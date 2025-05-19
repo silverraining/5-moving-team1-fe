@@ -16,6 +16,10 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
+  staticDirs:
+    // Next.js의 public 폴더를 Storybook dev 서버에서 접근 가능하도록 설정
+    // → /images/ 같은 경로를 정상적으로 로딩할 수 있게 해줌
+    ["../public"],
 };
 
 export default config;
