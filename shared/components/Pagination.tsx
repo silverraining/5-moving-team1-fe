@@ -79,13 +79,7 @@ const Pagination: React.FC<PaginationProps> = ({
   const pages = getPages();
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      gap={1}
-      mt={3}
-    >
+    <Box display="flex" justifyContent="center" alignItems="center">
       <IconButton
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage === 1}
