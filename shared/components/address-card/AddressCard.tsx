@@ -38,7 +38,7 @@ const StyledLabel = styled(Typography)<{ cardSize: "sm" | "md" }>(
     fontSize: cardSize === "sm" ? "12px" : "14px",
     fontWeight: "semibold", // 도로명, 지번 폰트 두께: 피그마 문서대로 적용했으나 실제 폰트 두께가 다르다면 이 줄을 수정해주세요
     marginRight: "8px",
-    minWidth: "32px",
+    minWidth: cardSize === "sm" ? "32px" : "48px",
     textAlign: "center",
   })
 );
