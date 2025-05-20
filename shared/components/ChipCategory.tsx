@@ -1,3 +1,4 @@
+import { COLORS } from "@/public/theme/colors";
 import { Box, Typography } from "@mui/material";
 import Image from "next/image";
 
@@ -9,43 +10,43 @@ export interface ChipProps {
 const categoryData = {
   small: {
     label: "소형이사",
-    bg: "#E9F4FF",
-    text: "#1B92FF",
+    bg: COLORS.PrimaryBlue[100],
+    text: COLORS.PrimaryBlue[300],
     img: "/images/chip/box.svg",
     alt: "소형이사",
   },
   home: {
     label: "가정이사",
-    bg: "#E9F4FF",
-    text: "#1B92FF",
+    bg: COLORS.PrimaryBlue[100],
+    text: COLORS.PrimaryBlue[300],
     img: "/images/chip/home.svg",
     alt: "가정이사",
   },
   office: {
     label: "사무실이사",
-    bg: "#E9F4FF",
-    text: "#1B92FF",
+    bg: COLORS.PrimaryBlue[100],
+    text: COLORS.PrimaryBlue[300],
     img: "/images/chip/company.svg",
     alt: "사무실이사",
   },
   designation: {
     label: "지정 견적 요청",
-    bg: "#FFEEF0",
-    text: "#FF4F64",
+    bg: COLORS.SecondaryRed[100],
+    text: COLORS.SecondaryRed[200],
     img: "/images/chip/document.svg",
     alt: "지정 견적 요청",
   },
   wait: {
     label: "견적 대기",
     bg: "#F2F3F8",
-    text: "#242945",
+    text: COLORS.PrimaryBlue[400],
     img: null,
     alt: "견적 대기",
   },
   complete: {
     label: "견적 확정",
     bg: "#F2F3F8",
-    text: "#242945",
+    text: COLORS.PrimaryBlue[400],
     img: null,
     alt: "견적 확정",
   },
@@ -89,6 +90,7 @@ export const ChipCategory = ({ size = "md", type = "small" }: ChipProps) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          boxShadow: "4px 4px 8px 0px #D9D9D91A",
         }}
       >
         {data.img && (
@@ -117,6 +119,7 @@ export const ChipCategory = ({ size = "md", type = "small" }: ChipProps) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
+          boxShadow: "4px 4px 8px 0px #D9D9D91A",
         }}
       >
         {data.img && (
@@ -131,6 +134,7 @@ export const ChipCategory = ({ size = "md", type = "small" }: ChipProps) => {
           fontSize={sizeInfo.font}
           color={data.text}
           lineHeight={`${sizeInfo.lineHeight}px`}
+          fontWeight="600"
         >
           {data.label}
         </Typography>

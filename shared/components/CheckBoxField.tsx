@@ -1,3 +1,5 @@
+import { COLORS } from "@/public/theme/colors";
+import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 
 interface CheckBoxProps {
@@ -17,11 +19,11 @@ export const CheckBoxField = ({
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+    <Box style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       {options.map((option) => {
         const isSelected = selected === option;
         return (
-          <button
+          <Button
             key={option}
             onClick={() => onChange(option)}
             style={{
@@ -33,12 +35,13 @@ export const CheckBoxField = ({
               padding: "10px 16px",
               border: "1px solid",
               borderRadius: "16px",
-              borderColor: isSelected ? "#1B92FF" : "#E6E6E6",
-              backgroundColor: isSelected ? "#F5FAFF" : "transparent",
-              color: "#000",
+              borderColor: isSelected ? COLORS.PrimaryBlue[300] : "#E6E6E6",
+              backgroundColor: isSelected
+                ? COLORS.PrimaryBlue[300]
+                : "transparent",
               cursor: "pointer",
-              fontSize: size === "md" ? "18px" : "14px",
-              lineHeight: size === "md" ? "26px" : "24px",
+
+              boxShadow: "4px 4px 10px 0px #C3D9F233",
             }}
           >
             <Image
@@ -51,10 +54,15 @@ export const CheckBoxField = ({
               width={size === "md" ? 36 : 24}
               height={size === "md" ? 36 : 24}
             />
-            <span>{option}</span>
-          </button>
+            <Typography
+              variant={size === "md" ? "SB_18" : "SB_14"}
+              color="text.primary"
+            >
+              {option}
+            </Typography>
+          </Button>
         );
       })}
-    </div>
+    </Box>
   );
 };

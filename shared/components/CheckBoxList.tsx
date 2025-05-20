@@ -1,3 +1,5 @@
+import { COLORS } from "@/public/theme/colors";
+import { Box, Button, Typography } from "@mui/material";
 import Image from "next/image";
 
 interface CheckBoxProps {
@@ -20,7 +22,7 @@ export const CheckBoxList = ({
   ];
 
   return (
-    <div
+    <Box
       style={{
         display: "flex",
         flexDirection: "column",
@@ -34,24 +36,27 @@ export const CheckBoxList = ({
       {options.map((option) => {
         const isSelected = selected === option;
         return (
-          <button
+          <Button
             key={option}
             onClick={() => onChange(option)}
             style={{
               display: "flex",
               alignItems: "center",
-              gap: "12px",
+              justifyContent: "flex-start",
+              gap: "8px",
               width: size === "md" ? "560px" : "280px",
               height: size === "md" ? "84px" : "52px",
-              padding: "10px 16px",
+              paddingLeft: size === "md" ? "32px" : "16px",
               border: "1px solid",
               borderRadius: "16px",
-              borderColor: isSelected ? "#1B92FF" : "#E6E6E6",
-              backgroundColor: isSelected ? "#F5FAFF" : "transparent",
+              borderColor: isSelected ? COLORS.PrimaryBlue[300] : "#E6E6E6",
+              backgroundColor: isSelected
+                ? COLORS.PrimaryBlue[50]
+                : "transparent",
               color: "#000",
               cursor: "pointer",
-              fontSize: size === "md" ? "18px" : "14px",
-              lineHeight: size === "md" ? "26px" : "24px",
+
+              boxShadow: "4px 4px 10px 0px #C3D9F233",
             }}
           >
             <Image
@@ -64,28 +69,34 @@ export const CheckBoxList = ({
               width={size === "md" ? 36 : 24}
               height={size === "md" ? 36 : 24}
             />
-            <span>{option}</span>
-          </button>
+            <Typography
+              variant={size === "md" ? "SB_18" : "SB_14"}
+              color="text.Primary"
+            >
+              {option}
+            </Typography>
+          </Button>
         );
       })}
 
-      <button
+      <Button
         onClick={onConfirm}
         style={{
           marginTop: size === "md" ? "24px" : "16px",
           width: size === "md" ? "560px" : "280px",
           height: size === "md" ? "64px" : "54px",
-          backgroundColor: "#1B92FF",
+          backgroundColor: COLORS.PrimaryBlue[300],
           color: "#FFF",
           border: "none",
           borderRadius: "16px",
           fontSize: size === "md" ? "20px" : "16px",
           lineHeight: size === "md" ? "32px" : "26px",
           cursor: "pointer",
+          fontWeight: 600,
         }}
       >
         선택 완료
-      </button>
-    </div>
+      </Button>
+    </Box>
   );
 };
