@@ -5,14 +5,12 @@ interface ChipProps {
   label: string;
   selected: boolean;
   onClick: () => void;
-  size?: "sm" | "md";
 }
 
 export const ChipArea = ({
   label = "서울",
   selected = false,
   onClick,
-  size = "md",
 }: ChipProps) => {
   return (
     <Box
@@ -28,8 +26,12 @@ export const ChipArea = ({
       }}
     >
       <Typography
-        variant={size === "md" ? "M_18" : "M_14"}
-        color={selected ? COLORS.PrimaryBlue[300] : COLORS.PrimaryBlue[400]}
+        sx={{
+          fontSize: [14, 18],
+          lineHeight: ["24px", "26px"],
+          fontWeight: 500,
+          color: selected ? COLORS.PrimaryBlue[300] : COLORS.PrimaryBlue[400],
+        }}
       >
         {label}
       </Typography>
