@@ -168,11 +168,15 @@ const Pagination: React.FC<PaginationProps> = ({
             }}
           >
             <Typography
-              sx={{
-                fontWeight: page === currentPage ? 600 : 400,
-                fontSize: isSmall ? "16px" : "14px",
-                lineHeight: isSmall ? "26px" : "20px",
-              }}
+              variant={
+                page === currentPage
+                  ? isSmall
+                    ? "SB_16"
+                    : "SB_18"
+                  : isSmall
+                    ? "M_16"
+                    : "R_18"
+              }
             >
               {page}
             </Typography>
@@ -195,15 +199,7 @@ const Pagination: React.FC<PaginationProps> = ({
               color: COLORS.Grayscale[300],
             }}
           >
-            <Typography
-              sx={{
-                fontWeight: 400,
-                fontSize: isSmall ? "16px" : "14px",
-                lineHeight: isSmall ? "26px" : "20px",
-              }}
-            >
-              {page}
-            </Typography>
+            <Typography variant={isSmall ? "R_16" : "R_14"}>{page}</Typography>
           </Button>
         )
       )}
