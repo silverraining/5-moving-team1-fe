@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import AddressModal from "@/shared/components/address-card/AddressModal";
+import AddressModal from "@/src/components/shared/components/address-card/AddressModal";
 import { useState } from "react";
 
 const meta: Meta<typeof AddressModal> = {

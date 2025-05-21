@@ -7,7 +7,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import { COLORS } from "../../../public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 
 type AddressCardProps = {
   zipCode: string;

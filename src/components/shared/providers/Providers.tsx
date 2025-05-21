@@ -10,7 +10,7 @@ import { usePrefersDarkMode } from "./hooks";
 import "dayjs/locale/ko";
 import { koKR } from "@mui/x-date-pickers/locales";
 import dayjs from "dayjs";
-import { clientSideEmotionCache } from "@/src/hooks/CreateEmotionCache";
+import { clientSideEmotionCache } from "@/src/hooks/createEmotionCache";
 import { createAppTheme } from "@/public/theme/theme";
 interface ThemeModeContextType {
   mode: "light" | "dark";

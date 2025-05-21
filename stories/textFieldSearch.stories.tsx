@@ -1,6 +1,6 @@
 import { useSearch } from "@/src/hooks/utill";
-import TextField from "@/shared/components/text-field";
-import { Meta, StoryObj } from "@storybook/react";
+import TextField from "@/src/components/shared/components/text-field";
+import type { Meta, StoryObj } from "@storybook/react";
 
 const meta: Meta = {
   title: "TextField",

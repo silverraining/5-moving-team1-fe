@@ -1,6 +1,6 @@
-import { Header } from "@/shared/components/header/Header";
-import { Progress } from "@/shared/components/progress/Progress";
 import type { Meta, StoryObj } from "@storybook/react";
+import { Header } from "@/src/components/shared/components/header/Header";
+import { Progress } from "@/src/components/shared/components/progress/progress";
 
 const meta: Meta<typeof Header> = {
   title: "Header",

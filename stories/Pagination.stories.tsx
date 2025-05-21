@@ -1,8 +1,8 @@
 // shared/components/Pagination.stories.tsx
 
-import React, { useState } from "react";
-import { Meta, StoryObj } from "@storybook/react";
-import Pagination from "@/shared/pagination/Pagination";
+import { useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react";
+import Pagination from "@/src/components/shared/pagination/Pagination";
 
 // 스토리북 메타 정의
 const meta: Meta<typeof Pagination> = {
