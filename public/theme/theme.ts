@@ -18,6 +18,7 @@ declare module "@mui/material/styles" {
 
 const sharedTypography: ThemeOptions["typography"] = {
   fontFamily: "'Pretendard Variable', sans-serif",
+  B_36: { fontSize: "36px", lineHeight: "42px", fontWeight: 700 },
   B_32: { fontSize: "32px", lineHeight: "42px", fontWeight: 700 },
   SB_32: { fontSize: "32px", lineHeight: "42px", fontWeight: 600 },
   B_24: { fontSize: "24px", lineHeight: "32px", fontWeight: 700 },
@@ -32,10 +33,10 @@ const sharedTypography: ThemeOptions["typography"] = {
   SB_18: { fontSize: "18px", lineHeight: "26px", fontWeight: 600 },
   M_18: { fontSize: "18px", lineHeight: "26px", fontWeight: 500 },
   R_18: { fontSize: "18px", lineHeight: "26px", fontWeight: 400 },
-  B_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 500 },
-  SB_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 500 },
+  B_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 700 },
+  SB_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 600 },
   R_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 500 },
-  M_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 500 },
+  M_16: { fontSize: "16px", lineHeight: "26px", fontWeight: 400 },
   B_14: { fontSize: "14px", lineHeight: "24px", fontWeight: 700 },
   SB_14: { fontSize: "14px", lineHeight: "24px", fontWeight: 600 },
   M_14: { fontSize: "14px", lineHeight: "24px", fontWeight: 500 },

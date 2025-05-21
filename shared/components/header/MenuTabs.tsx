@@ -30,8 +30,13 @@ export const MenuTabs = ({ menu }: MenuTabs) => {
             label={d}
             sx={{
               color:
-                value === index ? COLORS.Black[500] : COLORS.Grayscale[100], // 선택된 탭 텍스트 색상
-              fontWeight: value === index + 1 ? "bold" : "normal",
+                value === false
+                  ? COLORS.Black[500] // 초기 상태: 모두 동일하게
+                  : value === index
+                    ? COLORS.Black[500] // 선택된 탭
+                    : COLORS.Grayscale[400], // 비활성 탭
+              fontSize: "18px",
+              fontWeight: 700,
             }}
           />
         ))}
