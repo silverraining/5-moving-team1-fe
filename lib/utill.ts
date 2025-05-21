@@ -27,3 +27,29 @@ export const useSearch = (initialValue = "", delay = 300) => {
     onClear,
   };
 };
+
+export const useDrawer = () => {
+  const [open, setOpen] = useState(false);
+
+  const toggleDrawer = useCallback(
+    (newOpen: boolean) => () => {
+      setOpen(newOpen);
+    },
+    []
+  );
+
+  return { open, toggleDrawer };
+};
+
+export const useTab = () => {
+  const [value, setValue] = useState<number | false>(false);
+
+  const handleChange = useCallback(
+    (event: React.SyntheticEvent, newValue: number) => {
+      setValue(newValue);
+    },
+    []
+  );
+
+  return { value, handleChange, setValue };
+};
