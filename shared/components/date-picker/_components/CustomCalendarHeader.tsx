@@ -1,11 +1,21 @@
 "use client";
 
-import { Box, IconButton, Typography } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { PickersCalendarHeaderProps } from "@mui/x-date-pickers/PickersCalendarHeader";
+import { COLORS } from "@/public/theme/colors";
 
 export const CustomCalendarHeader = (props: PickersCalendarHeaderProps) => {
   const { currentMonth, onMonthChange } = props;
+
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const handlePrevMonth = () => {
     onMonthChange(currentMonth.subtract(1, "month"));
@@ -21,12 +31,18 @@ export const CustomCalendarHeader = (props: PickersCalendarHeaderProps) => {
       alignItems="center"
       justifyContent="space-between"
       px={"14px"}
-      py={"12px"}
+      py={isSmall ? "10px" : "12px"}
+      height={isSmall ? "48px" : "60px"}
     >
       <IconButton onClick={handlePrevMonth}>
         <ArrowBackIos fontSize="small" />
       </IconButton>
-      <Typography variant="SB_20">{currentMonth.format("YYYY. MM")}</Typography>
+      <Typography
+        variant={isSmall ? "SB_16" : "SB_20"}
+        sx={{ color: COLORS.Black[400] }}
+      >
+        {currentMonth.format("YYYY. MM")}
+      </Typography>
       <IconButton onClick={handleNextMonth}>
         <ArrowForwardIos fontSize="small" />
       </IconButton>
