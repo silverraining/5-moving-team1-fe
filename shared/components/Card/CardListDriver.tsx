@@ -150,9 +150,9 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
             <Box display="flex">
               <Typography
                 sx={{
-                  fontSize: [14, 14, 84],
-                  lineHeight: ["24px", "24px", "26px"],
-                  fontWeight: 600,
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
                   color: COLORS.Black[300],
                 }}
               >
@@ -160,10 +160,10 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
               </Typography>
               <Typography
                 sx={{
-                  fontSize: [14, 14, 84],
-                  lineHeight: ["24px", "24px", "26px"],
-                  fontWeight: 600,
-                  color: COLORS.Black[300],
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: COLORS.Grayscale[300],
                 }}
               >
                 확정
