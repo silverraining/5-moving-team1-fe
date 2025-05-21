@@ -12,8 +12,8 @@ import { COLORS } from "../../../public/theme/colors";
 
 type AddressCardProps = {
   zipCode: string;
-  newAddress: string;
-  oldAddress: string;
+  roadAddress: string;
+  jibunAddress: string;
   onClick?: () => void;
   selected?: boolean;
 };
@@ -88,8 +88,8 @@ const StyledValue = styled(Typography)(({ theme }) => ({
 
 const AddressCard = ({
   zipCode,
-  newAddress,
-  oldAddress,
+  roadAddress,
+  jibunAddress,
   onClick,
   selected = false,
 }: AddressCardProps) => {
@@ -106,9 +106,9 @@ const AddressCard = ({
     <StyledCard selected={isSelected} onClick={handleClick}>
       <CardContent
         sx={{
-          padding: theme.breakpoints.down("mobile") ? "16px" : "24px",
+          padding: isMobile ? "16px" : "24px",
           "&:last-child": {
-            paddingBottom: theme.breakpoints.down("mobile") ? "16px" : "24px",
+            paddingBottom: isMobile ? "16px" : "24px",
           },
         }}
       >
@@ -128,8 +128,8 @@ const AddressCard = ({
             <StyledLabel>지번</StyledLabel>
           </LabelContainer>
           <AddressTextContainer>
-            <StyledValue>{newAddress}</StyledValue>
-            <StyledValue>{oldAddress}</StyledValue>
+            <StyledValue>{roadAddress}</StyledValue>
+            <StyledValue>{jibunAddress}</StyledValue>
           </AddressTextContainer>
         </AddressContainer>
       </CardContent>
