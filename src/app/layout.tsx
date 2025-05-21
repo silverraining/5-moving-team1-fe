@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Providers } from "../components/shared/providers/Providers";
-import { LayOut } from "../components/shared/components/LayOut";
+import { LayOut } from "../components/shared/components/Layout";
 
 export const metadata = {
   title: "Moving",

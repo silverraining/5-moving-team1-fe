@@ -1,8 +1,8 @@
-import { CardList } from "@/shared/components/card/CardList";
 import type { Meta, StoryObj } from "@storybook/react";
+import { CardList } from "@/src/components/shared/components/card/CardList";
 
 const meta: Meta<typeof CardList> = {
-  title: "cardList",
+  title: "CardList",
   component: CardList,
   parameters: {
     docs: {

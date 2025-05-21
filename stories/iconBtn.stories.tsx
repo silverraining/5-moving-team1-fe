@@ -1,10 +1,10 @@
+import type { Meta, StoryObj } from "@storybook/react";
 import {
   Clip,
   Like,
   Kakao,
   FaceBook,
-} from "@/shared/components/icon-btn/IconBtn";
-import type { Meta, StoryObj } from "@storybook/react";
+} from "@/src/components/shared/components/icon-btn/IconBtn";
 
 const meta: Meta = {
   title: "IconBtn",

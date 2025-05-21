@@ -7,7 +7,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
-import { CardList } from "../components/shared/components/Card/CardList";
+import { CardList } from "../components/shared/components/card/CardList";
 import { PATH } from "../hooks/constants";
 export const Main = () => {
   const theme = useTheme();

@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import AddressCard from "@/shared/components/address-card/AddressCard";
+import AddressCard from "@/src/components/shared/components/address-card/AddressCard";
 
 const meta = {
   title: "address-card/AddressCard",

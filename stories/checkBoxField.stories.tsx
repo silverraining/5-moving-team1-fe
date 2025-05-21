@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CheckBoxField } from "@/shared/components/check-box/CheckBoxField";
+import { CheckBoxField } from "@/src/components/shared/components/check-box/CheckBoxField";
 import { action } from "@storybook/addon-actions";
 
 const meta: Meta<typeof CheckBoxField> = {

@@ -1,6 +1,6 @@
-import TextField from "@/shared/components/text-field";
+import type { Meta, StoryObj } from "@storybook/react";
+import TextField from "@/src/components/shared/components/text-field";
 import { Button } from "@mui/material";
-import { Meta, StoryObj } from "@storybook/react";
 import { InputHTMLAttributes } from "react";
 import { useForm } from "react-hook-form";
 

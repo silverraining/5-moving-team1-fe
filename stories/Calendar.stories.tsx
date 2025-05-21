@@ -1,12 +1,13 @@
 import React, { useState } from "react";
+import type { Meta, StoryObj } from "@storybook/react";
+import { ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { Meta, StoryObj } from "@storybook/react";
-import { Calendar } from "@/shared/components/date-picker/Calendar"; // Calendar 컴포넌트 경로에 맞게 수정하세요
+import { koKR } from "@mui/x-date-pickers/locales";
+import { Calendar } from "@/src/components/shared/components/date-picker/Calendar";
+import { createAppTheme } from "@/public/theme/theme";
 import dayjs, { Dayjs } from "dayjs";
-import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { createAppTheme } from "@/src/public/theme/theme";
 
 const meta: Meta<typeof Calendar> = {
   title: "Components/Calendar",

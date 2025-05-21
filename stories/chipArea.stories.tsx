@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ChipArea } from "@/shared/components/chip/ChipArea";
+import { ChipArea } from "@/src/components/shared/components/chip/ChipArea";
 
 const meta: Meta<typeof ChipArea> = {
   title: "Chip/ChipArea",

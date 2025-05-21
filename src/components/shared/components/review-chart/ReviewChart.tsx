@@ -6,8 +6,8 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { Progress } from "./_components/progress";
-import { Stars } from "./_components/stars";
+import { Progress } from "./components/progress";
+import { Stars } from "./components/stars";
 import { COLORS } from "@/public/theme/colors";
 interface ReviewChartProps {
   data: {
