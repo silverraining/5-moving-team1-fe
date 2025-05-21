@@ -18,6 +18,7 @@ declare module "@mui/material/styles" {
 
 const sharedTypography: ThemeOptions["typography"] = {
   fontFamily: "'Pretendard Variable', sans-serif",
+  B_36: { fontSize: "36px", lineHeight: "42px", fontWeight: 700 },
   B_32: { fontSize: "32px", lineHeight: "42px", fontWeight: 700 },
   SB_32: { fontSize: "32px", lineHeight: "42px", fontWeight: 600 },
   B_24: { fontSize: "24px", lineHeight: "32px", fontWeight: 700 },
