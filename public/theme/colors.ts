@@ -21,6 +21,9 @@ export const COLORS = {
     300: "#1B92FF",
     400: "#242945",
   },
+  White: {
+    100: "#FFFFFF",
+  },
   SecondaryYellow: { 100: "#FFC149" },
   SecondaryRed: { 100: "#FFEEF0", 200: "#FF4F64" },
   Line: { 100: "#F2F2F2" },
