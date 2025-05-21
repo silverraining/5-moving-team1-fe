@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import { Meta, StoryObj } from "@storybook/react";
-import Pagination from "@/shared/components/Pagination";
+import Pagination from "@/shared/pagination/Pagination";
 
 // 스토리북 메타 정의
 const meta: Meta<typeof Pagination> = {
