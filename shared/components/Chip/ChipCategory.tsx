@@ -55,15 +55,13 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
   const data = categoryData[type];
   const theme = useTheme();
 
-  const isMobile = useMediaQuery(
-    `(max-width:${theme.breakpoints.values.tablet - 1}px)`
-  );
-  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
-  const size = isMobile ? "sm" : isDesktop ? "xl" : "md";
+  const isSmall = useMediaQuery(`(max-width:400px)`);
+  const isMobile = useMediaQuery(theme.breakpoints.down("desktop"));
+  const size = isSmall ? "xs" : isMobile ? "sm" : "md";
 
   const sizeMap = {
-    sm: { img: 20, height: 24, borderRadius: 4 },
-    md: {
+    xs: { img: 20, height: 24, borderRadius: 4 },
+    sm: {
       img: 20,
       font: 13,
       height: 26,
@@ -72,7 +70,7 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
       gap: 0.25,
       px: "6px",
     },
-    xl: {
+    md: {
       img: 24,
       font: 18,
       height: 34,
@@ -82,11 +80,11 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
       px: "8px",
     },
   } as const;
+  let sizeStyle = sizeMap[size];
 
   if (!data) return null;
 
-  if (size === "sm") {
-    const sizeStyle = sizeMap[size];
+  if (size === "xs") {
     return (
       <Box
         sx={{
@@ -112,19 +110,19 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
     );
   }
 
-  const sizeInfo = sizeMap[size];
+  sizeStyle = sizeMap[size as "sm" | "md"];
   return (
     <Box
       sx={{
         width: "fit-content",
-        height: sizeInfo.height,
-        borderRadius: sizeInfo.borderRadius,
+        height: sizeStyle.height,
+        borderRadius: sizeStyle.borderRadius,
         backgroundColor: data.bg,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        gap: sizeInfo.gap,
-        px: sizeInfo.px,
+        gap: sizeStyle.gap,
+        px: sizeStyle.px,
         boxShadow: "4px 4px 8px 0px #D9D9D91A",
       }}
     >
@@ -132,14 +130,14 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
         <Image
           src={data.img}
           alt={data.alt}
-          width={sizeInfo.img}
-          height={sizeInfo.img}
+          width={sizeStyle.img}
+          height={sizeStyle.img}
         />
       )}
       <Typography
         sx={{
-          fontSize: sizeInfo.font,
-          lineHeight: `${sizeInfo.lineHeight}px`,
+          fontSize: sizeStyle.font,
+          lineHeight: `${sizeStyle.lineHeight}px`,
           fontWeight: 600,
           color: data.text,
         }}

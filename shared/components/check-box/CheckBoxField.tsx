@@ -37,7 +37,7 @@ export const CheckBoxField = ({ selected, onChange }: CheckBoxProps) => {
               gap: "12px",
               width: ["280px", "560px"],
               height: ["52px", "84px"],
-              padding: "10px 16px",
+              padding: ["10px 16px"],
               border: "1px solid",
               borderRadius: "16px",
               borderColor: isSelected ? COLORS.PrimaryBlue[300] : "#E6E6E6",
