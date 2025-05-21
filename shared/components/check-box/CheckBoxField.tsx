@@ -52,8 +52,8 @@ export const CheckBoxField = ({ selected, onChange }: CheckBoxProps) => {
             <Image
               src={
                 isSelected
-                  ? "/Images/check-box/Property 1=active, Property 2=md, sort=round.svg"
-                  : "/Images/check-box/Property 1=default, Property 2=md, sort=round.svg"
+                  ? "/Images/check-box/onclick.svg"
+                  : "/Images/check-box/click.svg"
               }
               alt="선택 상태"
               width={size === "sm" ? 24 : 36}
