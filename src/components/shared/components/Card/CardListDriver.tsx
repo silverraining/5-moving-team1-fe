@@ -1,7 +1,7 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { ChipCategory, ChipProps } from "../chip/ChipCategory";
 import Image from "next/image";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 
 export interface CardData {
   types: ChipProps["type"][];

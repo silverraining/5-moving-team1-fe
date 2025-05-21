@@ -11,7 +11,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 import { SearchInput } from "../text-field/Search";
 import AddressCard from "./AddressCard";
 import Image from "next/image";

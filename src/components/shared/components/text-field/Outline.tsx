@@ -1,4 +1,4 @@
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 import { InputProps, OutlinedInput, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 import { useState } from "react";

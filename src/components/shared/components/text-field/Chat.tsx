@@ -1,5 +1,5 @@
 "use client";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 import { Box, BoxProps, Stack, Typography, useTheme } from "@mui/material";
 
 interface ChatProps {

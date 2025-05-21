@@ -1,5 +1,5 @@
-import { COLORS } from "@/src/public/theme/colors";
-import { Button, Stack, Typography } from "@mui/material";
+import { COLORS } from "@/public/theme/colors";
+import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
 interface UserTab {
   user?: {

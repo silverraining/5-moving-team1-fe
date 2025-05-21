@@ -5,12 +5,13 @@ import { ThemeProvider, CssBaseline } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { CacheProvider } from "@emotion/react";
-import { clientSideEmotionCache } from "../../lib/CreateEmotionCache";
-import { createAppTheme } from "@/src/public/theme/theme";
+
 import { usePrefersDarkMode } from "./hooks";
 import "dayjs/locale/ko";
 import { koKR } from "@mui/x-date-pickers/locales";
 import dayjs from "dayjs";
+import { clientSideEmotionCache } from "@/src/hooks/CreateEmotionCache";
+import { createAppTheme } from "@/public/theme/theme";
 interface ThemeModeContextType {
   mode: "light" | "dark";
   toggleMode: () => void;

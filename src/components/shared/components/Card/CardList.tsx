@@ -1,4 +1,4 @@
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 import { Box, BoxProps, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
@@ -62,9 +62,7 @@ export const CardList = ({ variant }: CardListProps) => {
 };
 
 const SmallStyle: BoxProps = {
-  maxWidth: "432px",
-  minWidth: "327px",
-  width: "100%",
+  width: ["327px", "327px", "432px"],
   height: ["240px", "240px", "598px"],
   bgcolor: COLORS.PrimaryBlue[100],
   pl: 4,
@@ -81,9 +79,7 @@ const SmallStyle: BoxProps = {
 };
 
 const HomeStyle: BoxProps = {
-  maxWidth: "764px",
-  minWidth: "327px",
-  width: "100%",
+  width: ["327px", "327px", "764px"],
   height: ["240px", "240px", "287px"],
   bgcolor: "white",
   pl: 4,
@@ -100,9 +96,7 @@ const HomeStyle: BoxProps = {
 };
 
 const OfficeStyle: BoxProps = {
-  maxWidth: "764px",
-  minWidth: "327px",
-  width: "100%",
+  width: ["327px", "327px", "764px"],
   height: ["240px", "240px", "287px"],
   bgcolor: "white",
   pl: 4,
