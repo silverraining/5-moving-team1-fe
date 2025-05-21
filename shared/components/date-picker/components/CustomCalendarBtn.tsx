@@ -27,9 +27,7 @@ export const CustomActionBar = ({
         mx: isSmall ? "24px" : "40px",
         backgroundColor: disabled ? COLORS.Grayscale[100] : undefined,
         borderRadius: "16px",
-        fontWeight: 600,
-        fontSize: isSmall ? "16px" : "20px",
-        lineHeight: isSmall ? "26px" : "32px",
+        ...(isSmall ? theme.typography.SB_16 : theme.typography.SB_20),
 
         "&.Mui-disabled": {
           backgroundColor: COLORS.Grayscale[100],

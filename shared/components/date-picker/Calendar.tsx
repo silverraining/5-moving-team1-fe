@@ -1,9 +1,9 @@
 "use client";
 import { StaticDatePicker } from "@mui/x-date-pickers";
-import { CustomCalendarHeader } from "./_components/CustomCalendarHeader";
-import { CustomActionBar } from "./_components/CustomCalendarBtn";
+import { CustomCalendarHeader } from "./components/CustomCalendarHeader";
+import { CustomActionBar } from "./components/CustomCalendarBtn";
 import { Box, useMediaQuery, useTheme } from "@mui/material";
-import { Dayjs } from "dayjs";
+import dayjs, { Dayjs } from "dayjs";
 
 interface CalendarProps {
   onChange: (date: Dayjs | null) => void;
@@ -77,18 +77,14 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
         ".MuiDayCalendar-weekDayLabel": {
           width: isSmall ? 42 : 64,
           height: isSmall ? 42 : 64,
-          fontWeight: 500,
-          fontSize: isSmall ? 13 : 20,
-          lineHeight: isSmall ? 22 : 32,
+          ...(isSmall ? theme.typography.M_13 : theme.typography.M_20),
         },
 
         // 날짜 버튼
         ".MuiPickersDay-root": {
           width: isSmall ? "44px" : "64px",
           height: isSmall ? "42px" : "64px",
-          fontWeight: 500,
-          fontSize: isSmall ? 13 : 20,
-          lineHeight: isSmall ? "22px" : "32px",
+          ...(isSmall ? theme.typography.M_13 : theme.typography.M_20),
           color: "black",
           border: "none",
           "&.Mui-selected": {
@@ -111,6 +107,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
         value={value}
         onChange={onChange}
         displayStaticWrapperAs="desktop"
+        minDate={dayjs()} // 오늘 이전 날짜 비활성화
         slotProps={{
           layout: {
             sx: {
