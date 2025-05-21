@@ -41,6 +41,7 @@ export const Outline = ({
         }
         fullWidth
         sx={{
+          borderRadius: "16px",
           fontSize: ["16px", "16px", "20px"],
           fontWeight: 400,
           lineHeight: "26px",

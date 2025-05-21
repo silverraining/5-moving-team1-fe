@@ -11,7 +11,7 @@ export const Stars = ({ score, isMedium }: StarsProps) => {
   const nonActive = "/images/star/star.svg";
   const size = isMedium ? 24 : 48;
   const maxStars = 5;
-  console.log(isMedium);
+
   const starsFill = Array.from({ length: maxStars }, (_, i) => {
     const diff = score - i;
     if (diff >= 1) return 1;
