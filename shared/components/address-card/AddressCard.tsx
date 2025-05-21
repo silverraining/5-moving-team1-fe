@@ -18,21 +18,22 @@ type AddressCardProps = {
   selected?: boolean;
 };
 
-const StyledCard = styled(Card)<{ selected: boolean }>(({ selected }) => ({
-  borderRadius: "16px",
-  border: `1px solid ${selected ? COLORS.PrimaryBlue[200] : COLORS.Line[100]}`,
-  backgroundColor: selected ? COLORS.PrimaryBlue[50] : "white",
-  boxShadow: "none",
-  padding: "20px 16px 24px 16px",
-  cursor: "pointer",
-  transition: "all 0.2s ease-in-out",
-  width: "100%",
-  marginBottom: "8px",
-  "&:hover": {
-    borderColor: COLORS.PrimaryBlue[200],
-    backgroundColor: COLORS.PrimaryBlue[50],
-  },
-}));
+const StyledCard = styled(Card)<{ selected: boolean }>(
+  ({ selected, theme }) => ({
+    borderRadius: "16px",
+    border: `1px solid ${selected ? COLORS.PrimaryBlue[200] : COLORS.Line[100]}`,
+    backgroundColor: selected ? COLORS.PrimaryBlue[50] : "white",
+    boxShadow: "none",
+    cursor: "pointer",
+    transition: "all 0.2s ease-in-out",
+    width: "100%",
+    marginBottom: "8px",
+    "&:hover": {
+      borderColor: COLORS.PrimaryBlue[200],
+      backgroundColor: COLORS.PrimaryBlue[50],
+    },
+  })
+);
 
 const StyledLabel = styled(Typography)(({ theme }) => ({
   color: COLORS.PrimaryBlue[300],
@@ -52,21 +53,9 @@ const StyledLabel = styled(Typography)(({ theme }) => ({
   },
 }));
 
-const StyledValue = styled(Typography)(({ theme }) => ({
-  fontWeight: "normal",
-  flex: 1,
-  [theme.breakpoints.down("mobile")]: {
-    fontSize: "12px",
-  },
-  [theme.breakpoints.up("mobile")]: {
-    fontSize: "14px",
-  },
-}));
-
 const AddressContainer = styled(Box)({
-  display: "grid",
-  gridTemplateColumns: "auto 1fr",
-  columnGap: "8px",
+  display: "flex",
+  gap: "8px",
   marginTop: "16px",
 });
 
@@ -74,13 +63,28 @@ const LabelContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   gap: "16px",
+  flexShrink: 0,
 });
 
 const AddressTextContainer = styled(Box)({
   display: "flex",
   flexDirection: "column",
   gap: "16px",
+  width: "100%",
+  wordBreak: "break-all",
 });
+
+const StyledValue = styled(Typography)(({ theme }) => ({
+  fontWeight: "normal",
+  width: "100%",
+  wordBreak: "break-all",
+  [theme.breakpoints.down("mobile")]: {
+    fontSize: "12px",
+  },
+  [theme.breakpoints.up("mobile")]: {
+    fontSize: "14px",
+  },
+}));
 
 const AddressCard = ({
   zipCode,
@@ -100,7 +104,14 @@ const AddressCard = ({
 
   return (
     <StyledCard selected={isSelected} onClick={handleClick}>
-      <CardContent sx={{ padding: 0, "&:last-child": { paddingBottom: 0 } }}>
+      <CardContent
+        sx={{
+          padding: theme.breakpoints.down("mobile") ? "16px" : "24px",
+          "&:last-child": {
+            paddingBottom: theme.breakpoints.down("mobile") ? "16px" : "24px",
+          },
+        }}
+      >
         <Typography
           variant="body1"
           fontWeight="semibold"
