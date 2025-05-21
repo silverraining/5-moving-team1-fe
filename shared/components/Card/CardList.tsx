@@ -62,7 +62,9 @@ export const CardList = ({ variant }: CardListProps) => {
 };
 
 const SmallStyle: BoxProps = {
-  width: ["327px", "327px", "432px"],
+  maxWidth: "432px",
+  minWidth: "327px",
+  width: "100%",
   height: ["240px", "240px", "598px"],
   bgcolor: COLORS.PrimaryBlue[100],
   pl: 4,
@@ -78,21 +80,12 @@ const SmallStyle: BoxProps = {
   },
 };
 
-const SmallImageStyle: BoxProps = {
-  className: "slide-in",
-  sx: {
-    position: "absolute",
-    bottom: 0,
-    right: -100,
-    transform: "translateX(50%)",
-    opacity: 0,
-    transition: "all 1s ease",
-  },
-};
-
 const HomeStyle: BoxProps = {
-  width: ["327px", "327px", "764px"],
+  maxWidth: "764px",
+  minWidth: "327px",
+  width: "100%",
   height: ["240px", "240px", "287px"],
+  bgcolor: "white",
   pl: 4,
   pt: 6,
   sx: {
@@ -106,20 +99,12 @@ const HomeStyle: BoxProps = {
   },
 };
 
-const HomeImageStyle: BoxProps = {
-  className: "slide-in",
-  sx: {
-    position: "absolute",
-    bottom: -15,
-    right: 0,
-    transform: "translateX(60%) ", // 초기 상태
-    opacity: 0,
-    transition: "all 1s ease",
-  },
-};
 const OfficeStyle: BoxProps = {
-  width: ["327px", "327px", "764px"],
+  maxWidth: "764px",
+  minWidth: "327px",
+  width: "100%",
   height: ["240px", "240px", "287px"],
+  bgcolor: "white",
   pl: 4,
   pt: 6,
   sx: {
@@ -127,17 +112,44 @@ const OfficeStyle: BoxProps = {
     overflow: "hidden",
     position: "relative",
     "&:hover .slide-in": {
+      transform: "translateY(0)",
       opacity: 1,
     },
   },
 };
+
+const SmallImageStyle: BoxProps = {
+  className: "slide-in",
+  sx: {
+    position: "absolute",
+    bottom: 0,
+    right: -100,
+    transform: "translateX(50%)",
+    opacity: 1,
+    transition: "all 1s ease",
+  },
+};
+
+const HomeImageStyle: BoxProps = {
+  className: "slide-in",
+  sx: {
+    position: "absolute",
+    bottom: -15,
+    right: 0,
+    transform: "translateX(60%)",
+    opacity: 1,
+    transition: "all 1s ease",
+  },
+};
+
 const OfficeImageStyle: BoxProps = {
   className: "slide-in",
   sx: {
     position: "absolute",
-    bottom: -48,
+    bottom: -50,
     right: 0,
-    opacity: 0,
+    transform: "translateY(60%)",
+    opacity: 1,
     transition: "all 1.5s ease",
   },
 };

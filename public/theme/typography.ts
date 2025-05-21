@@ -2,6 +2,7 @@ import { createTheme } from "@mui/material/styles";
 
 declare module "@mui/material/styles" {
   interface TypographyVariants {
+    B_36: React.CSSProperties;
     B_32: React.CSSProperties;
     SB_32: React.CSSProperties;
     B_24: React.CSSProperties;
@@ -32,6 +33,7 @@ declare module "@mui/material/styles" {
   }
 
   interface TypographyVariantsOptions {
+    B_36?: React.CSSProperties;
     B_32?: React.CSSProperties;
     SB_32?: React.CSSProperties;
     B_24?: React.CSSProperties;
@@ -65,6 +67,7 @@ declare module "@mui/material/styles" {
 // 이걸로 `Typography` 컴포넌트에서 prop으로 쓸 수 있게 함
 declare module "@mui/material/Typography" {
   interface TypographyPropsVariantOverrides {
+    B_36: true;
     B_32: true;
     SB_32: true;
     B_24: true;
