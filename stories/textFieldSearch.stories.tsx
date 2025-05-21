@@ -1,4 +1,4 @@
-import { useSearch } from "@/lib/utill";
+import { useSearch } from "@/src/hooks/utill";
 import TextField from "@/shared/components/text-field";
 import { Meta, StoryObj } from "@storybook/react";
 
