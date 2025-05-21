@@ -26,5 +26,9 @@ export const COLORS = {
   },
   SecondaryYellow: { 100: "#FFC149" },
   SecondaryRed: { 100: "#FFEEF0", 200: "#FF4F64" },
+<<<<<<< HEAD
+  Line: { 100: "#F2f2f2", 200: "#E6E6E6" },
+=======
   Line: { 100: "#F2F2F2" },
+>>>>>>> dffa2000e62b769c2e84a4c60af1aad3b514afa2
 };
