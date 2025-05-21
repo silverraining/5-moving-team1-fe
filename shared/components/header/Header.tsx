@@ -53,6 +53,7 @@ export const Header = () => {
       height={["54px", "54px", "88px"]}
       alignItems={"center"}
       justifyContent={"space-between"}
+      bgcolor={"white"}
     >
       <Stack direction={"row"} alignItems="center" spacing={2}>
         <Link href={"/"} display={"flex"} alignItems={"center"}>
