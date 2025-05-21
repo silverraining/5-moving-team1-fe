@@ -37,7 +37,7 @@ type Story = StoryObj<typeof Button>;
 
 export const base: Story = {
   args: {
-    variant: "outlined",
+    variant: "contained",
     color: "primary",
     size: "medium",
     disabled: false,
