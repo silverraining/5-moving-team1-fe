@@ -9,6 +9,32 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+    viewport: {
+      viewports: {
+        mobile: {
+          name: "Mobile",
+          styles: {
+            width: "343px",
+            height: "800px",
+          },
+        },
+        tablet: {
+          name: "Tablet",
+          styles: {
+            width: "744px",
+            height: "1000px",
+          },
+        },
+        desktop: {
+          name: "Desktop",
+          styles: {
+            width: "1200px",
+            height: "1000px",
+          },
+        },
+      },
+      defaultViewport: "desktop",
+    },
   },
 };
 
