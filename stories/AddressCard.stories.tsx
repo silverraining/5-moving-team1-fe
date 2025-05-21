@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import AddressCard from "../shared/components/address-card/AddressCard";
+import AddressCard from "@/shared/components/address-card/AddressCard";
 
 const meta = {
   title: "address-card/AddressCard",
@@ -11,13 +11,6 @@ const meta = {
     },
   },
   tags: ["autodocs"],
-  decorators: [
-    (Story) => (
-      <div style={{ width: "100%", maxWidth: "600px" }}>
-        <Story />
-      </div>
-    ),
-  ],
 } satisfies Meta<typeof AddressCard>;
 
 export default meta;
@@ -26,9 +19,9 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     zipCode: "04538",
-    newAddress:
+    roadAddress:
       "서울 중구 삼일대로 343 (대신파이낸스센터 Daishin Finance Center)",
-    oldAddress: "서울 중구 저동1가 114",
+    jibunAddress: "서울 중구 저동1가 114",
   },
   parameters: {
     docs: {
@@ -43,34 +36,15 @@ export const Default: Story = {
 export const Selected: Story = {
   args: {
     zipCode: "04538",
-    newAddress:
+    roadAddress:
       "서울 중구 삼일대로 343 (대신파이낸스센터 Daishin Finance Center)",
-    oldAddress: "서울 중구 저동1가 114",
+    jibunAddress: "서울 중구 저동1가 114",
     selected: true,
   },
   parameters: {
     docs: {
       description: {
         story: "선택된 상태의 주소 카드입니다.",
-      },
-    },
-  },
-};
-
-export const Mobile: Story = {
-  args: {
-    zipCode: "04538",
-    newAddress:
-      "서울 중구 삼일대로 343 (대신파이낸스센터 Daishin Finance Center)",
-    oldAddress: "서울 중구 저동1가 114",
-  },
-  parameters: {
-    viewport: {
-      defaultViewport: "mobile1",
-    },
-    docs: {
-      description: {
-        story: "모바일 화면에서의 주소 카드입니다. (600px 미만)",
       },
     },
   },
