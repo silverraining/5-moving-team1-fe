@@ -6,7 +6,7 @@ import { Calendar } from "@/shared/components/date-picker/Calendar"; // Calendar
 import dayjs, { Dayjs } from "dayjs";
 import { ThemeProvider } from "@mui/material/styles";
 import { CssBaseline } from "@mui/material";
-import { createAppTheme } from "@/public/theme/theme";
+import { createAppTheme } from "@/src/public/theme/theme";
 
 const meta: Meta<typeof Calendar> = {
   title: "Components/Calendar",
