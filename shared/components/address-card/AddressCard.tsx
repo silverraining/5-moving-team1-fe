@@ -6,7 +6,6 @@ import {
   Typography,
   styled,
   useTheme,
-  useMediaQuery,
 } from "@mui/material";
 import { COLORS } from "../../../public/theme/colors";
 
@@ -35,7 +34,7 @@ const StyledCard = styled(Card)<{ selected: boolean }>(
   })
 );
 
-const StyledLabel = styled(Typography)(({ theme }) => ({
+const StyledLabel = styled(Typography)({
   color: COLORS.PrimaryBlue[300],
   backgroundColor: COLORS.PrimaryBlue[100],
   padding: "2px 8.5px",
@@ -43,15 +42,9 @@ const StyledLabel = styled(Typography)(({ theme }) => ({
   fontWeight: "semibold",
   marginRight: "8px",
   textAlign: "center",
-  [theme.breakpoints.down("mobile")]: {
-    fontSize: "12px",
-    minWidth: "32px",
-  },
-  [theme.breakpoints.up("mobile")]: {
-    fontSize: "14px",
-    minWidth: "48px",
-  },
-}));
+  fontSize: ["12px", "12px", "14px"],
+  minWidth: ["32px", "32px", "48px"],
+});
 
 const AddressContainer = styled(Box)({
   display: "flex",
@@ -74,17 +67,12 @@ const AddressTextContainer = styled(Box)({
   wordBreak: "break-all",
 });
 
-const StyledValue = styled(Typography)(({ theme }) => ({
+const StyledValue = styled(Typography)({
   fontWeight: "normal",
   width: "100%",
   wordBreak: "break-all",
-  [theme.breakpoints.down("mobile")]: {
-    fontSize: "12px",
-  },
-  [theme.breakpoints.up("mobile")]: {
-    fontSize: "14px",
-  },
-}));
+  fontSize: ["12px", "12px", "14px"],
+});
 
 const AddressCard = ({
   zipCode,
@@ -95,7 +83,6 @@ const AddressCard = ({
 }: AddressCardProps) => {
   const [isSelected, setIsSelected] = useState(selected);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
 
   const handleClick = () => {
     setIsSelected(!isSelected);
@@ -106,9 +93,9 @@ const AddressCard = ({
     <StyledCard selected={isSelected} onClick={handleClick}>
       <CardContent
         sx={{
-          padding: isMobile ? "16px" : "24px",
+          padding: ["16px", "16px", "24px"],
           "&:last-child": {
-            paddingBottom: isMobile ? "16px" : "24px",
+            paddingBottom: ["16px", "16px", "24px"],
           },
         }}
       >
@@ -117,7 +104,7 @@ const AddressCard = ({
           fontWeight="semibold"
           mb={1}
           sx={{
-            fontSize: isMobile ? "14px" : "16px",
+            fontSize: ["14px", "14px", "16px"],
           }}
         >
           {zipCode}

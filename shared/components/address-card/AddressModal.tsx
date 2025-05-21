@@ -49,23 +49,18 @@ const StyledDialogContent = styled(DialogContent)({
   padding: "0 24px 24px 24px",
 });
 
-const StyledButton = styled(Button)(({ theme }) => ({
+const StyledButton = styled(Button)({
   width: "100%",
   height: "56px",
   borderRadius: "16px",
   marginTop: "24px",
-  [theme.breakpoints.down("mobile")]: {
-    fontSize: "16px",
-  },
-  [theme.breakpoints.up("mobile")]: {
-    fontSize: "20px",
-  },
+  fontSize: ["16px", "16px", "20px"],
   fontWeight: "semibold",
   "&.Mui-disabled": {
     backgroundColor: COLORS.Grayscale[200],
     color: COLORS.White[100],
   },
-}));
+});
 
 const AddressModal: React.FC<AddressModalProps> = ({
   open,
@@ -118,13 +113,15 @@ const AddressModal: React.FC<AddressModalProps> = ({
     }
   };
 
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
-
   return (
     <StyledDialog open={open} onClose={onClose} fullWidth>
       <StyledDialogTitle>
-        <Typography variant={isMobile ? "M_18" : "M_24"} fontWeight="semibold">
+        <Typography
+          fontWeight="semibold"
+          sx={{
+            fontSize: ["18px", "18px", "24px"],
+          }}
+        >
           {title}
         </Typography>
         <IconButton onClick={onClose}>
@@ -166,6 +163,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
             backgroundColor: selectedAddress
               ? COLORS.PrimaryBlue[300]
               : undefined,
+            fontSize: ["16px", "16px", "20px"],
           }}
         >
           선택완료
