@@ -1,4 +1,4 @@
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 interface ProgressProps {
   max: number;

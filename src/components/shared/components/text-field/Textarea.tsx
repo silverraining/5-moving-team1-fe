@@ -1,5 +1,6 @@
 "use client";
-import { COLORS } from "@/src/public/theme/colors";
+
+import { COLORS } from "@/public/theme/colors";
 import {
   InputProps,
   OutlinedInput,

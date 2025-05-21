@@ -1,6 +1,4 @@
 "use client";
-import { PATH } from "@/src/hooks/constant";
-import { CardList } from "@/shared/components/card/CardList";
 import {
   Button,
   Stack,
@@ -9,7 +7,8 @@ import {
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
-import Grid from "@mui/material/Grid";
+import { CardList } from "../components/shared/components/Card/CardList";
+import { PATH } from "../hooks/constants";
 export const Main = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -20,28 +19,18 @@ export const Main = () => {
         <Typography variant="B_36">원하는 이사 서비스를 요청하고</Typography>
         <Typography variant="B_36">견적을 받아보세요 </Typography>
       </Stack>
-      <Grid
-        container
+      <Stack
+        width={"100%"}
         spacing={3}
         justifyContent="center"
         direction={isSmall ? "column" : "row"}
       >
-        <Grid item xs={12} md={8}>
-          <Grid container direction="column" spacing={3}>
-            <Grid item>
-              <CardList variant="home" />
-            </Grid>
-            <Grid item>
-              <CardList variant="office" />
-            </Grid>
-          </Grid>
-        </Grid>
-
-        {/* 오른쪽 컬럼 (small) */}
-        <Grid item xs={12} md={4}>
-          <CardList variant="small" />
-        </Grid>
-      </Grid>
+        <Stack direction="column" spacing={3}>
+          <CardList variant="home" />
+          <CardList variant="office" />
+        </Stack>
+        <CardList variant="small" />
+      </Stack>
       <Stack
         width={"100%"}
         direction={isSmall ? "column" : "row"}

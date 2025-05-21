@@ -1,6 +1,6 @@
 import { PickersActionBarProps } from "@mui/x-date-pickers/PickersActionBar";
 import { Button, useTheme, useMediaQuery } from "@mui/material";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 
 interface CustomActionBarProps extends PickersActionBarProps {
   onAccept?: () => void;

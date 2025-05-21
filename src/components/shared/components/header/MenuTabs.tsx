@@ -1,5 +1,6 @@
 import { useTab } from "@/src/hooks/utill";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
+
 import { Box, Tab, Tabs } from "@mui/material";
 import React from "react";
 

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Progress } from "./_components/progress";
 import { Stars } from "./_components/stars";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 interface ReviewChartProps {
   data: {
     average: number;

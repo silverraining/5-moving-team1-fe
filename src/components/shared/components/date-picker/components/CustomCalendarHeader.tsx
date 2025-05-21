@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { PickersCalendarHeaderProps } from "@mui/x-date-pickers/PickersCalendarHeader";
-import { COLORS } from "@/src/public/theme/colors";
+import { COLORS } from "@/public/theme/colors";
 
 export const CustomCalendarHeader = (props: PickersCalendarHeaderProps) => {
   const { currentMonth, onMonthChange } = props;
