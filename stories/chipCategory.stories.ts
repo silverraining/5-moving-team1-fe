@@ -1,49 +1,43 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ChipCategory } from "@/shared/components/ChipCategory";
+import { ChipCategory } from "@/shared/components/chip/ChipCategory";
 
 const meta: Meta<typeof ChipCategory> = {
   title: "Chip/ChipCategory",
   component: ChipCategory,
-  argTypes: {
-    size: {
-      control: { type: "select" },
-      options: ["sm", "md", "xl"],
-    },
-    type: {
-      control: { type: "select" },
-      options: ["small", "home", "office", "designation", "wait"],
-    },
-  },
 };
 
 export default meta;
-
 type Story = StoryObj<typeof ChipCategory>;
 
-export const Default: Story = {
+export const Mobile: Story = {
   args: {
-    size: "md",
     type: "small",
   },
+  parameters: {
+    viewport: {
+      defaultViewport: "mobile1", // 약 375px
+    },
+  },
 };
 
-export const SmallChip: Story = {
+export const Tablet: Story = {
   args: {
-    size: "sm",
     type: "home",
   },
-};
-
-export const ExtraLarge: Story = {
-  args: {
-    size: "xl",
-    type: "designation",
+  parameters: {
+    viewport: {
+      defaultViewport: "tablet", // 약 768px
+    },
   },
 };
 
-export const NoImage: Story = {
+export const Desktop: Story = {
   args: {
-    size: "md",
-    type: "wait",
+    type: "office",
+  },
+  parameters: {
+    viewport: {
+      defaultViewport: "desktop", // 약 1280px
+    },
   },
 };

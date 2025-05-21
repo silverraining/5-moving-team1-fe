@@ -1,30 +1,27 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CheckBoxField } from "@/shared/components/CheckBoxField";
+import { CheckBoxField } from "@/shared/components/check-box/CheckBoxField";
+import { action } from "@storybook/addon-actions";
 
 const meta: Meta<typeof CheckBoxField> = {
-  title: "checkBox/CheckBoxField",
+  title: "CheckBox/CheckBoxField",
   component: CheckBoxField,
-  tags: ["autodocs"],
   argTypes: {
-    size: {
-      control: "radio",
-      options: ["sm", "md"],
+    selected: {
+      control: { type: "select" },
+      options: [
+        "소형이사 (원룸, 투룸, 20평대 미만)",
+        "가정이사 (쓰리룸, 20평대 이상)",
+      ],
     },
   },
 };
 
 export default meta;
-
 type Story = StoryObj<typeof CheckBoxField>;
 
 export const Default: Story = {
   args: {
-    selected: "가정이사 (쓰리룸, 20평대 이상)",
-    size: "md",
-    onChange: () => {
-      alert(
-        "useState는 스토리북에서 어떻게 써야하는지 몰라서 클릭 시 alert로 대체했습니다."
-      );
-    },
+    selected: "소형이사 (원룸, 투룸, 20평대 미만)",
+    onChange: action("onChange"),
   },
 };

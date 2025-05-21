@@ -1,24 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ChipArea } from "@/shared/components/ChipArea";
+import { ChipArea } from "@/shared/components/chip/ChipArea";
 
 const meta: Meta<typeof ChipArea> = {
-  title: "Chip/chipArea",
+  title: "Chip/ChipArea",
   component: ChipArea,
   argTypes: {
-    label: {
-      control: "text",
-      defaultValue: "소형이사",
-    },
-    selected: {
-      control: "boolean",
-      defaultValue: false,
-    },
-    size: {
-      control: "select",
-      options: ["sm", "md"],
-      defaultValue: "md",
-    },
-    onClick: { action: "clicked" },
+    label: { control: "text" },
+    selected: { control: "boolean" },
   },
 };
 
@@ -27,22 +15,16 @@ type Story = StoryObj<typeof ChipArea>;
 
 export const Default: Story = {
   args: {
-    label: "소형이사",
+    label: "서울",
     selected: false,
+    onClick: () => alert("Chip clicked"),
   },
 };
 
 export const Selected: Story = {
   args: {
-    label: "사무실이사",
+    label: "서울",
     selected: true,
-  },
-};
-
-export const SmallSize: Story = {
-  args: {
-    label: "가정이사",
-    selected: false,
-    size: "sm",
+    onClick: () => alert("Chip clicked"),
   },
 };
