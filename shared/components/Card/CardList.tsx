@@ -1,10 +1,13 @@
 import { COLORS } from "@/public/theme/colors";
 import { Box, BoxProps, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+
 type VariantType = "small" | "office" | "home";
+
 interface CardListProps {
   variant: VariantType;
 }
+
 const CARD_CONTENT: Record<
   VariantType,
   { title: string; subTitle: string; img: string }
@@ -25,6 +28,7 @@ const CARD_CONTENT: Record<
     img: "/images/landing/building.svg",
   },
 };
+
 export const CardList = ({ variant }: CardListProps) => {
   const { title, subTitle, img } = CARD_CONTENT[variant];
   const Style =
@@ -40,6 +44,7 @@ export const CardList = ({ variant }: CardListProps) => {
       : variant === "home"
         ? HomeImageStyle
         : OfficeImageStyle;
+
   return (
     <Box {...Style}>
       <Stack>
@@ -66,13 +71,13 @@ const SmallStyle: BoxProps = {
     borderRadius: "32px",
     overflow: "hidden",
     position: "relative",
-
     "&:hover .slide-in": {
       transform: "translateX(0)",
       opacity: 1,
     },
   },
 };
+
 const SmallImageStyle: BoxProps = {
   className: "slide-in",
   sx: {
@@ -84,6 +89,7 @@ const SmallImageStyle: BoxProps = {
     transition: "all 1s ease",
   },
 };
+
 const HomeStyle: BoxProps = {
   width: ["327px", "327px", "764px"],
   height: ["240px", "240px", "287px"],

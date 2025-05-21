@@ -23,7 +23,9 @@
     "npx": "^10.2.2",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "storybook": "^8.6.13"
+    "react-hook-form": "^7.56.4",
+    "storybook": "^8.6.13",
+    "zustand": "^5.0.4"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",

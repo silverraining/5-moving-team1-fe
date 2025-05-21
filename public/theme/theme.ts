@@ -2,7 +2,6 @@
 "use client";
 import { createTheme, ThemeOptions } from "@mui/material/styles";
 import { COLORS } from "./colors";
-import { background } from "storybook/internal/theming";
 
 declare module "@mui/material/styles" {
   interface BreakpointOverrides {
@@ -18,6 +17,7 @@ declare module "@mui/material/styles" {
 }
 
 const sharedTypography: ThemeOptions["typography"] = {
+  fontFamily: "'Pretendard Variable', sans-serif",
   B_32: { fontSize: "32px", lineHeight: "42px", fontWeight: 700 },
   SB_32: { fontSize: "32px", lineHeight: "42px", fontWeight: 600 },
   B_24: { fontSize: "24px", lineHeight: "32px", fontWeight: 700 },
@@ -51,7 +51,7 @@ export const createAppTheme = (mode: "light" | "dark") =>
   createTheme({
     breakpoints: {
       values: {
-        mobile: 0,
+        mobile: 344,
         tablet: 744,
         desktop: 1200,
       },

@@ -1,8 +1,9 @@
 "use client";
 import { Box, Stack } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
-import { DarkModeToggle } from "./colorModeToggle";
-import { Header } from "./Header";
+
+import { Header } from "./header/Header";
+import { DarkModeToggle } from "./ColorModeToggle";
 
 type LayOutProps = {
   children: ReactNode;

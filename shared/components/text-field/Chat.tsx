@@ -24,7 +24,6 @@ export const Chat = ({ content, variant }: ChatProps) => {
       },
     },
     received: {
-      width: "100%",
       sx: {
         whiteSpace: "pre-wrap",
         wordBreak: "break-word",
@@ -55,10 +54,9 @@ export const Chat = ({ content, variant }: ChatProps) => {
       alignItems="center"
     >
       <Box
-        width="100%"
         maxWidth={["248px", "248px", "100%"]}
-        px={["20px", "40px"]}
-        py={["12px", "20px"]}
+        px={["20px", "20px", "40px"]}
+        py={["12px", "12px", "20px"]}
         {...bubbleStyles[variant]}
       >
         <Typography
