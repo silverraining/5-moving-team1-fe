@@ -133,13 +133,10 @@ export default function RejectRequestModal({
               gap={isSmall ? "6px" : "16px"}
               sx={{
                 width: "100%",
-                px: isSmall ? 0 : "18px",
-                paddingTop: isSmall ? "10px" : "24px",
-                paddingBottom: isSmall ? "20px" : "24px",
+                px: "18px",
+                py: isSmall ? "10px" : "24px",
                 borderRadius: "8px",
-                ...(isSmall
-                  ? { borderBottom: `1px solid ${COLORS.Line[100]}` }
-                  : { border: `1px solid ${COLORS.Line[100]}` }),
+                border: `1px solid ${COLORS.Line[100]}`,
               }}
             >
               <Box display="flex">

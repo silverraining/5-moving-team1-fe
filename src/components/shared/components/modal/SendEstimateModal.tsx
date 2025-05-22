@@ -42,7 +42,7 @@ export default function SendEstimateModal({
   toAddress,
 }: SendEstimateModalProps) {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const { register, handleSubmit, errors, isValid, reset } =
     useEstimateOfferForm();
@@ -65,18 +65,18 @@ export default function SendEstimateModal({
       slotProps={{
         paper: {
           sx: {
-            borderRadius: isMobile ? "32px 32px 0 0" : "32px",
+            borderRadius: isSmall ? "32px 32px 0 0" : "32px",
             margin: 0,
-            position: isMobile ? "fixed" : "initial",
+            position: isSmall ? "fixed" : "initial",
             px: "24px",
             paddingTop: "32px",
             paddingBottom: "40px",
-            bottom: isMobile ? 0 : "auto",
-            left: isMobile ? 0 : "auto",
-            right: isMobile ? 0 : "auto",
-            maxHeight: isMobile ? "90vh" : "auto",
-            width: isMobile ? "100%" : "auto",
-            gap: isMobile ? "26px" : "40px",
+            bottom: isSmall ? 0 : "auto",
+            left: isSmall ? 0 : "auto",
+            right: isSmall ? 0 : "auto",
+            maxHeight: isSmall ? "90vh" : "auto",
+            width: isSmall ? "100%" : "auto",
+            gap: isSmall ? "26px" : "40px",
           },
         },
       }}
@@ -88,13 +88,13 @@ export default function SendEstimateModal({
           alignItems: "center",
           padding: 0,
         }}
-        variant={isMobile ? "B_18" : "SB_24"}
+        variant={isSmall ? "B_18" : "SB_24"}
       >
         견적 보내기
         <Image
           onClick={onClose}
-          width={24}
-          height={24}
+          width={isSmall ? 24 : 36}
+          height={isSmall ? 24 : 36}
           src="/images/header/X.svg"
           alt="close"
           style={{ cursor: "pointer" }}
@@ -114,8 +114,8 @@ export default function SendEstimateModal({
             display="flex"
             flexWrap="wrap"
             sx={{
-              gap: isMobile ? "8px" : "12px",
-              mb: isMobile ? "14px" : "24px",
+              gap: isSmall ? "8px" : "12px",
+              mb: isSmall ? "14px" : "24px",
             }}
           >
             {moveType.map((type) => (
@@ -126,26 +126,27 @@ export default function SendEstimateModal({
             display="flex"
             flexDirection="column"
             alignItems="flex-start"
-            gap={isMobile ? "20px" : "32px"}
+            gap={isSmall ? "20px" : "32px"}
           >
             {/* 고객 정보 카드 */}
             <Box
               display="flex"
               flexDirection="column"
-              gap={isMobile ? "12px" : "24px"}
+              gap={isSmall ? "6px" : "16px"}
               sx={{
-                px: isMobile ? 0 : "18px",
-                paddingTop: isMobile ? "10px" : "24px",
-                paddingBottom: isMobile ? "20px" : "24px",
+                width: "100%",
+                px: isSmall ? 0 : "18px",
+                paddingTop: isSmall ? "10px" : "24px",
+                paddingBottom: isSmall ? "20px" : "24px",
                 borderRadius: "8px",
-                ...(isMobile
+                ...(isSmall
                   ? { borderBottom: `1px solid ${COLORS.Line[100]}` }
                   : { border: `1px solid ${COLORS.Line[100]}` }),
               }}
             >
               <Box display="flex">
                 <Typography
-                  variant={isMobile ? "SB_14" : "SB_24"}
+                  variant={isSmall ? "SB_14" : "SB_24"}
                   sx={{ whiteSpace: "nowrap" }}
                 >
                   {customerName} 고객님
@@ -154,10 +155,10 @@ export default function SendEstimateModal({
               <Box
                 display="flex"
                 alignItems="center"
-                gap={isMobile ? "8px" : "16px"}
+                gap={isSmall ? "8px" : "16px"}
               >
                 <InfoChip label="이사일" />
-                <Typography variant={isMobile ? "M_14" : "M_18"} noWrap>
+                <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                   {moveDate}
                 </Typography>
               </Box>
@@ -165,10 +166,10 @@ export default function SendEstimateModal({
                 <Box
                   display="flex"
                   alignItems="center"
-                  gap={isMobile ? "8px" : "12px"}
+                  gap={isSmall ? "8px" : "12px"}
                 >
                   <InfoChip label="출발" />
-                  <Typography variant={isMobile ? "M_14" : "M_18"} noWrap>
+                  <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                     {fromAddress}
                   </Typography>
                 </Box>
@@ -178,25 +179,25 @@ export default function SendEstimateModal({
                     width: "1px",
                     backgroundColor: COLORS.Line[200],
                     alignSelf: "stretch",
-                    mx: isMobile ? "14px" : "16px",
+                    mx: isSmall ? "14px" : "16px",
                   }}
                 />
                 <Box
                   display="flex"
                   alignItems="center"
-                  gap={isMobile ? "8px" : "12px"}
+                  gap={isSmall ? "8px" : "12px"}
                 >
                   <InfoChip label="도착" />
-                  <Typography variant={isMobile ? "M_14" : "M_18"} noWrap>
+                  <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                     {toAddress}
                   </Typography>
                 </Box>
               </Box>
             </Box>
             {/* 견적가 */}
-            <Box display="flex" flexDirection="column">
+            <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
               <Typography
-                variant={isMobile ? "SB_16" : "SB_20"}
+                variant={isSmall ? "SB_16" : "SB_20"}
                 color={COLORS.Black[300]}
               >
                 견적가를 입력해 주세요
@@ -206,6 +207,7 @@ export default function SendEstimateModal({
                 placeholder="견적가 입력"
                 register={register.price}
                 errorMessage={errors.price?.message}
+                sx={{ width: "100%" }}
               />
             </Box>
             {/* === 경계선 추가 === */}
@@ -217,9 +219,9 @@ export default function SendEstimateModal({
               }}
             />
             {/* 코멘트 */}
-            <Box display="flex" flexDirection="column">
+            <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
               <Typography
-                variant={isMobile ? "SB_16" : "SB_20"}
+                variant={isSmall ? "SB_16" : "SB_20"}
                 color={COLORS.Black[300]}
               >
                 코멘트를 입력해 주세요
@@ -228,12 +230,13 @@ export default function SendEstimateModal({
                 placeholder="최소 10자 이상 입력해주세요"
                 register={register.comment}
                 errorMessage={errors.comment?.message}
+                sx={{ width: "100%" }}
               />
             </Box>
           </Box>
         </DialogContent>
 
-        <DialogActions sx={{ p: 0, mt: isMobile ? "26px" : "40px" }}>
+        <DialogActions sx={{ p: 0, mt: isSmall ? "26px" : "40px" }}>
           <Button
             type="submit"
             variant="contained"
@@ -244,7 +247,7 @@ export default function SendEstimateModal({
             }}
           >
             <Typography
-              variant={isMobile ? "SB_16" : "SB_20"}
+              variant={isSmall ? "SB_16" : "SB_20"}
               color={COLORS.White[100]}
             >
               견적 보내기

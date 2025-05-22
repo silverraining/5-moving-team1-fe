@@ -48,7 +48,7 @@ export default function ReviewModal({
   moveType,
 }: ReviewModalProps) {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const { control, handleSubmit, register, isValid, errors, reset } =
     useReviewForm();
@@ -67,18 +67,18 @@ export default function ReviewModal({
       slotProps={{
         paper: {
           sx: {
-            borderRadius: isMobile ? "32px 32px 0 0" : "32px",
+            borderRadius: isSmall ? "32px 32px 0 0" : "32px",
             margin: 0,
-            position: isMobile ? "fixed" : "initial",
+            position: isSmall ? "fixed" : "initial",
             px: "24px",
             paddingTop: "32px",
             paddingBottom: "40px",
-            bottom: isMobile ? 0 : "auto",
-            left: isMobile ? 0 : "auto",
-            right: isMobile ? 0 : "auto",
-            maxHeight: isMobile ? "90vh" : "auto",
-            width: isMobile ? "100%" : "auto",
-            gap: isMobile ? "26px" : "40px",
+            bottom: isSmall ? 0 : "auto",
+            left: isSmall ? 0 : "auto",
+            right: isSmall ? 0 : "auto",
+            maxHeight: isSmall ? "90vh" : "auto",
+            width: isSmall ? "100%" : "auto",
+            gap: isSmall ? "26px" : "40px",
           },
         },
       }}
@@ -90,13 +90,13 @@ export default function ReviewModal({
           alignItems: "center",
           padding: 0,
         }}
-        variant={isMobile ? "B_18" : "SB_24"}
+        variant={isSmall ? "B_18" : "SB_24"}
       >
         리뷰 쓰기
         <Image
           onClick={onClose}
-          width={24}
-          height={24}
+          width={isSmall ? 24 : 36}
+          height={isSmall ? 24 : 36}
           src={"/images/header/X.svg"}
           alt="close"
           style={{ cursor: "pointer" }}
@@ -108,7 +108,7 @@ export default function ReviewModal({
           p: 0,
           display: "flex",
           flexDirection: "column",
-          gap: isMobile ? "20px" : "32px",
+          gap: isSmall ? "20px" : "32px",
         }}
       >
         {/* 기사 정보 카드 */}
@@ -118,56 +118,71 @@ export default function ReviewModal({
             display="flex"
             flexWrap="wrap"
             sx={{
-              mb: isMobile ? "14px" : "24px",
-              gap: isMobile ? "8px" : "12px",
+              mb: isSmall ? "14px" : "24px",
+              gap: isSmall ? "8px" : "12px",
             }}
           >
             {moveType.map((type) => (
               <ChipCategory key={type} type={type as ChipProps["type"]} />
             ))}
           </Box>
-          {/* 기존 기사님 정보 */}
+          {/* 기사님 정보 */}
           <Box
             display="flex"
-            gap={isMobile ? "12px" : "24px"}
+            gap={isSmall ? "12px" : "24px"}
             sx={{
-              px: isMobile ? 0 : "18px",
-              paddingTop: isMobile ? "10px" : "24px",
-              paddingBottom: isMobile ? "20px" : "24px",
+              width: "100%",
+              px: isSmall ? 0 : "18px",
+              paddingTop: isSmall ? "10px" : "24px",
+              paddingBottom: isSmall ? "20px" : "24px",
               borderRadius: "8px",
-              ...(isMobile
+              ...(isSmall
                 ? { borderBottom: `1px solid ${COLORS.Line[100]}` }
                 : { border: `1px solid ${COLORS.Line[100]}` }),
             }}
           >
-            <Image
-              width={isMobile ? 46 : 96}
-              height={isMobile ? 46 : 96}
-              style={{
-                borderRadius: "50%",
-                objectFit: "cover", // 이미지를 꽉 채우기 위해 추천
-              }}
-              src={"/images/profile/binProfile.svg"}
-              alt="기사님 프로필 이미지"
-            />
-            <Box display="flex-col" alignSelf="center">
-              <Typography
-                variant={isMobile ? "SB_14" : "SB_24"}
-                fontWeight="bold"
-              >
-                {moverName} 기사님
-              </Typography>
+            <Box
+              display="flex"
+              alignItems="center" // 수직 중앙 정렬
+              justifyContent="center" // 수평 중앙 정렬
+            >
+              <Image
+                width={isSmall ? 46 : 96}
+                height={isSmall ? 46 : 96}
+                style={{
+                  borderRadius: "50%",
+                  objectFit: "cover", // 이미지를 꽉 채우기 위해 추천
+                }}
+                src={"/images/profile/binProfile.svg"}
+                alt="기사님 프로필 이미지"
+              />
+            </Box>
+            <Box
+              display="flex"
+              flexDirection="column"
+              alignSelf="center"
+              gap={isSmall ? "6px" : "16px"}
+            >
+              <Box display="flex">
+                <Typography
+                  variant={isSmall ? "SB_14" : "SB_24"}
+                  fontWeight="bold"
+                  display="flex"
+                >
+                  {moverName} 기사님
+                </Typography>
+              </Box>
               <Box display="flex">
                 <Typography
                   color="text.secondary"
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: isMobile ? "6px" : "12px",
+                    gap: isSmall ? "6px" : "12px",
                   }}
                 >
                   <InfoChip label="이사일" />{" "}
-                  <Typography variant={isMobile ? "M_13" : "M_20"} noWrap>
+                  <Typography variant={isSmall ? "M_13" : "M_20"} noWrap>
                     {moveDate}
                   </Typography>
                 </Typography>
@@ -176,7 +191,7 @@ export default function ReviewModal({
                   sx={{
                     width: "1px",
                     backgroundColor: COLORS.Line[200],
-                    mx: isMobile ? "12px" : "16px",
+                    mx: isSmall ? "12px" : "16px",
                     alignSelf: "stretch",
                   }}
                 />
@@ -185,11 +200,11 @@ export default function ReviewModal({
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    gap: isMobile ? "6px" : "12px",
+                    gap: isSmall ? "6px" : "12px",
                   }}
                 >
                   <InfoChip label="견적가" />{" "}
-                  <Typography variant={isMobile ? "M_13" : "M_20"} noWrap>
+                  <Typography variant={isSmall ? "M_13" : "M_20"} noWrap>
                     {price.toLocaleString()}원
                   </Typography>
                 </Typography>
@@ -206,7 +221,7 @@ export default function ReviewModal({
           gap="16px"
         >
           <Typography
-            variant={isMobile ? "SB_16" : "SB_20"}
+            variant={isSmall ? "SB_16" : "SB_20"}
             color={COLORS.Black[300]}
           >
             평점을 선택해 주세요
@@ -217,7 +232,7 @@ export default function ReviewModal({
             render={({ field }) => (
               <ModalStar
                 score={field.value ?? 0}
-                isMedium={isMobile}
+                isMedium={isSmall}
                 editable
                 onChange={(val) => field.onChange(val)}
               />
@@ -235,7 +250,7 @@ export default function ReviewModal({
         {/* 상세 후기 */}
         <Box display="flex" flexDirection="column" gap="16px">
           <Typography
-            variant={isMobile ? "SB_16" : "SB_20"}
+            variant={isSmall ? "SB_16" : "SB_20"}
             color={COLORS.Black[300]}
           >
             상세 후기를 입력해 주세요
@@ -261,7 +276,7 @@ export default function ReviewModal({
           fullWidth
         >
           <Typography
-            variant={isMobile ? "SB_16" : "SB_20"}
+            variant={isSmall ? "SB_16" : "SB_20"}
             color={COLORS.White[100]}
           >
             {" "}
