@@ -1,3 +1,35 @@
+/**
+ * CheckboxList 컴포넌트 사용 방법
+ *
+ * 1. 체크박스 아이템 정의
+ * const checkboxItems: CheckboxItem[] = [
+ *   { label: "소형이사", count: 10, checked: false },
+ *   { label: "가정이사", count: 2, checked: false },
+ *   { label: "사무실이사", count: 8, checked: false },
+ * ];
+ *
+ * 2. 컴포넌트 사용
+ * <CheckboxList
+ *   title="지역"
+ *   items={checkboxItems}
+ *   onItemChange={(index, checked) => {
+ *
+ *    // 개별 체크박스 선택
+ *     const newItems = [...checkboxItems];
+ *     newItems[index].checked = checked;
+ *     setCheckboxItems(newItems);
+ *   }}
+ *    // 전체 선택
+ *   onSelectAll={(checked) => {
+ *     const newItems = checkboxItems.map(item => ({
+ *       ...item,
+ *       checked: checked
+ *     }));
+ *     setCheckboxItems(newItems);
+ *   }}
+ * />
+ */
+
 import { Box, Typography, Checkbox as MuiCheckbox } from "@mui/material";
 import { Checkbox } from "./Checkbox";
 import { COLORS } from "@/public/theme/colors";
