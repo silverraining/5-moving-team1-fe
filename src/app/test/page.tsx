@@ -1,5 +1,5 @@
 import React from "react";
-import DropDownWrapper from "@/shared/components/drop-down/DropDownWrapper";
+import DropDownWrapper from "@/src/components/shared/components/drop-down/DropDownWrapper";
 
 export default function Test() {
   return (
