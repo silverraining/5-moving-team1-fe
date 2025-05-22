@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Providers } from "../components/shared/providers/Providers";
-import { LayOut } from "../components/shared/components/Layout";
+import { CustomLayout } from "../components/shared/components/CustomLayout";
 
 export const metadata = {
   title: "Moving",
@@ -24,7 +24,7 @@ export default function RootLayout({
       </head>
       <body>
         <Providers>
-          <LayOut>{children}</LayOut>
+          <CustomLayout>{children}</CustomLayout>
         </Providers>
       </body>
     </html>

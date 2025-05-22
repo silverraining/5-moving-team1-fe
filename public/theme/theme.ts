@@ -52,7 +52,7 @@ export const createAppTheme = (mode: "light" | "dark") =>
   createTheme({
     breakpoints: {
       values: {
-        mobile: 344,
+        mobile: 375,
         tablet: 744,
         desktop: 1200,
       },
