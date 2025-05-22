@@ -1,29 +1,69 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { CheckBoxList } from "@/src/components/shared/components/check-box/CheckBoxList";
-import { action } from "@storybook/addon-actions";
+import { CheckboxList } from "../src/components/shared/components/filter-check-box/CheckboxList";
+import { ThemeProvider } from "@mui/material/styles";
+import { createAppTheme } from "../public/theme/theme";
+import { useState } from "react";
 
-const meta: Meta<typeof CheckBoxList> = {
-  title: "CheckBox/CheckBoxList",
-  component: CheckBoxList,
-  argTypes: {
-    selected: {
-      control: { type: "select" },
-      options: [
-        "소형이사 (원룸, 투룸, 20평대 미만)",
-        "가정이사 (쓰리룸, 20평대 이상)",
-        "사무실이사 (사무실, 상업공간)",
-      ],
-    },
+const theme = createAppTheme("light");
+
+const meta: Meta<typeof CheckboxList> = {
+  title: "filter-check-box/CheckboxList",
+  component: CheckboxList,
+  parameters: {
+    layout: "centered",
   },
+  tags: ["autodocs"],
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={theme}>
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
 };
 
 export default meta;
-type Story = StoryObj<typeof CheckBoxList>;
+type Story = StoryObj<typeof CheckboxList>;
+
+const defaultItems = [
+  { label: "소형이사", count: 10, checked: false },
+  { label: "가정이사", count: 2, checked: false },
+  { label: "사무실이사", count: 8, checked: false },
+];
 
 export const Default: Story = {
   args: {
-    selected: "가정이사 (쓰리룸, 20평대 이상)",
-    onChange: action("onChange"),
-    onConfirm: action("onConfirm"),
+    title: "이사 유형",
+    items: defaultItems,
+    onItemChange: () => {},
+    onSelectAll: () => {},
+  },
+};
+
+export const Interactive: Story = {
+  render: () => {
+    const [items, setItems] = useState(defaultItems);
+
+    const handleSelectAll = (checked: boolean) => {
+      setItems(items.map((item) => ({ ...item, checked })));
+    };
+
+    const handleItemChange = (index: number, checked: boolean) => {
+      setItems(
+        items.map((item, i) => ({
+          ...item,
+          checked: i === index ? checked : item.checked,
+        }))
+      );
+    };
+
+    return (
+      <CheckboxList
+        title="이사 유형"
+        items={items}
+        onSelectAll={handleSelectAll}
+        onItemChange={handleItemChange}
+      />
+    );
   },
 };
