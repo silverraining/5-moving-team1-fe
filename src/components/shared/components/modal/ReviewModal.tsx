@@ -240,29 +240,40 @@ export default function ReviewModal({
           }}
         />
         {/* 상세 후기 */}
-        <Typography
-          variant={isMobile ? "SB_16" : "SB_20"}
-          color={COLORS.Black[300]}
-        >
-          상세 후기를 입력해 주세요
-        </Typography>
-        <Textarea
-          register={register("content")}
-          placeholder="최소 10자 이상 입력해주세요"
-          errorMessage={errors.content?.message}
-          sx={{ width: "full" }}
-        />
+        <Box display="flex" flexDirection="column" gap="16px">
+          <Typography
+            variant={isMobile ? "SB_16" : "SB_20"}
+            color={COLORS.Black[300]}
+          >
+            상세 후기를 입력해 주세요
+          </Typography>
+          <Textarea
+            register={register("content")}
+            placeholder="최소 10자 이상 입력해주세요"
+            errorMessage={errors.content?.message}
+            sx={{ width: "full" }}
+          />
+        </Box>
       </DialogContent>
 
-      <DialogActions sx={{ px: 3, pb: 3 }}>
+      <DialogActions sx={{ p: 0 }}>
         <Button
           onClick={handleSubmit(onFormSubmit)}
           disabled={!isValid}
           variant="contained"
           color="primary"
+          sx={{
+            padding: "16px",
+          }}
           fullWidth
         >
-          리뷰 등록
+          <Typography
+            variant={isMobile ? "SB_16" : "SB_20"}
+            color={COLORS.White[100]}
+          >
+            {" "}
+            리뷰 등록
+          </Typography>
         </Button>
       </DialogActions>
     </Dialog>
