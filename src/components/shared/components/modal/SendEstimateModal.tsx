@@ -10,7 +10,7 @@ import {
   Box,
   useTheme,
   useMediaQuery,
-  // Divider,
+  Divider,
 } from "@mui/material";
 import Image from "next/image";
 import { Textarea } from "../text-field/Textarea";
@@ -135,7 +135,6 @@ export default function SendEstimateModal({
               gap={isMobile ? "12px" : "24px"}
               sx={{
                 px: isMobile ? 0 : "18px",
-                // py: isMobile ? "10px" : "24px",
                 paddingTop: isMobile ? "10px" : "24px",
                 paddingBottom: isMobile ? "20px" : "24px",
                 borderRadius: "8px",
@@ -162,12 +161,7 @@ export default function SendEstimateModal({
                   {moveDate}
                 </Typography>
               </Box>
-
-              <Box
-                display="flex"
-                alignItems="center"
-                // gap={isMobile ? "14px" : "16px"}
-              >
+              <Box display="flex" alignItems="center">
                 <Box
                   display="flex"
                   alignItems="center"
@@ -214,6 +208,14 @@ export default function SendEstimateModal({
                 errorMessage={errors.price?.message}
               />
             </Box>
+            {/* === 경계선 추가 === */}
+            <Divider
+              sx={{
+                height: "1px",
+                width: "100%",
+                backgroundColor: COLORS.Line[100],
+              }}
+            />
             {/* 코멘트 */}
             <Box display="flex" flexDirection="column">
               <Typography

@@ -17,16 +17,9 @@ import Image from "next/image";
 import { ModalStar } from "./components/ModalStar";
 import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
 import { InfoChip } from "./components/InfoChip";
-// import { COLORS } from "@/public/theme/colors";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";
 import { COLORS } from "@/public/theme/colors";
-
-// // 가데이터
-// const moveType = "small"; // (Review.EstimateOffer.EstimateRequest.moveType)
-// const moverName = "홍길동"; // (Review.moverProfile.nickname)
-// const moveDate = "2025-01-01T00:00:00Z"; // (Review.EstimateOffer.confirmedAt)
-// const price = 150000; // (Review.EstimateOffer.price)
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -42,7 +35,7 @@ interface ReviewModalProps {
   moverName: string;
   moveDate: string;
   price: number;
-  moveType: string[];
+  moveType: ChipProps["type"][];
 }
 
 export default function ReviewModal({
@@ -54,16 +47,16 @@ export default function ReviewModal({
   price,
   moveType,
 }: ReviewModalProps) {
-  // const [rating, setRating] = useState<number | null>(0);
-  // const [content, setContent] = useState("");
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
 
-  const { control, handleSubmit, register, isValid, errors } = useReviewForm();
+  const { control, handleSubmit, register, isValid, errors, reset } =
+    useReviewForm();
 
   const onFormSubmit = (data: { rating: number; content: string }) => {
     onSubmit(moverName, moveDate, price, data.rating, data.content, moveType);
-    onClose(); // 제출 후 모달 닫기 (선택 사항)
+    reset();
+    onClose();
   };
 
   return (
@@ -119,7 +112,6 @@ export default function ReviewModal({
         }}
       >
         {/* 기사 정보 카드 */}
-
         <Box display="flex" flexDirection="column" alignItems="flex-start">
           {/* 이사 유형 chip */}
           <Box
@@ -140,7 +132,8 @@ export default function ReviewModal({
             gap={isMobile ? "12px" : "24px"}
             sx={{
               px: isMobile ? 0 : "18px",
-              py: isMobile ? "10px" : "24px",
+              paddingTop: isMobile ? "10px" : "24px",
+              paddingBottom: isMobile ? "20px" : "24px",
               borderRadius: "8px",
               ...(isMobile
                 ? { borderBottom: `1px solid ${COLORS.Line[100]}` }
@@ -161,7 +154,6 @@ export default function ReviewModal({
               <Typography
                 variant={isMobile ? "SB_14" : "SB_24"}
                 fontWeight="bold"
-                // sx={{ mb: isMobile ? "6px" : "16px" }}
               >
                 {moverName} 기사님
               </Typography>
@@ -184,7 +176,7 @@ export default function ReviewModal({
                   sx={{
                     width: "1px",
                     backgroundColor: COLORS.Line[200],
-                    mx: isMobile ? "6px" : "9px",
+                    mx: isMobile ? "12px" : "16px",
                     alignSelf: "stretch",
                   }}
                 />
@@ -232,10 +224,11 @@ export default function ReviewModal({
             )}
           />
         </Box>
-
         {/* === 경계선 추가 === */}
         <Divider
           sx={{
+            height: "1px",
+            width: "100%",
             backgroundColor: COLORS.Line[100],
           }}
         />
@@ -251,7 +244,7 @@ export default function ReviewModal({
             register={register("content")}
             placeholder="최소 10자 이상 입력해주세요"
             errorMessage={errors.content?.message}
-            sx={{ width: "full" }}
+            sx={{ width: "100%" }}
           />
         </Box>
       </DialogContent>

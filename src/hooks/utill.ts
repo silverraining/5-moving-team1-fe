@@ -55,7 +55,7 @@ export const useTab = () => {
   return { value, handleChange, setValue };
 };
 
-// 리뷰 모달용 react-hook-form 훅
+// 리뷰 모달용 훅
 interface ReviewFormValues {
   rating: number;
   content: string;
@@ -65,6 +65,7 @@ export const useReviewForm = () => {
   const {
     control,
     handleSubmit,
+    reset,
     register,
     watch,
     formState: { errors },
@@ -81,6 +82,7 @@ export const useReviewForm = () => {
   return {
     control,
     handleSubmit,
+    reset,
     register: (name: keyof ReviewFormValues) =>
       register(name, {
         required: "내용을 입력해주세요",
