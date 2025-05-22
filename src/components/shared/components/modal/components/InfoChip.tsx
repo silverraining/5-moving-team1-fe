@@ -15,7 +15,7 @@ export function InfoChip({ label }: InfoBadgeProps) {
   const Chip = styled("div")(() => ({
     display: "flex",
     alignItems: "center",
-    justifyItems: "center",
+    justifyContent: "center",
     padding: isMobile ? "2px 4px" : "4px 6px",
     gap: "10px",
     width: isMobile ? "42px" : "59px",

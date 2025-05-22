@@ -94,3 +94,61 @@ export const useReviewForm = () => {
     watch,
   };
 };
+
+// 견적보내기 모달용 훅
+export interface EstimateIOfferFormValues {
+  price: string;
+  comment: string;
+}
+
+export const useEstimateOfferForm = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<EstimateIOfferFormValues>({
+    defaultValues: {
+      price: "",
+      comment: "",
+    },
+    mode: "onChange",
+  });
+
+  const price = watch("price").trim();
+  const comment = watch("comment").trim();
+
+  const isValid =
+    price !== "" &&
+    !isNaN(Number(price)) &&
+    Number(price) > 0 &&
+    comment.length >= 10;
+
+  return {
+    register: {
+      price: register("price", {
+        required: "견적가를 입력해주세요.",
+        validate: (value) => {
+          const number = Number(value);
+          if (isNaN(number) || number <= 0) {
+            return "올바른 숫자를 입력해주세요.";
+          }
+          return true;
+        },
+      }),
+      comment: register("comment", {
+        required: "코멘트를 입력해주세요.",
+        minLength: {
+          value: 10,
+          message: "10자 이상 입력해주세요.",
+        },
+      }),
+    },
+    handleSubmit,
+    reset,
+    errors,
+    isValid,
+    watch,
+  };
+};

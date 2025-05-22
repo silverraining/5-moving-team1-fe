@@ -3,12 +3,17 @@
 import { useState } from "react";
 import { Button } from "@mui/material";
 import ReviewModal from "@/src/components/shared/components/modal/ReviewModal";
+import SendEstimateModal from "@/src/components/shared/components/modal/SendEstimateModal";
 
 export default function TestPage() {
-  const [open, setOpen] = useState(false);
+  const [reviewOpen, setReviewOpen] = useState(false);
+  const [estimateOpen, setEstimateOpen] = useState(false);
 
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleReviewOpen = () => setReviewOpen(true);
+  const handleReviewClose = () => setReviewOpen(false);
+
+  const handleEstimateOpen = () => setEstimateOpen(true);
+  const handleEstimateClose = () => setEstimateOpen(false);
 
   const handleSubmit = (
     moverName: string,
@@ -28,24 +33,45 @@ export default function TestPage() {
     });
 
     alert("리뷰가 성공적으로 등록되었습니다.");
-    handleClose();
+    handleReviewClose();
+  };
+
+  const handleEstimateSend = (data: { price: number; comment: string }) => {
+    console.log("견적 데이터 전송됨:", data);
+    alert(`견적 전송됨!\n가격: ${data.price}\n코멘트: ${data.comment}`);
+    handleEstimateClose();
   };
 
   return (
     <div style={{ padding: 24 }}>
       <h1>리뷰 모달 테스트 페이지</h1>
-      <Button variant="outlined" onClick={handleOpen}>
+      <Button variant="outlined" onClick={handleReviewOpen} sx={{ mr: 2 }}>
         리뷰 쓰기 열기
       </Button>
 
+      <Button variant="outlined" color="secondary" onClick={handleEstimateOpen}>
+        견적 보내기 열기
+      </Button>
+      {/* ReviewModal */}
       <ReviewModal
-        isOpen={open}
-        onClose={handleClose}
+        isOpen={reviewOpen}
+        onClose={handleReviewClose}
         onSubmit={handleSubmit}
         moverName="김코드"
         moveDate="2024. 07. 01"
         price={210000}
         moveType={["small", "designation"]}
+      />
+      {/* SendEstimateModal */}
+      <SendEstimateModal
+        open={estimateOpen}
+        onClose={handleEstimateClose}
+        onSend={handleEstimateSend}
+        moveType={["small", "designation"]}
+        customerName="김코드"
+        moveDate="2024. 07. 01 (월)"
+        fromAddress="서울시 중구"
+        toAddress="경기도 수원시"
       />
     </div>
   );
