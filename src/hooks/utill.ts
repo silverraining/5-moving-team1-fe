@@ -154,3 +154,43 @@ export const useEstimateOfferForm = () => {
     watch,
   };
 };
+
+// 반려요청 모달 훅
+export interface RejectRequestFormValues {
+  reason: string;
+}
+
+export const useRejectRequestForm = () => {
+  const {
+    register,
+    handleSubmit,
+    reset,
+    watch,
+    formState: { errors },
+  } = useForm<RejectRequestFormValues>({
+    defaultValues: {
+      reason: "",
+    },
+    mode: "onChange",
+  });
+
+  const reason = watch("reason").trim();
+  const isValid = reason.length >= 10;
+
+  return {
+    register: {
+      reason: register("reason", {
+        required: "반려 사유를 입력해 주세요.",
+        minLength: {
+          value: 10,
+          message: "10자 이상 입력해 주세요.",
+        },
+      }),
+    },
+    handleSubmit,
+    reset,
+    errors,
+    isValid,
+    reason,
+  };
+};

@@ -4,16 +4,21 @@ import { useState } from "react";
 import { Button } from "@mui/material";
 import ReviewModal from "@/src/components/shared/components/modal/ReviewModal";
 import SendEstimateModal from "@/src/components/shared/components/modal/SendEstimateModal";
+import RejectRequestModal from "@/src/components/shared/components/modal/RejectRequestModal";
 
 export default function TestPage() {
   const [reviewOpen, setReviewOpen] = useState(false);
   const [estimateOpen, setEstimateOpen] = useState(false);
+  const [rejectOpen, setRejectOpen] = useState(false);
 
   const handleReviewOpen = () => setReviewOpen(true);
   const handleReviewClose = () => setReviewOpen(false);
 
   const handleEstimateOpen = () => setEstimateOpen(true);
   const handleEstimateClose = () => setEstimateOpen(false);
+
+  const handleRejectOpen = () => setRejectOpen(true);
+  const handleRejectClose = () => setRejectOpen(false);
 
   const handleSubmit = (
     moverName: string,
@@ -42,6 +47,12 @@ export default function TestPage() {
     handleEstimateClose();
   };
 
+  const handleRejectSubmit = (reason: string) => {
+    console.log("반려 사유:", reason);
+    alert(`반려 사유:\n${reason}`);
+    handleRejectClose();
+  };
+
   return (
     <div style={{ padding: 24 }}>
       <h1>리뷰 모달 테스트 페이지</h1>
@@ -49,9 +60,19 @@ export default function TestPage() {
         리뷰 쓰기 열기
       </Button>
 
-      <Button variant="outlined" color="secondary" onClick={handleEstimateOpen}>
+      <Button
+        variant="outlined"
+        color="secondary"
+        onClick={handleEstimateOpen}
+        sx={{ mr: 2 }}
+      >
         견적 보내기 열기
       </Button>
+
+      <Button variant="outlined" color="error" onClick={handleRejectOpen}>
+        반려 요청 열기
+      </Button>
+
       {/* ReviewModal */}
       <ReviewModal
         isOpen={reviewOpen}
@@ -69,7 +90,18 @@ export default function TestPage() {
         onSend={handleEstimateSend}
         moveType={["small", "designation"]}
         customerName="김코드"
-        moveDate="2024. 07. 01 (월)"
+        moveDate="2024. 07. 01(월)"
+        fromAddress="서울시 중구"
+        toAddress="경기도 수원시"
+      />
+      {/* RejectRequestModal */}
+      <RejectRequestModal
+        open={rejectOpen}
+        onClose={handleRejectClose}
+        onSubmit={handleRejectSubmit}
+        moveType={["small", "designation"]}
+        customerName="김코드"
+        moveDate="2024. 07. 01(월)"
         fromAddress="서울시 중구"
         toAddress="경기도 수원시"
       />

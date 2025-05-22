@@ -10,16 +10,16 @@ interface InfoBadgeProps {
 
 export function InfoChip({ label }: InfoBadgeProps) {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const Chip = styled("div")(() => ({
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    padding: isMobile ? "2px 4px" : "4px 6px",
+    padding: isSmall ? "2px 4px" : "4px 6px",
     gap: "10px",
-    width: isMobile ? "42px" : "59px",
-    height: isMobile ? "26px" : "34px",
+    width: isSmall ? "42px" : "59px",
+    height: isSmall ? "26px" : "34px",
     background: "#F4F7FB",
     borderRadius: "4px",
   }));
@@ -27,7 +27,7 @@ export function InfoChip({ label }: InfoBadgeProps) {
   return (
     <Chip>
       <Typography
-        variant={isMobile ? "M_13" : "R_18"}
+        variant={isSmall ? "M_13" : "R_18"}
         sx={{
           whiteSpace: "nowrap",
           color: COLORS.Grayscale[500],
