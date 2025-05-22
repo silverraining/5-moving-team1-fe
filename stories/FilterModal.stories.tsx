@@ -5,7 +5,7 @@ import FilterModal from "@/src/components/shared/components/modal/FilterModal";
 import { Button } from "@mui/material";
 
 const meta: Meta<typeof FilterModal> = {
-  title: "FilterModal",
+  title: "Modal",
   component: FilterModal,
   parameters: {
     docs: {
@@ -26,7 +26,7 @@ export default meta;
 
 type Story = StoryObj<typeof FilterModal>;
 
-export const Base: Story = {
+export const Filter: Story = {
   render: (args) => {
     const {
       open,
