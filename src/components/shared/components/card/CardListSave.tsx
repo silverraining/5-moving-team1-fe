@@ -1,53 +1,54 @@
 import { Box, Typography } from "@mui/material";
-import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListdd";
+import { ChipCategory, ChipProps } from "../chip/ChipCategory";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
+
+export interface CardData {
+  types: ChipProps["type"][];
+  message?: string;
+  imgSrc: string;
+  name: string;
+  like: number;
+  rating: number;
+  count: number;
+  career: number;
+  confirm: number;
+  isLiked: boolean;
+  cost: number;
+}
 
 interface CardProps {
   data: CardData;
   onLikeClick?: () => void;
 }
 
-export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
+export const CardListSave = ({ data, onLikeClick }: CardProps) => {
   return (
     <Box
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      border="0.5px solid"
-      borderColor={COLORS.Line[100]}
-      width={[327, 600, 955]}
-      height={[188, 188, 230]}
+      border="0.5px solid #F2F2F2"
+      width={[327, 600, 688]}
+      height={[150, 150, 202]}
       bgcolor="#FFFFFF"
       borderRadius="16px"
-      padding={["14px 16px", "14px 16px", "20px 24px"]}
+      padding={["16px 14px", "16px 14px", "20px 24px"]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
     >
-      <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
+      <Box>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
           {data.types.map((type, index) => (
             <ChipCategory key={index} type={type} />
           ))}
         </Box>
-        <Typography
-          sx={{
-            fontSize: [14, 14, 24],
-            lineHeight: ["24px", "24px", "32px"],
-            fontWeight: 600,
-            color: COLORS.Black[300],
-          }}
-        >
-          {data.message}
-        </Typography>
       </Box>
 
       {/* 아래 */}
       <Box
         display="flex"
-        border="1px solid"
-        borderColor={COLORS.Line[100]}
+        border="1px solid #F2F2F2"
         bgcolor="#FFFFFF"
         padding={["10px", "10px", "16px 18px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
@@ -66,7 +67,7 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
             }}
           />
         </Box>
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" flexGrow={1}>
           <Box
             display="flex"
             flexDirection="row"
@@ -74,7 +75,7 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
           >
             <Typography
               sx={{
-                fontSize: [14, 14, 84],
+                fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 600,
                 color: COLORS.Black[300],
@@ -110,9 +111,9 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
           <Box
             display="flex"
             flexDirection="row"
-            flexGrow={1}
             gap={"9.5px"}
             alignItems="center"
+            flexGrow={1}
             justifyContent={["space-between", "flex-start"]}
           >
             <Box

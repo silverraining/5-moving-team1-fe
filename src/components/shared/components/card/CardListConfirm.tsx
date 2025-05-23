@@ -1,9 +1,24 @@
 import { Box, Button, Typography } from "@mui/material";
-import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListdd";
+import { ChipCategory, ChipProps } from "../chip/ChipCategory";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
-import { formatKoreanDate } from "@/src/lib/koreanDate";
+
+export interface CardData {
+  types: ChipProps["type"][];
+  message?: string;
+  imgSrc: string;
+  name: string;
+  like: number;
+  rating: number;
+  count: number;
+  career: number;
+  confirm: number;
+  isLiked: boolean;
+  cost: number;
+  date: number;
+  from: string;
+  to: string;
+}
 
 interface CardProps {
   data: CardData;
@@ -12,7 +27,7 @@ interface CardProps {
   onDetailClick?: () => void;
 }
 
-export const CardListWait = ({
+export const CardListDriver = ({
   data,
   onLikeClick,
   onConfirmClick,
@@ -23,7 +38,8 @@ export const CardListWait = ({
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      border="0.5px solid #F2F2F2"
+      border="0.5px solid"
+      borderColor={COLORS.Line[100]}
       width={[327, 600, 688]}
       height={[398, 362, 410]}
       bgcolor="#FFFFFF"
@@ -46,7 +62,8 @@ export const CardListWait = ({
 
       <Box
         display="flex"
-        border="1px solid #F2F2F2"
+        border="1px solid"
+        borderColor={COLORS.Line[100]}
         bgcolor="#FFFFFF"
         padding={["16px", "10px", "16px 10px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
@@ -202,15 +219,10 @@ export const CardListWait = ({
       >
         <Box
           display={"flex"}
-          flexDirection={["column", "column", "row"]}
+          flexDirection={["column", "row", "row"]}
           gap={["14px", "14px", "24px"]}
-          alignItems={["flex-start", "flex-start", "center"]}
         >
-          <Box
-            display={"flex"}
-            gap={["8px", "8px", "12px"]}
-            alignItems={"center"}
-          >
+          <Box display={"flex"} gap={["8px", "8px", "12px"]}>
             <Box
               bgcolor="#F4F7FB"
               borderRadius="4px"
@@ -236,24 +248,11 @@ export const CardListWait = ({
                 color: COLORS.Black[300],
               }}
             >
-              {formatKoreanDate(data.date ?? "")}
+              {data.date}
             </Typography>
           </Box>
-          <Box
-            display={["none", "none", "inline-block"]}
-            height={14}
-            border={"1px solid #E6E6E6"}
-          ></Box>
-          <Box
-            display={"flex"}
-            gap={["8px", "8px", "12px"]}
-            alignItems={"center"}
-          >
-            <Box
-              display={"flex"}
-              gap={["8px", "8px", "12px"]}
-              alignItems={"center"}
-            >
+          <Box display={"flex"}>
+            <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
                 bgcolor="#F4F7FB"
                 borderRadius="4px"
@@ -282,16 +281,12 @@ export const CardListWait = ({
                 {data.from}
               </Typography>
             </Box>
-            <Box height={14} border={"1px solid #E6E6E6"}></Box>
+            {/* 여기 부분 해야함 */}
             <Box
               border={"1px solid ##E6E6E6"}
               height={["14px", "14px", "16px"]}
             ></Box>
-            <Box
-              display={"flex"}
-              gap={["8px", "8px", "12px"]}
-              alignItems={"center"}
-            >
+            <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
                 bgcolor="#F4F7FB"
                 borderRadius="4px"
@@ -346,7 +341,7 @@ export const CardListWait = ({
               color: COLORS.Black[400],
             }}
           >
-            {(data.cost ?? 0).toLocaleString()}원
+            {data.cost.toLocaleString()}원
           </Typography>
         </Box>
         <Box
@@ -361,7 +356,6 @@ export const CardListWait = ({
               height: [48, 48, 64],
               bgcolor: COLORS.PrimaryBlue[300],
               borderRadius: ["8px", "8px", "16px"],
-              flex: "1",
             }}
           >
             <Typography
@@ -382,7 +376,6 @@ export const CardListWait = ({
               height: [48, 48, 64],
               borderRadius: ["8px", "8px", "16px"],
               border: `1px solid ${COLORS.PrimaryBlue[300]}`,
-              flex: "1",
             }}
           >
             <Typography
