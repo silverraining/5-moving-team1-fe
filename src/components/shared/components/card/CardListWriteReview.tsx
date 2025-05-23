@@ -134,13 +134,13 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
         </Box>
       </Box>
       <Button
-        disabled={data.ReviewCheck ? false : true}
+        disabled={data.ReviewCheck ? true : false}
         onClick={onReviewClick}
         variant="contained"
         sx={(theme) => ({
           bgcolor: data.ReviewCheck
-            ? theme.palette.PrimaryBlue[300]
-            : theme.palette.Grayscale[100],
+            ? theme.palette.Grayscale[100]
+            : theme.palette.PrimaryBlue[300],
           height: [48, 48, 64],
         })}
       >
