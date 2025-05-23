@@ -1,7 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
-import { CardData } from "./CardListdd";
+import { CardData } from "./CardListCompleteState";
 import Image from "next/image";
-import { COLORS } from "@/public/theme/colors";
+
+import { joinAddress } from "@/src/lib/joinAddress";
+import { typeMapper } from "@/src/lib/typeMapper";
 
 interface CardProps {
   data: CardData;
@@ -19,188 +21,360 @@ export const CardListProfile = ({
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      border="0.5px solid"
-      borderColor={COLORS.Line[100]}
-      width={[327, 600, 688]}
-      height={[222, 222, 280]}
-      bgcolor="#FFFFFF"
-      borderRadius="16px"
-      padding={[
-        "16px 14px 10px 14px",
-        "16px 14px 10px 14px",
-        "20px 24px 14px 24px",
-      ]}
-      boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
-      boxSizing={"border-box"}
+      bgcolor={"transparent"}
+      gap={"10px"}
+      width={[327, 600, 1200]}
     >
-      <Box display="flex" flexDirection="row" gap={["14px", "16px"]}>
-        <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
-          <Image
-            src={data.imgSrc}
-            alt={"프로필 이미지"}
-            fill
-            style={{
-              overflow: "hidden",
-              borderRadius: "50%",
-              objectFit: "cover",
-            }}
-          />
-        </Box>
-        <Box>
-          <Typography
-            sx={{
-              fontSize: [14, 14, 24],
-              lineHeight: ["24px", "24px", "32px"],
-              fontWeight: 600,
-              color: COLORS.Black[300],
-            }}
+      <Box
+        display="flex"
+        flexDirection="column"
+        justifyContent="space-between"
+        width={[327, 600, 1200]}
+        height={[222, 186, 272]}
+        borderRadius="16px"
+        border="0.5px solid"
+        padding={[
+          "16px 14px 10px 14px",
+          "16px 14px 10px 14px",
+          "20px 24px 14px 24px",
+        ]}
+        boxSizing={"border-box"}
+        sx={(theme) => ({
+          backgroundColor: theme.palette.NeutralGray[200],
+          borderColor: theme.palette.Grayscale[100],
+        })}
+      >
+        <Box
+          display="flex"
+          flexDirection="row"
+          gap={["14px", "16px"]}
+          justifyContent={["flex-start", "flex-start", "space-between"]}
+        >
+          <Box
+            display={["inline-block", "inline-block", "none"]}
+            width={[46, 46, 56]}
+            height={[46, 46, 56]}
+            position="relative"
           >
-            {data.name}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: [14, 14, 24],
-              lineHeight: ["24px", "24px", "32px"],
-              fontWeight: 600,
-              color: COLORS.Black[300],
-            }}
-          >
-            {data.message}
-          </Typography>
-        </Box>
-      </Box>
-
-      {/* 별 있는 곳 */}
-      <Box>
-        <Box>
-          <Box position={"relative"} width={[46, 46, 56]} height={[46, 46, 56]}>
             <Image
-              src="/images/star/star_active.svg"
-              alt="별점 사진"
+              src={data.imgSrc}
+              alt={"프로필 이미지"}
               fill
               style={{
+                overflow: "hidden",
+                borderRadius: "50%",
                 objectFit: "cover",
               }}
             />
           </Box>
-          <Typography></Typography>
+          <Box maxWidth={["80%", "80%", "45%"]}>
+            <Typography
+              sx={(theme) => ({
+                fontSize: [14, 14, 24],
+                lineHeight: ["24px", "24px", "32px"],
+                fontWeight: 600,
+                color: theme.palette.Black[300],
+              })}
+            >
+              {data.name}
+            </Typography>
+            <Typography
+              sx={(theme) => ({
+                fontSize: [14, 14, 20],
+                lineHeight: ["24px", "24px", "32px"],
+                fontWeight: 400,
+                color: theme.palette.Grayscale[400],
+                overflow: "hidden",
+                whiteSpace: "nowrap",
+                textOverflow: "ellipsis",
+              })}
+            >
+              {data.message}
+            </Typography>
+          </Box>
+          <Box
+            display={["none", "none", "flex"]}
+            gap={["8px", "8px", "11px"]}
+            flexDirection={["column", "row", "row"]}
+          >
+            <Button
+              onClick={onMyClick}
+              variant="contained"
+              sx={(theme) => ({
+                width: ["auto", "auto", 280],
+                height: [48, 48, 64],
+                bgcolor: theme.palette.PrimaryBlue[300],
+                borderRadius: ["8px", "8px", "16px"],
+              })}
+            >
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [16, 16, 20],
+                  lineHeight: ["26px", "26px", "32px"],
+                  fontWeight: 600,
+                  color: theme.palette.White[100],
+                })}
+              >
+                견적 보내기
+              </Typography>
+            </Button>
+            <Button
+              onClick={onBasicClick}
+              variant="outlined"
+              sx={(theme) => ({
+                width: ["auto", "auto", 280],
+                height: [48, 48, 64],
+                borderRadius: ["8px", "8px", "16px"],
+                border: `1px solid ${theme.palette.PrimaryBlue[300]}`,
+              })}
+            >
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [16, 16, 20],
+                  lineHeight: ["26px", "26px", "32px"],
+                  fontWeight: 600,
+                  color: theme.palette.PrimaryBlue[300],
+                })}
+              >
+                반려
+              </Typography>
+            </Button>
+          </Box>
         </Box>
-        <Box>
-          <Typography></Typography>
-          <Typography></Typography>
-        </Box>
-        <Box>
-          <Typography></Typography>
-          <Typography></Typography>
-        </Box>
-      </Box>
 
-      {/* 제공 서비스 있는 곳 */}
-      <Box>
-        <Box display="flex">
-          <Typography
-            sx={{
-              fontSize: [13, 13, 16],
-              lineHeight: ["22px", "22px", "26px"],
-              fontWeight: 500,
-              color: COLORS.Grayscale[300],
-            }}
+        {/* 별 있는 곳 */}
+        <Box
+          display="flex"
+          padding={["10px", "26px 18px"]}
+          justifyContent={"space-between"}
+          flexDirection="column"
+          border={"1px solid"}
+          height={[120, 84, 128]}
+          sx={(theme) => ({
+            backgroundColor: theme.palette.NeutralGray[100],
+            borderColor: theme.palette.Line[100],
+            boxShadow: "4px 4px 16px 0px rgba(233, 233, 233, 0.1)",
+          })}
+        >
+          <Box
+            display={["none", "none", "inline-block"]}
+            width={[46, 46, 56]}
+            height={[46, 46, 56]}
+            position="relative"
           >
-            제공 서비스
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: [13, 13, 16],
-              lineHeight: ["22px", "22px", "26px"],
-              fontWeight: 500,
-              color: COLORS.Black[300],
-            }}
+            <Image
+              src={data.imgSrc}
+              alt={"프로필 이미지"}
+              fill
+              style={{
+                overflow: "hidden",
+                borderRadius: "50%",
+                objectFit: "cover",
+              }}
+            />
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap={"9.5px"}
+            alignItems="center"
+            justifyContent={["flex-start"]}
           >
-            {data.types}
-          </Typography>
-        </Box>
+            <Box
+              display="flex"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Image
+                src="/images/star/star_active.svg"
+                alt="별점 사진"
+                width={20}
+                height={20}
+              />
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {data.rating}
+              </Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Grayscale[300],
+                })}
+              >
+                ({data.count})
+              </Typography>
+            </Box>
+            <Box height={14} border={"1px solid #E6E6E6"}></Box>
+            <Box display="flex">
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Grayscale[300],
+                })}
+              >
+                경력
+              </Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {data.career}년
+              </Typography>
+            </Box>
+            <Box height={14} border={"1px solid #E6E6E6"}></Box>
+            <Box display="flex">
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {data.confirm}
+              </Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Grayscale[300],
+                })}
+              >
+                확정
+              </Typography>
+            </Box>
+          </Box>
 
-        <Box display="flex">
-          <Typography
-            sx={{
-              fontSize: [13, 13, 16],
-              lineHeight: ["22px", "22px", "26px"],
-              fontWeight: 500,
-              color: COLORS.Black[300],
-            }}
+          <Box
+            display={"flex"}
+            flexDirection={["column", "row", "row"]}
+            gap={"20px"}
           >
-            {data.confirm}
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: [13, 13, 16],
-              lineHeight: ["22px", "22px", "26px"],
-              fontWeight: 500,
-              color: COLORS.Grayscale[300],
-            }}
-          >
-            확정
-          </Typography>
+            <Box display={"flex"} gap={["8px", "8px", "12px"]}>
+              <Box
+                bgcolor="#F4F7FB"
+                borderRadius="4px"
+                display={"inline-block"}
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
+              >
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [14, 14, 18],
+                    lineHeight: ["24px", "24px", "26px"],
+                    fontWeight: [500, 500, 400],
+                    color: theme.palette.Grayscale[400],
+                  })}
+                >
+                  제공 서비스
+                </Typography>
+              </Box>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [14, 14, 18],
+                  lineHeight: ["24px", "24px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {joinAddress(typeMapper(data.types))}
+              </Typography>
+            </Box>
+
+            <Box display={"flex"} gap={["8px", "8px", "12px"]}>
+              <Box
+                bgcolor="#F4F7FB"
+                borderRadius="4px"
+                display={"inline-block"}
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
+              >
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [14, 14, 18],
+                    lineHeight: ["24px", "24px", "26px"],
+                    fontWeight: [500, 500, 400],
+                    color: theme.palette.Grayscale[400],
+                  })}
+                >
+                  지역
+                </Typography>
+              </Box>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [14, 14, 18],
+                  lineHeight: ["24px", "24px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {joinAddress(data.address)}
+              </Typography>
+            </Box>
+          </Box>
         </Box>
       </Box>
 
       {/* 버튼 있는 곳 */}
       <Box
-        display={"flex"}
+        display={["flex", "flex", "none"]}
         gap={["8px", "8px", "11px"]}
         flexDirection={["column", "row", "row"]}
       >
         <Button
           onClick={onMyClick}
           variant="contained"
-          sx={{
+          sx={(theme) => ({
             height: [48, 48, 64],
-            bgcolor: COLORS.PrimaryBlue[300],
+            bgcolor: theme.palette.PrimaryBlue[300],
             borderRadius: ["8px", "8px", "16px"],
-          }}
+            flex: 1,
+          })}
         >
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontSize: [16, 16, 20],
               lineHeight: ["26px", "26px", "32px"],
               fontWeight: 600,
-              color: COLORS.White[100],
-            }}
+              color: theme.palette.White[100],
+            })}
           >
-            내 프로필 수정
+            견적 보내기
           </Typography>
-          <Image
-            src={"/images/write/active_write.svg"}
-            alt="상세보기"
-            width={24}
-            height={24}
-          ></Image>
         </Button>
         <Button
           onClick={onBasicClick}
           variant="outlined"
-          sx={{
+          sx={(theme) => ({
             height: [48, 48, 64],
             borderRadius: ["8px", "8px", "16px"],
-            border: `1px solid ${COLORS.PrimaryBlue[300]}`,
-          }}
+            border: `1px solid ${theme.palette.PrimaryBlue[300]}`,
+            flex: 1,
+          })}
         >
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontSize: [16, 16, 20],
               lineHeight: ["26px", "26px", "32px"],
               fontWeight: 600,
-              color: COLORS.PrimaryBlue[300],
-            }}
+              color: theme.palette.PrimaryBlue[300],
+            })}
           >
-            기본 정보 수정
+            반려
           </Typography>
-          <Image
-            src={"/images/write/write.svg"}
-            alt="상세보기"
-            width={24}
-            height={24}
-          ></Image>
         </Button>
       </Box>
     </Box>

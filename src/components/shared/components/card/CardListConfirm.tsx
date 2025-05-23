@@ -89,12 +89,12 @@ export const CardListDriver = ({
             justifyContent="space-between"
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 600,
-                color: COLORS.Black[300],
-              }}
+                color: theme.palette.Black[300],
+              })}
             >
               {data.name} 기사님
             </Typography>
@@ -112,12 +112,12 @@ export const CardListDriver = ({
                 style={{ cursor: "pointer" }}
               />
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 18],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.PrimaryBlue[400],
-                }}
+                  color: theme.palette.PrimaryBlue[400],
+                })}
               >
                 {data.like}
               </Typography>
@@ -143,22 +143,22 @@ export const CardListDriver = ({
                 height={20}
               />
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.rating}
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 ({data.count})
               </Typography>
@@ -166,22 +166,22 @@ export const CardListDriver = ({
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 경력
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.career}년
               </Typography>
@@ -189,22 +189,22 @@ export const CardListDriver = ({
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.confirm}
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 확정
               </Typography>
@@ -230,23 +230,23 @@ export const CardListDriver = ({
               padding={["2px 6px", "2px 6px", "4px 6px"]}
             >
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [14, 14, 18],
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: [500, 500, 400],
-                  color: COLORS.Grayscale[400],
-                }}
+                  color: theme.palette.Grayscale[400],
+                })}
               >
                 이사일
               </Typography>
             </Box>
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 500,
-                color: COLORS.Black[300],
-              }}
+                color: theme.palette.Black[300],
+              })}
             >
               {data.date}
             </Typography>
@@ -260,23 +260,23 @@ export const CardListDriver = ({
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontSize: [14, 14, 18],
                     lineHeight: ["24px", "24px", "26px"],
                     fontWeight: [500, 500, 400],
-                    color: COLORS.Grayscale[400],
-                  }}
+                    color: theme.palette.Grayscale[400],
+                  })}
                 >
                   출발
                 </Typography>
               </Box>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [14, 14, 18],
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.from}
               </Typography>
@@ -294,23 +294,23 @@ export const CardListDriver = ({
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontSize: [14, 14, 18],
                     lineHeight: ["24px", "24px", "26px"],
                     fontWeight: [500, 500, 400],
-                    color: COLORS.Grayscale[400],
-                  }}
+                    color: theme.palette.Grayscale[400],
+                  })}
                 >
                   도착
                 </Typography>
               </Box>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [14, 14, 18],
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.to}
               </Typography>
@@ -324,22 +324,22 @@ export const CardListDriver = ({
           alignItems={"center"}
         >
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontSize: [14, 14, 18],
               lineHeight: ["24px", "24px", "26px"],
               fontWeight: 500,
-              color: COLORS.Black[400],
-            }}
+              color: theme.palette.Black[400],
+            })}
           >
             견적 금액
           </Typography>
           <Typography
-            sx={{
+            sx={(theme) => ({
               fontSize: [18, 18, 24],
               lineHeight: ["26px", "26px", "32px"],
               fontWeight: 700,
-              color: COLORS.Black[400],
-            }}
+              color: theme.palette.Black[400],
+            })}
           >
             {data.cost.toLocaleString()}원
           </Typography>
@@ -352,19 +352,19 @@ export const CardListDriver = ({
           <Button
             onClick={onConfirmClick}
             variant="contained"
-            sx={{
+            sx={(theme) => ({
               height: [48, 48, 64],
-              bgcolor: COLORS.PrimaryBlue[300],
+              bgcolor: theme.palette.PrimaryBlue[300],
               borderRadius: ["8px", "8px", "16px"],
-            }}
+            })}
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [16, 16, 20],
                 lineHeight: ["26px", "26px", "32px"],
                 fontWeight: 600,
-                color: COLORS.White[100],
-              }}
+                color: theme.palette.White[100],
+              })}
             >
               견적 확정하기
             </Typography>
@@ -372,19 +372,19 @@ export const CardListDriver = ({
           <Button
             onClick={onDetailClick}
             variant="outlined"
-            sx={{
+            sx={(theme) => ({
               height: [48, 48, 64],
               borderRadius: ["8px", "8px", "16px"],
-              border: `1px solid ${COLORS.PrimaryBlue[300]}`,
-            }}
+              border: `1px solid ${theme.palette.PrimaryBlue[300]}`,
+            })}
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [16, 16, 20],
                 lineHeight: ["26px", "26px", "32px"],
                 fontWeight: 600,
-                color: COLORS.PrimaryBlue[300],
-              }}
+                color: theme.palette.PrimaryBlue[300],
+              })}
             >
               상세보기
             </Typography>

@@ -1,7 +1,8 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListdd";
+import { CardData } from "./CardListCompleteState";
 import Image from "next/image";
+import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
 
 interface CardProps {
@@ -34,17 +35,19 @@ export const CardListMyReview = ({ data }: CardProps) => {
             <ChipCategory key={index} type={type} />
           ))}
         </Box>
-        <Typography
-          sx={{
-            fontSize: [14, 14, 24],
-            lineHeight: ["24px", "24px", "32px"],
-            fontWeight: 600,
-            color: COLORS.Black[300],
-            display: ["none", "block", "block"],
-          }}
-        >
-          {data.date}
-        </Typography>
+        <Box display="flex">
+          <Typography
+            sx={(theme) => ({
+              fontSize: [14, 14, 24],
+              lineHeight: ["24px", "24px", "32px"],
+              fontWeight: 600,
+              color: theme.palette.Black[300],
+              display: ["none", "block", "block"],
+            })}
+          >
+            작성일 {formatKoreanDate(data.date ?? "", false)}
+          </Typography>
+        </Box>
       </Box>
 
       {/* 아래 */}
@@ -78,12 +81,12 @@ export const CardListMyReview = ({ data }: CardProps) => {
             justifyContent="space-between"
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 600,
-                color: COLORS.Black[300],
-              }}
+                color: theme.palette.Black[300],
+              })}
             >
               {data.name} 기사님
             </Typography>
@@ -115,22 +118,22 @@ export const CardListMyReview = ({ data }: CardProps) => {
           >
             <Box display="flex">
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 이사일
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.career}년
               </Typography>
@@ -138,22 +141,22 @@ export const CardListMyReview = ({ data }: CardProps) => {
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 견적가
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {(data.cost ?? 0).toLocaleString()}원
               </Typography>
@@ -161,20 +164,29 @@ export const CardListMyReview = ({ data }: CardProps) => {
           </Box>
         </Box>
       </Box>
-      <Box>
-        <Typography>{data.writeReview}</Typography>
-      </Box>
-      <Box display="flex" justifyContent="flex-end">
+      <Box display="flex" justifyContent="space-between" flexDirection="column">
         <Typography
-          sx={{
-            fontSize: [14, 14, 24],
+          sx={(theme) => ({
+            fontSize: [14, 14, 20],
             lineHeight: ["24px", "24px", "32px"],
-            fontWeight: 600,
-            color: COLORS.Black[300],
-            display: ["block", "none", "none"],
-          }}
+            fontWeight: 400,
+            color: theme.palette.Grayscale[500],
+          })}
         >
-          {data.date}
+          {data.writeReview}
+        </Typography>
+        <Typography
+          display={"flex"}
+          justifyContent="flex-end"
+          sx={(theme) => ({
+            fontSize: [14, 14, 18],
+            lineHeight: ["24px", "24px", "26px"],
+            fontWeight: 400,
+            color: theme.palette.Grayscale[300],
+            display: ["block", "none", "none"],
+          })}
+        >
+          작성일 {formatKoreanDate(data.date ?? "", false)}
         </Typography>
       </Box>
     </Box>

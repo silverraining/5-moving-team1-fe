@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListdd";
-import { COLORS } from "@/public/theme/colors";
-import { formatKoreanDate } from "@/src/lib/koreanDate";
+import { CardData } from "./CardListCompleteState";
+
+import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
 
 interface CardProps {
@@ -22,8 +22,8 @@ export const CardListRequest = ({
       flexDirection="column"
       justifyContent="space-between"
       border="0.5px solid #F2F2F2"
-      width={[327, 600, 688]}
-      height={[398, 362, 410]}
+      width={[328, 600, 955]}
+      height={[316, 228, 296]}
       bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
@@ -34,7 +34,11 @@ export const CardListRequest = ({
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
     >
-      <Box display={"flex"} alignItems={"center"}>
+      <Box
+        display={"flex"}
+        alignItems={"center"}
+        justifyContent={"space-between"}
+      >
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
           {data.types.map((type, index) => (
             <ChipCategory key={index} type={type} />
@@ -47,12 +51,13 @@ export const CardListRequest = ({
 
       <Box
         display="flex"
-        border="1px solid #F2F2F2"
+        border={["1px solid", "0px solid", "0px solid"]}
         bgcolor="#FFFFFF"
         padding={["16px", "10px", "16px 10px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
+        sx={(theme) => ({ borderColor: theme.palette.Line[100] })}
       >
         <Box display="flex" flexDirection="column" flexGrow={1}>
           <Box
@@ -61,12 +66,12 @@ export const CardListRequest = ({
             justifyContent="space-between"
           >
             <Typography
-              sx={{
-                fontSize: [14, 14, 18],
-                lineHeight: ["24px", "24px", "26px"],
+              sx={(theme) => ({
+                fontSize: [16, 16, 20],
+                lineHeight: ["26px", "26px", "32px"],
                 fontWeight: 600,
-                color: COLORS.Black[300],
-              }}
+                color: theme.palette.Black[300],
+              })}
             >
               {data.name} 고객님
             </Typography>
@@ -94,28 +99,28 @@ export const CardListRequest = ({
               padding={["2px 6px", "2px 6px", "4px 6px"]}
             >
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [14, 14, 18],
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: [500, 500, 400],
-                  color: COLORS.Grayscale[400],
-                }}
+                  color: theme.palette.Grayscale[400],
+                })}
               >
                 이사일
               </Typography>
             </Box>
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 500,
-                color: COLORS.Black[300],
-              }}
+                color: theme.palette.Black[300],
+              })}
             >
-              {formatKoreanDate(data.MovingDay ?? "")}
+              {formatKoreanDate(data.movingDay ?? "")}
             </Typography>
           </Box>
-          <Box display={"flex"}>
+          <Box display={"flex"} gap={["4px"]}>
             <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
                 bgcolor="#F4F7FB"
@@ -124,23 +129,23 @@ export const CardListRequest = ({
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontSize: [14, 14, 18],
                     lineHeight: ["24px", "24px", "26px"],
                     fontWeight: [500, 500, 400],
-                    color: COLORS.Grayscale[400],
-                  }}
+                    color: theme.palette.Grayscale[400],
+                  })}
                 >
                   출발
                 </Typography>
               </Box>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [14, 14, 18],
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.from}
               </Typography>
@@ -157,55 +162,28 @@ export const CardListRequest = ({
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
                 <Typography
-                  sx={{
+                  sx={(theme) => ({
                     fontSize: [14, 14, 18],
                     lineHeight: ["24px", "24px", "26px"],
                     fontWeight: [500, 500, 400],
-                    color: COLORS.Grayscale[400],
-                  }}
+                    color: theme.palette.Grayscale[400],
+                  })}
                 >
                   도착
                 </Typography>
               </Box>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [14, 14, 18],
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.to}
               </Typography>
             </Box>
           </Box>
-        </Box>
-        <Box
-          display={"flex"}
-          gap={["8px", "8px", "16px"]}
-          justifyContent={"flex-end"}
-          alignItems={"center"}
-        >
-          <Typography
-            sx={{
-              fontSize: [14, 14, 18],
-              lineHeight: ["24px", "24px", "26px"],
-              fontWeight: 500,
-              color: COLORS.Black[400],
-            }}
-          >
-            견적 금액
-          </Typography>
-          <Typography
-            sx={{
-              fontSize: [18, 18, 24],
-              lineHeight: ["26px", "26px", "32px"],
-              fontWeight: 700,
-              color: COLORS.Black[400],
-            }}
-          >
-            {(data.cost ?? 0).toLocaleString()}원
-          </Typography>
         </Box>
         <Box
           display={"flex"}
@@ -215,19 +193,20 @@ export const CardListRequest = ({
           <Button
             onClick={onConfirmClick}
             variant="contained"
-            sx={{
+            sx={(theme) => ({
               height: [48, 48, 64],
-              bgcolor: COLORS.PrimaryBlue[300],
+              bgcolor: theme.palette.PrimaryBlue[300],
               borderRadius: ["8px", "8px", "16px"],
-            }}
+              flex: 1,
+            })}
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [16, 16, 20],
                 lineHeight: ["26px", "26px", "32px"],
                 fontWeight: 600,
-                color: COLORS.White[100],
-              }}
+                color: theme.palette.White[100],
+              })}
             >
               견적 보내기
             </Typography>
@@ -235,19 +214,20 @@ export const CardListRequest = ({
           <Button
             onClick={onDetailClick}
             variant="outlined"
-            sx={{
+            sx={(theme) => ({
               height: [48, 48, 64],
               borderRadius: ["8px", "8px", "16px"],
-              border: `1px solid ${COLORS.PrimaryBlue[300]}`,
-            }}
+              border: `1px solid ${theme.palette.PrimaryBlue[300]}`,
+              flex: 1,
+            })}
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [16, 16, 20],
                 lineHeight: ["26px", "26px", "32px"],
                 fontWeight: 600,
-                color: COLORS.PrimaryBlue[300],
-              }}
+                color: theme.palette.PrimaryBlue[300],
+              })}
             >
               반려
             </Typography>

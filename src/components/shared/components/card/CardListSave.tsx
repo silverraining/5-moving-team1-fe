@@ -1,21 +1,7 @@
 import { Box, Typography } from "@mui/material";
-import { ChipCategory, ChipProps } from "../chip/ChipCategory";
+import { ChipCategory } from "../chip/ChipCategory";
+import { CardData } from "./CardListCompleteState";
 import Image from "next/image";
-import { COLORS } from "@/public/theme/colors";
-
-export interface CardData {
-  types: ChipProps["type"][];
-  message?: string;
-  imgSrc: string;
-  name: string;
-  like: number;
-  rating: number;
-  count: number;
-  career: number;
-  confirm: number;
-  isLiked: boolean;
-  cost: number;
-}
 
 interface CardProps {
   data: CardData;
@@ -74,12 +60,12 @@ export const CardListSave = ({ data, onLikeClick }: CardProps) => {
             justifyContent="space-between"
           >
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 600,
-                color: COLORS.Black[300],
-              }}
+                color: theme.palette.Black[300],
+              })}
             >
               {data.name} 기사님
             </Typography>
@@ -97,12 +83,12 @@ export const CardListSave = ({ data, onLikeClick }: CardProps) => {
                 style={{ cursor: "pointer" }}
               />
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 18],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.PrimaryBlue[400],
-                }}
+                  color: theme.palette.PrimaryBlue[400],
+                })}
               >
                 {data.like}
               </Typography>
@@ -128,22 +114,22 @@ export const CardListSave = ({ data, onLikeClick }: CardProps) => {
                 height={20}
               />
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.rating}
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 ({data.count})
               </Typography>
@@ -151,22 +137,22 @@ export const CardListSave = ({ data, onLikeClick }: CardProps) => {
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 경력
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.career}년
               </Typography>
@@ -174,22 +160,22 @@ export const CardListSave = ({ data, onLikeClick }: CardProps) => {
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Black[300],
-                }}
+                  color: theme.palette.Black[300],
+                })}
               >
                 {data.confirm}
               </Typography>
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: COLORS.Grayscale[300],
-                }}
+                  color: theme.palette.Grayscale[300],
+                })}
               >
                 확정
               </Typography>

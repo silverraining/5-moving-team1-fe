@@ -1,6 +1,8 @@
-import { Box, Button, Typography } from "@mui/material";
-import { CardData } from "./CardListdd";
+import { Box, Typography } from "@mui/material";
+import { CardData } from "./CardListCompleteState";
 import Image from "next/image";
+import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
+import { maskNickname } from "@/src/lib/maskNickname";
 
 interface CardProps {
   data: CardData;
@@ -8,17 +10,47 @@ interface CardProps {
 
 export const CardListReview = ({ data }: CardProps) => {
   return (
-    <Box>
-      <Box>
+    <Box
+      border={"1px solid"}
+      padding={["15px", "15px", "24px"]}
+      sx={(theme) => ({
+        borderColor: theme.palette.Line[100],
+        backgroundColor: theme.palette.White[100],
+      })}
+    >
+      <Box display={"flex"} gap={"6px"} alignItems={"center"}>
         <Box>
-          <Typography>{data.nickname}</Typography>
+          <Typography
+            sx={(theme) => ({
+              fontSize: [14, 14, 18],
+              lineHeight: ["24px", "24px", "26px"],
+              fontWeight: 400,
+              color: theme.palette.Black[400],
+            })}
+          >
+            {maskNickname(data.nickname ?? "")}
+          </Typography>
         </Box>
+        <Box
+          border={"1px solid"}
+          height={[12, 12, 14]}
+          sx={(theme) => ({ BorderColor: theme.palette.Line[200] })}
+        ></Box>
         <Box>
-          <Typography>{data.date}</Typography>
+          <Typography
+            sx={(theme) => ({
+              fontSize: [14, 14, 18],
+              lineHeight: ["24px", "24px", "26px"],
+              fontWeight: 400,
+              color: theme.palette.Grayscale[300],
+            })}
+          >
+            {formatKoreanDate(data.date ?? "", false)}
+          </Typography>
         </Box>
       </Box>
       <Box display="flex" gap="4px">
-        {Array.from(data.review ?? 1).map((_, i) => (
+        {Array.from({ length: data.review ?? 1 }).map((_, i) => (
           <Box
             key={i}
             position="relative"
@@ -35,7 +67,7 @@ export const CardListReview = ({ data }: CardProps) => {
         ))}
       </Box>
       <Box>
-        <Typography>{data.review}</Typography>
+        <Typography>{data.writeReview}</Typography>
       </Box>
     </Box>
   );
