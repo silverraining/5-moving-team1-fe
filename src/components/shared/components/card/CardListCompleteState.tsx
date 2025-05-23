@@ -51,58 +51,60 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
       boxShadow="2px 2px 10px 0px rgba(220, 220, 220, 0.14), -2px -2px 10px 0px rgba(220, 220, 220, 0.14)"
       boxSizing={"border-box"}
     >
-      <Box
-        display={"flex"}
-        alignItems={"center"}
-        justifyContent={"center"}
-        position={"absolute"}
-        border="1px solid"
-        top={0}
-        right={0}
-        width={"100%"}
-        height={"100%"}
-        flexDirection={"column"}
-        gap={"16px"}
-        sx={(theme) => ({
-          background: "rgba(4, 4, 4, 0.64)",
-          zIndex: 0,
-          borderRadius: "16px",
-          borderColor: theme.palette.Line[100],
-        })}
-      >
-        <Typography
+      {data.refuse && (
+        <Box
+          display={"flex"}
+          alignItems={"center"}
+          justifyContent={"center"}
+          position={"absolute"}
+          border="1px solid"
+          top={0}
+          right={0}
+          width={"100%"}
+          height={"100%"}
+          flexDirection={"column"}
+          gap={"16px"}
           sx={(theme) => ({
-            fontSize: [16, 16, 18],
-            lineHeight: ["26px", "26px", "26px"],
-            fontWeight: 600,
-            color: theme.palette.White[100],
-          })}
-        >
-          이사 완료된 견적이에요
-        </Typography>
-        <Button
-          onClick={onclickDetails}
-          variant="contained"
-          sx={(theme) => ({
-            height: [48, 48, 64],
-            bgcolor: theme.palette.PrimaryBlue[100],
-            borderRadius: ["8px", "8px", "16px"],
-            border: "1px solid",
-            borderColor: theme.palette.PrimaryBlue[200],
+            background: "rgba(4, 4, 4, 0.64)",
+            zIndex: 0,
+            borderRadius: "16px",
+            borderColor: theme.palette.Line[100],
           })}
         >
           <Typography
             sx={(theme) => ({
-              fontSize: [14, 14, 16],
-              lineHeight: ["24px", "24px", "26px"],
+              fontSize: [16, 16, 18],
+              lineHeight: ["26px", "26px", "26px"],
               fontWeight: 600,
-              color: theme.palette.PrimaryBlue[300],
+              color: theme.palette.White[100],
             })}
           >
-            견적 상세보기
+            이사 완료된 견적이에요
           </Typography>
-        </Button>
-      </Box>
+          <Button
+            onClick={onclickDetails}
+            variant="contained"
+            sx={(theme) => ({
+              height: [48, 48, 64],
+              bgcolor: theme.palette.PrimaryBlue[100],
+              borderRadius: ["8px", "8px", "16px"],
+              border: "1px solid",
+              borderColor: theme.palette.PrimaryBlue[200],
+            })}
+          >
+            <Typography
+              sx={(theme) => ({
+                fontSize: [14, 14, 16],
+                lineHeight: ["24px", "24px", "26px"],
+                fontWeight: 600,
+                color: theme.palette.PrimaryBlue[300],
+              })}
+            >
+              견적 상세보기
+            </Typography>
+          </Button>
+        </Box>
+      )}
       <Box display={"flex"} justifyContent={"space-between"}>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
           {data.types.map((type, index) => (
