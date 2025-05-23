@@ -1,89 +1,116 @@
-import { Box, TextField, Button, Typography } from "@mui/material";
+import { COLORS } from "@/public/theme/colors";
+import { Box, Button, Typography } from "@mui/material";
 
-interface InputBoxProps {
-  field1: string;
-  field2: string;
-  isEditing: boolean;
-  onChangeField1: (value: string) => void;
-  onChangeField2: (value: string) => void;
-  onSubmit: () => void;
-  onEditToggle: () => void;
+interface EditableBoxProps {
+  fromLabel: string;
+  toLabel: string;
+  onFromClick: () => void;
+  onToClick: () => void;
+  onConfirmClick: () => void;
 }
 
-export const InputBox = ({
-  field1,
-  field2,
-  isEditing,
-  onChangeField1,
-  onChangeField2,
-  onSubmit,
-  onEditToggle,
-}: InputBoxProps) => {
-  const isFilled = field1.trim() !== "" && field2.trim() !== "";
+export const EditableBox = ({
+  fromLabel,
+  toLabel,
+  onFromClick,
+  onToClick,
+  onConfirmClick,
+}: EditableBoxProps) => {
+  const hasFrom = !!fromLabel;
+  const hasTo = !!toLabel;
+  const showConfirm = hasFrom && hasTo;
 
   return (
     <Box
       display="flex"
+      width={[327, 624]}
       flexDirection="column"
+      padding={["20px 24px", "32px"]}
+      alignItems="center"
       gap={2}
-      p={2}
-      border="1px solid #ccc"
-      borderRadius="8px"
-      width="300px"
+      borderRadius="32px 0 32px 32px "
+      sx={{
+        backgroundColor: COLORS.White[100],
+      }}
+      boxSizing={"border-box"}
     >
-      <Box>
-        <TextField
+      {/* 출발지 */}
+      <Box display={"flex"} flexDirection={"column"} alignItems={"flex-end"}>
+        <Button
           variant="outlined"
-          value={field1}
-          onChange={(e) => onChangeField1(e.target.value)}
-          disabled={!isEditing}
-        />
-        {field1.trim() !== "" && (
-          <Button>
-            <Typography
-              variant="body2"
-              color="primary"
-              sx={{
-                cursor: "pointer",
-                textDecoration: "underline",
-                width: "fit-content",
-                mt: 0.5,
-              }}
-              onClick={onEditToggle}
-            >
-              수정하기1
-            </Typography>
-          </Button>
-        )}
-      </Box>
-
-      <Box>
-        <TextField
-          variant="outlined"
-          value={field2}
-          onChange={(e) => onChangeField2(e.target.value)}
-          disabled={!isEditing}
-        />
-        {field2.trim() !== "" && (
+          onClick={onFromClick}
+          sx={{
+            borderRadius: "16px",
+            width: [279, 560],
+            height: [54, 64],
+            justifyContent: "flex-start",
+            padding: 2,
+          }}
+        >
+          {fromLabel || "출발지 선택하기"}
+        </Button>
+        {hasFrom && (
           <Typography
-            variant="body2"
-            color="primary"
+            onClick={onFromClick}
             sx={{
+              fontSize: [12, 16],
+              lineHeight: ["24px", "26px"],
+              fontWeight: 500,
+              color: COLORS.Black[400],
               cursor: "pointer",
               textDecoration: "underline",
-              width: "fit-content",
-              mt: 0.5,
             }}
-            onClick={onEditToggle}
           >
-            수정하기2
+            수정하기
           </Typography>
         )}
       </Box>
 
-      {isEditing && (
-        <Button variant="contained" onClick={onSubmit} disabled={!isFilled}>
-          저장
+      {/* 도착지 */}
+      <Box display={"flex"} flexDirection={"column"} alignItems={"flex-end"}>
+        <Button
+          variant="outlined"
+          onClick={onToClick}
+          sx={{
+            borderRadius: "16px",
+            width: [279, 560],
+            height: [54, 64],
+            justifyContent: "flex-start",
+            padding: 2,
+          }}
+        >
+          {toLabel || "도착지 선택하기"}
+        </Button>
+        {hasTo && (
+          <Typography
+            onClick={onToClick}
+            sx={{
+              fontSize: [12, 16],
+              lineHeight: ["24px", "26px"],
+              fontWeight: 500,
+              color: COLORS.Black[400],
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
+            수정하기
+          </Typography>
+        )}
+      </Box>
+
+      {/* 견적 확정하기 버튼 */}
+      {showConfirm && (
+        <Button
+          variant="contained"
+          onClick={onConfirmClick}
+          sx={{
+            width: [279, 560],
+            height: [54, 64],
+            backgroundColor: COLORS.PrimaryBlue[300],
+            borderRadius: "16px",
+          }}
+        >
+          견적 확정하기
         </Button>
       )}
     </Box>
