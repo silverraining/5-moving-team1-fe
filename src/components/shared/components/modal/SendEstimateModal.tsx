@@ -1,0 +1,259 @@
+"use client";
+
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Button,
+  Typography,
+  Box,
+  useTheme,
+  useMediaQuery,
+  Divider,
+} from "@mui/material";
+import Image from "next/image";
+import { Textarea } from "../text-field/Textarea";
+import { useEstimateOfferForm } from "@/src/hooks/utill";
+import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
+import { Outline } from "../text-field/Outline";
+import { InfoChip } from "./components/InfoChip";
+
+interface SendEstimateModalProps {
+  open: boolean;
+  onClose: () => void;
+  onSend: (formData: { price: number; comment: string }) => void;
+  moveType: ChipProps["type"][];
+  customerName: string;
+  moveDate: string;
+  fromAddress: string;
+  toAddress: string;
+}
+
+export default function SendEstimateModal({
+  open,
+  onClose,
+  onSend,
+  moveType,
+  customerName,
+  moveDate,
+  fromAddress,
+  toAddress,
+}: SendEstimateModalProps) {
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+
+  const { register, handleSubmit, errors, isValid, reset } =
+    useEstimateOfferForm();
+
+  const onSubmit = (data: { price: string; comment: string }) => {
+    onSend({
+      price: Number(data.price),
+      comment: data.comment.trim(),
+    });
+
+    reset();
+    onClose();
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      slotProps={{
+        paper: {
+          sx: {
+            borderRadius: isSmall ? "32px 32px 0 0" : "32px",
+            margin: 0,
+            position: isSmall ? "fixed" : "initial",
+            px: "24px",
+            paddingTop: "32px",
+            paddingBottom: "40px",
+            bottom: isSmall ? 0 : "auto",
+            left: isSmall ? 0 : "auto",
+            right: isSmall ? 0 : "auto",
+            maxHeight: isSmall ? "90vh" : "auto",
+            width: isSmall ? "100%" : "auto",
+            gap: isSmall ? "26px" : "40px",
+          },
+        },
+      }}
+    >
+      <DialogTitle
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          padding: 0,
+        }}
+        variant={isSmall ? "B_18" : "SB_24"}
+      >
+        견적 보내기
+        <Image
+          onClick={onClose}
+          width={isSmall ? 24 : 36}
+          height={isSmall ? 24 : 36}
+          src="/images/header/X.svg"
+          alt="close"
+          style={{ cursor: "pointer" }}
+        />
+      </DialogTitle>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <DialogContent
+          sx={{
+            p: 0,
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* 이사 유형 chip */}
+          <Box
+            display="flex"
+            flexWrap="wrap"
+            sx={{
+              gap: isSmall ? "8px" : "12px",
+              mb: isSmall ? "14px" : "24px",
+            }}
+          >
+            {moveType.map((type) => (
+              <ChipCategory key={type} type={type as ChipProps["type"]} />
+            ))}
+          </Box>
+          <Box
+            display="flex"
+            flexDirection="column"
+            alignItems="flex-start"
+            gap={isSmall ? "20px" : "32px"}
+          >
+            {/* 고객 정보 카드 */}
+            <Box
+              display="flex"
+              flexDirection="column"
+              gap={isSmall ? "6px" : "16px"}
+              sx={{
+                width: "100%",
+                px: isSmall ? 0 : "18px",
+                paddingTop: isSmall ? "10px" : "24px",
+                paddingBottom: isSmall ? "20px" : "24px",
+                borderRadius: "8px",
+                ...(isSmall
+                  ? { borderBottom: `1px solid ${theme.palette.Line[100]}` }
+                  : { border: `1px solid ${theme.palette.Line[100]}` }),
+              }}
+            >
+              <Box display="flex">
+                <Typography
+                  variant={isSmall ? "SB_14" : "SB_24"}
+                  sx={{ whiteSpace: "nowrap" }}
+                >
+                  {customerName} 고객님
+                </Typography>
+              </Box>
+              <Box
+                display="flex"
+                alignItems="center"
+                gap={isSmall ? "8px" : "16px"}
+              >
+                <InfoChip label="이사일" />
+                <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
+                  {moveDate}
+                </Typography>
+              </Box>
+              <Box display="flex" alignItems="center">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap={isSmall ? "8px" : "12px"}
+                >
+                  <InfoChip label="출발" />
+                  <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
+                    {fromAddress}
+                  </Typography>
+                </Box>
+                {/* === 경계선 추가 === */}
+                <Box
+                  sx={{
+                    width: "1px",
+                    backgroundColor: theme.palette.Line[200],
+                    alignSelf: "stretch",
+                    mx: isSmall ? "14px" : "16px",
+                  }}
+                />
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  gap={isSmall ? "8px" : "12px"}
+                >
+                  <InfoChip label="도착" />
+                  <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
+                    {toAddress}
+                  </Typography>
+                </Box>
+              </Box>
+            </Box>
+            {/* 견적가 */}
+            <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
+              <Typography
+                variant={isSmall ? "SB_16" : "SB_20"}
+                sx={{ color: theme.palette.Black[300] }}
+              >
+                견적가를 입력해 주세요
+              </Typography>
+              <Outline
+                type="number"
+                placeholder="견적가 입력"
+                register={register.price}
+                errorMessage={errors.price?.message}
+                sx={{ width: "100%" }}
+              />
+            </Box>
+            {/* === 경계선 추가 === */}
+            <Divider
+              sx={{
+                height: "1px",
+                width: "100%",
+                backgroundColor: theme.palette.Line[100],
+              }}
+            />
+            {/* 코멘트 */}
+            <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
+              <Typography
+                variant={isSmall ? "SB_16" : "SB_20"}
+                sx={{ color: theme.palette.Black[300] }}
+              >
+                코멘트를 입력해 주세요
+              </Typography>
+              <Textarea
+                placeholder="최소 10자 이상 입력해주세요"
+                register={register.comment}
+                errorMessage={errors.comment?.message}
+                sx={{ width: "100%" }}
+              />
+            </Box>
+          </Box>
+        </DialogContent>
+
+        <DialogActions sx={{ p: 0, mt: isSmall ? "26px" : "40px" }}>
+          <Button
+            type="submit"
+            variant="contained"
+            disabled={!isValid}
+            sx={{
+              padding: "16px",
+              width: "100%",
+            }}
+          >
+            <Typography
+              variant={isSmall ? "SB_16" : "SB_20"}
+              sx={{ color: theme.palette.White[100] }}
+            >
+              견적 보내기
+            </Typography>
+          </Button>
+        </DialogActions>
+      </form>
+    </Dialog>
+  );
+}
