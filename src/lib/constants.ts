@@ -22,8 +22,4 @@ export const RegionType = [
 ] as const;
 export type Region = (typeof RegionType)[number];
 
-export const PATH = {
-  userlogin: "/auth/user/login",
-  moverlogin: "/auth/mover/login",
-  signup: "/auth/signup",
-};
+export const PATH = { login: "/auth/login", signup: "/auth/signup" };

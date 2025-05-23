@@ -11,21 +11,20 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { DrawerList } from "../DrawerList";
-import { authStore } from "@/src/store/authStore";
+
 import { useDrawer } from "@/src/hooks/utill";
 import { UserTabs } from "./UserTabs";
 import { MenuTabs } from "./MenuTabs";
+import { AuthStore } from "@/src/store/authStore";
 
 export const Header = () => {
   const { open, toggleDrawer } = useDrawer();
-  const { login, user, isLogin, logout } = authStore();
-
-  const isCustomer = user?.role === "customer";
-  const isMover = user?.role === "mover";
-
+  const { user, token } = AuthStore();
+  const isLogin = token;
+  const isCustomer = user?.roll === "customer";
+  const isMover = user?.roll === "mover";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
   const customerMenu = ["견적 요청", "기사님 찾기", "내 견적 관리"];
   const moverMenu = ["받은 요청", "내 견적 관리"];
   const guestMenu = ["기사님 찾기"];
@@ -37,15 +36,6 @@ export const Header = () => {
       ? moverMenu
       : ["로그인", ...guestMenu];
 
-  const testLogin = () => {
-    const user = {
-      id: "1",
-      name: "test",
-      role: "mover" as "mover",
-      token: "asdasd",
-    };
-    login(user);
-  };
   return (
     <Box
       display={"flex"}
@@ -68,19 +58,41 @@ export const Header = () => {
       </Stack>
       {!isSmall ? (
         isLogin ? (
-          <UserTabs isSmall={isSmall} user={user ?? undefined} />
+          <UserTabs
+            isSmall={isSmall}
+            user={
+              user
+                ? {
+                    id: user.id,
+                    name: user.name,
+                    role: user.roll ?? null,
+                    token: token ?? null,
+                  }
+                : undefined
+            }
+          />
         ) : (
-          <Button
-            variant="contained"
-            onClick={testLogin}
-            sx={{ width: "116px", height: "44px" }}
-          >
+          <Button variant="contained" sx={{ width: "116px", height: "44px" }}>
             로그인
           </Button>
         )
       ) : (
         <Stack direction={"row"} alignItems={"center"} gap={"24px"}>
-          {isLogin && <UserTabs isSmall={isSmall} user={user ?? undefined} />}
+          {isLogin && (
+            <UserTabs
+              isSmall={isSmall}
+              user={
+                user
+                  ? {
+                      id: user.id,
+                      name: user.name,
+                      role: user.roll ?? null,
+                      token: token ?? null,
+                    }
+                  : undefined
+              }
+            />
+          )}
           <Image
             src={"/images/header/menu.svg"}
             width={24}
