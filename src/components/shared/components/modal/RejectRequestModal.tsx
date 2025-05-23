@@ -15,7 +15,6 @@ import { useTheme } from "@mui/material/styles";
 import { useRejectRequestForm } from "@/src/hooks/utill";
 import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
 import { InfoChip } from "./components/InfoChip";
-import { COLORS } from "@/public/theme/colors";
 import { Textarea } from "../text-field/Textarea";
 
 interface RejectRequestModalProps {
@@ -136,7 +135,7 @@ export default function RejectRequestModal({
                 px: "18px",
                 py: isSmall ? "10px" : "24px",
                 borderRadius: "8px",
-                border: `1px solid ${COLORS.Line[100]}`,
+                border: `1px solid ${theme.palette.Line[100]}`,
               }}
             >
               <Box display="flex">
@@ -172,7 +171,7 @@ export default function RejectRequestModal({
                 <Box
                   sx={{
                     width: "1px",
-                    backgroundColor: COLORS.Line[200],
+                    backgroundColor: theme.palette.Line[200],
                     alignSelf: "stretch",
                     mx: isSmall ? "14px" : "16px",
                   }}
@@ -199,8 +198,7 @@ export default function RejectRequestModal({
             >
               <Typography
                 variant={isSmall ? "SB_16" : "SB_20"}
-                color={COLORS.Black[300]}
-                sx={{ width: "100%" }}
+                sx={{ width: "100%", color: theme.palette.Black[300] }}
               >
                 반려 사유를 입력해 주세요
               </Typography>
@@ -225,7 +223,7 @@ export default function RejectRequestModal({
           >
             <Typography
               variant={isSmall ? "SB_16" : "SB_20"}
-              color={COLORS.White[100]}
+              sx={{ color: theme.palette.White[100] }}
             >
               반려하기
             </Typography>

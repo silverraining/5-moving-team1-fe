@@ -19,7 +19,6 @@ import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";
-import { COLORS } from "@/public/theme/colors";
 
 interface ReviewModalProps {
   isOpen: boolean;
@@ -137,8 +136,8 @@ export default function ReviewModal({
               paddingBottom: isSmall ? "20px" : "24px",
               borderRadius: "8px",
               ...(isSmall
-                ? { borderBottom: `1px solid ${COLORS.Line[100]}` }
-                : { border: `1px solid ${COLORS.Line[100]}` }),
+                ? { borderBottom: `1px solid ${theme.palette.Line[100]}` }
+                : { border: `1px solid ${theme.palette.Line[100]}` }),
             }}
           >
             <Box
@@ -190,7 +189,7 @@ export default function ReviewModal({
                 <Box
                   sx={{
                     width: "1px",
-                    backgroundColor: COLORS.Line[200],
+                    backgroundColor: theme.palette.Line[200],
                     mx: isSmall ? "12px" : "16px",
                     alignSelf: "stretch",
                   }}
@@ -222,7 +221,7 @@ export default function ReviewModal({
         >
           <Typography
             variant={isSmall ? "SB_16" : "SB_20"}
-            color={COLORS.Black[300]}
+            sx={{ color: theme.palette.Black[300] }}
           >
             평점을 선택해 주세요
           </Typography>
@@ -244,14 +243,14 @@ export default function ReviewModal({
           sx={{
             height: "1px",
             width: "100%",
-            backgroundColor: COLORS.Line[100],
+            backgroundColor: theme.palette.Line[100],
           }}
         />
         {/* 상세 후기 */}
         <Box display="flex" flexDirection="column" gap="16px">
           <Typography
             variant={isSmall ? "SB_16" : "SB_20"}
-            color={COLORS.Black[300]}
+            sx={{ color: theme.palette.Black[300] }}
           >
             상세 후기를 입력해 주세요
           </Typography>
@@ -277,7 +276,7 @@ export default function ReviewModal({
         >
           <Typography
             variant={isSmall ? "SB_16" : "SB_20"}
-            color={COLORS.White[100]}
+            sx={{ color: theme.palette.White[100] }}
           >
             {" "}
             리뷰 등록

@@ -1,6 +1,5 @@
 "use client";
 
-import { COLORS } from "@/public/theme/colors";
 import { Typography, useTheme, useMediaQuery } from "@mui/material";
 import { styled } from "@mui/system";
 
@@ -20,7 +19,7 @@ export function InfoChip({ label }: InfoBadgeProps) {
     gap: "10px",
     width: isSmall ? "42px" : "59px",
     height: isSmall ? "26px" : "34px",
-    background: "#F4F7FB",
+    background: theme.palette.PrimaryBlue[50],
     borderRadius: "4px",
   }));
 
@@ -30,7 +29,7 @@ export function InfoChip({ label }: InfoBadgeProps) {
         variant={isSmall ? "M_13" : "R_18"}
         sx={{
           whiteSpace: "nowrap",
-          color: COLORS.Grayscale[500],
+          color: theme.palette.Grayscale[500],
         }}
       >
         {label}
