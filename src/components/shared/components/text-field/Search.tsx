@@ -3,6 +3,7 @@ import Image from "next/image";
 
 interface SearchProps extends Omit<InputProps, "fullWidth"> {
   variation: "left" | "right";
+  bgColor?: string;
 }
 
 export const SearchInput: React.FC<SearchProps> = (props) => {
@@ -45,25 +46,21 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
         )
       }
       fullWidth
-      sx={{
-        ...SearchStyles,
-      }}
+      sx={(theme) => ({
+        bgcolor: props.bgColor ? props.bgColor : theme.palette.NeutralGray[100],
+        borderRadius: "16px",
+        width: "100%",
+        height: ["52px", "52px", "64px"],
+        border: "0px",
+        paddingX: ["16px", "16px", "24px"],
+        paddingY: "14px",
+        color: theme.palette.Grayscale[400],
+        fontSize: ["14px", "14px", "20px"],
+        fontStyle: "normal",
+        fontWeight: 400,
+        textAlign: "center",
+        ":focus": { color: theme.palette.Black[400] },
+      })}
     />
   );
 };
-
-const SearchStyles: SxProps<Theme> = (theme) => ({
-  width: "100%",
-  bgcolor: theme.palette.NeutralGray[100],
-  height: ["52px", "52px", "64px"],
-  borderRadius: "16px",
-  border: "0px",
-  paddingX: ["16px", "16px", "24px"],
-  paddingY: "14px",
-  color: theme.palette.Grayscale[400],
-  fontSize: ["14px", "14px", "20px"],
-  fontStyle: "normal",
-  fontWeight: 400,
-  textAlign: "center",
-  ":focus": { color: theme.palette.Black[400] },
-});
