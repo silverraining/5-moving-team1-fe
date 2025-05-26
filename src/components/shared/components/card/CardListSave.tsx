@@ -1,84 +1,59 @@
-import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { ChipCategory, ChipProps } from "../chip/ChipCategory";
+import { Box, Typography } from "@mui/material";
+import { ChipCategory } from "../chip/ChipCategory";
+import { CardData } from "@/src/types/card";
 import Image from "next/image";
-
-export interface CardData {
-  types: ChipProps["type"][];
-  message?: string;
-  imgSrc: string;
-  name: string;
-  like: number;
-  rating: number;
-  count: number;
-  career: number;
-  confirm: number;
-  isLiked: boolean;
-}
 
 interface CardProps {
   data: CardData;
   onLikeClick?: () => void;
 }
 
-export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
-  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
-  const size = isMobile ? "sm" : isDesktop ? "lg" : "md";
-
+export const CardListSave = ({ data, onLikeClick }: CardProps) => {
   return (
     <Box
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
       border="0.5px solid #F2F2F2"
-      width={[327, 600, 955]}
-      height={[188, 188, 230]}
-      bgcolor={theme.palette.White[100]}
+      width={[327, 600, 688]}
+      height={[150, 150, 202]}
+      bgcolor="#FFFFFF"
       borderRadius="16px"
-      padding={["14px 16px", "14px 16px", "20px 24px"]}
+      padding={["16px 14px", "16px 14px", "20px 24px"]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
+      boxSizing={"border-box"}
     >
-      <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
+      <Box>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
           {data.types.map((type, index) => (
             <ChipCategory key={index} type={type} />
           ))}
         </Box>
-        <Typography
-          sx={(theme) => ({
-            fontSize: [14, 14, 24],
-            lineHeight: ["24px", "24px", "32px"],
-            fontWeight: 600,
-            color: theme.palette.Black[300],
-          })}
-        >
-          {data.message}
-        </Typography>
       </Box>
 
       {/* 아래 */}
       <Box
         display="flex"
         border="1px solid #F2F2F2"
-        bgcolor={theme.palette.White[100]}
+        bgcolor="#FFFFFF"
         padding={["10px", "10px", "16px 18px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
+        borderRadius={"6px"}
       >
-        <Box width={size === "lg" ? 56 : 46} height={size === "lg" ? 56 : 46}>
+        <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
             src={data.imgSrc}
             alt={"프로필 이미지"}
-            width={size === "lg" ? 56 : 46}
-            height={size === "lg" ? 56 : 46}
+            fill
             style={{
               overflow: "hidden",
               borderRadius: "50%",
+              objectFit: "cover",
             }}
           />
         </Box>
-        <Box display="flex" flexDirection="column">
+        <Box display="flex" flexDirection="column" flexGrow={1}>
           <Box
             display="flex"
             flexDirection="row"
@@ -86,7 +61,7 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
           >
             <Typography
               sx={(theme) => ({
-                fontSize: [14, 14, 84],
+                fontSize: [14, 14, 18],
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 600,
                 color: theme.palette.Black[300],
@@ -122,9 +97,10 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
           <Box
             display="flex"
             flexDirection="row"
-            flexGrow={1}
             gap={"9.5px"}
             alignItems="center"
+            flexGrow={1}
+            justifyContent={["space-between", "flex-start"]}
           >
             <Box
               display="flex"
@@ -137,13 +113,49 @@ export const CardListDriver = ({ data, onLikeClick }: CardProps) => {
                 width={20}
                 height={20}
               />
-              <Typography>{data.rating}</Typography>
-              <Typography>({data.count})</Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {data.rating}
+              </Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Grayscale[300],
+                })}
+              >
+                ({data.count})
+              </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
-              <Typography>경력</Typography>
-              <Typography>{data.career}년</Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Grayscale[300],
+                })}
+              >
+                경력
+              </Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {data.career}년
+              </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex">
