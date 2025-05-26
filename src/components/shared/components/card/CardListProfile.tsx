@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from "@mui/material";
-import { CardData } from "./CardListCompleteState";
+import { CardData } from "@/src/types/card";
 import Image from "next/image";
 
 import { joinAddress } from "@/src/lib/joinAddress";

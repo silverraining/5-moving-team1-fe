@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListCompleteState";
+import { CardData } from "@/src/types/card";
 import Image from "next/image";
 
 interface CardProps {

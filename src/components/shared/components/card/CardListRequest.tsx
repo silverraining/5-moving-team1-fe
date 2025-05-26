@@ -1,6 +1,6 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListCompleteState";
+import { CardData } from "@/src/types/card";
 
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";

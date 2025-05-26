@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "./CardListCompleteState";
+import { CardData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
@@ -21,11 +21,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
       height={[208, 208, 346]}
       bgcolor="#FFFFFF"
       borderRadius="16px"
-      padding={[
-        "16px 14px 10px 14px",
-        "16px 14px 10px 14px",
-        "20px 24px 14px 24px",
-      ]}
+      padding={["16px 14px 10px 14px", "16px 14px 10px 14px", "32px 24px"]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
     >
@@ -61,7 +57,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
         gap={["12px", "12px", "24px"]}
         borderRadius={"1px"}
       >
-        <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
+        <Box width={[46, 46, 96]} height={[46, 46, 96]} position="relative">
           <Image
             src={data.imgSrc}
             alt={"프로필 이미지"}

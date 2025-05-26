@@ -1,32 +1,9 @@
 import { Box, Button, Typography } from "@mui/material";
-import { ChipCategory, ChipProps } from "../chip/ChipCategory";
+import { ChipCategory } from "../chip/ChipCategory";
+import { CardData } from "@/src/types/card";
 
 import dayjs from "@/src/lib/dayjsConfig";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
-
-export interface CardData {
-  types: ChipProps["type"][];
-  message?: string;
-  imgSrc: string;
-  name: string;
-  like: number;
-  rating: number;
-  count: number;
-  career: number;
-  confirm: number;
-  isLiked: boolean;
-  cost?: number;
-  date?: string;
-  from?: string;
-  to?: string;
-  ReviewCheck?: boolean;
-  review?: number;
-  writeReview?: string;
-  nickname?: string;
-  movingDay?: string;
-  refuse?: boolean;
-  address: string[];
-}
 
 interface CardProps {
   data: CardData;

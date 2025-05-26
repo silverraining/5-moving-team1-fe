@@ -1,5 +1,5 @@
 import { Box, Typography } from "@mui/material";
-import { CardData } from "./CardListCompleteState";
+import { CardData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { maskNickname } from "@/src/lib/maskNickname";
