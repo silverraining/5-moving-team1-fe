@@ -14,7 +14,7 @@ type CustomLayoutProps = {
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const isMainPage = pathname === "/";
+  const isMainPage = pathname === "/" || "/customer/request";
   const { SnackbarComponent } = useSnackbar();
 
   useEffect(() => {

@@ -29,6 +29,8 @@ export const CheckBoxList = ({
   const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
   const size = isMobile ? "sm" : isDesktop ? "xl" : "md";
 
+  const isDisabled = !selected;
+
   return (
     <Box
       sx={{
@@ -36,9 +38,10 @@ export const CheckBoxList = ({
         flexDirection: "column",
         gap: ["8px", "16px"],
         backgroundColor: theme.palette.White[100],
-        borderRadius: "0px 24px 24px 24px",
+        borderRadius: isMobile ? "24px 4px 24px 24px" : "32px 0px 32px 32px",
         width: ["280px", "560px"],
         boxShadow: "4px 4px 10px 0px #E0E0E040",
+        padding: isMobile ? "16px" : "40px",
       }}
     >
       {options.map((option) => {
@@ -52,7 +55,7 @@ export const CheckBoxList = ({
               alignItems: "center",
               justifyContent: "flex-start",
               gap: "8px",
-              width: ["280px", "560px"],
+              width: "100%",
               height: ["52px", "84px"],
               paddingLeft: ["16px", "32px"],
               border: "1px solid",
@@ -91,11 +94,14 @@ export const CheckBoxList = ({
 
       <Button
         onClick={onConfirm}
+        disabled={isDisabled}
         sx={(theme) => ({
           marginTop: ["16px", "24px"],
-          width: ["280px", "560px"],
+          width: "100%",
           height: ["54px", "64px"],
-          backgroundColor: theme.palette.PrimaryBlue[300],
+          backgroundColor: isDisabled
+            ? theme.palette.Grayscale[100]
+            : theme.palette.PrimaryBlue[300],
           color: theme.palette.White[100],
           border: "none",
           borderRadius: "16px",
