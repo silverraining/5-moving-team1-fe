@@ -1,24 +1,24 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { CardData } from "@/src/types/card";
 import Image from "next/image";
-import { COLORS } from "@/public/theme/colors";
+
+import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 
 interface CardProps {
   data: CardData;
-  onLikeClick?: () => void;
+  onReviewClick?: () => void;
 }
 
-export const CardListCost = ({ data, onLikeClick }: CardProps) => {
+export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
   return (
     <Box
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      border="0.5px solid"
-      borderColor={COLORS.Line[100]}
+      border="0.5px solid #F2F2F2"
       width={[327, 600, 688]}
-      height={[222, 222, 280]}
+      height={[208, 208, 346]}
       bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
@@ -35,28 +35,17 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
             <ChipCategory key={index} type={type} />
           ))}
         </Box>
-        <Typography
-          sx={(theme) => ({
-            fontSize: [14, 14, 24],
-            lineHeight: ["24px", "24px", "32px"],
-            fontWeight: 600,
-            color: theme.palette.Black[300],
-          })}
-        >
-          {data.message}
-        </Typography>
       </Box>
 
       {/* 아래 */}
       <Box
         display="flex"
-        border="1px solid"
-        borderColor={COLORS.Line[100]}
+        border={["0px", "0px", "1px solid #F2F2F2"]}
         bgcolor="#FFFFFF"
         padding={["10px", "10px", "16px 18px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
-        borderRadius={"6px"}
+        borderRadius={"1px"}
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
@@ -67,6 +56,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
               overflow: "hidden",
               borderRadius: "50%",
               objectFit: "cover",
+              border: "2px solid #242945",
             }}
           />
         </Box>
@@ -86,30 +76,6 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
             >
               {data.name} 기사님
             </Typography>
-            <Box display="flex" alignItems="center">
-              <Image
-                src={
-                  data.isLiked
-                    ? "/images/like/like.svg"
-                    : "/images/like/unlike.svg"
-                }
-                alt="좋아요 버튼"
-                width={24}
-                height={24}
-                onClick={onLikeClick}
-                style={{ cursor: "pointer" }}
-              />
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 18],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.PrimaryBlue[400],
-                })}
-              >
-                {data.like}
-              </Typography>
-            </Box>
           </Box>
           <Box
             display="flex"
@@ -119,27 +85,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
             alignItems="center"
             justifyContent={["space-between", "flex-start"]}
           >
-            <Box
-              display="flex"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Image
-                src="/images/star/star_active.svg"
-                alt="별점 사진"
-                width={20}
-                height={20}
-              />
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Black[300],
-                })}
-              >
-                {data.rating}
-              </Typography>
+            <Box display="flex">
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
@@ -148,7 +94,17 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                ({data.count})
+                이사일
+              </Typography>
+              <Typography
+                sx={(theme) => ({
+                  fontSize: [13, 13, 16],
+                  lineHeight: ["22px", "22px", "26px"],
+                  fontWeight: 500,
+                  color: theme.palette.Black[300],
+                })}
+              >
+                {formatKoreanDate(data.movingDay ?? "", false)}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -161,7 +117,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                경력
+                견적가
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -171,62 +127,25 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.career}년
-              </Typography>
-            </Box>
-            <Box height={14} border={"1px solid #E6E6E6"}></Box>
-            <Box display="flex">
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Black[300],
-                })}
-              >
-                {data.confirm}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
-              >
-                확정
+                {(data.cost ?? 0).toLocaleString()}원
               </Typography>
             </Box>
           </Box>
         </Box>
       </Box>
-      <Box
-        display="flex"
-        justifyContent="flex-end"
-        alignItems="flex-end"
-        gap={["8px", "16px"]}
+      <Button
+        disabled={data.ReviewCheck ? true : false}
+        onClick={onReviewClick}
+        variant="contained"
+        sx={(theme) => ({
+          bgcolor: data.ReviewCheck
+            ? theme.palette.Grayscale[100]
+            : theme.palette.PrimaryBlue[300],
+          height: [48, 48, 64],
+        })}
       >
-        <Typography
-          sx={(theme) => ({
-            fontSize: [14, 14, 18],
-            lineHeight: ["24px", "24px", "26px"],
-            fontWeight: 500,
-            color: theme.palette.Black[400],
-          })}
-        >
-          견적 금액
-        </Typography>
-        <Typography
-          sx={(theme) => ({
-            fontSize: [18, 18, 24],
-            lineHeight: ["26px", "26px", "32px"],
-            fontWeight: 700,
-            color: theme.palette.PrimaryBlue[400],
-          })}
-        >
-          {(data.cost ?? 0).toLocaleString()}원
-        </Typography>
-      </Box>
+        {data.ReviewCheck ? "리뷰 작성하기" : "리뷰 작성 완료"}
+      </Button>
     </Box>
   );
 };
