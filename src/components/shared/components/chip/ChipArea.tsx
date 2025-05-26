@@ -1,5 +1,4 @@
-import { COLORS } from "@/public/theme/colors";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, useTheme } from "@mui/material";
 
 interface ChipProps {
   label: string;
@@ -12,18 +11,19 @@ export const ChipArea = ({
   selected = false,
   onClick,
 }: ChipProps) => {
+  const theme = useTheme();
   return (
     <Box
       onClick={onClick}
       sx={{
         display: "inline-block",
         backgroundColor: selected
-          ? COLORS.PrimaryBlue[50]
-          : COLORS.NeutralGray[100],
-        border: `1px solid ${selected ? COLORS.PrimaryBlue[300] : COLORS.Grayscale[100]}`,
+          ? theme.palette.PrimaryBlue[50]
+          : theme.palette.NeutralGray[100],
+        border: `1px solid ${selected ? theme.palette.PrimaryBlue[300] : theme.palette.Grayscale[100]}`,
         "&:hover": {
-          backgroundColor: COLORS.PrimaryBlue[50],
-          border: `1px solid ${COLORS.PrimaryBlue[300]}`,
+          backgroundColor: theme.palette.PrimaryBlue[50],
+          border: `1px solid ${theme.palette.PrimaryBlue[300]}`,
         },
         padding: "10px 20px",
         borderRadius: "100px",
@@ -35,9 +35,11 @@ export const ChipArea = ({
           fontSize: [14, 18],
           lineHeight: ["24px", "26px"],
           fontWeight: 500,
-          color: selected ? COLORS.PrimaryBlue[300] : COLORS.PrimaryBlue[400],
+          color: selected
+            ? theme.palette.PrimaryBlue[300]
+            : theme.palette.PrimaryBlue[400],
           "&:hover": {
-            color: COLORS.PrimaryBlue[300],
+            color: theme.palette.PrimaryBlue[300],
           },
         }}
       >
