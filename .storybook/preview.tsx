@@ -1,5 +1,7 @@
 import type { Preview } from "@storybook/react";
-
+import { ThemeProvider, CssBaseline } from "@mui/material";
+import { createAppTheme } from "../public/theme/theme"; // 실제 테마 경로로 수정
+const theme = createAppTheme("light");
 const preview: Preview = {
   parameters: {
     actions: { argTypesRegex: "^on[A-Z].*" },
@@ -9,12 +11,13 @@ const preview: Preview = {
         date: /Date$/,
       },
     },
+
     viewport: {
       viewports: {
         mobile: {
           name: "Mobile",
           styles: {
-            width: "343px",
+            width: "0px",
             height: "800px",
           },
         },
@@ -36,6 +39,13 @@ const preview: Preview = {
       defaultViewport: "desktop",
     },
   },
+  decorators: [
+    (Story) => (
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Story />
+      </ThemeProvider>
+    ),
+  ],
 };
-
 export default preview;
