@@ -1,7 +1,8 @@
-import { PATH } from "@/src/hooks/constants";
-import { Stack, Typography } from "@mui/material";
+import { Stack } from "@mui/material";
 import Image from "next/image";
 import Link from "next/link";
+import { TextLink } from "./TextLink";
+import { PATH } from "@/src/lib/constants";
 
 interface LogoSectionProps {
   description: string;
@@ -26,17 +27,7 @@ export const LogoSection = ({
           height={height}
         />
       </Link>
-      <Stack
-        direction={"row"}
-        spacing={"8px"}
-        sx={(theme) => ({
-          bgcolor: theme.palette.primary.main,
-          color: theme.palette.common.white,
-        })}
-      >
-        <Typography>{description}</Typography>
-        <Link href={link.href}>{link.content}</Link>
-      </Stack>
+      <TextLink description={description} link={link} />
     </Stack>
   );
 };
