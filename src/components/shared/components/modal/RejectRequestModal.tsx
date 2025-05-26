@@ -13,7 +13,8 @@ import Image from "next/image";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useRejectRequestForm } from "@/src/hooks/utill";
-import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
+import { ChipCategory } from "../chip/ChipCategory";
+import { ChipProps } from "@/src/types/card";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 
