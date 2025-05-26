@@ -1,9 +1,6 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { ChipProps } from "@/src/types/card";
 import Image from "next/image";
-
-export interface ChipProps {
-  type: "small" | "home" | "office" | "designation" | "wait" | "complete";
-}
 
 export const ChipCategory = ({ type = "small" }: ChipProps) => {
   const theme = useTheme();
@@ -60,13 +57,13 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
   const size = isSmall ? "xs" : isMobile ? "sm" : "md";
 
   const sizeMap = {
-    xs: { img: 20, height: 24, borderRadius: 4 },
+    xs: { img: 20, height: 24, borderRadius: "4px" },
     sm: {
       img: 20,
       font: 13,
       height: 26,
-      lineHeight: 22,
-      borderRadius: 4,
+      lineHeight: "22px",
+      borderRadius: "4px",
       gap: 0.25,
       px: "6px",
     },
@@ -74,8 +71,8 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
       img: 24,
       font: 18,
       height: 34,
-      lineHeight: 24,
-      borderRadius: 8,
+      lineHeight: "24px",
+      borderRadius: "8px",
       gap: 0.5,
       px: "8px",
     },
