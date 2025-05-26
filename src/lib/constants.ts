@@ -1,4 +1,5 @@
 export const ServiceType = ["소형이사", "가정이사", "사무실이사"] as const;
+
 export type Service = (typeof ServiceType)[number];
 
 export const RegionType = [
@@ -22,4 +23,10 @@ export const RegionType = [
 ] as const;
 export type Region = (typeof RegionType)[number];
 
-export const PATH = { login: "/auth/login", signup: "/auth/signup" };
+export const PATH = {
+  main: "/",
+  userlogin: "/auth/user/login",
+  moverlogin: "/auth/mover/login",
+  usersignup: "/auth/user/signup",
+  moversignup: "/auth/mover/signup",
+};

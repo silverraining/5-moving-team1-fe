@@ -8,7 +8,8 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { CardList } from "../components/shared/components/card/CardList";
-import { PATH } from "../hooks/constants";
+import { PATH } from "../lib/constants";
+
 export const Main = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -51,7 +52,7 @@ export const Main = () => {
             로그인
           </Button>
         </Link>
-        <Link href={PATH.signup}>
+        <Link href={PATH.usersignup}>
           <Button
             fullWidth
             variant="outlined"

@@ -17,7 +17,7 @@ export const Outline = ({
 }: OutlineProps) => {
   const [showPassword, setShowPassword] = useState(false);
   const isPassword = type === "password";
-  const icon = !showPassword ? "visibility.svg" : "visibility_off.svg";
+  const icon = showPassword ? "visibility.svg" : "visibility_off.svg";
 
   return (
     <Stack spacing={1}>
@@ -27,11 +27,11 @@ export const Outline = ({
         endAdornment={
           isPassword && (
             <Image
-              src={`./images/input/${icon}`}
+              src={`/images/input/${icon}`}
               width={24}
               height={24}
               alt="Visibility Icon"
-              style={{ cursor: "pointer" }}
+              style={{ cursor: "pointer", display: "block" }}
               onClick={() => {
                 setShowPassword(!showPassword);
               }}
@@ -39,28 +39,43 @@ export const Outline = ({
           )
         }
         fullWidth
-        sx={{
+        sx={(theme) => ({
           borderRadius: "16px",
-          fontSize: ["16px", "16px", "20px"],
+          fontSize: "16px",
           fontWeight: 400,
           lineHeight: "26px",
+          borderColor: "red",
           p: 0,
-          "&.MuiInputBase-root": {
-            border: "1px solid #E6E6E6",
-            px: "14px",
-            py: ["14px", "14px", "16px"],
-            height: ["54px", "54px", "64px"],
+          [theme.breakpoints.up("tablet")]: {
+            fontSize: "20px",
           },
-        }}
+          "& fieldset": {
+            borderWidth: "1px",
+            borderColor: errorMessage
+              ? theme.palette.SecondaryRed[200]
+              : theme.palette.Line[200],
+          },
+          "&.MuiInputBase-root": {
+            px: "14px",
+            py: "14px",
+            height: "54px",
+            [theme.breakpoints.up("tablet")]: {
+              py: "16px",
+              height: "64px",
+            },
+          },
+        })}
         {...props}
       />
       {errorMessage && (
-        <Typography
-          variant="M_13"
-          sx={(theme) => ({ color: theme.palette.SecondaryRed[200] })}
-        >
-          {errorMessage}
-        </Typography>
+        <Stack alignItems={"end"}>
+          <Typography
+            variant="M_13"
+            sx={(theme) => ({ color: theme.palette.SecondaryRed[200] })}
+          >
+            {errorMessage}
+          </Typography>
+        </Stack>
       )}
     </Stack>
   );
