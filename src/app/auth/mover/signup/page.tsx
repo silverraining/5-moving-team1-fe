@@ -9,13 +9,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
-import {
-  signUpSchema,
-  SignUpSchemaType,
-} from "@/src/schema/auth/signup.schema";
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
   MOVER_INFO,
@@ -23,19 +17,18 @@ import {
   SIGNUP_FIELD,
 } from "@/src/lib/authConstants";
 
+import { useSignupForm } from "@/src/hooks/auth/hook";
+
 const SignUp = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const {
     register,
+    onSubmit,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<SignUpSchemaType>({ resolver: zodResolver(signUpSchema) });
-
-  const onSubmit = (data: SignUpSchemaType) => {
-    console.log("✅ 제출된 값:", errors);
-  };
+  } = useSignupForm("MOVER");
 
   return (
     <Stack

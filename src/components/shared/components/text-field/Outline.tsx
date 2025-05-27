@@ -64,6 +64,13 @@ export const Outline = ({
               height: "64px",
             },
           },
+          //자동 완성시 배경색 변경 방지
+          "& input:-webkit-autofill": {
+            WebkitBoxShadow: `0 0 0px 1000px white inset !important`,
+            boxShadow: `0 0 0px 1000px white inset !important`,
+            WebkitTextFillColor: theme.palette.text.primary,
+            transition: "background-color 5000s ease-in-out 0s !important",
+          },
         })}
         {...props}
       />
