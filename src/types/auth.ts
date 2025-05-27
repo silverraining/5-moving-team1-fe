@@ -17,13 +17,12 @@ export type Signup = {
 export type Role = "CUSTOMER" | "MOVER";
 
 export type User = {
-  data: any;
   id: string;
   name: string;
   phone: string;
   email: string;
-  roll: Role;
-  refreshToken: string;
+  role: Role;
+  refreshToken?: string;
   createdAt: Date;
   updatedAt: Date;
   notifications: [];
@@ -56,10 +55,10 @@ export type MoverProfile = {
   createdAt: Date;
   updatedAt: Date;
   serviceType: ServiceType[];
-  serviceRegions: ServiceRegion;
-  likedCustomers: Like[];
-  reviews: Review[];
-  estimateOffers: EstimateOffer[];
-  user: User;
-  designatedRequests: EstimateRequest[];
+  serviceRegions: ServiceRegion[];
+  likedCustomers?: Like[];
+  reviews?: Review[];
+  estimateOffers?: EstimateOffer[];
+  user?: User;
+  designatedRequests?: EstimateRequest[];
 };

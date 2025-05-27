@@ -1,21 +1,29 @@
 import { http, HttpResponse, passthrough } from "msw";
-import { LOGIN } from "../lib/mockData";
 import { API_BASE_URL } from "../lib/constants";
+import { generateMoverList } from "../utills/utill";
+import { MOVER_DTAIL } from "../lib/mockData";
+import { ServiceRegion, ServiceType } from "../types/common";
 
 export const handlers = [
-  http.post(`${API_BASE_URL}/auth/login/local`, async ({ request }) => {
-    const body = await request.json();
-    console.log("MOCK LOGIN 요청 도착", body);
-
-    return HttpResponse.json(LOGIN);
+  http.get(`${API_BASE_URL}/user/mover/list`, async ({ request }) => {
+    const url = new URL(request.url);
+    const location = url.searchParams.get("location") as ServiceRegion | null;
+    const serviceType = url.searchParams.get(
+      "serviceType"
+    ) as ServiceType | null;
+    const sortBy = url.searchParams.get("sortBy");
+    console.log("MOCK MOVER LIST 요청 도착", { location, serviceType, sortBy });
+    const movers = generateMoverList(30);
+    return HttpResponse.json(movers);
   }),
-  http.post(`${API_BASE_URL}/auth/register`, async ({ request }) => {
-    const body = await request.json();
-    console.log("MOCK REGISTER 요청 도착", body);
 
-    return HttpResponse.json("회원가입 성공", {
-      status: 201,
-    });
+  http.get(`${API_BASE_URL}/user/mover/detail/:moverId`, async ({ params }) => {
+    const { moverId } = params;
+    const movers = generateMoverList(30);
+    const mover = movers.find((m) => m.id === moverId) ?? MOVER_DTAIL;
+    console.log("MOCK MOVER DETAIL 요청 도착", moverId);
+    return HttpResponse.json(mover);
   }),
+
   http.post("http://localhost:5000/real-route", passthrough),
 ];

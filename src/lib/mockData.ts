@@ -1,3 +1,6 @@
+import { MoverProfile } from "../types/auth";
+import { ServiceRegion, ServiceType } from "../types/common";
+
 export const LOGIN = {
   accessToken: "mockAccessToken12345",
   refreshToken: "mockRefreshToken67890",
@@ -15,4 +18,38 @@ export const LOGIN = {
     customerProfile: [{ id: "profile1", info: "프로필 정보 예시" }],
     moverProfile: [],
   },
+};
+
+export const MOVER_LIST: MoverProfile[] = [
+  {
+    id: "mover-001",
+    userId: "user-002",
+    nickname: "이사왕",
+    imageUrl: "https://example.com/mover1.jpg",
+    experience: 5,
+    intro: "안녕하세요! 이사 전문 기사입니다.",
+    description: "고객님의 소중한 짐을 안전하게 옮겨드립니다.",
+    averageRating: 4.8,
+    confirmedCount: 50,
+    serviceType: [ServiceType.HOME, ServiceType.OFFICE],
+    serviceRegions: [ServiceRegion.CHUNGBUK, ServiceRegion.GYEONGGI],
+    createdAt: new Date("2024-01-01T10:00:00Z"),
+    updatedAt: new Date("2024-05-26T12:00:00Z"),
+  },
+];
+
+export const MOVER_DTAIL: MoverProfile = {
+  id: "mover-001",
+  userId: "user-002",
+  nickname: "이사왕",
+  imageUrl: "https://example.com/mover1.jpg",
+  experience: 5,
+  intro: "안녕하세요! 이사 전문 기사입니다.",
+  description: "고객님의 소중한 짐을 안전하게 옮겨드립니다.",
+  averageRating: 4.8,
+  confirmedCount: 50,
+  serviceType: [ServiceType.HOME, ServiceType.OFFICE],
+  serviceRegions: [ServiceRegion.CHUNGBUK, ServiceRegion.GYEONGGI],
+  createdAt: new Date("2024-01-01T10:00:00Z"),
+  updatedAt: new Date("2024-05-26T12:00:00Z"),
 };
