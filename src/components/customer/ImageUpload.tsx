@@ -1,19 +1,31 @@
 "use client";
 
-import { Box, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography, CircularProgress } from "@mui/material";
 import Image from "next/image";
 import { useRef } from "react";
 
-interface ProfileImageUploadProps {
-  profileImage: string | null;
-  onImageChange: (image: string | null) => void;
+interface ImageUploadProps {
+  onFileSelect: (file: File) => void;
+  previewImage?: string | null;
+  isUploading?: boolean;
+  initialImage?: string | null;
 }
 
-export const ProfileImageUpload = ({
-  profileImage,
-  onImageChange,
-}: ProfileImageUploadProps) => {
+//TODO: drag & drop 업로드 기능 추가
+//TODO: 이미지 삭제 기능 추가
+//TODO: 이미지 크기 or 확장자 제한 추가
+//TODO: 에러 처리
+
+export const ImageUpload = ({
+  onFileSelect,
+  previewImage,
+  isUploading = false,
+  initialImage = null,
+}: ImageUploadProps) => {
+  // 파일 입력을 위한 input 요소의 ref
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const displayImage = previewImage || initialImage;
 
   const handleImageClick = () => {
     fileInputRef.current?.click();
@@ -21,13 +33,8 @@ export const ProfileImageUpload = ({
 
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        onImageChange(e.target?.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+    if (!file) return;
+    onFileSelect(file);
   };
 
   return (
@@ -51,11 +58,18 @@ export const ProfileImageUpload = ({
           overflow: "hidden",
           position: "relative",
           borderRadius: "6px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          border: "1px dashed",
+          borderColor: (theme) => theme.palette.Line[100],
         }}
       >
-        {profileImage ? (
+        {isUploading ? (
+          <CircularProgress />
+        ) : displayImage ? (
           <Image
-            src={profileImage}
+            src={displayImage}
             alt="프로필 이미지"
             fill
             style={{ objectFit: "cover" }}
