@@ -15,7 +15,8 @@ import {
 import { Controller } from "react-hook-form";
 import Image from "next/image";
 import { ModalStar } from "./components/ModalStar";
-import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
+import { ChipCategory } from "../chip/ChipCategory";
+import { ChipProps } from "@/src/types/card";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";

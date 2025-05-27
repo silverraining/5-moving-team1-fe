@@ -15,7 +15,8 @@ import {
 import Image from "next/image";
 import { Textarea } from "../text-field/Textarea";
 import { useEstimateOfferForm } from "@/src/hooks/utill";
-import { ChipCategory, type ChipProps } from "../chip/ChipCategory";
+import { ChipCategory } from "../chip/ChipCategory";
+import { ChipProps } from "@/src/types/card";
 import { Outline } from "../text-field/Outline";
 import { InfoChip } from "./components/InfoChip";
 
