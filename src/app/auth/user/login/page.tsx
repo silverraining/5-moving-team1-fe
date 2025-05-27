@@ -19,20 +19,17 @@ import {
   LOGIN_FIELD,
   USER_SIGNUP_LINK,
 } from "@/src/lib/authConstants";
+import { useLoginForm } from "@/src/hooks/auth/hook";
 
 const Login = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
   const {
     register,
     handleSubmit,
+    onSubmit,
     formState: { errors, isValid },
-  } = useForm<LoginSchemaType>({ resolver: zodResolver(loginSchema) });
-
-  const onSubmit = (data: LoginSchemaType) => {
-    console.log("✅ 제출된 값:", errors);
-  };
+  } = useLoginForm("CUSTOMER");
 
   return (
     <Stack
