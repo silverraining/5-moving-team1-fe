@@ -1,5 +1,11 @@
+import { generateMockReviews } from "../mock/moverHendler";
 import { MoverProfile } from "../types/auth";
-import { ServiceRegion, ServiceType } from "../types/common";
+import {
+  EstimateRequestStatus,
+  ServiceRegion,
+  ServiceType,
+} from "../types/common";
+import { EstimateRequest } from "../types/estimate";
 
 export const LOGIN = {
   accessToken: "mockAccessToken12345",
@@ -52,4 +58,36 @@ export const MOVER_DTAIL: MoverProfile = {
   serviceRegions: [ServiceRegion.CHUNGBUK, ServiceRegion.GYEONGGI],
   createdAt: new Date("2024-01-01T10:00:00Z"),
   updatedAt: new Date("2024-05-26T12:00:00Z"),
+  reviews: [],
 };
+
+export const ESTIMATEREQUEST: EstimateRequest = {
+  id: "estimate-001",
+  customerId: "user-001",
+  estimateOfferId: "offer-001",
+  moveType: ServiceType.HOME,
+  status: EstimateRequestStatus.PENDING,
+  moveDate: new Date("2024-06-01T10:00:00Z"),
+  targetMoverIds: ["mover-001", "mover-002"],
+  fromAddress: { city: "서울", street: "강남구 테헤란로" },
+  toAddress: { city: "서울", street: "서초구 서초동" },
+  createdAt: new Date("2024-05-01T10:00:00Z"),
+  updatedAt: new Date("2024-05-26T12:00:00Z"),
+  estimateOffers: [],
+  confirmedOfferId: "",
+  confirmedOffer: undefined,
+  customerProfile: {
+    userId: "user-001",
+    id: "profile1",
+    imageUrl: "https://example.com/customer1.jpg",
+    serviceRegion: ServiceRegion.SEOUL,
+    serviceType: [ServiceType.HOME, ServiceType.OFFICE],
+    createdAt: new Date("2024-01-01T10:00:00Z"),
+    updatedAt: new Date("2024-05-26T12:00:00Z"),
+    reviews: [],
+    likes: [],
+  },
+};
+const reviewData = generateMockReviews(30, ESTIMATEREQUEST.customerProfile);
+
+MOVER_DTAIL.reviews = reviewData;

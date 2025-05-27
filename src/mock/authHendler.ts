@@ -2,7 +2,7 @@ import { http, HttpResponse, passthrough } from "msw";
 import { LOGIN } from "../lib/mockData";
 import { API_BASE_URL } from "../lib/constants";
 
-export const Authhandlers = [
+export const authHandlers = [
   http.post(`${API_BASE_URL}/auth/login/local`, async ({ request }) => {
     const body = await request.json();
     console.log("MOCK LOGIN 요청 도착", body);

@@ -1,9 +1,10 @@
 import { setupWorker } from "msw/browser";
-import { Authhandlers } from "./authHendler";
+import { authHandlers } from "./authHendler";
 import { handlers } from "./hendler";
+import { moverHandlers } from "./moverHendler";
 
 const isBrowser = typeof window !== "undefined";
 
 export const worker = isBrowser
-  ? setupWorker(...Authhandlers, ...handlers)
+  ? setupWorker(...authHandlers, ...handlers, ...moverHandlers)
   : null;
