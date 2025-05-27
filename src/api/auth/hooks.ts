@@ -21,15 +21,8 @@ export const useLogin = (): UseMutationResult<
   });
 };
 
-export const useSignup = (): UseMutationResult<
-  { user: User },
-  Error,
-  Signup
-> => {
+export const useSignup = (): UseMutationResult<User, Error, Signup> => {
   return useMutation({
-    mutationFn: async (data: Signup) => {
-      const response = await signup(data);
-      return response.data;
-    },
+    mutationFn: (data: Signup) => signup(data),
   });
 };

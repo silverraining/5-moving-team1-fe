@@ -1,12 +1,8 @@
+import { User } from "@/src/types/auth";
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
 interface UserTab {
-  user?: {
-    id: string;
-    name: string;
-    role: "customer" | "mover" | null;
-    token: string | null;
-  };
+  user: User | null;
   isSmall: boolean;
 }
 
