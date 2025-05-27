@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
 import { Stack, Box, useTheme, useMediaQuery } from "@mui/material";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import { CheckBoxList } from "@/src/components/shared/components/check-box/CheckBoxList";
+import { useEstimateStore } from "@/src/store/requestStore";
 
 interface Step1Props {
   onSelect: (value: string) => void;
@@ -13,14 +13,14 @@ export default function Step1_MoveType({ onSelect }: Step1Props) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
-  const [selected, setSelected] = useState<string>(""); // 선택된 값 하나 저장
+  const { moveType, setMoveType } = useEstimateStore();
 
   const handleConfirm = () => {
-    if (selected) {
-      onSelect(selected);
+    if (moveType) {
+      onSelect(moveType);
     }
   };
-
+  console.log("✅ Step1 - 현재 moveType:", moveType);
   return (
     <Stack spacing={isSmall ? "8px" : "24px"}>
       {/* 시스템 안내 메시지 */}
@@ -37,8 +37,8 @@ export default function Step1_MoveType({ onSelect }: Step1Props) {
         }}
       >
         <CheckBoxList
-          selected={selected}
-          onChange={setSelected} // 선택 시 상태 업데이트
+          selected={moveType}
+          onChange={setMoveType} // 선택 시 상태 업데이트
           onConfirm={handleConfirm} // 확인 시 상위로 전달
         />
       </Box>
