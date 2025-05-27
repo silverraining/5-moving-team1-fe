@@ -1,6 +1,6 @@
 import { http, HttpResponse, passthrough } from "msw";
 import { API_BASE_URL } from "../lib/constants";
-import { generateMoverList } from "../utills/utill";
+import { generateMoverList } from "../utils/utill";
 import { MOVER_DTAIL } from "../lib/mockData";
 import { ServiceRegion, ServiceType } from "../types/common";
 
