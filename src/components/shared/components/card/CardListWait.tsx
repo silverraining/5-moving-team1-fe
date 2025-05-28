@@ -27,8 +27,9 @@ export const CardListWait = ({
       maxWidth={"688px"}
       minWidth={"327px"}
       width={"100%"}
+      gap={["0px", "0px", "14px"]}
       maxHeight={"440px"}
-      minHeight={"398px"}
+      minHeight={"362px"}
       height={"100%"}
       bgcolor="#FFFFFF"
       borderRadius="16px"
@@ -209,7 +210,7 @@ export const CardListWait = ({
           flexDirection={["column", "column", "row"]}
           gap={["14px", "14px", "24px"]}
           alignItems={["flex-start", "flex-start", "center"]}
-          flexWrap={"wrap"}
+          flexWrap={"nowrap"}
         >
           <Box
             display={"flex"}
