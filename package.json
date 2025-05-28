@@ -28,7 +28,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
     "storybook": "^8.6.13",
-    "zod": "^3.25.20",
+    "zod": "^3.25.32",
     "zustand": "^5.0.4"
   },
   "devDependencies": {

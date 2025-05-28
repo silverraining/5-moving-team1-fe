@@ -15,7 +15,7 @@ import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
 import {
   signUpSchema,
   SignUpSchemaType,
-} from "@/src/schema/auth/signup.schema";
+} from "@/src/schemas/auth/signup.schema";
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
   SIGNUP_FIELD,
