@@ -47,9 +47,9 @@ export const ProfileRegister = () => {
     try {
       // 1. 프로필 데이터 준비
       const profileData = {
-        services: selectedServices,
-        regions: selectedRegions,
-        profileImageUrl: s3ImageUrl, // S3에 업로드된 이미지 URL
+        serviceType: selectedServices,
+        serviceRegion: selectedRegions,
+        imageUrl: s3ImageUrl, // S3에 업로드된 이미지 URL
       };
 
       // 2. 프로필 등록 API 호출
