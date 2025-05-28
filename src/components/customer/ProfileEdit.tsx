@@ -50,6 +50,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    control,
   } = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
     defaultValues: {
@@ -174,6 +175,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
               {/* 개인정보 입력 */}
               <PersonalInfoSection
                 register={register}
+                control={control}
                 errors={errors}
                 initialData={initialData}
               />

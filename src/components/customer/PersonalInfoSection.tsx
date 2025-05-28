@@ -1,12 +1,21 @@
 "use client";
 
-import { Box, Stack, Typography } from "@mui/material";
-import { UseFormRegister, FieldErrors } from "react-hook-form";
-import TextField from "../shared/components/text-field";
+import { Box, Stack, Typography, TextField, Theme } from "@mui/material";
+import {
+  UseFormRegister,
+  FieldErrors,
+  Controller,
+  Control,
+} from "react-hook-form";
 import { ProfileEditFormData } from "../../schemas/profile.schema";
+import {
+  formatPhoneNumber,
+  removePhoneNumberFormat,
+} from "../../utils/formatPhonNumber";
 
 interface PersonalInfoSectionProps {
   register: UseFormRegister<ProfileEditFormData>;
+  control: Control<ProfileEditFormData>;
   errors: FieldErrors<ProfileEditFormData>;
   initialData?: {
     name?: string;
@@ -15,8 +24,16 @@ interface PersonalInfoSectionProps {
   };
 }
 
+const textFieldStyle = {
+  "& .MuiOutlinedInput-root": {
+    borderRadius: "12px",
+    backgroundColor: (theme: Theme) => theme.palette.White[100],
+  },
+};
+
 export const PersonalInfoSection = ({
   register,
+  control,
   errors,
   initialData,
 }: PersonalInfoSectionProps) => {
@@ -41,11 +58,14 @@ export const PersonalInfoSection = ({
               이름
             </Typography>
           </Box>
-          <TextField.Input
+          <TextField
             type="text"
             placeholder="이름을 입력해주세요."
-            register={register("name")}
-            errorMessage={errors.name?.message}
+            {...register("name")}
+            error={!!errors.name}
+            helperText={errors.name?.message}
+            fullWidth
+            sx={textFieldStyle}
           />
         </Box>
 
@@ -67,12 +87,15 @@ export const PersonalInfoSection = ({
               이메일
             </Typography>
           </Box>
-          <TextField.Input
+          <TextField
             type="email"
             value={initialData?.email}
             disabled
-            register={register("email")}
-            errorMessage={errors.email?.message}
+            {...register("email")}
+            error={!!errors.email}
+            helperText={errors.email?.message}
+            fullWidth
+            sx={textFieldStyle}
           />
         </Box>
 
@@ -94,11 +117,33 @@ export const PersonalInfoSection = ({
               전화번호
             </Typography>
           </Box>
-          <TextField.Input
-            type="tel"
-            placeholder="010-1234-5678"
-            register={register("phone")}
-            errorMessage={errors.phone?.message}
+
+          {/* Controller: 전화번호 입력값 실시간 변환을 위해 사용 */}
+          <Controller
+            name="phone"
+            control={control}
+            render={({ field: { onChange, value } }) => {
+              const formattedValue = formatPhoneNumber(value || "");
+              return (
+                <TextField
+                  type="tel"
+                  placeholder="010-1234-5678"
+                  value={formattedValue}
+                  onChange={(e) => {
+                    // 1. 입력값 하이픈 포맷팅
+                    const formatted = formatPhoneNumber(e.target.value);
+                    // 2. 입력창에 포맷팅된 값 표시
+                    e.target.value = formatted;
+                    // 3. 폼 데이터에는 하이픈 제거한 값 저장 (01012345678)
+                    onChange(removePhoneNumberFormat(formatted));
+                  }}
+                  error={!!errors.phone}
+                  helperText={errors.phone?.message}
+                  fullWidth
+                  sx={textFieldStyle}
+                />
+              );
+            }}
           />
         </Box>
       </Stack>
