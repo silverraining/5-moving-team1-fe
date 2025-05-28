@@ -7,6 +7,7 @@ import { Box, useTheme, useMediaQuery } from "@mui/material";
 import { Progress } from "../../shared/components/progress/progress";
 import Step1_MoveType from "./steps/Step1_MoveType";
 import Step2_MoveDate from "./steps/Step2_MoveDate";
+import Step3_AddressSelect from "./steps/Step3_AddressSelect";
 import { useEstimateStore } from "@/src/store/requestStore";
 
 export default function RequestNewPageClient() {
@@ -14,7 +15,16 @@ export default function RequestNewPageClient() {
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const [step, setStep] = useState<1 | 2 | 3 | 4>(1); // 타입 선언
-  const { moveType, moveDate, setMoveType, setMoveDate } = useEstimateStore();
+  const {
+    moveType,
+    moveDate,
+    fromAddress,
+    toAddress,
+    setMoveType,
+    setMoveDate,
+    setFromAddress,
+    setToAddress,
+  } = useEstimateStore();
 
   const handleSelectStep1 = (value: string) => {
     setMoveType(value);
@@ -26,7 +36,21 @@ export default function RequestNewPageClient() {
     setStep(3);
   };
 
-  console.log("지금 선택된 값들은?", moveType, moveDate);
+  const handleSelectFromAddress = (from: string) => {
+    setFromAddress(from);
+  };
+
+  const handleSelectToAddress = (to: string) => {
+    setToAddress(to);
+  };
+
+  console.log(
+    "🎀 지금 선택된 값들은?",
+    moveType,
+    moveDate,
+    fromAddress,
+    toAddress
+  );
 
   return (
     <>
@@ -45,8 +69,17 @@ export default function RequestNewPageClient() {
             onBack={() => setStep(1)}
           />
         )}
-        {/* {step === 3 && <Step3_StartLocation onSelect={(v) => updateField("startLocation", v)} />}
-        {step === 4 && <Step4_EndLocation onSelect={(v) => updateField("endLocation", v)} />} */}
+        {step === 3 && (
+          <Step3_AddressSelect
+            onSelectFrom={handleSelectFromAddress}
+            onSelectTo={handleSelectToAddress}
+            onBackStep1={() => setStep(1)}
+            onBackStep2={() => setStep(2)}
+          />
+        )}
+        {/* {step === 4 && (
+          <Step4_EndLocation onSelect={(v) => updateField("endLocation", v)} />
+        )} */}
       </Box>
     </>
   );

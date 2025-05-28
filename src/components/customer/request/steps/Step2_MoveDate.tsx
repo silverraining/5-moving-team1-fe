@@ -23,7 +23,7 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
 
   const handleAccept = (value: Dayjs | null) => {
     if (value) {
-      const formatted = value.format("YYYY-MM-DD");
+      const formatted = value.format("YYYY년 MM월 DD일");
       setMoveDate(formatted); // 전역 상태 업데이트
       onSelect(formatted); // 스텝 이동과 함께 날짜 전달
     }
