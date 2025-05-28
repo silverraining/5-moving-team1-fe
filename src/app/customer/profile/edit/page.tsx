@@ -1,4 +1,4 @@
-import { ProfileEdit } from "@/src/components/customer/ProfileEdit";
+import { ProfileEdit } from "@/src/components/profile/ProfileEdit";
 
 // 테스트용 초기 데이터 (실제로는 API에서 가져올 데이터)
 const mockInitialData = {
@@ -7,7 +7,7 @@ const mockInitialData = {
   phone: "010-1234-5678",
   serviceType: ["small"],
   serviceRegion: ["서울"],
-  imageUrl: "/images/profile/binProfile.svg",
+  imageUrl: "/Images/profile/binProfile.svg",
 };
 
 export default function ProfileEditPage() {

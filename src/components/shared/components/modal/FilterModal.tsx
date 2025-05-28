@@ -94,7 +94,7 @@ const FilterModal = ({
             </Typography>
           </Stack>
           <Image
-            src={"/images/modal/x.svg"}
+            src={"/Images/modal/x.svg"}
             width={24}
             height={24}
             alt="close"

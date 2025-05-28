@@ -47,7 +47,7 @@ export const Header = () => {
       <Stack direction={"row"} alignItems="center" spacing={2}>
         <Link href={"/"} display={"flex"} alignItems={"center"}>
           <Image
-            src={"/images/logo/logo.svg"}
+            src={"/Images/logo/logo.svg"}
             width={88}
             height={34}
             alt="logo"
@@ -67,7 +67,7 @@ export const Header = () => {
         <Stack direction={"row"} alignItems={"center"} gap={"24px"}>
           {isLogin && <UserTabs isSmall={isSmall} user={user} />}
           <Image
-            src={"/images/header/menu.svg"}
+            src={"/Images/header/menu.svg"}
             width={24}
             height={24}
             alt="menu"

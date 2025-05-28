@@ -27,7 +27,7 @@ export const Outline = ({
         endAdornment={
           isPassword && (
             <Image
-              src={`/images/input/${icon}`}
+              src={`/Images/input/${icon}`}
               width={24}
               height={24}
               alt="Visibility Icon"

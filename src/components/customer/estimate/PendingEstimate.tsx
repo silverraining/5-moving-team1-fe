@@ -24,7 +24,7 @@ export default function PendingEstimate() {
     {
       types: ["small", "home"],
       message: "안녕하세요 고객님이 주문하신 물품을 안전하게 운송해 드립니다.",
-      imgSrc: "/images/profile/maleProfile.svg",
+      imgSrc: "/Images/profile/maleProfile.svg",
       name: "홍길동",
       nickname: "hong123",
       like: 42,
@@ -47,7 +47,7 @@ export default function PendingEstimate() {
     {
       types: ["office"],
       message: "사무실 이사 전문, 깔끔한 정리와 정돈을 약속드립니다.",
-      imgSrc: "/images/profile/maleProfile.svg",
+      imgSrc: "/Images/profile/maleProfile.svg",
       name: "김민지",
       nickname: "minji_kim",
       like: 27,
@@ -70,7 +70,7 @@ export default function PendingEstimate() {
     {
       types: ["home"],
       message: "이사 걱정 끝! 신속 정확한 서비스 보장!",
-      imgSrc: "/images/profile/maleProfile.svg",
+      imgSrc: "/Images/profile/maleProfile.svg",
       name: "이수현",
       nickname: "soo_move",
       like: 59,
@@ -93,7 +93,7 @@ export default function PendingEstimate() {
     {
       types: ["small"],
       message: "원룸 전문 이사 도와드립니다!",
-      imgSrc: "/images/profile/maleProfile.svg",
+      imgSrc: "/Images/profile/maleProfile.svg",
       name: "박지은",
       nickname: "eunpark",
       like: 12,
@@ -116,7 +116,7 @@ export default function PendingEstimate() {
     {
       types: ["office", "home"],
       message: "이사 + 정리 + 청소까지 원스톱 해결!",
-      imgSrc: "/images/profile/maleProfile.svg",
+      imgSrc: "/Images/profile/maleProfile.svg",
       name: "최강민",
       nickname: "kangmin_move",
       like: 71,

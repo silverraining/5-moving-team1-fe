@@ -59,7 +59,7 @@ export const RequestModal = ({
             {title}
           </Typography>
           <Image
-            src={"/images/modal/x.svg"}
+            src={"/Images/modal/x.svg"}
             width={size}
             height={size}
             alt="close"
