@@ -11,7 +11,14 @@ import {
 } from "@mui/material";
 
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
+<<<<<<< HEAD
+import {
+  signUpSchema,
+  SignUpSchemaType,
+} from "@/src/schemas/auth/signup.schema";
+=======
 
+>>>>>>> test1
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
   SIGNUP_FIELD,

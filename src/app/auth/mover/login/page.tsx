@@ -2,6 +2,7 @@
 
 import { LogoSection } from "@/src/components/auth/LogoSection";
 import { TextLink } from "@/src/components/auth/TextLink";
+import { loginSchema, LoginSchemaType } from "@/src/schemas/auth/login.schema";
 import {
   Button,
   Stack,

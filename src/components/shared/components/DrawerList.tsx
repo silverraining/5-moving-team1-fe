@@ -23,7 +23,7 @@ export const DrawerList = ({ toggleDrawer, menu }: DrawerListProps) => {
             <Image
               width={24}
               height={24}
-              src={"/images/header/X.svg"}
+              src={"/Images/header/X.svg"}
               alt="close"
             />
           </Button>

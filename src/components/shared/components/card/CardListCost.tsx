@@ -90,8 +90,8 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
               <Image
                 src={
                   data.isLiked
-                    ? "/images/like/like.svg"
-                    : "/images/like/unlike.svg"
+                    ? "/Images/like/like.svg"
+                    : "/Images/like/unlike.svg"
                 }
                 alt="좋아요 버튼"
                 width={24}
@@ -125,7 +125,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
               alignItems="center"
             >
               <Image
-                src="/images/star/star_active.svg"
+                src="/Images/star/star_active.svg"
                 alt="별점 사진"
                 width={20}
                 height={20}

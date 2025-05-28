@@ -93,7 +93,7 @@ export default function RejectRequestModal({
           onClick={handleClose}
           width={isSmall ? 24 : 36}
           height={isSmall ? 24 : 36}
-          src="/images/header/X.svg"
+          src="/Images/header/X.svg"
           alt="close"
           style={{ cursor: "pointer" }}
         />

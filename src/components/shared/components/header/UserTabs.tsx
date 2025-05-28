@@ -17,7 +17,7 @@ export const UserTabs = ({ user, isSmall }: UserTab) => {
       <Image
         width={size}
         height={size}
-        src={"/images/header/alram.svg"}
+        src={"/Images/header/alram.svg"}
         alt="alram"
         style={{ cursor: "pointer" }}
       />
@@ -25,7 +25,7 @@ export const UserTabs = ({ user, isSmall }: UserTab) => {
         <Image
           width={size}
           height={size}
-          src={"/images/header/profile.svg"}
+          src={"/Images/header/profile.svg"}
           alt="alram"
           style={{ cursor: "pointer" }}
         />

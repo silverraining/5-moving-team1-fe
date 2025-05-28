@@ -10,6 +10,10 @@ import {
   useTheme,
 } from "@mui/material";
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
+import {
+  signUpSchema,
+  SignUpSchemaType,
+} from "@/src/schemas/auth/signup.schema";
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
   MOVER_INFO,

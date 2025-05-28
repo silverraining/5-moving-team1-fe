@@ -123,7 +123,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         </Typography>
         <IconButton onClick={onClose}>
           <Image
-            src="/images/header/X.svg"
+            src="/Images/header/X.svg"
             alt="close"
             width={24}
             height={24}

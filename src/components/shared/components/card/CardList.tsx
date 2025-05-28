@@ -14,17 +14,17 @@ const CARD_CONTENT: Record<
   small: {
     title: "소형이사",
     subTitle: "원룸, 투룸, 20평대 미만",
-    img: "/images/landing/hand.svg",
+    img: "/Images/landing/hand.svg",
   },
   home: {
     title: "가정이사",
     subTitle: "쓰리룸, 20평대 미만",
-    img: "/images/landing/car.svg",
+    img: "/Images/landing/car.svg",
   },
   office: {
     title: "기업, 사무실 이사",
     subTitle: "사무실 , 상업공간",
-    img: "/images/landing/building.svg",
+    img: "/Images/landing/building.svg",
   },
 };
 

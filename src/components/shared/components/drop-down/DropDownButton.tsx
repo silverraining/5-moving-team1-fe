@@ -50,8 +50,8 @@ export default function DropDownButton({
         };
 
   const iconSrc = isSelected
-    ? "/images/drop-down/chevron-down.svg"
-    : "/images/drop-down/chevron-down2.svg";
+    ? "/Images/drop-down/chevron-down.svg"
+    : "/Images/drop-down/chevron-down2.svg";
 
   return (
     <Button
