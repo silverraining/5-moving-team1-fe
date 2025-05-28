@@ -9,19 +9,23 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
+<<<<<<< HEAD
 import {
   signUpSchema,
   SignUpSchemaType,
 } from "@/src/schemas/auth/signup.schema";
+=======
+
+>>>>>>> test1
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
   SIGNUP_FIELD,
   USER_INFO,
   USER_LOGIN_LINK,
 } from "@/src/lib/authConstants";
+import { useSignupForm } from "@/src/hooks/auth/hook";
 
 const SignUp = () => {
   const theme = useTheme();
@@ -29,13 +33,10 @@ const SignUp = () => {
 
   const {
     register,
+    onSubmit,
     handleSubmit,
     formState: { errors, isValid },
-  } = useForm<SignUpSchemaType>({ resolver: zodResolver(signUpSchema) });
-
-  const onSubmit = (data: SignUpSchemaType) => {
-    console.log("✅ 제출된 값:", errors);
-  };
+  } = useSignupForm("CUSTOMER");
 
   return (
     <Stack

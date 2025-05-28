@@ -19,10 +19,9 @@ import { AuthStore } from "@/src/store/authStore";
 
 export const Header = () => {
   const { open, toggleDrawer } = useDrawer();
-  const { user, token } = AuthStore();
-  const isLogin = token;
-  const isCustomer = user?.roll === "customer";
-  const isMover = user?.roll === "mover";
+  const { user, isLogin } = AuthStore();
+  const isCustomer = user?.role === "CUSTOMER";
+  const isMover = user?.role === "MOVER";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const customerMenu = ["견적 요청", "기사님 찾기", "내 견적 관리"];
@@ -58,19 +57,7 @@ export const Header = () => {
       </Stack>
       {!isSmall ? (
         isLogin ? (
-          <UserTabs
-            isSmall={isSmall}
-            user={
-              user
-                ? {
-                    id: user.id,
-                    name: user.name,
-                    role: user.roll ?? null,
-                    token: token ?? null,
-                  }
-                : undefined
-            }
-          />
+          <UserTabs isSmall={isSmall} user={user} />
         ) : (
           <Button variant="contained" sx={{ width: "116px", height: "44px" }}>
             로그인
@@ -78,21 +65,7 @@ export const Header = () => {
         )
       ) : (
         <Stack direction={"row"} alignItems={"center"} gap={"24px"}>
-          {isLogin && (
-            <UserTabs
-              isSmall={isSmall}
-              user={
-                user
-                  ? {
-                      id: user.id,
-                      name: user.name,
-                      role: user.roll ?? null,
-                      token: token ?? null,
-                    }
-                  : undefined
-              }
-            />
-          )}
+          {isLogin && <UserTabs isSmall={isSmall} user={user} />}
           <Image
             src={"/images/header/menu.svg"}
             width={24}

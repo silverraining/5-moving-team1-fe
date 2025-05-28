@@ -1,10 +1,10 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { AuthStore } from "@/src/store/authStore";
-import { login } from "./api";
-import { Login, User } from "@/src/types/auth";
+import { login, signup } from "./api";
+import { Login, User, Signup } from "@/src/types/auth";
 
 export const useLogin = (): UseMutationResult<
-  { token: string; user: User },
+  { accessToken: string; refreshToken: string; user: User },
   Error,
   Login
 > => {
@@ -13,10 +13,16 @@ export const useLogin = (): UseMutationResult<
   return useMutation({
     mutationFn: (data: Login) => login(data),
     onSuccess: (data) => {
-      setAuth(data.token, data.user);
+      setAuth(data.accessToken, data.refreshToken, data.user);
     },
     onError: (error) => {
       console.error("로그인 실패", error);
     },
+  });
+};
+
+export const useSignup = (): UseMutationResult<User, Error, Signup> => {
+  return useMutation({
+    mutationFn: (data: Signup) => signup(data),
   });
 };
