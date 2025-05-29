@@ -14,7 +14,7 @@ export default function RequestNewPageClient() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
-  const [step, setStep] = useState<number | null>(null); // null: 초기 로딩 상태
+  // const [step, setStep] = useState<number | null>(null); // null: 초기 로딩 상태
   const [isLoading, setIsLoading] = useState(true);
 
   const {
@@ -22,10 +22,12 @@ export default function RequestNewPageClient() {
     moveDate,
     fromAddress,
     toAddress,
+    step,
     setMoveType,
     setMoveDate,
     setFromAddress,
     setToAddress,
+    setStep,
   } = useEstimateStore();
 
   const handleSelectStep1 = (value: string) => {
@@ -67,6 +69,7 @@ export default function RequestNewPageClient() {
   // [TEST용: 나중에 여기를 API 호출 후, 데이터확인하고 페이지 이동시키기]
   // 새로고침 시에도 localStorage에서 상태 복구
   useEffect(() => {
+    // 최초 진입 시 localStorage에서 복구 및 step 설정
     const localMoveType = localStorage.getItem("moveType") || "";
     const localMoveDate = localStorage.getItem("moveDate") || "";
     const localFromAddress = localStorage.getItem("fromAddress") || "";
@@ -87,11 +90,11 @@ export default function RequestNewPageClient() {
       setStep(1);
     }
 
-    // zustand 상태도 동기화
-    setMoveType(localMoveType);
-    setMoveDate(localMoveDate);
-    setFromAddress(localFromAddress);
-    setToAddress(localToAddress);
+    // // zustand 상태도 동기화
+    // setMoveType(localMoveType);
+    // setMoveDate(localMoveDate);
+    // setFromAddress(localFromAddress);
+    // setToAddress(localToAddress);
 
     setIsLoading(false);
   }, []);
@@ -107,6 +110,8 @@ export default function RequestNewPageClient() {
     fromAddress,
     toAddress
   );
+
+  console.log("💦 스텝 체크", step);
 
   return (
     <>
