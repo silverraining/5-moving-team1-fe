@@ -41,8 +41,8 @@ export default function Step3_AddressSelect({
       // [TEST용: 견적확정 후 스낵바 띄우고 랜딩페이지로 이동 / 견적확정 후처리를 어떻게 하면 좋을까요?]
       // 2. 스낵바 메시지 띄우기
       openSnackbar("견적 확정 완료", "success", 5000);
-      // 3. 랜딩페이지로 이동
-      router.push("/");
+      // 3. 동일페이지로 이동
+      router.push("/customer/request");
     }
   };
 

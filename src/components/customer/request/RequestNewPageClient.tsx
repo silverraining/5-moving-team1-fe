@@ -40,6 +40,14 @@ export default function RequestNewPageClient() {
     setStep(3);
   };
 
+  useEffect(() => {
+    const showConfirm = !!fromAddress && !!toAddress;
+
+    if (showConfirm && step !== 4) {
+      setStep(4);
+    }
+  }, [fromAddress, toAddress]);
+
   const handleSelectStep3 = (from: string, to: string) => {
     setFromAddress(from);
     setToAddress(to);
@@ -122,7 +130,7 @@ export default function RequestNewPageClient() {
             onBack={() => setStep(1)}
           />
         )}
-        {step === 3 && (
+        {(step === 3 || step === 4) && (
           <Step3_AddressSelect
             onSelectFrom={handleSelectFromAddress}
             onSelectTo={handleSelectToAddress}
