@@ -14,7 +14,6 @@ export default function RequestNewPageClient() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
-  // const [step, setStep] = useState<number | null>(null); // null: 초기 로딩 상태
   const [isLoading, setIsLoading] = useState(true);
 
   const {
@@ -32,13 +31,13 @@ export default function RequestNewPageClient() {
 
   const handleSelectStep1 = (value: string) => {
     setMoveType(value);
-    localStorage.setItem("moveType", value); // [TEST용: 로컬에 저장 / 추후 백엔드에 저장된걸로 수정]
+    localStorage.setItem("moveType", value);
     setStep(2);
   };
 
   const handleSelectStep2 = (formattedDate: string) => {
     setMoveDate(formattedDate);
-    localStorage.setItem("moveDate", formattedDate); // [TEST용: 로컬에 저장 / 추후 백엔드에 저장된걸로 수정]
+    localStorage.setItem("moveDate", formattedDate);
     setStep(3);
   };
 
@@ -53,7 +52,7 @@ export default function RequestNewPageClient() {
   const handleSelectStep3 = (from: string, to: string) => {
     setFromAddress(from);
     setToAddress(to);
-    setStep(-1); // 모두 완료되었으므로 InProgressPage로 이동
+    setStep(-1); // 모두 완료 시, InProgressPage로 이동
   };
 
   const handleSelectFromAddress = (from: string) => {
@@ -89,29 +88,12 @@ export default function RequestNewPageClient() {
     } else {
       setStep(1);
     }
-
-    // // zustand 상태도 동기화
-    // setMoveType(localMoveType);
-    // setMoveDate(localMoveDate);
-    // setFromAddress(localFromAddress);
-    // setToAddress(localToAddress);
-
     setIsLoading(false);
   }, []);
 
   if (isLoading) return <div className="p-10">로딩 중...</div>;
 
   if (step === -1) return <InProgressPage />;
-
-  console.log(
-    "🎀 지금 선택된 값들은?",
-    moveType,
-    moveDate,
-    fromAddress,
-    toAddress
-  );
-
-  console.log("💦 스텝 체크", step);
 
   return (
     <>

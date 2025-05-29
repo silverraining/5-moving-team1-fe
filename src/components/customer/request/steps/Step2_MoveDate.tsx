@@ -23,13 +23,12 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
 
   const handleAccept = (value: Dayjs | null) => {
     if (value) {
-      const formatted = value.format("YYYY년 M월 DD일");
+      const formatted = value.format("YYYY년 M월 D일");
       setMoveDate(formatted); // 전역 상태 업데이트
       onSelect(formatted); // 스텝 이동과 함께 날짜 전달
     }
   };
 
-  console.log("✅ Step2 - 전역 moveType 값:", moveType);
   return (
     <Stack spacing={isSmall ? "8px" : "24px"}>
       <Chat

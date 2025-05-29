@@ -20,16 +20,14 @@ export default function Step1_MoveType({ onSelect }: Step1Props) {
       onSelect(moveType);
     }
   };
-  console.log("✅ Step1 - 현재 moveType:", moveType);
+
   return (
     <Stack spacing={isSmall ? "8px" : "24px"}>
-      {/* 시스템 안내 메시지 */}
       <Chat
         variant="sent"
         content={`몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)`}
       />
       <Chat variant="sent" content={`이사 종류를 선택해 주세요.`} />
-      {/* 선택 UI */}
       <Box
         sx={{
           display: "flex",
@@ -38,8 +36,8 @@ export default function Step1_MoveType({ onSelect }: Step1Props) {
       >
         <CheckBoxList
           selected={moveType}
-          onChange={setMoveType} // 선택 시 상태 업데이트
-          onConfirm={handleConfirm} // 확인 시 상위로 전달
+          onChange={setMoveType}
+          onConfirm={handleConfirm}
         />
       </Box>
     </Stack>

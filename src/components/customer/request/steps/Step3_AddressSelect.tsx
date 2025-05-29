@@ -36,23 +36,15 @@ export default function Step3_AddressSelect({
 
   const handleConfirm = () => {
     if (fromAddress && toAddress) {
-      // 1. 부모에게 알림
+      // 1. 부모에 전달
       onSelect(fromAddress, toAddress);
-      // [TEST용: 견적확정 후 스낵바 띄우고 랜딩페이지로 이동 / 견적확정 후처리를 어떻게 하면 좋을까요?]
+      // [TEST용: 견적확정 후 스낵바 띄우고 페이지 이동 / 견적확정 후처리 확인 필요]
       // 2. 스낵바 메시지 띄우기
       openSnackbar("견적 확정 완료", "success", 5000);
       // 3. 동일페이지로 이동
       router.push("/customer/request");
     }
   };
-
-  console.log(
-    "✅ Step3 - 전역 선택값:",
-    "moveType:",
-    moveType,
-    "moveDate:",
-    moveDate
-  );
 
   return (
     <>
