@@ -186,7 +186,7 @@ export const CardListProfile = ({
               alignItems="center"
             >
               <Image
-                src="/images/star/star_active.svg"
+                src="/Images/star/star_active.svg"
                 alt="별점 사진"
                 width={20}
                 height={20}

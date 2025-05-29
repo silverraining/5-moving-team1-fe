@@ -24,8 +24,13 @@ export const CardListWait = ({
       flexDirection="column"
       justifyContent="space-between"
       border="0.5px solid #F2F2F2"
-      width={[327, 600, 688]}
-      height={[398, 362, 410]}
+      maxWidth={"688px"}
+      minWidth={"327px"}
+      width={"100%"}
+      gap={["0px", "0px", "14px"]}
+      maxHeight={"440px"}
+      minHeight={"362px"}
+      height={"100%"}
       bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
@@ -85,8 +90,8 @@ export const CardListWait = ({
               <Image
                 src={
                   data.isLiked
-                    ? "/images/like/like.svg"
-                    : "/images/like/unlike.svg"
+                    ? "/Images/like/like.svg"
+                    : "/Images/like/unlike.svg"
                 }
                 alt="좋아요 버튼"
                 width={24}
@@ -120,7 +125,7 @@ export const CardListWait = ({
               alignItems="center"
             >
               <Image
-                src="/images/star/star_active.svg"
+                src="/Images/star/star_active.svg"
                 alt="별점 사진"
                 width={20}
                 height={20}
@@ -205,6 +210,7 @@ export const CardListWait = ({
           flexDirection={["column", "column", "row"]}
           gap={["14px", "14px", "24px"]}
           alignItems={["flex-start", "flex-start", "center"]}
+          flexWrap={"nowrap"}
         >
           <Box
             display={"flex"}
@@ -223,6 +229,7 @@ export const CardListWait = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: [500, 500, 400],
                   color: theme.palette.Grayscale[400],
+                  whiteSpace: "nowrap",
                 })}
               >
                 이사일
@@ -234,6 +241,7 @@ export const CardListWait = ({
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 500,
                 color: theme.palette.Black[300],
+                wordBreak: "keep-all",
               })}
             >
               {formatKoreanDate(data.date ?? "")}
@@ -266,6 +274,7 @@ export const CardListWait = ({
                     lineHeight: ["24px", "24px", "26px"],
                     fontWeight: [500, 500, 400],
                     color: theme.palette.Grayscale[400],
+                    whiteSpace: "nowrap",
                   })}
                 >
                   출발
@@ -277,6 +286,7 @@ export const CardListWait = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  wordBreak: "keep-all",
                 })}
               >
                 {data.from}
@@ -304,6 +314,7 @@ export const CardListWait = ({
                     lineHeight: ["24px", "24px", "26px"],
                     fontWeight: [500, 500, 400],
                     color: theme.palette.Grayscale[400],
+                    whiteSpace: "nowrap",
                   })}
                 >
                   도착
@@ -315,6 +326,7 @@ export const CardListWait = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  wordBreak: "keep-all",
                 })}
               >
                 {data.to}
@@ -370,6 +382,7 @@ export const CardListWait = ({
                 lineHeight: ["26px", "26px", "32px"],
                 fontWeight: 600,
                 color: theme.palette.White[100],
+                wordBreak: "keep-all",
               })}
             >
               견적 확정하기

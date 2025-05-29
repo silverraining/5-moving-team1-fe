@@ -58,7 +58,7 @@ export const CardListReview = ({ data }: CardProps) => {
             height={[20, 20, 24]}
           >
             <Image
-              src="/images/star/star_active.svg"
+              src="/Images/star/star_active.svg"
               alt="별점 사진"
               fill
               style={{ objectFit: "contain" }}

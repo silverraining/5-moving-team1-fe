@@ -15,8 +15,8 @@ export const ModalStar = ({
   editable = false,
   onChange,
 }: ModalStarsProps) => {
-  const active = "/images/star/star_active.svg";
-  const nonActive = "/images/star/star.svg";
+  const active = "/Images/star/star_active.svg";
+  const nonActive = "/Images/star/star.svg";
   const size = isMedium ? 24 : 48;
   const maxStars = 5;
 

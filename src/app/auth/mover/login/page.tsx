@@ -2,7 +2,7 @@
 
 import { LogoSection } from "@/src/components/auth/LogoSection";
 import { TextLink } from "@/src/components/auth/TextLink";
-import { loginSchema, LoginSchemaType } from "@/src/schema/auth/login.schema";
+import { loginSchema, LoginSchemaType } from "@/src/schemas/auth/login.schema";
 import {
   Button,
   Stack,
@@ -10,8 +10,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
@@ -19,6 +17,7 @@ import {
   MOVER_SIGNUP_LINK,
   LOGIN_FIELD,
 } from "@/src/lib/authConstants";
+import { useLoginForm } from "@/src/hooks/auth/hook";
 
 const Login = () => {
   const theme = useTheme();
@@ -27,12 +26,9 @@ const Login = () => {
   const {
     register,
     handleSubmit,
+    onSubmit,
     formState: { errors, isValid },
-  } = useForm<LoginSchemaType>({ resolver: zodResolver(loginSchema) });
-
-  const onSubmit = (data: LoginSchemaType) => {
-    console.log("✅ 제출된 값:", errors);
-  };
+  } = useLoginForm("MOVER");
 
   return (
     <Stack

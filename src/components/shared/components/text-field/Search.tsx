@@ -17,7 +17,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
           <Image
             width={36}
             height={36}
-            src={"/images/input/search.svg"}
+            src={"/Images/input/search.svg"}
             alt="search Icon"
             style={{ marginRight: "8px" }}
           />
@@ -31,7 +31,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
                 width={36}
                 height={36}
                 onClick={props.onClick}
-                src={"/images/input/delete.svg"}
+                src={"/Images/input/delete.svg"}
                 alt="delete Icon"
                 style={{ cursor: "pointer" }}
               />
@@ -39,7 +39,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
             <Image
               width={36}
               height={36}
-              src={"/images/input/search.svg"}
+              src={"/Images/input/search.svg"}
               alt="search Icon"
             />
           </Box>
@@ -60,6 +60,13 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
         fontWeight: 400,
         textAlign: "center",
         ":focus": { color: theme.palette.Black[400] },
+        //자동 완성시 배경색 변경 방지
+        "& input:-webkit-autofill": {
+          WebkitBoxShadow: `0 0 0px 1000px white inset !important`,
+          boxShadow: `0 0 0px 1000px white inset !important`,
+          WebkitTextFillColor: theme.palette.text.primary,
+          transition: "background-color 5000s ease-in-out 0s !important",
+        },
       })}
     />
   );

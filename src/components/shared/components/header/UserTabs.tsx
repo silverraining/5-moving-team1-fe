@@ -1,12 +1,8 @@
+import { User } from "@/src/types/auth";
 import { Stack, Typography } from "@mui/material";
 import Image from "next/image";
 interface UserTab {
-  user?: {
-    id: string;
-    name: string;
-    role: "customer" | "mover" | null;
-    token: string | null;
-  };
+  user: User | null;
   isSmall: boolean;
 }
 
@@ -21,7 +17,7 @@ export const UserTabs = ({ user, isSmall }: UserTab) => {
       <Image
         width={size}
         height={size}
-        src={"/images/header/alram.svg"}
+        src={"/Images/header/alram.svg"}
         alt="alram"
         style={{ cursor: "pointer" }}
       />
@@ -29,7 +25,7 @@ export const UserTabs = ({ user, isSmall }: UserTab) => {
         <Image
           width={size}
           height={size}
-          src={"/images/header/profile.svg"}
+          src={"/Images/header/profile.svg"}
           alt="alram"
           style={{ cursor: "pointer" }}
         />

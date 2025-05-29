@@ -21,7 +21,7 @@ export const LogoSection = ({
     <Stack width={"100%"} alignItems={"center"} spacing={"18px"}>
       <Link href={PATH.main}>
         <Image
-          src={"/images/logo/logo_text.svg"}
+          src={"/Images/logo/logo_text.svg"}
           alt="Logo"
           width={width}
           height={height}

@@ -20,7 +20,7 @@ export function useSnackbar(): UseSnackbarReturn {
   const infoStyles = {
     bg: theme.palette.PrimaryBlue[100],
     text: theme.palette.PrimaryBlue[300],
-    icon: "/images/info.svg",
+    icon: "/Images/info.svg",
   };
   const {
     open,
@@ -47,10 +47,9 @@ export function useSnackbar(): UseSnackbarReturn {
         open={open}
         autoHideDuration={duration}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         sx={{
           position: "fixed",
-          bottom: 16,
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: (theme) => theme.zIndex.snackbar,

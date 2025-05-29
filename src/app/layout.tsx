@@ -5,7 +5,7 @@ import { CustomLayout } from "../components/shared/components/CustomLayout";
 export const metadata = {
   title: "Moving",
   icons: {
-    icon: "/images/favicon.svg",
+    icon: "/Images/favicon.svg",
   },
 };
 
