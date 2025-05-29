@@ -1,6 +1,6 @@
 "use client";
 
-import RequestNewPageClient from "@/src/components/customer/request/RequestNewPageClient";
+import EstimateRequestFlow from "@/src/components/customer/request/EstimateRequestFlow";
 export default function Page() {
-  return <RequestNewPageClient />;
+  return <EstimateRequestFlow />;
 }

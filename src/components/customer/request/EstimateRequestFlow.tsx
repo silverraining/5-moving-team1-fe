@@ -10,7 +10,7 @@ import Step3_AddressSelect from "./steps/Step3_AddressSelect";
 import { useEstimateStore } from "@/src/store/requestStore";
 import InProgressPage from "./steps/InProgressPage";
 
-export default function RequestNewPageClient() {
+export default function EstimateRequestFlow() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
