@@ -23,7 +23,7 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
 
   const handleAccept = (value: Dayjs | null) => {
     if (value) {
-      const formatted = value.format("YYYY년 MM월 DD일");
+      const formatted = value.format("YYYY년 M월 DD일");
       setMoveDate(formatted); // 전역 상태 업데이트
       onSelect(formatted); // 스텝 이동과 함께 날짜 전달
     }
@@ -31,15 +31,12 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
 
   console.log("✅ Step2 - 전역 moveType 값:", moveType);
   return (
-    <Stack
-      sx={{
-        width: "100%",
-        gap: isSmall ? "16px" : "24px",
-      }}
-      spacing={isSmall ? "8px" : "24px"}
-    >
-      <Chat variant="sent" content={`이사 종류를 선택해 주세요.`} />
-      <Chat variant="sent" content={`이사 예정일을 선택해주세요.`} />
+    <Stack spacing={isSmall ? "8px" : "24px"}>
+      <Chat
+        variant="sent"
+        content={`몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)`}
+      />
+      <Chat variant="sent" content={`이사 종류를 선택해주세요.`} />
       <Box
         sx={{
           display: "flex",
@@ -47,36 +44,44 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
           alignItems: "flex-end",
         }}
       >
-        {moveType && (
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "flex-end",
-              gap: isSmall ? "4px" : "6px",
-            }}
-          >
-            <Chat variant="received" content={moveType} />
-            <Typography
-              onClick={onBack}
-              variant={"R_16"}
+        <Stack
+          spacing={isSmall ? "8px" : "24px"}
+          width="100%"
+          sx={{ alignItems: "flex-end" }}
+        >
+          {moveType && (
+            <Box
               sx={{
-                cursor: "pointer",
-                color: theme.palette.Grayscale[500],
-                fontWeight: 600,
-                textDecoration: "underline",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "flex-end",
+                gap: isSmall ? "4px" : "6px",
               }}
             >
-              수정하기
-            </Typography>
-          </Box>
-        )}
+              <Chat variant="received" content={moveType} />
+              <Typography
+                onClick={onBack}
+                variant={isSmall ? "M_12" : "R_16"}
+                sx={{
+                  cursor: "pointer",
+                  color: theme.palette.Grayscale[500],
+                  fontWeight: 600,
+                  textDecoration: "underline",
+                }}
+              >
+                수정하기
+              </Typography>
+            </Box>
+          )}
 
-        <Calendar
-          value={selectedDate}
-          onChange={setSelectedDate}
-          onAccept={handleAccept}
-        />
+          <Chat variant="sent" content={`이사 예정일을 선택해주세요.`} />
+
+          <Calendar
+            value={selectedDate}
+            onChange={setSelectedDate}
+            onAccept={handleAccept}
+          />
+        </Stack>
       </Box>
     </Stack>
   );

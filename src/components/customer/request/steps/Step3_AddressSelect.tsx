@@ -56,13 +56,7 @@ export default function Step3_AddressSelect({
 
   return (
     <>
-      <Stack
-        sx={{
-          width: "100%",
-          gap: isSmall ? "16px" : "24px",
-        }}
-        spacing={isSmall ? "8px" : "24px"}
-      >
+      <Stack spacing={isSmall ? "8px" : "24px"}>
         <Chat
           variant="sent"
           content={`몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)`}
@@ -75,63 +69,69 @@ export default function Step3_AddressSelect({
             alignItems: "flex-end",
           }}
         >
-          {moveType && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                gap: isSmall ? "4px" : "6px",
-              }}
-            >
-              <Chat variant="received" content={moveType} />
-              <Typography
-                onClick={onBackStep1}
-                variant={"R_16"}
+          <Stack
+            spacing={isSmall ? "8px" : "24px"}
+            width="100%"
+            sx={{ alignItems: "flex-end" }}
+          >
+            {moveType && (
+              <Box
                 sx={{
-                  cursor: "pointer",
-                  color: theme.palette.Grayscale[500],
-                  fontWeight: 600,
-                  textDecoration: "underline",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: isSmall ? "4px" : "6px",
                 }}
               >
-                수정하기
-              </Typography>
-            </Box>
-          )}
-          <Chat variant="sent" content={`이사 예정일을 선택해주세요.`} />
-          {moveDate && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                gap: isSmall ? "4px" : "6px",
-              }}
-            >
-              <Chat variant="received" content={moveDate} />
-              <Typography
-                onClick={onBackStep2}
-                variant={"R_16"}
+                <Chat variant="received" content={moveType} />
+                <Typography
+                  onClick={onBackStep1}
+                  variant={isSmall ? "M_12" : "R_16"}
+                  sx={{
+                    cursor: "pointer",
+                    color: theme.palette.Grayscale[500],
+                    fontWeight: 600,
+                    textDecoration: "underline",
+                  }}
+                >
+                  수정하기
+                </Typography>
+              </Box>
+            )}
+            <Chat variant="sent" content={`이사 예정일을 선택해주세요.`} />
+            {moveDate && (
+              <Box
                 sx={{
-                  cursor: "pointer",
-                  color: theme.palette.Grayscale[500],
-                  fontWeight: 600,
-                  textDecoration: "underline",
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "flex-end",
+                  gap: isSmall ? "4px" : "6px",
                 }}
               >
-                수정하기
-              </Typography>
-            </Box>
-          )}
-          <Chat variant="sent" content={`이사 지역을 선택해주세요.`} />
-          <EditableBox
-            fromLabel={fromAddress}
-            toLabel={toAddress}
-            onFromClick={() => setOpenFromModal(true)}
-            onToClick={() => setOpenToModal(true)}
-            onConfirmClick={handleConfirm}
-          />
+                <Chat variant="received" content={moveDate} />
+                <Typography
+                  onClick={onBackStep2}
+                  variant={isSmall ? "M_12" : "R_16"}
+                  sx={{
+                    cursor: "pointer",
+                    color: theme.palette.Grayscale[500],
+                    fontWeight: 600,
+                    textDecoration: "underline",
+                  }}
+                >
+                  수정하기
+                </Typography>
+              </Box>
+            )}
+            <Chat variant="sent" content={`이사 지역을 선택해주세요.`} />
+            <EditableBox
+              fromLabel={fromAddress}
+              toLabel={toAddress}
+              onFromClick={() => setOpenFromModal(true)}
+              onToClick={() => setOpenToModal(true)}
+              onConfirmClick={handleConfirm}
+            />
+          </Stack>
         </Box>
         {/* 출발지 모달 */}
         <AddressModal
