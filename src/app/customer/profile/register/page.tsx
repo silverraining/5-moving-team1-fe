@@ -1,4 +1,4 @@
-import { ProfileRegister } from "@/src/components/profile/ProfileRegister";
+import { ProfileRegister } from "@/src/components/profile/customer/ProfileRegister";
 
 export default function ProfileRegisterPage() {
   return <ProfileRegister />;
