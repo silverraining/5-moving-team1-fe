@@ -28,6 +28,8 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
   const router = useRouter();
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [serviceError, setServiceError] = useState<boolean>(false);
+  const [regionError, setRegionError] = useState<boolean>(false);
 
   const { openSnackbar } = useSnackbarStore();
 
@@ -65,6 +67,7 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
       : [...selectedServices, service];
     setSelectedServices(newServices);
     setValue("serviceType", newServices);
+    setServiceError(newServices.length === 0);
   };
 
   const handleRegionToggle = (region: string) => {
@@ -73,6 +76,7 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
       : [...selectedRegions, region];
     setSelectedRegions(newRegions);
     setValue("serviceRegion", newRegions);
+    setRegionError(newRegions.length === 0);
   };
 
   const onSubmit = async (data: MoverProfileRegisterFormData) => {
@@ -416,6 +420,16 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
                       *
                     </Typography>
                   </Box>
+                  {serviceError && (
+                    <Typography
+                      variant="M_16"
+                      sx={(theme) => ({
+                        color: theme.palette.SecondaryRed[200],
+                      })}
+                    >
+                      제공 서비스를 하나 이상 선택해주세요.
+                    </Typography>
+                  )}
                 </Stack>
                 <ServiceSelector
                   selectedServices={selectedServices}
@@ -453,6 +467,16 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
                       *
                     </Typography>
                   </Box>
+                  {regionError && (
+                    <Typography
+                      variant="M_16"
+                      sx={(theme) => ({
+                        color: theme.palette.SecondaryRed[200],
+                      })}
+                    >
+                      서비스 가능 지역을 하나 이상 선택해주세요.
+                    </Typography>
+                  )}
                 </Stack>
                 <RegionSelector
                   selectedRegions={selectedRegions}
