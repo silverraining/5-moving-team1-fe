@@ -2,17 +2,17 @@
 
 import { Box, Stack, Typography, Button } from "@mui/material";
 import { useState } from "react";
-import { ImageUpload } from "./ImageUpload";
-import { ServiceSelector } from "./ServiceSelector";
-import { RegionSelector } from "./RegionSelector";
-import { useSnackbarStore } from "../../store/snackBarStore";
-import { useImageUpload } from "../../api/upload-image/uploadImage.hooks";
+import { ImageUpload } from "../ImageUpload";
+import { ServiceSelector } from "../ServiceSelector";
+import { RegionSelector } from "../RegionSelector";
+import { useSnackbarStore } from "../../../store/snackBarStore";
+import { useImageUpload } from "../../../api/upload-image/uploadImage.hooks";
 
 export const ProfileRegister = () => {
   const [selectedServices, setSelectedServices] = useState<string[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
 
-  const openSnackbar = useSnackbarStore((state) => state.openSnackbar);
+  const { openSnackbar } = useSnackbarStore();
 
   // 이미지 업로드 커스텀 훅 사용
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =

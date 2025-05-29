@@ -4,17 +4,17 @@ import { Box, Stack, Typography, Button } from "@mui/material";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ImageUpload } from "./ImageUpload";
-import { ServiceSelector } from "./ServiceSelector";
-import { RegionSelector } from "./RegionSelector";
-import { PersonalInfoSection } from "./PersonalInfoSection";
-import { PasswordChangeSection } from "./PasswordChangeSection";
-import { useSnackbarStore } from "../../store/snackBarStore";
-import { useImageUpload } from "../../api/upload-image/uploadImage.hooks";
+import { ImageUpload } from "../ImageUpload";
+import { ServiceSelector } from "../ServiceSelector";
+import { RegionSelector } from "../RegionSelector";
+import { PersonalInfoSection } from "../PersonalInfoSection";
+import { PasswordChangeSection } from "../PasswordChangeSection";
+import { useSnackbarStore } from "../../../store/snackBarStore";
+import { useImageUpload } from "../../../api/upload-image/uploadImage.hooks";
 import {
   ProfileEditFormData,
   profileEditSchema,
-} from "../../schemas/profile.schema";
+} from "../../../schemas/profile.schema";
 
 interface ProfileEditProps {
   // 초기 프로필 데이터
@@ -36,7 +36,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
     initialData?.serviceRegion || []
   );
 
-  const openSnackbar = useSnackbarStore((state) => state.openSnackbar);
+  const { openSnackbar } = useSnackbarStore();
 
   // 이미지 업로드 커스텀 훅 사용
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
