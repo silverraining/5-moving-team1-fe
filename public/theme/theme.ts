@@ -144,6 +144,29 @@ export const createAppTheme = (mode: "light" | "dark") => {
           },
         ],
       },
+      MuiFormHelperText: {
+        styleOverrides: {
+          root: {
+            color:
+              mode === "light"
+                ? COLORS.SecondaryRed[200]
+                : DARK_COLORS.SecondaryRed[200],
+            marginLeft: 0,
+            fontSize: "16px",
+            lineHeight: "26px",
+            fontWeight: 500,
+            "&.Mui-error": {
+              color:
+                mode === "light"
+                  ? COLORS.SecondaryRed[200]
+                  : DARK_COLORS.SecondaryRed[200],
+              fontSize: "16px",
+              lineHeight: "26px",
+              fontWeight: 500,
+            },
+          },
+        },
+      },
     },
   });
 };
