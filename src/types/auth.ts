@@ -43,13 +43,13 @@ export type CustomerProfile = {
 };
 
 export type MoverProfile = {
-  id: String;
-  userId: String;
-  nickname: String;
-  imageUrl: String;
+  id: string;
+  userId: string;
+  nickname: string;
+  imageUrl: string;
   experience: number;
-  intro: String;
-  description: String;
+  intro: string;
+  description: string;
   averageRating: number;
   confirmedCount: number;
   createdAt: Date;

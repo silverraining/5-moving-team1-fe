@@ -4,14 +4,14 @@ export const MOVER_INFO = {
   description: "일반 유저라면?",
   link: {
     content: "일반 유저 전용 페이지",
-    href: PATH.userlogin,
+    href: PATH.userLogin,
   },
 };
 export const MOVER_SIGNUP_LINK = {
   description: "아직 무빙 회원이 아니신가요?",
   link: {
     content: "이메일로 회원가입하기",
-    href: PATH.moversignup,
+    href: PATH.moverSignup,
   },
 };
 
@@ -19,7 +19,7 @@ export const MOVER_LOGIN_LINK = {
   description: "이미 무빙 회원이신가요?",
   link: {
     content: "로그인",
-    href: PATH.moverlogin,
+    href: PATH.moverLogin,
   },
 };
 
@@ -27,21 +27,21 @@ export const USER_INFO = {
   description: "기사님이신가요?",
   link: {
     content: "기사님 전용 페이지",
-    href: PATH.moverlogin,
+    href: PATH.moverLogin,
   },
 };
 export const USER_SIGNUP_LINK = {
   description: "아직 무빙 회원이 아니신가요?",
   link: {
     content: "이메일로 회원가입하기",
-    href: PATH.usersignup,
+    href: PATH.userSignup,
   },
 };
 export const USER_LOGIN_LINK = {
   description: "이미 무빙 회원이신가요?",
   link: {
     content: "로그인",
-    href: PATH.userlogin,
+    href: PATH.userLogin,
   },
 };
 

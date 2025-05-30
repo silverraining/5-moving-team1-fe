@@ -2,14 +2,16 @@ import { useLogin, useSignup } from "@/src/api/auth/hooks";
 import { Role } from "@/src/types/auth";
 import { useSnackbar } from "../snackBarHooks";
 import { useForm } from "react-hook-form";
-import { loginSchema, LoginSchemaType } from "@/src/schema/auth/login.schema";
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
+
+import { PATH } from "@/src/lib/constants";
+import { loginSchema, LoginSchemaType } from "@/src/schemas/auth/login.schema";
 import {
   signUpSchema,
   SignUpSchemaType,
-} from "@/src/schema/auth/signup.schema";
-import { PATH } from "@/src/lib/constants";
+} from "@/src/schemas/auth/signup.schema";
 
 export const useLoginForm = (userType: Role) => {
   const { mutate } = useLogin();
@@ -55,7 +57,7 @@ export const useSignupForm = (userType: Role) => {
   });
 
   const onSubmit = (data: SignUpSchemaType) => {
-    const path = userType === "CUSTOMER" ? PATH.userlogin : PATH.moverlogin;
+    const path = userType === "CUSTOMER" ? PATH.userLogin : PATH.moverLogin;
     mutate(
       { ...data, userType }, // 외부에서 받은 고정값 삽입
       {
