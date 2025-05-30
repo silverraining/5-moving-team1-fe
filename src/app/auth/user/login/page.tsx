@@ -2,7 +2,6 @@
 
 import { LogoSection } from "@/src/components/auth/LogoSection";
 import { TextLink } from "@/src/components/auth/TextLink";
-import { loginSchema, LoginSchemaType } from "@/src/schemas/auth/login.schema";
 import {
   Button,
   Stack,
@@ -10,8 +9,6 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
 import { FormSection } from "@/src/components/auth/FromSection";
 import {

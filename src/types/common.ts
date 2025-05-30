@@ -1,8 +1,4 @@
-enum ServiceType {
-  "SMALL",
-  "HOME",
-  "OFFICE",
-}
+export type ServiceType = "SMALL" | "HOME" | "OFFICE";
 
 enum ServiceRegion {
   SEOUL = "Seoul",
@@ -62,5 +58,4 @@ export {
   EstimateRequestStatus,
   NotificationType,
   ServiceRegion,
-  ServiceType,
 };
