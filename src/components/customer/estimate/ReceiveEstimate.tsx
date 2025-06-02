@@ -1,14 +1,29 @@
+"use client";
 import { EstimateRequest } from "@/src/types/card";
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack, Box } from "@mui/material";
 import { EstimateInfo } from "./EstimateInfo";
 import { CardListCost } from "../../shared/components/card/CardListCost";
-import Dropdown from "./Dropdown";
+import Dropdown, { SortOption } from "./Dropdown";
+import { useState } from "react";
+import { EstimateSection } from "./EstimateSection";
 
 export default function ReceiveEstimate() {
+  const sortOption = [
+    { label: "전체", value: "all" },
+    { label: "확정한 견적서", value: "complete" },
+  ];
+  const [selectedSort, setSelectedSort] = useState<SortOption>(sortOption[0]);
+
+  const handleOptionChange = (option: SortOption) => {
+    setSelectedSort(option);
+  };
+
   // 임시로 넣은 좋아요 토글
   const handleLikeClick = () => {
     alert(`좋아요 버튼 누름`);
   };
+  // 옵션 목록
+
   const mockCardList: EstimateRequest[] = [
     {
       types: ["small", "home"],
@@ -38,7 +53,7 @@ export default function ReceiveEstimate() {
           writeReview: "친절하게 잘 해주셨어요.",
           nickname: "홍길동",
           movingDay: "2024-07-05",
-          refuse: false,
+          reject: false,
           address: ["서울특별시 강남구 삼성동", "경기도 성남시 분당구 정자동"],
         },
         {
@@ -61,7 +76,7 @@ export default function ReceiveEstimate() {
           writeReview: "",
           nickname: "이이사",
           movingDay: "2024-07-05",
-          refuse: false,
+          reject: false,
           address: ["서울특별시 강남구 삼성동", "경기도 성남시 분당구 정자동"],
         },
       ],
@@ -94,7 +109,7 @@ export default function ReceiveEstimate() {
           writeReview: "완벽하게 정리해주셨어요.",
           nickname: "철수",
           movingDay: "2024-06-15",
-          refuse: false,
+          reject: false,
           address: ["서울특별시 마포구 상암동", "서울특별시 은평구 녹번동"],
         },
       ],
@@ -124,30 +139,13 @@ export default function ReceiveEstimate() {
             })}
           >
             {/* 견적 정보 */}
-            <Stack>
-              <Typography
-                marginBottom={["24px", "24px", "40px"]}
-                variant="SB_24"
-                sx={(theme) => ({
-                  Color: theme.palette.Black[400],
-                })}
-              >
-                견적 정보
-              </Typography>
+            <EstimateSection title="견적 정보">
               <EstimateInfo info={info} />
-            </Stack>
+            </EstimateSection>
+
             {/* 견적 목록 */}
-            <Stack>
-              <Typography
-                marginBottom={["24px", "24px", "40px"]}
-                variant="SB_24"
-                sx={(theme) => ({
-                  Color: theme.palette.Black[400],
-                })}
-              >
-                견적서 목록
-              </Typography>
-              <Dropdown />
+            <EstimateSection title="견적서 목록">
+              <Dropdown options={sortOption} onChange={handleOptionChange} />
               <Stack gap={"56px"}>
                 {!info.estimateList || info.estimateList.length === 0 ? (
                   <Typography>제출된 견적서가 없습니다.</Typography>
@@ -161,7 +159,7 @@ export default function ReceiveEstimate() {
                   ))
                 )}
               </Stack>
-            </Stack>
+            </EstimateSection>
           </Stack>
         ))}
       </Stack>
