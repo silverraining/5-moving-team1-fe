@@ -21,18 +21,20 @@ interface DropDownButtonProps {
   Radius?: string | { mobile?: string; tablet?: string; desktop?: string };
 }
 
-export default function DropDownButton({
-  label,
-  isSelected,
-  onClick,
-  width,
-  height,
-  padding,
-  gap,
-  iconSize,
-  typographyVariant,
-  Radius,
-}: DropDownButtonProps) {
+export default function DropDownButton(props: DropDownButtonProps) {
+  const {
+    label,
+    isSelected,
+    onClick,
+    width,
+    height,
+    padding,
+    gap,
+    iconSize,
+    typographyVariant,
+    Radius,
+  } = props;
+
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
 
