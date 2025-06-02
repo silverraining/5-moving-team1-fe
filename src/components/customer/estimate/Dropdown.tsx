@@ -1,4 +1,5 @@
 "use client";
+import { useState } from "react";
 import {
   Box,
   Button,
@@ -6,18 +7,21 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { useState } from "react";
 import DropDownButton from "../../shared/components/drop-down/filter-drop-down/DropDownButton";
 
-// 옵션 목록
-const OPTIONS = [
-  { label: "전체", value: "all" },
-  { label: "확정한 견적서", value: "complete" },
-];
+export interface SortOption {
+  label: string;
+  value: string;
+}
 
-export default function Dropdown() {
-  const [open, setOpen] = useState(false); // 드롭다운 열림/닫힘
-  const [selected, setSelected] = useState(OPTIONS[0]); // 기본값
+interface SortDropdownProps {
+  options: SortOption[];
+  onChange?: (option: SortOption) => void;
+}
+
+export default function SortDropdown({ options, onChange }: SortDropdownProps) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState<SortOption>(options[0]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -25,10 +29,12 @@ export default function Dropdown() {
     theme.breakpoints.between("tablet", "desktop")
   );
 
-  // 옵션 선택 함수
-  const handleSelect = (option: (typeof OPTIONS)[0]) => {
-    setSelected(option);
-    setOpen(false);
+  const handleToggle = () => setIsOpen((prev) => !prev);
+
+  const handleSelect = (option: SortOption) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+    onChange?.(option);
   };
 
   return (
@@ -39,14 +45,15 @@ export default function Dropdown() {
         marginBottom: ["16px", "16px", "32px"],
       }}
     >
+      {/* DropDownButton으로 드롭다운 헤더 */}
       <Box
         width={["127px", "127px", "190px"]}
         height={["36px", "36px", "64px"]}
       >
         <DropDownButton
-          label={selected.label}
-          isSelected={open}
-          onClick={() => setOpen((prev) => !prev)}
+          label={selectedOption.label}
+          isSelected={isOpen}
+          onClick={handleToggle}
           width="100%"
           height="100%"
           padding={{ mobile: "10px", tablet: "10px", desktop: "15px" }}
@@ -55,8 +62,9 @@ export default function Dropdown() {
           iconSize={{ mobile: "10px", tablet: "10px", desktop: "15px" }}
         />
       </Box>
-      {open && (
-        // 전체 옵션 스타일
+
+      {/* 드롭다운 목록 */}
+      {isOpen && (
         <Box
           sx={(theme) => ({
             position: "absolute",
@@ -71,49 +79,54 @@ export default function Dropdown() {
             boxShadow: "2px 2px 8px rgba(0,0,0,0.08)",
           })}
         >
-          {OPTIONS.map((option, idx) => {
-            const isFirst = idx === 0;
-            const isLast = idx === OPTIONS.length - 1;
-            return (
-              <Button
-                key={option.value}
-                sx={(theme) => ({
-                  justifyContent: "flex-start",
-                  width: ["127px", "127px", "328px"],
-                  height: ["36px", "36px", "64px"],
-                  padding: ["10px", "10px", "15px"],
-                  cursor: "pointer",
-                  borderTopLeftRadius: isFirst ? "16px" : 0,
-                  borderTopRightRadius: isFirst ? "16px" : 0,
-                  borderBottomLeftRadius: isLast ? "16px" : 0,
-                  borderBottomRightRadius: isLast ? "16px" : 0,
-                  border:
-                    selected.value === option.value
-                      ? `1px solid ${theme.palette.PrimaryBlue[300]}`
-                      : `1px solid ${theme.palette.Line[200]}`,
-                  background:
-                    selected.value === option.value
-                      ? theme.palette.PrimaryBlue[50]
-                      : theme.palette.White[100],
-                })}
-                onClick={() => handleSelect(option)}
+          {options.map((option, idx) => (
+            <Button
+              key={option.value}
+              onClick={() => handleSelect(option)}
+              sx={{
+                justifyContent: "flex-start",
+                width: ["127px", "127px", "328px"],
+                height: ["36px", "36px", "64px"],
+                padding: ["10px", "10px", "15px"],
+                cursor: "pointer",
+                border:
+                  selectedOption.value === option.value
+                    ? `1px solid ${theme.palette.PrimaryBlue[300]}`
+                    : `1px solid ${theme.palette.Line[200]}`,
+                backgroundColor:
+                  selectedOption.value === option.value
+                    ? theme.palette.PrimaryBlue[50]
+                    : theme.palette.White[100],
+                borderLeft: `1px solid ${theme.palette.Line[200]}`,
+                borderRight: `1px solid ${theme.palette.Line[200]}`,
+                borderTop:
+                  idx === 0 ? `1px solid ${theme.palette.Line[200]}` : "none",
+                borderBottom:
+                  idx === options.length - 1
+                    ? `1px solid ${theme.palette.Line[200]}`
+                    : "none",
+                borderRadius:
+                  idx === 0
+                    ? "8px 8px 0 0"
+                    : idx === options.length - 1
+                      ? "0 0 8px 8px"
+                      : 0,
+              }}
+            >
+              <Typography
+                fontSize={["14px", "14px", "18px"]}
+                lineHeight={["24px", "24px", "26px"]}
+                color={
+                  selectedOption.value === option.value
+                    ? theme.palette.PrimaryBlue[300]
+                    : theme.palette.Black[400]
+                }
+                fontWeight={500}
               >
-                <Typography
-                  fontSize={["14px", "14px", "18px"]}
-                  lineHeight={["24px", "24px", "26px"]}
-                  fontWeight={500}
-                  sx={(theme) => ({
-                    color:
-                      selected.value === option.value
-                        ? theme.palette.PrimaryBlue[300]
-                        : theme.palette.Black[400],
-                  })}
-                >
-                  {option.label}
-                </Typography>
-              </Button>
-            );
-          })}
+                {option.label}
+              </Typography>
+            </Button>
+          ))}
         </Box>
       )}
     </Box>
