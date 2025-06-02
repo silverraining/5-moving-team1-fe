@@ -32,6 +32,6 @@ export type CardData = {
   writeReview?: string;
   nickname?: string;
   movingDay?: string;
-  refuse?: boolean;
+  reject?: boolean;
   address: string[];
 };
