@@ -41,7 +41,7 @@ export default function PendingEstimate() {
       ReviewCheck: true,
       review: 5,
       writeReview: "처음 견적 받아봤는데 너무 만족스러웠어요!",
-      refuse: false,
+      reject: false,
       address: ["서울", "경기"],
     },
     {
@@ -64,7 +64,7 @@ export default function PendingEstimate() {
       ReviewCheck: true,
       review: 4,
       writeReview: "깔끔하게 마무리해주셔서 감사해요.",
-      refuse: false,
+      reject: false,
       address: ["서울"],
     },
     {
@@ -87,7 +87,7 @@ export default function PendingEstimate() {
       ReviewCheck: true,
       review: 5,
       writeReview: "정말 친절하고 정확하게 도와주셨어요!",
-      refuse: false,
+      reject: false,
       address: ["인천", "경기"],
     },
     {
@@ -110,7 +110,7 @@ export default function PendingEstimate() {
       ReviewCheck: false,
       review: 0,
       writeReview: "",
-      refuse: false,
+      reject: false,
       address: ["부산"],
     },
     {
@@ -133,7 +133,7 @@ export default function PendingEstimate() {
       ReviewCheck: true,
       review: 5,
       writeReview: "완벽한 이사 서비스였습니다!",
-      refuse: false,
+      reject: false,
       address: ["대구", "경북"],
     },
   ];

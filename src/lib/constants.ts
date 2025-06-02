@@ -70,7 +70,7 @@ export const PATH = {
   /**내견적관리-확정 견적 상세보기 */
   moverEstimateComfirmDetail: (id: string) => `/mover/estimate/confirm/${id}`,
   /**내견적관리-반려 견적 */
-  moverEstimateRefuse: "/mover/estimate/refuse",
+  moverEstimateReject: "/mover/estimate/reject",
   /**찜한 기사 페이지 */
   userWishlist: "/customer/wishlist",
   /**일반유저 리뷰 페이지 */

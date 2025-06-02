@@ -21,7 +21,7 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     PATH.customerRequest ||
     PATH.userEstimateReceive ||
     PATH.moverEstimateComfirm ||
-    PATH.moverEstimateRefuse;
+    PATH.moverEstimateReject;
   // 페이지중 여백을 빼야 할 페이지
   const disablePadingPage = PATH.userEstimateReceive;
 
