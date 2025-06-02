@@ -10,7 +10,7 @@ interface SnsShareProps {
 
 export const SnsShare = ({
   title,
-  url = typeof window !== "undefi ㅇned" ? window.location.href : "",
+  url = typeof window !== "undefined" ? window.location.href : "",
 }: SnsShareProps) => {
   const theme = useTheme();
   const { openSnackbar } = useSnackbar();
