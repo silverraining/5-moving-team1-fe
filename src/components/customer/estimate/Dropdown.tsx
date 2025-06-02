@@ -116,11 +116,12 @@ export default function SortDropdown({ options, onChange }: SortDropdownProps) {
               <Typography
                 fontSize={["14px", "14px", "18px"]}
                 lineHeight={["24px", "24px", "26px"]}
-                color={
-                  selectedOption.value === option.value
-                    ? theme.palette.PrimaryBlue[300]
-                    : theme.palette.Black[400]
-                }
+                sx={(theme) => ({
+                  color:
+                    selectedOption.value === option.value
+                      ? theme.palette.PrimaryBlue[300]
+                      : theme.palette.Black[400],
+                })}
                 fontWeight={500}
               >
                 {option.label}
