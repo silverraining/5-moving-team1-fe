@@ -10,7 +10,7 @@ interface CardProps {
   data: CardData;
 }
 
-export const CardListRefuse = ({ data }: CardProps) => {
+export const CardListReject = ({ data }: CardProps) => {
   return (
     <Box
       position={"relative"}
@@ -28,7 +28,7 @@ export const CardListRefuse = ({ data }: CardProps) => {
       boxShadow="2px 2px 10px 0px rgba(220, 220, 220, 0.14), -2px -2px 10px 0px rgba(220, 220, 220, 0.14)"
       boxSizing={"border-box"}
     >
-      {data.refuse && (
+      {data.reject && (
         <Box
           display={"flex"}
           alignItems={"center"}

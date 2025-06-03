@@ -17,7 +17,9 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
       justifyContent="space-between"
       border="0.5px solid"
       borderColor={COLORS.Line[100]}
-      width={[327, 600, 688]}
+      maxWidth={"1320px"}
+      minWidth={"327px"}
+      width={"100%"}
       height={[222, 222, 280]}
       bgcolor="#FFFFFF"
       borderRadius="16px"

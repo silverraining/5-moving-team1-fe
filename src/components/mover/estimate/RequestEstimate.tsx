@@ -1,22 +1,24 @@
 "use client";
 import { Grid } from "@mui/material";
-import { CardListWait } from "@/src/components/shared/components/card/CardListWait";
 import { CardData } from "@/src/types/card";
+import { CardListReject } from "../../shared/components/card/CardListReject";
+import { CardListCompleteState } from "../../shared/components/card/CardListCompleteState";
 
-export default function PendingEstimate() {
+/**
+ * 견적 조회("estimate")와 반려 요청("reject") 중 하나를 나타냅니다.
+ * - "estimate": 견적 조회
+ * - "reject": 반려 요청
+ */
+type RequestType = "estimate" | "reject";
+
+interface RequestEstimateProps {
+  requestType: RequestType;
+}
+
+export default function RequestEstimate({ requestType }: RequestEstimateProps) {
   // 임시로 넣은 상세 보기
   const handleDetailClick = () => {
     alert(`상세보기 버튼 누름`);
-  };
-
-  // 임시로 넣은 좋아요 토글
-  const handleLikeClick = () => {
-    alert(`좋아요 버튼 누름`);
-  };
-
-  // 임시로 넣은 견적 확정하기
-  const handleConfirmClick = () => {
-    alert(`견적을 선택 완료했습니다!`);
   };
 
   // 확인용으로 넣은 임시 데이터
@@ -41,7 +43,7 @@ export default function PendingEstimate() {
       ReviewCheck: true,
       review: 5,
       writeReview: "처음 견적 받아봤는데 너무 만족스러웠어요!",
-      reject: false,
+      reject: true,
       address: ["서울", "경기"],
     },
     {
@@ -87,7 +89,7 @@ export default function PendingEstimate() {
       ReviewCheck: true,
       review: 5,
       writeReview: "정말 친절하고 정확하게 도와주셨어요!",
-      reject: false,
+      reject: true,
       address: ["인천", "경기"],
     },
     {
@@ -139,7 +141,7 @@ export default function PendingEstimate() {
   ];
 
   return (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} sx={{ maxWidth: 1400, margin: "0 auto" }}>
       {mockCardList.map((card, index) => (
         <Grid
           key={index}
@@ -147,12 +149,13 @@ export default function PendingEstimate() {
           display={"flex"}
           sx={{ justifyContent: "center" }}
         >
-          <CardListWait
-            data={card}
-            onDetailClick={handleDetailClick}
-            onLikeClick={handleLikeClick}
-            onConfirmClick={handleConfirmClick}
-          />
+          {requestType === "estimate" && (
+            <CardListCompleteState
+              data={card}
+              onclickDetails={handleDetailClick}
+            />
+          )}
+          {requestType === "reject" && <CardListReject data={card} />}
         </Grid>
       ))}
     </Grid>

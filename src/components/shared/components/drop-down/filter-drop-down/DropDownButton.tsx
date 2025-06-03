@@ -1,21 +1,45 @@
 "use client";
-import { Button, Typography, useMediaQuery, useTheme } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import Image from "next/image";
 
-interface DropDownButtonProps {
+export interface DropDownButtonProps {
   label: string;
   isSelected: boolean;
   onClick?: () => void;
+  width?: string | { mobile?: string; tablet?: string; desktop?: string };
+  height?: string | { mobile?: string; tablet?: string; desktop?: string };
+  padding?: string | { mobile?: string; tablet?: string; desktop?: string };
+  typographyVariant?: "M_14" | "M_18" | "SB_16" | "B_16";
+  Radius?: string | { mobile?: string; tablet?: string; desktop?: string };
+  iconSize?: boolean;
 }
-
 export default function DropDownButton({
   label,
   isSelected,
   onClick,
+  typographyVariant,
+  iconSize,
+  ...props
 }: DropDownButtonProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
-  const iconSize = isTablet ? 10 : 15;
+  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
+
+  const resolvedIconSize = iconSize
+    ? isDesktop
+      ? 15
+      : 10
+    : isTablet
+      ? 10
+      : 15;
+  const resolvedTypography = typographyVariant ?? (isTablet ? "M_14" : "M_18");
+
   const buttonStyle = {
     justifyContent: "space-between",
     alignItems: "center",
@@ -40,13 +64,13 @@ export default function DropDownButton({
   };
 
   const iconSrc = isSelected
-    ? "/Images/drop-down/chevron-down-blue-lg.svg"
-    : "/Images/drop-down/chevron-down-lg.svg";
+    ? "/images/drop-down/chevron-down-blue-lg.svg"
+    : "/images/drop-down/chevron-down-lg.svg";
 
   return (
-    <Button onClick={onClick} sx={buttonStyle}>
+    <Button onClick={onClick} sx={buttonStyle} {...props}>
       <Typography
-        variant={isTablet ? "M_14" : "M_18"}
+        variant={resolvedTypography}
         sx={{
           color: isSelected
             ? theme.palette.PrimaryBlue[300]
@@ -56,7 +80,12 @@ export default function DropDownButton({
       >
         {label}
       </Typography>
-      <Image src={iconSrc} alt="드롭다운" width={iconSize} height={iconSize} />
+      <Image
+        src={iconSrc}
+        alt="드롭다운"
+        width={resolvedIconSize}
+        height={resolvedIconSize}
+      />
     </Button>
   );
 }
