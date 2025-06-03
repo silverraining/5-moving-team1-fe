@@ -1,8 +1,14 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { ChipProps } from "@/src/types/card";
 import Image from "next/image";
+interface ChipCategoryProps extends ChipProps {
+  forceMobileSize?: boolean;
+}
 
-export const ChipCategory = ({ type = "small" }: ChipProps) => {
+export const ChipCategory = ({
+  type = "small",
+  forceMobileSize = false,
+}: ChipCategoryProps) => {
   const theme = useTheme();
 
   const categoryData = {
@@ -52,10 +58,6 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
 
   const data = categoryData[type];
 
-  const isSmall = useMediaQuery(`(max-width:400px)`);
-  const isMobile = useMediaQuery(theme.breakpoints.down("desktop"));
-  const size = isSmall ? "xs" : isMobile ? "sm" : "md";
-
   const sizeMap = {
     xs: { img: 20, height: 24, borderRadius: "4px" },
     sm: {
@@ -77,6 +79,11 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
       px: "8px",
     },
   } as const;
+
+  //  모바일 사이즈 강제 적용
+  const isSmall = useMediaQuery(`(max-width:400px)`);
+  const isMobile = useMediaQuery(theme.breakpoints.down("desktop"));
+  const size = forceMobileSize ? "sm" : isSmall ? "xs" : isMobile ? "sm" : "md";
   let sizeStyle = sizeMap[size];
 
   if (!data) return null;
@@ -144,3 +151,5 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
     </Box>
   );
 };
+
+export type { ChipProps };
