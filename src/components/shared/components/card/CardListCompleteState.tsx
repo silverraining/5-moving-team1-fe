@@ -187,7 +187,11 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                 {formatKoreanDate(data.movingDay ?? "")}
               </Typography>
             </Box>
-            <Box height={14} border={"1px solid #E6E6E6"}></Box>
+            <Box
+              display={["none", "none", "block"]}
+              height={14}
+              border={"1px solid #E6E6E6"}
+            ></Box>
             <Box display="flex">
               <Typography
                 sx={(theme) => ({
