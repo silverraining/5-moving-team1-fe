@@ -1,7 +1,7 @@
 import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
-import Image from "next/image";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import { Clip, Kakao, FaceBook } from "../icon-btn/IconBtn";
 
 interface SnsShareProps {
   title?: string;
@@ -55,76 +55,9 @@ export const SnsShare = ({
         {title}
       </Typography>
       <Box sx={{ display: "flex", gap: "16px" }}>
-        <Box
-          onClick={() => handleShare("링크복사")}
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "16px",
-            backgroundColor: theme.palette.White[100],
-            border: `1px solid ${theme.palette.Line[200]}`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: theme.palette.Grayscale[100],
-            },
-          }}
-        >
-          <Image
-            src="/Images/icon-btn/clip.svg"
-            alt="링크 복사"
-            width={32}
-            height={32}
-          />
-        </Box>
-        <Box
-          onClick={() => handleShare("카카오톡")}
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "16px",
-            backgroundColor: "#FEE500",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: "#FFD600",
-            },
-          }}
-        >
-          <Image
-            src="/Images/icon-btn/kakao.svg"
-            alt="카카오톡 공유"
-            width={28}
-            height={28}
-          />
-        </Box>
-        <Box
-          onClick={() => handleShare("페이스북")}
-          sx={{
-            width: 64,
-            height: 64,
-            borderRadius: "16px",
-            backgroundColor: "#1877F2",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-            "&:hover": {
-              backgroundColor: "#166FE5",
-            },
-          }}
-        >
-          <Image
-            src="/Images/icon-btn/facebook.svg"
-            alt="페이스북 공유"
-            width={28}
-            height={28}
-          />
-        </Box>
+        <Clip onClick={() => handleShare("링크복사")} />
+        <Kakao onClick={() => handleShare("카카오톡")} />
+        <FaceBook onClick={() => handleShare("페이스북")} />
       </Box>
     </Box>
   );
