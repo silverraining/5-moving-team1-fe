@@ -1,18 +1,33 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { ReviewData } from "@/src/types/common";
 import { StarRating } from "./StarRating";
+import Pagination from "../../pagination/Pagination";
 
 interface ReviewListProps {
   reviews: ReviewData[];
+  itemsPerPage?: number; // 페이지당 표시할 리뷰 수
 }
 
-export const ReviewList = ({ reviews }: ReviewListProps) => {
+export const ReviewList = ({ reviews, itemsPerPage = 5 }: ReviewListProps) => {
   const theme = useTheme();
+  const [currentPage, setCurrentPage] = useState(1);
+
+  // 전체 페이지 수 계산
+  const totalPages = Math.ceil(reviews.length / itemsPerPage);
+
+  // 현재 페이지에 표시할 리뷰 계산
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+  const currentReviews = reviews.slice(startIndex, endIndex);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
 
   return (
     <Box>
-      {reviews.map((review) => (
+      {currentReviews.map((review) => (
         <Box
           key={review.id}
           sx={{
@@ -55,6 +70,24 @@ export const ReviewList = ({ reviews }: ReviewListProps) => {
           </Typography>
         </Box>
       ))}
+
+      {/* 페이지네이션 */}
+      {totalPages > 1 && (
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "40px",
+            paddingTop: "24px",
+          }}
+        >
+          <Pagination
+            currentPage={currentPage}
+            totalPages={totalPages}
+            onPageChange={handlePageChange}
+          />
+        </Box>
+      )}
     </Box>
   );
 };

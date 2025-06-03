@@ -71,6 +71,55 @@ const mockReviews: ReviewData[] = [
     rating: 3,
     content: "무난합니다.",
   },
+  {
+    id: 6,
+    author: "lhs****",
+    date: "2024-06-28",
+    rating: 5,
+    content: "정말 꼼꼼하고 친절하게 해주셨어요. 다음에도 부탁드리고 싶습니다!",
+  },
+  {
+    id: 7,
+    author: "park***",
+    date: "2024-06-25",
+    rating: 4,
+    content: "시간 약속도 잘 지키시고 물건도 안전하게 옮겨주셨습니다.",
+  },
+  {
+    id: 8,
+    author: "choi***",
+    date: "2024-06-20",
+    rating: 5,
+    content: "전문적이고 신뢰할 수 있는 기사님이세요. 적극 추천합니다!",
+  },
+  {
+    id: 9,
+    author: "kim****",
+    date: "2024-06-18",
+    rating: 4,
+    content: "깔끔하고 정확한 작업 감사합니다.",
+  },
+  {
+    id: 10,
+    author: "lee****",
+    date: "2024-06-15",
+    rating: 5,
+    content: "가격도 합리적이고 서비스도 만족스러워요!",
+  },
+  {
+    id: 11,
+    author: "song***",
+    date: "2024-06-12",
+    rating: 4,
+    content: "성실하게 작업해주셔서 감사합니다.",
+  },
+  {
+    id: 12,
+    author: "jung***",
+    date: "2024-06-10",
+    rating: 5,
+    content: "이사 첫 경험이었는데 너무 잘 도와주셨어요!",
+  },
 ];
 
 export const MoverDetail = ({ moverId }: MoverDetailProps) => {
@@ -87,38 +136,28 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   };
 
   const handleServiceClick = (service: string) => {
-    // 서비스 선택 로직
+    // TODO : 서비스 선택 로직 구현
     console.log(`${service} 서비스 선택`);
   };
 
   const handleLikeClick = () => {
+    // TODO : 찜하기 로직 구현
     setIsLiked(!isLiked);
   };
 
   const handleQuoteRequest = () => {
-    // 견적 요청 로직
+    // TODO : 지정 견적 요청 로직 구현
+    // TODO : 일반 견적 없을 경우 모달 띄우기
     console.log("견적 요청하기");
   };
 
-  const renderStars = (rating: number) => {
-    return Array.from({ length: rating }, (_, index) => (
-      <Image
-        key={index}
-        src="/Images/star/star_active.svg"
-        alt="별점"
-        width={16}
-        height={16}
-      />
-    ));
-  };
-
   return (
-    <Box sx={{ maxWidth: "1200px", margin: "0 auto", padding: "24px 16px" }}>
+    <Box sx={{ maxWidth: "1400px", margin: "0 auto", padding: "24px 16px" }}>
       {/* 메인 컨텐츠 영역 */}
       <Box
         sx={{
           display: "flex",
-          gap: "64px",
+          gap: "96px",
           alignItems: "flex-start",
           justifyContent: "space-between",
         }}
@@ -248,7 +287,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           </Box>
 
           {/* 댓글 섹션 */}
-          <ReviewList reviews={mockReviews} />
+          <ReviewList reviews={mockReviews} itemsPerPage={5} />
         </Box>
 
         {/* 오른쪽 사이드바 */}
