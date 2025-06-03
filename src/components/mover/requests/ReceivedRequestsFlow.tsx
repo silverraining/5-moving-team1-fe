@@ -1,5 +1,6 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../shared/components/modal/SendEstimateModal";
@@ -18,6 +19,7 @@ import { CheckboxList } from "../../shared/components/filter-check-box/CheckboxL
 import { SearchInput } from "../../shared/components/text-field/Search";
 import MoveSortDropdown from "./MoveSortDropdown";
 import FilterModal from "../../shared/components/modal/FilterModal";
+import EmptyRequest from "./EmptyRequest";
 
 type TestReceivedRequestRaw = {
   id: string;
@@ -110,6 +112,9 @@ const transformToCardData = (
 // 위 부분은 백엔드 연결하면 삭제 예정
 // 아래부터 진짜 코드
 export default function ReceivedRequestsFlow() {
+  const searchParams = useSearchParams(); // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
+  const isEmptyTest = searchParams?.get("empty") === "true"; // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
+
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
@@ -136,8 +141,10 @@ export default function ReceivedRequestsFlow() {
     office: false,
   });
 
-  const transformedList: TransformedCardData[] =
-    testDataList.map(transformToCardData);
+  // 빈 상태 테스트면 빈 배열, 아니면 기존 데이터 변환
+  const transformedList: TransformedCardData[] = isEmptyTest
+    ? []
+    : testDataList.map(transformToCardData);
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);
@@ -301,16 +308,20 @@ export default function ReceivedRequestsFlow() {
               )}
             </Box>
           </Box>
-          {/* 우측 카드 목록 영역 */}
+          {/* 우측 카드 리스트 또는 EmptyRequest 조건부 렌더링 */}
           <Box sx={{ display: "flex", flexDirection: "column" }}>
-            {transformedList.map((data) => (
-              <CardListRequest
-                key={data.id}
-                data={data}
-                onConfirmClick={handleOpenEstimateModal}
-                onDetailClick={handleOpenRejectModal}
-              />
-            ))}
+            {transformedList.length === 0 ? (
+              <EmptyRequest />
+            ) : (
+              transformedList.map((data) => (
+                <CardListRequest
+                  key={data.id}
+                  data={data}
+                  onConfirmClick={handleOpenEstimateModal}
+                  onDetailClick={handleOpenRejectModal}
+                />
+              ))
+            )}
             {/* 모달들 */}
             {isEstimateModalOpen && (
               <SendEstimateModal onClose={handleCloseEstimateModal} />
