@@ -27,7 +27,12 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       boxSizing={"border-box"}
       width="100%"
     >
-      <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={["14px", "16px"]}
+        marginBottom="16px"
+      >
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
           {data.types.map((type, index) => (
             <ChipCategory key={index} type={type} />
