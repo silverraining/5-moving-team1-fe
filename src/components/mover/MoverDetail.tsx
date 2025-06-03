@@ -29,13 +29,13 @@ export const mockMoverData: CardData = {
   address: ["서울", "경기"],
 };
 
-const mockReviewData: ReviewStatistics = {
+export const mockReviewData: ReviewStatistics = {
   average: 5.0,
   score: { 1: 0, 2: 0, 3: 0, 4: 8, 5: 170 },
   max: 170,
 };
 
-const mockReviews: ReviewData[] = [
+export const mockReviews: ReviewData[] = [
   {
     id: 1,
     author: "kjm****",
