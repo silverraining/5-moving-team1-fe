@@ -8,54 +8,47 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 
-interface DropDownButtonProps {
+export interface DropDownButtonProps {
   label: string;
   isSelected: boolean;
   onClick?: () => void;
   width?: string | { mobile?: string; tablet?: string; desktop?: string };
   height?: string | { mobile?: string; tablet?: string; desktop?: string };
   padding?: string | { mobile?: string; tablet?: string; desktop?: string };
-  gap?: string | { mobile?: string; tablet?: string; desktop?: string };
-  iconSize?: string | { mobile?: string; tablet?: string; desktop?: string };
-  typographyVariant?: "M_14" | "M_18" | "SB_16" | "B_16"; // 필요에 따라 확장 가능
+  typographyVariant?: "M_14" | "M_18" | "SB_16" | "B_16";
   Radius?: string | { mobile?: string; tablet?: string; desktop?: string };
+  iconSize?: boolean;
 }
-
-export default function DropDownButton(props: DropDownButtonProps) {
-  const {
-    label,
-    isSelected,
-    onClick,
-    width,
-    height,
-    padding,
-    gap,
-    iconSize,
-    typographyVariant,
-    Radius,
-  } = props;
-
+export default function DropDownButton({
+  label,
+  isSelected,
+  onClick,
+  typographyVariant,
+  iconSize,
+  ...props
+}: DropDownButtonProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
+  const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
 
-  const resolvedWidth = width ?? (isTablet ? "fit-content" : "328px");
-  const resolvedHeight = height ?? (isTablet ? "36px" : "64px");
-  const resolvedPadding =
-    padding ?? (isTablet ? "6px 10px 6px 14px" : "16px 24px");
-  const resolvedGap = gap ?? (isTablet ? "6px" : "12px");
-  const resolvedIconSize = iconSize ?? (isTablet ? 10 : 15);
+  const resolvedIconSize = iconSize
+    ? isDesktop
+      ? 15
+      : 10
+    : isTablet
+      ? 10
+      : 15;
   const resolvedTypography = typographyVariant ?? (isTablet ? "M_14" : "M_18");
-  const resolvedRadius = Radius ?? (isTablet ? "8px" : "16px");
 
   const buttonStyle = {
     justifyContent: "space-between",
     alignItems: "center",
     textTransform: "none",
     display: "flex",
-    width: resolvedWidth,
-    height: resolvedHeight,
-    padding: resolvedPadding,
-    gap: resolvedGap,
+    width: isTablet ? "fit-content" : "328px",
+    height: isTablet ? "36px" : "64px",
+    padding: isTablet ? "6px 10px 6px 14px" : "16px 24px",
+    gap: isTablet ? "6px" : "12px",
     border: `1px solid ${
       isSelected
         ? theme.palette.PrimaryBlue[300]
@@ -63,7 +56,7 @@ export default function DropDownButton(props: DropDownButtonProps) {
           ? theme.palette.Line[200]
           : theme.palette.Grayscale[100]
     }`,
-    borderRadius: resolvedRadius,
+    borderRadius: isTablet ? "8px" : "16px",
     backgroundColor: isSelected
       ? theme.palette.PrimaryBlue[50]
       : theme.palette.White[100],
@@ -75,7 +68,7 @@ export default function DropDownButton(props: DropDownButtonProps) {
     : "/images/drop-down/chevron-down-lg.svg";
 
   return (
-    <Button onClick={onClick} sx={buttonStyle}>
+    <Button onClick={onClick} sx={buttonStyle} {...props}>
       <Typography
         variant={resolvedTypography}
         sx={{
@@ -87,13 +80,12 @@ export default function DropDownButton(props: DropDownButtonProps) {
       >
         {label}
       </Typography>
-      <Box
+      <Image
+        src={iconSrc}
+        alt="드롭다운"
         width={resolvedIconSize}
         height={resolvedIconSize}
-        position={"relative"}
-      >
-        <Image src={iconSrc} alt="드롭다운" fill />
-      </Box>
+      />
     </Button>
   );
 }

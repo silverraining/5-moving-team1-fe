@@ -1,6 +1,6 @@
 "use client";
 import { EstimateRequest } from "@/src/types/card";
-import { Typography, Stack, Box } from "@mui/material";
+import { Typography, Stack } from "@mui/material";
 import { EstimateInfo } from "./EstimateInfo";
 import { CardListCost } from "../../shared/components/card/CardListCost";
 import Dropdown, { SortOption } from "./Dropdown";
