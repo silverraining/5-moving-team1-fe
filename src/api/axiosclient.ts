@@ -3,7 +3,7 @@ import Cookies from "js-cookie";
 import { API_BASE_URL } from "../lib/constants";
 
 const apiClient = axios.create({
-  baseURL: `${API_BASE_URL}/api`,
+  baseURL: API_BASE_URL,
   timeout: 10000,
   adapter: "fetch", // fetch adapter 사용
   fetchOptions: {
