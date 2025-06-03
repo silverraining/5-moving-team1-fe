@@ -2,16 +2,34 @@
 
 import { Box, Divider, useMediaQuery, useTheme } from "@mui/material";
 import ProfileMenuItem from "./ProfileMenuItem";
+import { User } from "@/src/types/auth";
+import Link from "next/link";
+import { PATH } from "@/src/lib/constants";
 
-export default function ProfileDropDown() {
+interface ProfileDropDownProps {
+  user: User | null;
+  logout?: () => void;
+  close?: () => void;
+}
+
+export default function ProfileDropDown({
+  user,
+  logout,
+  close,
+}: ProfileDropDownProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
+  const profileHref = user?.role === "MOVER" ? PATH.main : PATH.main;
+  const rievewHref =
+    user?.role === "MOVER" ? PATH.moverReview : PATH.userReview;
 
   return (
     <Box
       sx={(theme) => ({
         width: isTablet ? "152px" : "248px",
-        height: isTablet ? "224px" : "296px",
+        height: "100%",
+        maxHeight: "296px",
+        minHeight: "224px",
         padding: isTablet ? "10px 6px 6px" : "16px 4px 6px",
         backgroundColor: theme.palette.White[100],
         border: `1px solid ${theme.palette.Line[200]}`,
@@ -24,10 +42,29 @@ export default function ProfileDropDown() {
       })}
     >
       <ProfileMenuItem nickname="김가나" bold type="nickname" />
-      <ProfileMenuItem label="프로필 수정" type="menu" />
-      <ProfileMenuItem label="찜한 기사님" type="menu" />
-      <ProfileMenuItem label="이사 리뷰" type="menu" />
-
+      <Link
+        href={profileHref}
+        style={{ width: "100%", textDecoration: "none" }}
+        onClick={close}
+      >
+        <ProfileMenuItem label="프로필 수정" type="menu" />
+      </Link>
+      {user?.role !== "MOVER" && (
+        <Link
+          href={PATH.userWishlist}
+          style={{ width: "100%", textDecoration: "none" }}
+          onClick={close}
+        >
+          <ProfileMenuItem label="찜한 기사님" type="menu" />
+        </Link>
+      )}
+      <Link
+        href={rievewHref}
+        style={{ width: "100%", textDecoration: "none" }}
+        onClick={close}
+      >
+        <ProfileMenuItem label="이사 리뷰" type="menu" />
+      </Link>
       <Divider
         sx={(theme) => ({
           width: "100%",
@@ -36,7 +73,7 @@ export default function ProfileDropDown() {
         })}
       />
 
-      <ProfileMenuItem label="로그아웃" type="logout" />
+      <ProfileMenuItem label="로그아웃" type="logout" onClick={logout} />
     </Box>
   );
 }
