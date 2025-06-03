@@ -15,7 +15,7 @@ interface MoverDetailProps {
 }
 
 // 임시 데이터 - 실제로는 API에서 가져올 데이터
-const mockMoverData: CardData = {
+export const mockMoverData: CardData = {
   types: ["small", "home"],
   message: "고객님의 물품을 안전하게 운송해드립니다.",
   imgSrc: "/Images/profile/maleProfile.svg",
