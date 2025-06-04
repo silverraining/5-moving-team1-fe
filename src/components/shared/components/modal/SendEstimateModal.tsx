@@ -195,7 +195,11 @@ export default function SendEstimateModal({
               </Box>
             </Box>
             {/* 견적가 */}
-            <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              sx={{ width: "100%", gap: "16px" }}
+            >
               <Typography
                 variant={isSmall ? "SB_16" : "SB_20"}
                 sx={{ color: theme.palette.Black[300] }}
@@ -207,7 +211,12 @@ export default function SendEstimateModal({
                 placeholder="견적가 입력"
                 register={register.price}
                 errorMessage={errors.price?.message}
-                sx={{ width: "100%" }}
+                sx={{
+                  width: "100%",
+                  backgroundColor: theme.palette.NeutralGray[200],
+                  borderRadius: ["16px", "16px", "18px"],
+                  border: "none",
+                }}
               />
             </Box>
             {/* === 경계선 추가 === */}
@@ -219,7 +228,11 @@ export default function SendEstimateModal({
               }}
             />
             {/* 코멘트 */}
-            <Box display="flex" flexDirection="column" sx={{ width: "100%" }}>
+            <Box
+              display="flex"
+              flexDirection="column"
+              sx={{ width: "100%", gap: "16px" }}
+            >
               <Typography
                 variant={isSmall ? "SB_16" : "SB_20"}
                 sx={{ color: theme.palette.Black[300] }}
@@ -230,7 +243,12 @@ export default function SendEstimateModal({
                 placeholder="최소 10자 이상 입력해주세요"
                 register={register.comment}
                 errorMessage={errors.comment?.message}
-                sx={{ width: "100%" }}
+                sx={{
+                  width: "100%",
+                  backgroundColor: theme.palette.NeutralGray[200],
+                  borderRadius: ["16px", "16px", "18px"],
+                  border: "none",
+                }}
               />
             </Box>
           </Box>
