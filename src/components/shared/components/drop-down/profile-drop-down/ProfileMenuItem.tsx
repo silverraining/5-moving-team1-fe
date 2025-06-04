@@ -10,6 +10,7 @@ interface ProfileMenuItemProps {
   height?: number;
   bold?: boolean;
   type?: MenuItemType;
+  onClick?: () => void;
 }
 
 export default function ProfileMenuItem({
@@ -18,6 +19,7 @@ export default function ProfileMenuItem({
   height = 54,
   bold = false,
   type,
+  onClick,
 }: ProfileMenuItemProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -33,6 +35,7 @@ export default function ProfileMenuItem({
 
   return (
     <Box
+      onClick={onClick}
       sx={(theme) => ({
         width: "100%",
         maxWidth: "100%",

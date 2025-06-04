@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { useForm } from "react-hook-form";
 
 export const useSearch = (initialValue = "", delay = 300) => {
@@ -40,19 +40,6 @@ export const useDrawer = () => {
   );
 
   return { open, toggleDrawer };
-};
-
-export const useTab = () => {
-  const [value, setValue] = useState<number | false>(false);
-
-  const handleChange = useCallback(
-    (event: React.SyntheticEvent, newValue: number) => {
-      setValue(newValue);
-    },
-    []
-  );
-
-  return { value, handleChange, setValue };
 };
 
 type OptionKey = "small" | "home" | "office";
@@ -246,5 +233,20 @@ export const useRejectRequestForm = () => {
     errors,
     isValid,
     reason,
+  };
+};
+
+export const useDropdown = () => {
+  const anchorRef = useRef(null);
+  const [open, setOpen] = useState(false);
+
+  const toggle = useCallback(() => setOpen((prev) => !prev), []);
+  const close = useCallback(() => setOpen(false), []);
+
+  return {
+    open,
+    toggle,
+    close,
+    anchorRef,
   };
 };

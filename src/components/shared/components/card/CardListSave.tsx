@@ -1,9 +1,9 @@
-import { Box, Typography } from "@mui/material";
+import { Box, BoxProps, Skeleton, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { CardData } from "@/src/types/card";
 import Image from "next/image";
 import { useResponsiveValue } from "@/src/hooks/useResponsiveValue";
-interface CardProps {
+interface CardProps extends BoxProps {
   data: CardData;
   onLikeClick?: () => void;
   forceMobileSize?: boolean;
@@ -13,6 +13,7 @@ export const CardListSave = ({
   data,
   onLikeClick,
   forceMobileSize = false,
+  ...props
 }: CardProps) => {
   const responsive = useResponsiveValue(forceMobileSize);
 
@@ -29,6 +30,16 @@ export const CardListSave = ({
       padding={responsive(["16px 14px", "16px 14px", "20px 24px"])}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
+      sx={(theme) => ({
+        transition:
+          "box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
+        cursor: "pointer",
+        "&:hover": {
+          boxShadow: theme.shadows[4],
+          borderColor: theme.palette.grey[400],
+        },
+      })}
+      {...props}
     >
       <Box>
         <Box
@@ -217,6 +228,65 @@ export const CardListSave = ({
               </Typography>
             </Box>
           </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+export const CardListSaveSkeleton = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      border="0.5px solid #F2F2F2"
+      width={[327, 600, 688]}
+      height={[150, 150, 202]}
+      bgcolor="#FFFFFF"
+      borderRadius="16px"
+      padding={["16px 14px", "16px 14px", "20px 24px"]}
+      boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
+      boxSizing="border-box"
+    >
+      {/* 상단 카테고리 */}
+      <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
+        {[...Array(2)].map((_, i) => (
+          <Skeleton
+            key={i}
+            variant="rounded"
+            width={60}
+            height={28}
+            sx={{ borderRadius: "16px" }}
+          />
+        ))}
+      </Box>
+
+      {/* 하단 카드 본문 */}
+      <Box
+        display="flex"
+        border="1px solid #F2F2F2"
+        bgcolor="#FFFFFF"
+        padding={["10px", "10px", "16px 18px"]}
+        boxShadow="4px 4px 16px 0px #E9E9E91A"
+        gap={["12px", "12px", "24px"]}
+        borderRadius={"6px"}
+      >
+        {/* 프로필 이미지 */}
+        <Box width={[46, 46, 56]} height={[46, 46, 56]}>
+          <Skeleton variant="circular" width="100%" height="100%" />
+        </Box>
+
+        {/* 텍스트 영역 */}
+        <Box display="flex" flexDirection="column" flexGrow={1} gap={1}>
+          <Box display="flex" justifyContent="space-between">
+            <Skeleton width={120} height={24} />
+            <Box display="flex" gap="4px">
+              <Skeleton variant="circular" width={24} height={24} />
+              <Skeleton width={20} height={24} />
+            </Box>
+          </Box>
+
+          <Skeleton width="100%" height={20} />
         </Box>
       </Box>
     </Box>

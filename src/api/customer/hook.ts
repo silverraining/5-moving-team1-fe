@@ -5,7 +5,7 @@ import { ServiceRegion, ServiceType } from "@/src/types/common";
 export const useMoverList = (params: MoverListRequest, enabled = true) => {
   const {
     location = ServiceRegion.SEOUL,
-    serviceType = ServiceType.HOME,
+    serviceType = "HOME",
     sortBy = "rating",
   } = params;
   return useQuery({
