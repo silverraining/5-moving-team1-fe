@@ -209,7 +209,13 @@ export default function ReceivedRequestsFlow() {
             />
           </Box>
           {/* 우측 검색, 드롭다운 등 헤더 영역 */}
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              minWidth: ["375px", "601px", "955px"],
+            }}
+          >
             <Box sx={{ marginBottom: isSmall ? "12px" : "24px" }}>
               <SearchInput
                 variation="left"
