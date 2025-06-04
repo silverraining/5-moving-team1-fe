@@ -67,6 +67,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
           WebkitTextFillColor: theme.palette.text.primary,
           transition: "background-color 5000s ease-in-out 0s !important",
         },
+        ...(typeof props.sx === "function" ? props.sx(theme) : props.sx),
       })}
     />
   );

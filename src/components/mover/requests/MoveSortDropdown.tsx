@@ -52,8 +52,8 @@ export default function MoveSortDropdown({
         <Typography
           sx={(theme) => ({
             fontWeight: 500,
-            fontSize: ["12px", "14px"],
-            color: theme.palette.Black[300],
+            fontSize: ["12px", "12px", "14px"],
+            color: theme.palette.Black[400],
           })}
         >
           {selectedOption.label}
@@ -74,8 +74,9 @@ export default function MoveSortDropdown({
           sx={(theme) => ({
             position: "absolute",
             top: "100%",
-            left: "50%",
-            transform: "translateX(-50%)",
+            left: "auto", // 왼쪽 위치 무시
+            right: 0, // 트리거의 오른쪽 끝에 맞춤
+            transform: "none", // 중앙 정렬 제거
             width: ["120px", "140px"],
             backgroundColor: "white",
             boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",

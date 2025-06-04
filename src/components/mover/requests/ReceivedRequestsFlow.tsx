@@ -30,7 +30,7 @@ export default function ReceivedRequestsFlow() {
   const isEmptyTest = searchParams?.get("empty") === "true"; // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
 
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+  const isSmall = useMediaQuery(theme.breakpoints.down("desktop")); // 모바일+태블릿일 때 포함
 
   const [isEstimateModalOpen, setIsEstimateModalOpen] = useState(false); // 견적 보내기 모달 여닫기
   const [isRejectModalOpen, setIsRejectModalOpen] = useState(false); // 반려하기 모달 여닫기
@@ -132,23 +132,35 @@ export default function ReceivedRequestsFlow() {
     console.log(
       "보내는 견적 데이터:",
       formData,
-      "요청 ID:",
-      selectedRequest?.id
+      "선택된 데이터",
+      selectedRequest
     );
     setIsEstimateModalOpen(false);
   };
 
   // 반려하기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
   const handleSendReject = (reason: string) => {
-    console.log("보내는 반려 사유:", reason, "요청 ID:", selectedRequest?.id);
+    console.log("보내는 반려 사유:", reason, "선택된 데이터", selectedRequest);
     setIsRejectModalOpen(false);
   };
 
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Typography>받은 요청</Typography>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
+      {/* 헤더 pull 이후삭제예정 */}
+      <Typography
+        variant={isSmall ? "SB_18" : "SB_24"}
+        sx={{ py: isSmall ? "14px" : "32px", width: "100%", textAlign: "left" }}
+      >
+        받은 요청
+      </Typography>
       {/* 좌측 필터 영역 */}
-      <Box sx={{ display: "flex" }}>
+      <Box sx={{ display: "flex", gap: "107px" }}>
         <Box
           sx={{
             display: isSmall ? "none" : "flex",
@@ -194,21 +206,30 @@ export default function ReceivedRequestsFlow() {
         </Box>
         {/* 우측 검색, 드롭다운 등 헤더 영역 */}
         <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <SearchInput
-            variation="right" // 또는 "left"
-            value={keyword}
-            onChange={handleKeywordChange}
-            onClick={handleClear} // 검색어 삭제 버튼에 적용됨
-            placeholder="어떤 고객님을 찾고 게세요?"
-          />
+          <Box sx={{ marginBottom: isSmall ? "12px" : "24px" }}>
+            <SearchInput
+              variation="left"
+              value={keyword}
+              onChange={handleKeywordChange}
+              onClick={handleClear} // 검색어 삭제 버튼에 적용됨
+              placeholder="어떤 고객님을 찾고 게세요?"
+              sx={{ bgcolor: theme.palette.NeutralGray[200], border: "none" }}
+            />
+          </Box>
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
+              marginBottom: ["16px", "20px", "32px"],
             }}
           >
-            <Typography>전체 {transformedList.length}건</Typography>
+            <Box>
+              <Typography variant={isSmall ? "M_13" : "M_16"}>전체 </Typography>
+              <Typography variant={isSmall ? "SB_13" : "SB_16"}>
+                {transformedList.length}건
+              </Typography>
+            </Box>
             <Box sx={{ display: "flex", gap: "4px" }}>
               <MoveSortDropdown />
               {/* 모바일 환경: 필터 아이콘만 보이기 */}
@@ -249,7 +270,13 @@ export default function ReceivedRequestsFlow() {
             </Box>
           </Box>
           {/* 우측 카드 리스트 또는 EmptyRequest 조건부 렌더링 */}
-          <Box sx={{ display: "flex", flexDirection: "column" }}>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: ["24px", "32px", "48px"],
+            }}
+          >
             {transformedList.length === 0 ? (
               <EmptyRequest />
             ) : (
