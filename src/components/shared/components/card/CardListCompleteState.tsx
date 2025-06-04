@@ -88,7 +88,15 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             <ChipCategory key={index} type={type} />
           ))}
         </Box>
-        <Typography display={["none", "inline-block", "inline-block"]}>
+        <Typography
+          display={["none", "inline-block", "inline-block"]}
+          sx={(theme) => ({
+            fontSize: [12, 12, 14],
+            lineHeight: ["18px", "18px", "24px"],
+            fontWeight: 400,
+            color: theme.palette.Grayscale[500],
+          })}
+        >
           {dayjs(data.date).fromNow()}
         </Typography>
       </Box>
@@ -112,8 +120,14 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
+            gap="14px"
           >
-            <Box display={"flex"} flexDirection="row" gap={"5px"}>
+            <Box
+              display={"flex"}
+              flexDirection="row"
+              gap={"5px"}
+              alignItems="center"
+            >
               <Typography
                 sx={(theme) => ({
                   fontSize: [14, 14, 18],
@@ -124,21 +138,36 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
               >
                 {data.name} 고객님
               </Typography>
-              <Typography display={["inline-block", "none", "none"]}>
+              <Typography
+                display={["inline-block", "none", "none"]}
+                sx={(theme) => ({
+                  fontSize: [12, 12, 14],
+                  lineHeight: ["18px", "18px", "24px"],
+                  fontWeight: 400,
+                  color: theme.palette.Grayscale[500],
+                })}
+              >
                 {dayjs(data.date).fromNow()}
               </Typography>
             </Box>
             <Box display={["flex", "none", "none"]}>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
+              <Box
+                bgcolor="#F4F7FB"
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
-                이사일
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  이사일
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
@@ -165,17 +194,24 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             flexGrow={1}
             justifyContent={["space-between", "flex-start"]}
           >
-            <Box display={["none", "flex"]}>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
+            <Box display={["none", "flex"]} alignItems="center" gap={"12px"}>
+              <Box
+                bgcolor="#F4F7FB"
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
-                이사일
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  이사일
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
@@ -192,17 +228,24 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
               height={14}
               border={"1px solid #E6E6E6"}
             ></Box>
-            <Box display="flex">
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
+            <Box display="flex" alignItems="center" gap={"12px"}>
+              <Box
+                bgcolor="#F4F7FB"
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
-                출발
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  출발
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
@@ -215,17 +258,24 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
-            <Box display="flex">
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
+            <Box display="flex" alignItems="center" gap={"12px"}>
+              <Box
+                bgcolor="#F4F7FB"
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
               >
-                도착
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  도착
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],

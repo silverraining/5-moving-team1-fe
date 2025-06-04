@@ -44,7 +44,15 @@ export const CardListRequest = ({
             <ChipCategory key={index} type={type} />
           ))}
         </Box>
-        <Typography display={["none", "inline-block"]}>
+        <Typography
+          display={["none", "inline-block"]}
+          sx={(theme) => ({
+            fontSize: [12, 12, 14],
+            lineHeight: ["18px", "18px", "24px"],
+            fontWeight: 400,
+            color: theme.palette.Grayscale[500],
+          })}
+        >
           {dayjs(data.date).fromNow()}
         </Typography>
       </Box>
@@ -75,7 +83,15 @@ export const CardListRequest = ({
             >
               {data.name} 고객님
             </Typography>
-            <Typography display={["inline-block", "none"]}>
+            <Typography
+              display={["inline-block", "none"]}
+              sx={(theme) => ({
+                fontSize: [12, 12, 14],
+                lineHeight: ["18px", "18px", "24px"],
+                fontWeight: 400,
+                color: theme.palette.Grayscale[500],
+              })}
+            >
               {dayjs(data.date).fromNow()}
             </Typography>
           </Box>
