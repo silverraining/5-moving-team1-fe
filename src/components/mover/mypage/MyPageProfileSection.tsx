@@ -15,10 +15,12 @@ export const MyPageProfileSection = ({ data }: MyPageProfileSectionProps) => {
   return (
     <Box width="100%" display="flex" justifyContent="center" mb="32px">
       <Box width="100%" maxWidth="1400px" px="24px">
-        <Typography variant="SB_24" mb="32px">
-          마이페이지
-        </Typography>
-        <CardListProfileWrapper data={data} />
+        <Typography variant="SB_24">마이페이지</Typography>
+
+        <Box mt="32px">
+          <CardListProfileWrapper data={data} />
+        </Box>
+
         <Divider
           sx={{
             width: "100%",
