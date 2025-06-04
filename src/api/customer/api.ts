@@ -9,7 +9,7 @@ export type MoverListRequest = {
 
 export const moverList = async ({
   location = ServiceRegion.SEOUL,
-  serviceType = ServiceType.HOME,
+  serviceType = "HOME",
   sortBy = "rating",
 }: MoverListRequest) => {
   try {

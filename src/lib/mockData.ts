@@ -1,9 +1,6 @@
 import { generateMockReviews } from "../mock/moverHendler";
 import { MoverProfile } from "../types/auth";
-import {
-  EstimateRequestStatus,
-  ServiceRegion,
-} from "../types/common";
+import { EstimateRequestStatus, ServiceRegion } from "../types/common";
 import { EstimateRequest } from "../types/estimate";
 
 export const LOGIN = {
@@ -30,7 +27,7 @@ export const MOVER_LIST: MoverProfile[] = [
     id: "mover-001",
     userId: "user-002",
     nickname: "이사왕",
-    imageUrl: "/images/profile/maleProfile.svg",
+    imageUrl: "/Images/profile/maleProfile.svg",
     experience: 5,
     intro: "안녕하세요! 이사 전문 기사입니다.",
     description: "고객님의 소중한 짐을 안전하게 옮겨드립니다.",
@@ -48,7 +45,7 @@ export const MOVER_DTAIL: MoverProfile = {
   id: "mover-001",
   userId: "user-002",
   nickname: "이사왕",
-  imageUrl: "/images/profile/maleProfile.svg",
+  imageUrl: "/Images/profile/maleProfile.svg",
   experience: 5,
   intro: "안녕하세요! 이사 전문 기사입니다.",
   description: "고객님의 소중한 짐을 안전하게 옮겨드립니다.",

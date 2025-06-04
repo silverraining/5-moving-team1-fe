@@ -16,7 +16,7 @@ export const dummyMoverList: CardData[] = [
   {
     types: ["small", "designation"],
     message: "고객님의 물품을 안전하게 운송해 드립니다.",
-    imgSrc: "/images/profile/maleProfile.svg",
+    imgSrc: "/Images/profile/maleProfile.svg",
     name: "김이사",
     isLiked: true,
     like: 25,
@@ -29,7 +29,7 @@ export const dummyMoverList: CardData[] = [
   {
     types: ["small", "home"],
     message: "고객님의 물품을 안전하게 운송해 드립니다.",
-    imgSrc: "/images/profile/maleProfile.svg",
+    imgSrc: "/Images/profile/maleProfile.svg",
     name: "김이사",
     isLiked: true,
     like: 25,
@@ -42,7 +42,7 @@ export const dummyMoverList: CardData[] = [
   {
     types: ["small", "office", "designation"],
     message: "고객님의 물품을 안전하게 운송해 드립니다.",
-    imgSrc: "/images/profile/maleProfile.svg",
+    imgSrc: "/Images/profile/maleProfile.svg",
     name: "김이사",
     isLiked: true,
     like: 25,
