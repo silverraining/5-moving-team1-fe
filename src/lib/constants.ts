@@ -92,6 +92,10 @@ export const PATH = {
 
   /** 일반 유저 리뷰 페이지 (/customer/reviews) */
   userReview: "/customer/reviews",
+  /** 일반 유저 작성가능 한 리뷰 페이지 (/customer/reviews/pending) */
+  userReviewPending: "/customer/reviews/pending",
+  /** 일반 유저 작성가능 한 리뷰 페이지 (/customer/reviews/completed) */
+  userReviewCompleted: "/customer/reviews/completed",
 };
 
 export const API_BASE_URL =

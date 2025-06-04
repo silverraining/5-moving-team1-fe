@@ -3,7 +3,11 @@ import { MenuTabs } from "./MenuTabs";
 import { Progress } from "../progress/progress";
 import { usePathname } from "next/navigation";
 import { useEstimateStore } from "@/src/store/requestStore";
-import { MOVER_REQUST, USER_REQUEST } from "@/src/lib/headerConstants";
+import {
+  MOVER_REQUST,
+  USER_REQUEST,
+  USER_REVIEW,
+} from "@/src/lib/headerConstants";
 import { PATH } from "@/src/lib/constants";
 import { useEffect } from "react";
 
@@ -17,9 +21,15 @@ export const SubHeader = () => {
 
   const isTabmenu =
     pathname.startsWith("/customer/estimate") ||
-    pathname.startsWith("/mover/estimate");
+    pathname.startsWith("/mover/estimate") ||
+    pathname.startsWith(PATH.userReview);
 
-  const tabMenu = isTabmenu ? USER_REQUEST : MOVER_REQUST;
+  const tabMenu = pathname.startsWith(PATH.userReview)
+    ? USER_REVIEW
+    : pathname.startsWith("/customer/estimate")
+      ? USER_REQUEST
+      : MOVER_REQUST;
+
   let tabMenuElement = null;
   let progressElement = null;
   let labelElement = null;

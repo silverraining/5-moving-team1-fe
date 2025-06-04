@@ -15,7 +15,7 @@ import { UserTabs } from "./UserTabs";
 import { MenuTabs } from "./MenuTabs";
 import { AuthStore } from "@/src/store/authStore";
 import { PATH } from "@/src/lib/constants";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import {
   CUSTOMER_MENU,
@@ -26,7 +26,6 @@ import Link from "next/link";
 
 export const Header = () => {
   const router = useRouter();
-  const pathname = usePathname();
   const { openSnackbar } = useSnackbar();
   const { open, toggleDrawer } = useDrawer();
   const { user, isLogin, logout } = AuthStore();
@@ -34,7 +33,7 @@ export const Header = () => {
   const isMover = user?.role === "MOVER";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-  console.log("Current Path:", pathname);
+
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
@@ -62,7 +61,7 @@ export const Header = () => {
       <Stack direction={"row"} alignItems="center" spacing={2}>
         <Link href={PATH.main} passHref>
           <Image
-            src={"/images/logo/logo.svg"}
+            src={"/Images/logo/logo.svg"}
             width={88}
             height={34}
             alt="logo"
@@ -86,7 +85,7 @@ export const Header = () => {
             <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
           )}
           <Image
-            src={"/images/header/menu.svg"}
+            src={"/Images/header/menu.svg"}
             width={24}
             height={24}
             alt="menu"
