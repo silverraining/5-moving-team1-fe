@@ -6,7 +6,6 @@ import Image from "next/image";
 import SendEstimateModal from "../../shared/components/modal/SendEstimateModal";
 import RejectRequestModal from "../../shared/components/modal/RejectRequestModal";
 import { CardListRequest } from "../../shared/components/card/CardListRequest";
-import { CardData } from "@/src/types/card";
 import {
   Box,
   Typography,
@@ -14,112 +13,27 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import dayjs from "dayjs";
 import { CheckboxList } from "../../shared/components/filter-check-box/CheckboxList";
 import { SearchInput } from "../../shared/components/text-field/Search";
 import MoveSortDropdown from "./MoveSortDropdown";
 import FilterModal from "../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
+import {
+  testDataList,
+  TransformedCardData,
+  transformToCardData,
+} from "./mockEstimateRequests";
 
-type TestReceivedRequestRaw = {
-  id: string;
-  moveType: "SMALL" | "HOME" | "OFFICE";
-  status: string;
-  moveDate: string;
-  fromAddress: { fullAddress: string };
-  toAddress: { fullAddress: string };
-  customer: {
-    imageUrl: string | null;
-    serviceType: {
-      SMALL: boolean;
-      HOME: boolean;
-      OFFICE: boolean;
-    };
-    user: {
-      name: string;
-    };
-  };
-};
-
-// CardListRequest에서 요구하는 형식 (ChipProps["type"][])
-type TransformedCardData = {
-  id: string;
-  name: string;
-  date: string;
-  movingDay: string;
-  from: string;
-  to: string;
-  types: ("small" | "home" | "office")[];
-};
-
-const testDataList: TestReceivedRequestRaw[] = [
-  {
-    id: "1",
-    moveType: "HOME",
-    status: "PENDING",
-    moveDate: "2025-06-01T00:00:00.000Z",
-    fromAddress: { fullAddress: "서울 중구 삼일대로 343" },
-    toAddress: { fullAddress: "서울 중구 청계천로 100" },
-    customer: {
-      imageUrl: null,
-      serviceType: { SMALL: false, HOME: true, OFFICE: false },
-      user: { name: "김짱구" },
-    },
-  },
-  {
-    id: "2",
-    moveType: "SMALL",
-    status: "PENDING",
-    moveDate: "2025-06-03T00:00:00.000Z",
-    fromAddress: { fullAddress: "서울 강남구 테헤란로 10" },
-    toAddress: { fullAddress: "서울 강동구 성내로 20" },
-    customer: {
-      imageUrl: null,
-      serviceType: { SMALL: true, HOME: false, OFFICE: false },
-      user: { name: "이짱구" },
-    },
-  },
-  {
-    id: "3",
-    moveType: "OFFICE",
-    status: "PENDING",
-    moveDate: "2025-06-05T00:00:00.000Z",
-    fromAddress: { fullAddress: "서울 송파구 석촌호수로 300" },
-    toAddress: { fullAddress: "서울 중구 퇴계로 77" },
-    customer: {
-      imageUrl: null,
-      serviceType: { SMALL: false, HOME: false, OFFICE: true },
-      user: { name: "박짱구" },
-    },
-  },
-];
-
-// 변환 함수
-const transformToCardData = (
-  data: TestReceivedRequestRaw
-): TransformedCardData => {
-  return {
-    id: data.id,
-    name: data.customer.user.name,
-    date: dayjs().subtract(2, "day").toISOString(), // 테스트용 생성일
-    movingDay: dayjs(data.moveDate).format("YYYY-MM-DD"),
-    from: data.fromAddress.fullAddress,
-    to: data.toAddress.fullAddress,
-    types: [data.moveType.toLowerCase()] as ("small" | "home" | "office")[],
-  };
-};
-
-// 위 부분은 백엔드 연결하면 삭제 예정
-// 아래부터 진짜 코드
 export default function ReceivedRequestsFlow() {
+  // url 뒤에 '?empty=true' 추가하면 빈 경우 확인 가능
   const searchParams = useSearchParams(); // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
   const isEmptyTest = searchParams?.get("empty") === "true"; // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
-  const [isEstimateModalOpen, setEstimateModalOpen] = useState(false); // 견적 보내기 모달 여닫기
-  const [isRejectModalOpen, setRejectModalOpen] = useState(false); // 반려하기 모달 여닫기
+  const [isEstimateModalOpen, setIsEstimateModalOpen] = useState(false); // 견적 보내기 모달 여닫기
+  const [isRejectModalOpen, setIsRejectModalOpen] = useState(false); // 반려하기 모달 여닫기
   const [isFilterModalOpen, setIsFilterModalOpen] = useState(false); // 필터링 모달 여닫기
   const [moveTypeItems, setMoveTypeItems] = useState([
     // 이사유형 필터링
@@ -140,6 +54,10 @@ export default function ReceivedRequestsFlow() {
     home: false,
     office: false,
   });
+  const [selectedRequest, setSelectedRequest] = useState<
+    // 선택된 견적건
+    (typeof testDataList)[0] | null
+  >(null);
 
   // 빈 상태 테스트면 빈 배열, 아니면 기존 데이터 변환
   const transformedList: TransformedCardData[] = isEmptyTest
@@ -195,14 +113,36 @@ export default function ReceivedRequestsFlow() {
     setIsFilterModalOpen(false);
   };
 
-  const handleOpenEstimateModal = () => setEstimateModalOpen(true);
-  const handleCloseEstimateModal = () => setEstimateModalOpen(false);
+  // 견적 보내기 모달 핸들러
+  const handleSendClick = (request: (typeof testDataList)[0]) => {
+    console.log("견적 보내기 버튼 눌리나 테스트");
+    setSelectedRequest(request);
+    setIsEstimateModalOpen(true);
+  };
 
-  const handleOpenRejectModal = () => setRejectModalOpen(true);
-  const handleCloseRejectModal = () => setRejectModalOpen(false);
+  // 견적 반려하기 모달 핸들러
+  const handleRejectClick = (request: (typeof testDataList)[0]) => {
+    console.log("반려 버튼 눌리나 테스트");
+    setSelectedRequest(request);
+    setIsRejectModalOpen(true);
+  };
 
-  const handleOpenFilter = () => setIsFilterModalOpen(true);
-  const handleCloseFilter = () => setIsFilterModalOpen(false);
+  // 견적 보내기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
+  const handleSendEstimate = (formData: { price: number; comment: string }) => {
+    console.log(
+      "보내는 견적 데이터:",
+      formData,
+      "요청 ID:",
+      selectedRequest?.id
+    );
+    setIsEstimateModalOpen(false);
+  };
+
+  // 반려하기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
+  const handleSendReject = (reason: string) => {
+    console.log("보내는 반려 사유:", reason, "요청 ID:", selectedRequest?.id);
+    setIsRejectModalOpen(false);
+  };
 
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -275,7 +215,7 @@ export default function ReceivedRequestsFlow() {
               {isSmall && (
                 <>
                   <Button
-                    onClick={handleOpenFilter}
+                    onClick={() => setIsFilterModalOpen(true)}
                     sx={{
                       padding: 0,
                       width: "32px",
@@ -289,7 +229,7 @@ export default function ReceivedRequestsFlow() {
                       height={32}
                       alt="필터"
                       style={{ cursor: "pointer" }}
-                      onClick={handleOpenFilter}
+                      onClick={() => setIsFilterModalOpen(true)}
                     />
                   </Button>
                   {isFilterModalOpen && (
@@ -317,17 +257,45 @@ export default function ReceivedRequestsFlow() {
                 <CardListRequest
                   key={data.id}
                   data={data}
-                  onConfirmClick={handleOpenEstimateModal}
-                  onDetailClick={handleOpenRejectModal}
+                  onConfirmClick={() => {
+                    const original = testDataList.find(
+                      (item) => item.id === data.id
+                    );
+                    if (original) handleSendClick(original);
+                  }}
+                  onDetailClick={() => {
+                    const original = testDataList.find(
+                      (item) => item.id === data.id
+                    );
+                    if (original) handleRejectClick(original);
+                  }}
                 />
               ))
             )}
             {/* 모달들 */}
-            {isEstimateModalOpen && (
-              <SendEstimateModal onClose={handleCloseEstimateModal} />
+            {isEstimateModalOpen && selectedRequest?.customer && (
+              <SendEstimateModal
+                open={isEstimateModalOpen}
+                onClose={() => setIsEstimateModalOpen(false)}
+                onSend={handleSendEstimate}
+                moveType={[selectedRequest.moveType]} // 배열로 감싸기
+                customerName={selectedRequest.customer.user.name}
+                moveDate={selectedRequest.moveDate}
+                fromAddress={selectedRequest.fromAddress.fullAddress}
+                toAddress={selectedRequest.toAddress.fullAddress}
+              />
             )}
-            {isRejectModalOpen && (
-              <RejectRequestModal onClose={handleCloseRejectModal} />
+            {isRejectModalOpen && selectedRequest?.customer && (
+              <RejectRequestModal
+                open={isRejectModalOpen}
+                onClose={() => setIsRejectModalOpen(false)}
+                onSubmit={handleSendReject}
+                moveType={[selectedRequest.moveType]} // 배열로 감싸기
+                customerName={selectedRequest.customer.user.name}
+                moveDate={selectedRequest.moveDate}
+                fromAddress={selectedRequest.fromAddress.fullAddress}
+                toAddress={selectedRequest.toAddress.fullAddress}
+              />
             )}
           </Box>
         </Box>
