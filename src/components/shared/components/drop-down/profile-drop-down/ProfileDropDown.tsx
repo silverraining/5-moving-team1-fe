@@ -21,7 +21,7 @@ export default function ProfileDropDown({
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
   const profileHref = user?.role === "MOVER" ? PATH.main : PATH.main;
   const rievewHref =
-    user?.role === "MOVER" ? PATH.moverReview : PATH.userReview;
+    user?.role === "MOVER" ? PATH.moverReview : PATH.userReviewPending;
 
   return (
     <Box
