@@ -207,7 +207,12 @@ export default function RejectRequestModal({
                 placeholder="최소 10자 이상 입력해주세요"
                 register={register.reason}
                 errorMessage={errors.reason?.message}
-                sx={{ width: "100%" }}
+                sx={{
+                  width: "100%",
+                  backgroundColor: theme.palette.NeutralGray[200],
+                  borderRadius: ["16px", "16px", "18px"],
+                  border: "none",
+                }}
               />
             </Box>
           </Box>
