@@ -1,8 +1,4 @@
-enum ServiceType {
-  "SMALL",
-  "HOME",
-  "OFFICE",
-}
+export type ServiceType = "SMALL" | "HOME" | "OFFICE";
 
 enum ServiceRegion {
   SEOUL = "Seoul",
@@ -57,10 +53,29 @@ enum NotificationType {
   MOVE_DAY_REMINDER,
 }
 
+export interface ReviewData {
+  id: number;
+  author: string;
+  date: string;
+  rating: number;
+  content: string;
+}
+
+export interface ReviewStatistics {
+  average: number;
+  score: {
+    1: number;
+    2: number;
+    3: number;
+    4: number;
+    5: number;
+  };
+  max: number;
+}
+
 export {
   EstimateOfferStatus,
   EstimateRequestStatus,
   NotificationType,
   ServiceRegion,
-  ServiceType,
 };

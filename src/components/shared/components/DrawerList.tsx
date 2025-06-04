@@ -1,17 +1,18 @@
+import { TabType } from "@/src/lib/headerConstants";
 import {
   Box,
   Button,
-  Divider,
   List,
   ListItem,
   ListItemButton,
   ListItemText,
 } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 
 interface DrawerListProps {
   toggleDrawer: (open: boolean) => () => void;
-  menu: string[];
+  menu: TabType;
 }
 
 export const DrawerList = ({ toggleDrawer, menu }: DrawerListProps) => {
@@ -29,12 +30,18 @@ export const DrawerList = ({ toggleDrawer, menu }: DrawerListProps) => {
           </Button>
         </ListItem>
 
-        {menu.map((name, index) => (
-          <ListItem key={index} disablePadding>
-            <ListItemButton>
-              <ListItemText primary={name} />
-            </ListItemButton>
-          </ListItem>
+        {menu.map((tap, index) => (
+          <Link
+            href={tap.href}
+            key={index}
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <ListItem disablePadding>
+              <ListItemButton>
+                <ListItemText primary={tap.label} />
+              </ListItemButton>
+            </ListItem>
+          </Link>
         ))}
       </List>
     </Box>

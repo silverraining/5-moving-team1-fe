@@ -17,15 +17,22 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       justifyContent="space-between"
       border="0.5px solid"
       borderColor={COLORS.Line[100]}
-      width={[327, 600, 955]}
-      height={[188, 188, 230]}
+      maxWidth={[327, 600, 955]}
+      // height={[188, 188, 230]}
+      height="auto"
       bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={["14px 16px", "14px 16px", "20px 24px"]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
+      width="100%"
     >
-      <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={["14px", "16px"]}
+        marginBottom="16px"
+      >
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
           {data.types.map((type, index) => (
             <ChipCategory key={index} type={type} />
@@ -66,12 +73,8 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             }}
           />
         </Box>
-        <Box display="flex" flexDirection="column">
-          <Box
-            display="flex"
-            flexDirection="row"
-            justifyContent="space-between"
-          >
+        <Box display="flex" flexDirection="column" width="100%">
+          <Box display="flex" alignItems="center" width="100%">
             <Typography
               sx={(theme) => ({
                 fontSize: [14, 14, 18],
@@ -82,7 +85,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             >
               {data.name} 기사님
             </Typography>
-            <Box display="flex" alignItems="center">
+            <Box display="flex" alignItems="center" ml="auto">
               <Image
                 src={
                   data.isLiked
@@ -111,14 +114,16 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             display="flex"
             flexDirection="row"
             flexGrow={1}
-            gap={"9.5px"}
+            gap={"16px"}
             alignItems="center"
             justifyContent={["space-between", "flex-start"]}
           >
+            {/* 평점 */}
             <Box
               display="flex"
               justifyContent="space-between"
               alignItems="center"
+              gap="4px"
             >
               <Image
                 src="/Images/star/star_active.svg"
@@ -147,14 +152,17 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                 ({data.count})
               </Typography>
             </Box>
+            {/* Divider */}
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
-            <Box display="flex">
+            {/* 경력 */}
+            <Box display="flex" gap="16px">
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Grayscale[300],
+                  whiteSpace: "nowrap",
                 })}
               >
                 경력
@@ -165,32 +173,29 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  whiteSpace: "nowrap",
                 })}
               >
                 {data.career}년
               </Typography>
             </Box>
+            {/* Divider */}
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
-            <Box display="flex">
+            {/* 확정 */}
+            <Box display="flex" gap="4px">
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  whiteSpace: "nowrap",
+                  span: {
+                    color: theme.palette.Grayscale[300],
+                  },
                 })}
               >
-                {data.confirm}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
-              >
-                확정
+                {data.confirm}건 <span>확정</span>
               </Typography>
             </Box>
           </Box>

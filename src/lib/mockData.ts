@@ -1,10 +1,6 @@
 import { generateMockReviews } from "../mock/moverHendler";
 import { MoverProfile } from "../types/auth";
-import {
-  EstimateRequestStatus,
-  ServiceRegion,
-  ServiceType,
-} from "../types/common";
+import { EstimateRequestStatus, ServiceRegion } from "../types/common";
 import { EstimateRequest } from "../types/estimate";
 
 export const LOGIN = {
@@ -31,16 +27,17 @@ export const MOVER_LIST: MoverProfile[] = [
     id: "mover-001",
     userId: "user-002",
     nickname: "이사왕",
-    imageUrl: "https://example.com/mover1.jpg",
+    imageUrl: "/Images/profile/maleProfile.svg",
     experience: 5,
     intro: "안녕하세요! 이사 전문 기사입니다.",
     description: "고객님의 소중한 짐을 안전하게 옮겨드립니다.",
     averageRating: 4.8,
     confirmedCount: 50,
-    serviceType: [ServiceType.HOME, ServiceType.OFFICE],
+    serviceType: ["HOME", "OFFICE"],
     serviceRegions: [ServiceRegion.CHUNGBUK, ServiceRegion.GYEONGGI],
     createdAt: new Date("2024-01-01T10:00:00Z"),
     updatedAt: new Date("2024-05-26T12:00:00Z"),
+    reviews: [],
   },
 ];
 
@@ -48,13 +45,13 @@ export const MOVER_DTAIL: MoverProfile = {
   id: "mover-001",
   userId: "user-002",
   nickname: "이사왕",
-  imageUrl: "https://example.com/mover1.jpg",
+  imageUrl: "/Images/profile/maleProfile.svg",
   experience: 5,
   intro: "안녕하세요! 이사 전문 기사입니다.",
   description: "고객님의 소중한 짐을 안전하게 옮겨드립니다.",
   averageRating: 4.8,
   confirmedCount: 50,
-  serviceType: [ServiceType.HOME, ServiceType.OFFICE],
+  serviceType: ["OFFICE", "SMALL"],
   serviceRegions: [ServiceRegion.CHUNGBUK, ServiceRegion.GYEONGGI],
   createdAt: new Date("2024-01-01T10:00:00Z"),
   updatedAt: new Date("2024-05-26T12:00:00Z"),
@@ -65,7 +62,7 @@ export const ESTIMATEREQUEST: EstimateRequest = {
   id: "estimate-001",
   customerId: "user-001",
   estimateOfferId: "offer-001",
-  moveType: ServiceType.HOME,
+  moveType: "HOME",
   status: EstimateRequestStatus.PENDING,
   moveDate: new Date("2024-06-01T10:00:00Z"),
   targetMoverIds: ["mover-001", "mover-002"],
@@ -81,7 +78,7 @@ export const ESTIMATEREQUEST: EstimateRequest = {
     id: "profile1",
     imageUrl: "https://example.com/customer1.jpg",
     serviceRegion: ServiceRegion.SEOUL,
-    serviceType: [ServiceType.HOME, ServiceType.OFFICE],
+    serviceType: ["HOME", "SMALL"],
     createdAt: new Date("2024-01-01T10:00:00Z"),
     updatedAt: new Date("2024-05-26T12:00:00Z"),
     reviews: [],
@@ -90,4 +87,7 @@ export const ESTIMATEREQUEST: EstimateRequest = {
 };
 const reviewData = generateMockReviews(30, ESTIMATEREQUEST.customerProfile);
 
+MOVER_LIST.forEach((mover) => {
+  mover.reviews = reviewData;
+});
 MOVER_DTAIL.reviews = reviewData;

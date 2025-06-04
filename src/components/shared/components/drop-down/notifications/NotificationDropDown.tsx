@@ -8,10 +8,12 @@ import { mockNotifications } from "./notifications.mock";
 
 interface NotificationDropDownProps {
   onHighlightClick?: (highlight: string) => void;
+  onClose?: () => void;
 }
 
 export default function NotificationDropDown({
   onHighlightClick,
+  onClose,
 }: NotificationDropDownProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -59,7 +61,7 @@ export default function NotificationDropDown({
           ...CustomScrollY,
         }}
       >
-        <NotificationHeader />
+        <NotificationHeader onClose={onClose} />
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           {mockNotifications.map((item) => (
