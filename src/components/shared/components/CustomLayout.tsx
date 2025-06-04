@@ -16,9 +16,6 @@ type CustomLayoutProps = {
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-<<<<<<< HEAD
-  const isMainPage = pathname === "/" || pathname === "/customer/request";
-=======
   // 페이지 중 bgColor 가 들어가는 페이지
   const colorPages = [
     PATH.main,
@@ -44,7 +41,6 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const isPadding = noPaddingPages.includes(pathname);
   const isSubHeader = subHeaderPages.includes(pathname);
 
->>>>>>> 5d175713c921397103d4e33c3733c8e32c85e24c
   const { SnackbarComponent } = useSnackbar();
 
   useEffect(() => {
