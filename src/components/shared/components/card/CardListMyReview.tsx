@@ -201,8 +201,8 @@ export const CardListMyReview = ({ data }: CardProps) => {
           display={["flex", "flex", "none"]}
           justifyContent="flex-end"
           sx={(theme) => ({
-            fontSize: [14, 14, 18],
-            lineHeight: ["24px", "24px", "26px"],
+            fontSize: [12, 12, 18],
+            lineHeight: ["18px", "18px", "26px"],
             fontWeight: 400,
             color: theme.palette.Grayscale[300],
           })}
