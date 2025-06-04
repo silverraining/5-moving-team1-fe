@@ -27,6 +27,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
             variant={isDesktop ? "R_20" : "R_14"}
             sx={(theme) => ({
               color: theme.palette.Grayscale[300],
+              whiteSpace: "nowrap",
             })}
           >
             견적 요청일
@@ -45,6 +46,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
             variant={isDesktop ? "R_20" : "R_14"}
             sx={(theme) => ({
               color: theme.palette.Grayscale[300],
+              whiteSpace: "nowrap",
             })}
           >
             서비스
@@ -63,6 +65,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
             variant={isDesktop ? "R_20" : "R_14"}
             sx={(theme) => ({
               color: theme.palette.Grayscale[300],
+              whiteSpace: "nowrap",
             })}
           >
             이용일
@@ -81,6 +84,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
             variant={isDesktop ? "R_20" : "R_14"}
             sx={(theme) => ({
               color: theme.palette.Grayscale[300],
+              whiteSpace: "nowrap",
             })}
           >
             출발지
@@ -99,6 +103,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
             variant={isDesktop ? "R_20" : "R_14"}
             sx={(theme) => ({
               color: theme.palette.Grayscale[300],
+              whiteSpace: "nowrap",
             })}
           >
             도착지
