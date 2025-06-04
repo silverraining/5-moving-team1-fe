@@ -152,178 +152,185 @@ export default function ReceivedRequestsFlow() {
         alignItems: "center",
       }}
     >
-      {/* 헤더 pull 이후삭제예정 */}
-      <Typography
-        variant={isSmall ? "SB_18" : "SB_24"}
-        sx={{ py: isSmall ? "14px" : "32px", width: "100%", textAlign: "left" }}
-      >
-        받은 요청
-      </Typography>
-      {/* 좌측 필터 영역 */}
-      <Box sx={{ display: "flex", gap: "107px" }}>
-        <Box
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Typography
+          variant={isSmall ? "SB_18" : "SB_24"}
           sx={{
-            display: isSmall ? "none" : "flex",
-            flexDirection: "column",
+            py: isSmall ? "14px" : "32px",
+            width: "100%",
+            textAlign: "left",
           }}
         >
-          <CheckboxList
-            title="이사 유형"
-            items={moveTypeItems}
-            onItemChange={(index, checked) => {
-              // 개별 체크박스 선택
-              const newItems = [...moveTypeItems];
-              newItems[index].checked = checked;
-              setMoveTypeItems(newItems);
+          받은 요청
+        </Typography>
+        <Box sx={{ display: "flex", gap: "107px" }}>
+          {/* 좌측 필터 영역 */}
+          <Box
+            sx={{
+              display: isSmall ? "none" : "flex",
+              flexDirection: "column",
             }}
-            // 전체 선택
-            onSelectAll={(checked) => {
-              const newItems = moveTypeItems.map((item) => ({
-                ...item,
-                checked: checked,
-              }));
-              setMoveTypeItems(newItems);
-            }}
-          />
-          <CheckboxList
-            title="필터"
-            items={filterItems}
-            onItemChange={(index, checked) => {
-              // 개별 체크박스 선택
-              const newItems = [...filterItems];
-              newItems[index].checked = checked;
-              setFilterItems(newItems);
-            }}
-            // 전체 선택
-            onSelectAll={(checked) => {
-              const newItems = filterItems.map((item) => ({
-                ...item,
-                checked: checked,
-              }));
-              setFilterItems(newItems);
-            }}
-          />
-        </Box>
-        {/* 우측 검색, 드롭다운 등 헤더 영역 */}
-        <Box sx={{ display: "flex", flexDirection: "column" }}>
-          <Box sx={{ marginBottom: isSmall ? "12px" : "24px" }}>
-            <SearchInput
-              variation="left"
-              value={keyword}
-              onChange={handleKeywordChange}
-              onClick={handleClear} // 검색어 삭제 버튼에 적용됨
-              placeholder="어떤 고객님을 찾고 게세요?"
-              sx={{ bgcolor: theme.palette.NeutralGray[200], border: "none" }}
+          >
+            <CheckboxList
+              title="이사 유형"
+              items={moveTypeItems}
+              onItemChange={(index, checked) => {
+                // 개별 체크박스 선택
+                const newItems = [...moveTypeItems];
+                newItems[index].checked = checked;
+                setMoveTypeItems(newItems);
+              }}
+              // 전체 선택
+              onSelectAll={(checked) => {
+                const newItems = moveTypeItems.map((item) => ({
+                  ...item,
+                  checked: checked,
+                }));
+                setMoveTypeItems(newItems);
+              }}
+            />
+            <CheckboxList
+              title="필터"
+              items={filterItems}
+              onItemChange={(index, checked) => {
+                // 개별 체크박스 선택
+                const newItems = [...filterItems];
+                newItems[index].checked = checked;
+                setFilterItems(newItems);
+              }}
+              // 전체 선택
+              onSelectAll={(checked) => {
+                const newItems = filterItems.map((item) => ({
+                  ...item,
+                  checked: checked,
+                }));
+                setFilterItems(newItems);
+              }}
             />
           </Box>
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: ["16px", "20px", "32px"],
-            }}
-          >
-            <Box>
-              <Typography variant={isSmall ? "M_13" : "M_16"}>전체 </Typography>
-              <Typography variant={isSmall ? "SB_13" : "SB_16"}>
-                {transformedList.length}건
-              </Typography>
+          {/* 우측 검색, 드롭다운 등 헤더 영역 */}
+          <Box sx={{ display: "flex", flexDirection: "column" }}>
+            <Box sx={{ marginBottom: isSmall ? "12px" : "24px" }}>
+              <SearchInput
+                variation="left"
+                value={keyword}
+                onChange={handleKeywordChange}
+                onClick={handleClear} // 검색어 삭제 버튼에 적용됨
+                placeholder="어떤 고객님을 찾고 게세요?"
+                sx={{ bgcolor: theme.palette.NeutralGray[200], border: "none" }}
+              />
             </Box>
-            <Box sx={{ display: "flex", gap: "4px" }}>
-              <MoveSortDropdown />
-              {/* 모바일 환경: 필터 아이콘만 보이기 */}
-              {isSmall && (
-                <>
-                  <Button
-                    onClick={() => setIsFilterModalOpen(true)}
-                    sx={{
-                      padding: 0,
-                      width: "32px",
-                      height: "32px",
-                      minWidth: "32px",
-                    }}
-                  >
-                    <Image
-                      src="/Images/icon-btn/sort_button.svg"
-                      width={32}
-                      height={32}
-                      alt="필터"
-                      style={{ cursor: "pointer" }}
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                marginBottom: ["16px", "20px", "32px"],
+              }}
+            >
+              <Box>
+                <Typography variant={isSmall ? "M_13" : "M_16"}>
+                  전체{" "}
+                </Typography>
+                <Typography variant={isSmall ? "SB_13" : "SB_16"}>
+                  {transformedList.length}건
+                </Typography>
+              </Box>
+              <Box sx={{ display: "flex", gap: "4px" }}>
+                <MoveSortDropdown />
+                {/* 모바일 환경: 필터 아이콘만 보이기 */}
+                {isSmall && (
+                  <>
+                    <Button
                       onClick={() => setIsFilterModalOpen(true)}
-                    />
-                  </Button>
-                  {isFilterModalOpen && (
-                    <FilterModal
-                      open={isFilterModalOpen}
-                      onClose={() => setIsFilterModalOpen(false)}
-                      count={count}
-                      checked={checked}
-                      indeterminate={indeterminate}
-                      onAllChange={handleAllChange}
-                      onIndividualChange={handleIndividualChange}
-                      onSubmit={handleSubmit}
-                    />
-                  )}
-                </>
+                      sx={{
+                        padding: 0,
+                        width: "32px",
+                        height: "32px",
+                        minWidth: "32px",
+                      }}
+                    >
+                      <Image
+                        src="/Images/icon-btn/sort_button.svg"
+                        width={32}
+                        height={32}
+                        alt="필터"
+                        style={{ cursor: "pointer" }}
+                        onClick={() => setIsFilterModalOpen(true)}
+                      />
+                    </Button>
+                    {isFilterModalOpen && (
+                      <FilterModal
+                        open={isFilterModalOpen}
+                        onClose={() => setIsFilterModalOpen(false)}
+                        count={count}
+                        checked={checked}
+                        indeterminate={indeterminate}
+                        onAllChange={handleAllChange}
+                        onIndividualChange={handleIndividualChange}
+                        onSubmit={handleSubmit}
+                      />
+                    )}
+                  </>
+                )}
+              </Box>
+            </Box>
+            {/* 우측 카드 리스트 또는 EmptyRequest 조건부 렌더링 */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: ["24px", "32px", "48px"],
+              }}
+            >
+              {transformedList.length === 0 ? (
+                <EmptyRequest />
+              ) : (
+                transformedList.map((data) => (
+                  <CardListRequest
+                    key={data.id}
+                    data={data}
+                    onConfirmClick={() => {
+                      const original = testDataList.find(
+                        (item) => item.id === data.id
+                      );
+                      if (original) handleSendClick(original);
+                    }}
+                    onDetailClick={() => {
+                      const original = testDataList.find(
+                        (item) => item.id === data.id
+                      );
+                      if (original) handleRejectClick(original);
+                    }}
+                  />
+                ))
+              )}
+              {/* 모달들 */}
+              {isEstimateModalOpen && selectedRequest?.customer && (
+                <SendEstimateModal
+                  open={isEstimateModalOpen}
+                  onClose={() => setIsEstimateModalOpen(false)}
+                  onSend={handleSendEstimate}
+                  moveType={[selectedRequest.moveType]} // 배열로 감싸기
+                  customerName={selectedRequest.customer.user.name}
+                  moveDate={selectedRequest.moveDate}
+                  fromAddress={selectedRequest.fromAddress.fullAddress}
+                  toAddress={selectedRequest.toAddress.fullAddress}
+                />
+              )}
+              {isRejectModalOpen && selectedRequest?.customer && (
+                <RejectRequestModal
+                  open={isRejectModalOpen}
+                  onClose={() => setIsRejectModalOpen(false)}
+                  onSubmit={handleSendReject}
+                  moveType={[selectedRequest.moveType]} // 배열로 감싸기
+                  customerName={selectedRequest.customer.user.name}
+                  moveDate={selectedRequest.moveDate}
+                  fromAddress={selectedRequest.fromAddress.fullAddress}
+                  toAddress={selectedRequest.toAddress.fullAddress}
+                />
               )}
             </Box>
-          </Box>
-          {/* 우측 카드 리스트 또는 EmptyRequest 조건부 렌더링 */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: ["24px", "32px", "48px"],
-            }}
-          >
-            {transformedList.length === 0 ? (
-              <EmptyRequest />
-            ) : (
-              transformedList.map((data) => (
-                <CardListRequest
-                  key={data.id}
-                  data={data}
-                  onConfirmClick={() => {
-                    const original = testDataList.find(
-                      (item) => item.id === data.id
-                    );
-                    if (original) handleSendClick(original);
-                  }}
-                  onDetailClick={() => {
-                    const original = testDataList.find(
-                      (item) => item.id === data.id
-                    );
-                    if (original) handleRejectClick(original);
-                  }}
-                />
-              ))
-            )}
-            {/* 모달들 */}
-            {isEstimateModalOpen && selectedRequest?.customer && (
-              <SendEstimateModal
-                open={isEstimateModalOpen}
-                onClose={() => setIsEstimateModalOpen(false)}
-                onSend={handleSendEstimate}
-                moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                customerName={selectedRequest.customer.user.name}
-                moveDate={selectedRequest.moveDate}
-                fromAddress={selectedRequest.fromAddress.fullAddress}
-                toAddress={selectedRequest.toAddress.fullAddress}
-              />
-            )}
-            {isRejectModalOpen && selectedRequest?.customer && (
-              <RejectRequestModal
-                open={isRejectModalOpen}
-                onClose={() => setIsRejectModalOpen(false)}
-                onSubmit={handleSendReject}
-                moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                customerName={selectedRequest.customer.user.name}
-                moveDate={selectedRequest.moveDate}
-                fromAddress={selectedRequest.fromAddress.fullAddress}
-                toAddress={selectedRequest.toAddress.fullAddress}
-              />
-            )}
           </Box>
         </Box>
       </Box>

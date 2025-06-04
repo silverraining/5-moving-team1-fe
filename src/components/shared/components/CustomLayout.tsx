@@ -30,7 +30,6 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     PATH.userRequest,
     PATH.userEstimate,
     PATH.userEstimateReceive,
-    PATH.moverRequest,
     PATH.moverEstimateConfirm,
     PATH.moverEstimateReject,
     PATH.userWishlist,
