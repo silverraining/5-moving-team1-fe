@@ -134,7 +134,7 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
         </Box>
       </Box>
       <Button
-        disabled={data.ReviewCheck ? true : false}
+        disabled={data.ReviewCheck}
         onClick={onReviewClick}
         variant="contained"
         sx={(theme) => ({
@@ -144,7 +144,7 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
           height: [48, 48, 64],
         })}
       >
-        {data.ReviewCheck ? "리뷰 작성하기" : "리뷰 작성 완료"}
+        {!data.ReviewCheck ? "리뷰 작성하기" : "리뷰 작성 완료"}
       </Button>
     </Box>
   );
