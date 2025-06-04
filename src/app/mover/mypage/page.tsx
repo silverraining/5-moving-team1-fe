@@ -15,45 +15,27 @@ export default function MyPage() {
   const theme = useTheme();
 
   return (
-    <Box display="flex" justifyContent="center" pt="32px">
-      <Box width="100%" maxWidth="1400px" px="24px">
-        <Box mb="32px">
-          <Typography variant="SB_24">마이페이지</Typography>
-        </Box>
-        {/* 프로필 섹션 */}
-        <MyPageProfileSection data={mockMoverData} />
+    <Box display="flex" flexDirection="column" alignItems="center" pt="32px">
+      {/* 프로필 섹션 */}
+      <MyPageProfileSection data={mockMoverData} />
 
-        {/* Divider */}
-        <Divider
+      {/* 리뷰 섹션 */}
+      <Box mb="40px" width="100%" maxWidth="1400px" px="24px">
+        <Typography
           sx={{
-            width: "100%",
-            maxWidth: "1400px",
-            borderColor: `${theme.palette.Line[100]}`,
-            borderWidth: "1px",
-            mb: "32px",
-          }}
-        />
-
-        {/* 리뷰 섹션 */}
-        <Box
-          sx={{
-            marginBottom: "40px",
+            fontSize: [18, 20, 24],
+            fontWeight: 700,
+            color: theme.palette.Black[300],
+            marginBottom: "32px",
           }}
         >
-          <Typography
-            sx={{
-              fontSize: [18, 20, 24],
-              fontWeight: 700,
-              color: theme.palette.Black[300],
-              marginBottom: "32px",
-            }}
-          >
-            리뷰 (178)
-          </Typography>
-          <ReviewChart data={mockReviewData} />
-        </Box>
+          리뷰 (178)
+        </Typography>
+        <ReviewChart data={mockReviewData} />
+      </Box>
 
-        {/* 댓글 섹션 */}
+      {/* 댓글 섹션 */}
+      <Box width="100%" maxWidth="1400px" px="24px">
         <ReviewList reviews={mockReviews} itemsPerPage={5} />
       </Box>
     </Box>
