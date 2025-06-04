@@ -19,7 +19,7 @@ interface SortDropdownProps {
   onChange?: (option: SortOption) => void;
 }
 
-export default function SortDropdown({ options, onChange }: SortDropdownProps) {
+export default function Dropdown({ options, onChange }: SortDropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SortOption>(options[0]);
 
