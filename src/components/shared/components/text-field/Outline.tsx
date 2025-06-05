@@ -5,7 +5,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 interface OutlineProps extends Omit<InputProps, "fullWidth"> {
   type?: string;
-  border: boolean;
+  border?: boolean;
   register: UseFormRegisterReturn;
   errorMessage?: string;
 }
