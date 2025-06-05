@@ -18,6 +18,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       border="0.5px solid"
       borderColor={COLORS.Line[100]}
       maxWidth={1200}
+      minWidth={[400, 580, 680]}
       // height={[188, 188, 230]}
       height="auto"
       bgcolor="#FFFFFF"

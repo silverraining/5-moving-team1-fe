@@ -18,6 +18,7 @@ export const CardListReject = ({ data }: CardProps) => {
       flexDirection="column"
       justifyContent="space-between"
       maxWidth={1200}
+      minWidth={[400, 580, 680]}
       width={"100%"}
       height={[194, 194, 216]}
       borderRadius="16px"
