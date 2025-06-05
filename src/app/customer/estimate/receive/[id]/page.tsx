@@ -7,5 +7,5 @@ export default function ReceiveDetailPage({
   params: { id: string };
 }) {
   const { id } = params;
-  return <ReceiveDetail moverId={id} />;
+  return <ReceiveDetail customerId={id} />;
 }

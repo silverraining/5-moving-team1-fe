@@ -15,7 +15,7 @@ import { EstimateInfo } from "./EstimateInfo";
 import { useState } from "react";
 import Image from "next/image";
 
-export default function PendingDetail({ moverId }: { moverId: string }) {
+export default function PendingDetail({ customerId }: { customerId: string }) {
   const handleLikeClick = () => {
     alert(`좋아요 버튼 누름`);
   };

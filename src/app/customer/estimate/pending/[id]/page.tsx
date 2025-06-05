@@ -7,5 +7,5 @@ export default function PendingDetailPage({
   params: { id: string };
 }) {
   const { id } = params;
-  return <PendingDetail moverId={id} />;
+  return <PendingDetail customerId={id} />;
 }
