@@ -21,7 +21,8 @@ export const SubHeader = () => {
 
   const isTabmenu =
     pathname.startsWith("/customer/estimate") ||
-    pathname.startsWith("/mover/estimate") ||
+    pathname.startsWith("/mover/estimate/confirm") ||
+    pathname.startsWith("/mover/estimate/reject") ||
     pathname.startsWith(PATH.userReview);
 
   const tabMenu = pathname.startsWith(PATH.userReview)
