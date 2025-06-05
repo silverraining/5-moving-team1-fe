@@ -13,11 +13,13 @@ import { UseFormRegisterReturn } from "react-hook-form";
 interface TextareaProps extends Omit<InputProps, "fullWidth"> {
   register: UseFormRegisterReturn;
   errorMessage?: string;
+  border?: boolean;
 }
 
 export const Textarea = ({
   register,
   errorMessage,
+  border = true,
   ...props
 }: TextareaProps) => {
   const theme = useTheme();
@@ -37,6 +39,9 @@ export const Textarea = ({
           p: 0,
           fontSize,
           alignItems: "flex-start",
+          "& fieldset": {
+            border: border ? "1px solid" : "none",
+          },
           "& textarea": {
             px: ["14px", "14px", "24px"],
             pt: "14px",
