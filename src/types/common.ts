@@ -21,12 +21,12 @@ enum ServiceRegion {
 }
 
 export type Notification = {
-  id: String;
-  userId: String;
+  id: string;
+  userId: string;
   type: NotificationType;
-  message: String;
-  targetId: String;
-  isRead: Boolean;
+  message: string;
+  targetId: string;
+  isRead: boolean;
   createdAt: Date;
 };
 

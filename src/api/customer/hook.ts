@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { moverDetail, moverList, MoverListRequest } from "./api";
-import { ServiceRegion, ServiceType } from "@/src/types/common";
+import { ServiceRegion } from "@/src/types/common";
 
 export const useMoverList = (params: MoverListRequest, enabled = true) => {
   const {
