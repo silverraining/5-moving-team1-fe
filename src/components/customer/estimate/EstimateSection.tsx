@@ -7,7 +7,7 @@ interface SectionProps {
 
 export function EstimateSection({ title, children }: SectionProps) {
   return (
-    <Stack>
+    <Stack width={"100%"}>
       <Typography
         variant="SB_24"
         sx={(theme) => ({
