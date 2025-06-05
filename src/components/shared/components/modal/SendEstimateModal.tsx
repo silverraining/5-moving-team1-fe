@@ -211,11 +211,11 @@ export default function SendEstimateModal({
                 placeholder="견적가 입력"
                 register={register.price}
                 errorMessage={errors.price?.message}
+                border={false}
                 sx={{
                   width: "100%",
                   backgroundColor: theme.palette.NeutralGray[200],
                   borderRadius: ["16px", "16px", "18px"],
-                  border: "none",
                 }}
               />
             </Box>
@@ -243,11 +243,11 @@ export default function SendEstimateModal({
                 placeholder="최소 10자 이상 입력해주세요"
                 register={register.comment}
                 errorMessage={errors.comment?.message}
+                border={false}
                 sx={{
                   width: "100%",
                   backgroundColor: theme.palette.NeutralGray[200],
                   borderRadius: ["16px", "16px", "18px"],
-                  border: "none",
                 }}
               />
             </Box>

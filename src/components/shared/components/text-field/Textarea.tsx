@@ -7,6 +7,8 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  SxProps,
+  Theme,
 } from "@mui/material";
 import { UseFormRegisterReturn } from "react-hook-form";
 
@@ -14,12 +16,14 @@ interface TextareaProps extends Omit<InputProps, "fullWidth"> {
   register: UseFormRegisterReturn;
   errorMessage?: string;
   border?: boolean;
+  sx?: SxProps<Theme>;
 }
 
 export const Textarea = ({
   register,
   errorMessage,
   border = true,
+  sx: customSx,
   ...props
 }: TextareaProps) => {
   const theme = useTheme();
@@ -48,6 +52,7 @@ export const Textarea = ({
             resize: "none",
             overflow: "auto",
           },
+          ...customSx,
         }}
         {...props}
       />
