@@ -25,7 +25,7 @@ export default function ReceiveDetail({ customerId }: { customerId: string }) {
   ];
   const mockCardList: CardData[] = [
     {
-      types: ["small", "complete"],
+      types: ["small"],
       message: "1톤 트럭 + 기사님 1명, 포장 포함",
       imgSrc: "/Images/profile/maleProfile.svg",
       name: "이사천국",
@@ -48,7 +48,7 @@ export default function ReceiveDetail({ customerId }: { customerId: string }) {
       address: ["서울특별시 강남구 삼성동", "경기도 성남시 분당구 정자동"],
     },
   ];
-  const mockStatus: EstimateOfferStatus = EstimateOfferStatus.CONFIRMED;
+  const mockStatus: EstimateOfferStatus = EstimateOfferStatus.CANCELED;
 
   return (
     <Stack
