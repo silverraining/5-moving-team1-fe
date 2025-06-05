@@ -17,7 +17,9 @@ export const CardListReject = ({ data }: CardProps) => {
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      width={[327, 600, 955]}
+      maxWidth={1200}
+      minWidth={[400, 580, 680]}
+      width={"100%"}
       height={[194, 194, 216]}
       borderRadius="16px"
       padding={[
@@ -91,14 +93,20 @@ export const CardListReject = ({ data }: CardProps) => {
           display="flex"
           flexDirection="column"
           flexGrow={1}
-          gap={["14px", "14px", "18px"]}
+          gap={["10px", "14px", "18px"]}
         >
           <Box
             display="flex"
             flexDirection="column"
             justifyContent="space-between"
+            gap={"14px"}
           >
-            <Box display={"flex"} flexDirection="row" gap={"5px"}>
+            <Box
+              display={"flex"}
+              flexDirection="row"
+              gap={"5px"}
+              alignItems={"center"}
+            >
               <Typography
                 sx={(theme) => ({
                   fontSize: [14, 14, 18],
@@ -109,21 +117,37 @@ export const CardListReject = ({ data }: CardProps) => {
               >
                 {data.name} 고객님
               </Typography>
-              <Typography display={["inline-block", "none", "none"]}>
+              <Typography
+                display={["inline-block", "none", "none"]}
+                sx={(theme) => ({
+                  fontSize: [12, 12, 14],
+                  lineHeight: ["18px", "18px", "24px"],
+                  fontWeight: 400,
+                  color: theme.palette.Grayscale[500],
+                })}
+              >
                 {dayjs(data.date).fromNow()}
               </Typography>
             </Box>
             <Box display={["flex", "none", "none"]}>
-              <Typography
+              <Box
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
                 sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
+                  backgroundColor: theme.palette.Background[400],
                 })}
               >
-                이사일
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                  })}
+                >
+                  이사일
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
@@ -150,23 +174,33 @@ export const CardListReject = ({ data }: CardProps) => {
             flexGrow={1}
             justifyContent={["space-between", "flex-start"]}
           >
-            <Box display={["none", "flex"]}>
-              <Typography
+            <Box display={["none", "flex"]} gap={"12px"} alignItems="center">
+              <Box
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
                 sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
+                  backgroundColor: theme.palette.Background[400],
                 })}
               >
-                이사일
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  이사일
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  wordBreak: "break-all",
                 })}
               >
                 {formatKoreanDate(data.movingDay ?? "")}
@@ -177,17 +211,26 @@ export const CardListReject = ({ data }: CardProps) => {
               height={14}
               border={"1px solid #E6E6E6"}
             ></Box>
-            <Box display="flex">
-              <Typography
+            <Box display="flex" gap={"12px"} alignItems="center">
+              <Box
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
                 sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
+                  backgroundColor: theme.palette.Background[400],
                 })}
               >
-                출발
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  출발
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],
@@ -200,17 +243,26 @@ export const CardListReject = ({ data }: CardProps) => {
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
-            <Box display="flex">
-              <Typography
+            <Box display="flex" gap={"12px"} alignItems="center">
+              <Box
+                borderRadius="4px"
+                padding={["2px 6px", "2px 6px", "4px 6px"]}
                 sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
+                  backgroundColor: theme.palette.Background[400],
                 })}
               >
-                도착
-              </Typography>
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [13, 13, 16],
+                    lineHeight: ["22px", "22px", "26px"],
+                    fontWeight: 500,
+                    color: theme.palette.Grayscale[300],
+                    whiteSpace: "nowrap",
+                  })}
+                >
+                  도착
+                </Typography>
+              </Box>
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],

@@ -45,6 +45,7 @@ export const COLORS = {
   },
   Background: {
     100: "#F2F3F8",
+    400: "#F4F7FB",
   },
   NeutralGray: {
     50: "#F5F5F5",
@@ -99,6 +100,7 @@ export const DARK_COLORS = {
   },
   Background: {
     100: "#2B2D31",
+    400: "#393B40",
   },
   NeutralGray: {
     50: "#2C2C2C",

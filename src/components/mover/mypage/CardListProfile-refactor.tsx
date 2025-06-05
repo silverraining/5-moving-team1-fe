@@ -291,7 +291,14 @@ export const CardListProfile = ({
               {/* 제공 서비스 & 지역 */}
               <Box display="flex" gap="20px" mt="12px" flexWrap="wrap">
                 <Box display="flex" gap="8px" alignItems="center">
-                  <Box bgcolor="#F4F7FB" borderRadius="4px" px="6px" py="2px">
+                  <Box
+                    borderRadius="4px"
+                    px="6px"
+                    py="2px"
+                    sx={(theme) => ({
+                      backgroundColor: theme.palette.Background[400],
+                    })}
+                  >
                     <Typography sx={{ fontSize: 14, color: "#999999" }}>
                       제공 서비스
                     </Typography>
@@ -302,7 +309,14 @@ export const CardListProfile = ({
                 </Box>
 
                 <Box display="flex" gap="8px" alignItems="center">
-                  <Box bgcolor="#F4F7FB" borderRadius="4px" px="6px" py="2px">
+                  <Box
+                    borderRadius="4px"
+                    px="6px"
+                    py="2px"
+                    sx={(theme) => ({
+                      backgroundColor: theme.palette.Background[400],
+                    })}
+                  >
                     <Typography sx={{ fontSize: 14, color: "#999999" }}>
                       지역
                     </Typography>

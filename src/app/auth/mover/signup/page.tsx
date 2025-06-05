@@ -4,23 +4,20 @@ import { LogoSection } from "@/src/components/auth/LogoSection";
 import { TextLink } from "@/src/components/auth/TextLink";
 import {
   Button,
+  Checkbox,
+  FormControlLabel,
   Stack,
   Typography,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
-import {
-  signUpSchema,
-  SignUpSchemaType,
-} from "@/src/schemas/auth/signup.schema";
 import { FormSection } from "@/src/components/auth/FromSection";
 import {
   MOVER_INFO,
   MOVER_LOGIN_LINK,
   SIGNUP_FIELD,
 } from "@/src/lib/authConstants";
-
 import { useSignupForm } from "@/src/hooks/auth/hook";
 
 const SignUp = () => {

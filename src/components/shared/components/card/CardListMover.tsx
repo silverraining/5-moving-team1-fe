@@ -17,7 +17,8 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       justifyContent="space-between"
       border="0.5px solid"
       borderColor={COLORS.Line[100]}
-      maxWidth={[327, 600, 955]}
+      maxWidth={1200}
+      minWidth={[400, 580, 680]}
       // height={[188, 188, 230]}
       height="auto"
       bgcolor="#FFFFFF"
@@ -73,7 +74,12 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             }}
           />
         </Box>
-        <Box display="flex" flexDirection="column" width="100%">
+        <Box
+          display="flex"
+          flexDirection="column"
+          width="100%"
+          alignItems="flex-start"
+        >
           <Box display="flex" alignItems="center" width="100%">
             <Typography
               sx={(theme) => ({
@@ -113,7 +119,6 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
           <Box
             display="flex"
             flexDirection="row"
-            flexGrow={1}
             gap={"16px"}
             alignItems="center"
             justifyContent={["space-between", "flex-start"]}
@@ -155,7 +160,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             {/* Divider */}
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             {/* 경력 */}
-            <Box display="flex" gap="16px">
+            <Box display="flex" gap="4px">
               <Typography
                 sx={(theme) => ({
                   fontSize: [13, 13, 16],

@@ -31,9 +31,9 @@ export type User = {
 };
 
 export type CustomerProfile = {
-  id: String;
-  userId: String;
-  imageUrl: String;
+  id: string;
+  userId: string;
+  imageUrl: string;
   serviceType: ServiceType[];
   serviceRegion: ServiceRegion;
   createdAt: Date;
