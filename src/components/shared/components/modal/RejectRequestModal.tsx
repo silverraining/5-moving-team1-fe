@@ -211,8 +211,8 @@ export default function RejectRequestModal({
                   width: "100%",
                   backgroundColor: theme.palette.NeutralGray[200],
                   borderRadius: ["16px", "16px", "18px"],
-                  border: "none",
                 }}
+                border={false}
               />
             </Box>
           </Box>
