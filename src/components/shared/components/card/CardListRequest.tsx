@@ -109,10 +109,12 @@ export const CardListRequest = ({
         >
           <Box display={"flex"} gap={["8px", "8px", "12px"]}>
             <Box
-              bgcolor="#F4F7FB"
               borderRadius="4px"
               display={"inline-block"}
               padding={["2px 6px", "2px 6px", "4px 6px"]}
+              sx={(theme) => ({
+                backgroundColor: theme.palette.Background[400],
+              })}
             >
               <Typography
                 sx={(theme) => ({
@@ -139,10 +141,12 @@ export const CardListRequest = ({
           <Box display={"flex"} gap={["4px"]}>
             <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 display={"inline-block"}
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -172,10 +176,12 @@ export const CardListRequest = ({
             ></Box>
             <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 display={"inline-block"}
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({

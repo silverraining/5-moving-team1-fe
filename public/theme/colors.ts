@@ -45,6 +45,7 @@ export const COLORS = {
   },
   Background: {
     100: "#F2F3F8",
+    400: "#F4F7FB",
   },
   NeutralGray: {
     50: "#F5F5F5",

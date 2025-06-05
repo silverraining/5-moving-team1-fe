@@ -152,9 +152,11 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             </Box>
             <Box display={["flex", "none", "none"]}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -196,9 +198,11 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
           >
             <Box display={["none", "flex"]} alignItems="center" gap={"12px"}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -230,9 +234,11 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             ></Box>
             <Box display="flex" alignItems="center" gap={"12px"}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -260,9 +266,11 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex" alignItems="center" gap={"12px"}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({

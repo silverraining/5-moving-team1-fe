@@ -130,9 +130,11 @@ export const CardListReject = ({ data }: CardProps) => {
             </Box>
             <Box display={["flex", "none", "none"]}>
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -173,9 +175,11 @@ export const CardListReject = ({ data }: CardProps) => {
           >
             <Box display={["none", "flex"]} gap={"12px"} alignItems="center">
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -208,9 +212,11 @@ export const CardListReject = ({ data }: CardProps) => {
             ></Box>
             <Box display="flex" gap={"12px"} alignItems="center">
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
@@ -238,9 +244,11 @@ export const CardListReject = ({ data }: CardProps) => {
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
             <Box display="flex" gap={"12px"} alignItems="center">
               <Box
-                bgcolor="#F4F7FB"
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
+                sx={(theme) => ({
+                  backgroundColor: theme.palette.Background[400],
+                })}
               >
                 <Typography
                   sx={(theme) => ({
