@@ -34,7 +34,8 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     PATH.moverEstimateConfirm,
     PATH.moverEstimateReject,
     PATH.userWishlist,
-    PATH.userReview,
+    PATH.userReviewPending,
+    PATH.userReviewCompleted,
   ];
 
   const isColorPage = colorPages.includes(pathname);
