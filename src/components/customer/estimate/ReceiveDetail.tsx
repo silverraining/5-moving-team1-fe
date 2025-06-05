@@ -80,7 +80,9 @@ export default function ReceiveDetail({ customerId }: { customerId: string }) {
 
         {/* 견적가 */}
         <EstimateSection title="견적가">
-          <Typography variant="B_32">{mockCardList[0].cost}</Typography>
+          <Typography variant="B_32">
+            {(mockCardList[0].cost ?? 0).toLocaleString()}원
+          </Typography>
         </EstimateSection>
         <Divider />
 

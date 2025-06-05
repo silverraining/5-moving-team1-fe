@@ -1,12 +1,5 @@
 "use client";
-import {
-  Box,
-  Stack,
-  Typography,
-  Divider,
-  Button,
-  useTheme,
-} from "@mui/material";
+import { Stack, Typography, Divider, Button, useTheme } from "@mui/material";
 import { CardData, EstimateRequest } from "@/src/types/card";
 import { CardListMover } from "../../shared/components/card/CardListMover";
 import { EstimateSection } from "./EstimateSection";
@@ -94,7 +87,9 @@ export default function PendingDetail({ customerId }: { customerId: string }) {
 
         {/* 견적가 */}
         <EstimateSection title="견적가">
-          <Typography variant="B_32">{mockCardList[0].cost}</Typography>
+          <Typography variant="B_32">
+            {(mockCardList[0].cost ?? 0).toLocaleString()}원
+          </Typography>
         </EstimateSection>
         <Divider />
 
