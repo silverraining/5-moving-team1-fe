@@ -25,13 +25,13 @@ export const AuthStore = create<AuthStoreState>((set) => ({
   user: null,
   isLogin: false,
   login: (accessToken: string, refreshToken: string, user: User) => {
-    Cookies.set("AccessToken", accessToken, { expires: 1 });
-    Cookies.set("RefreshToken", refreshToken, { expires: 1 });
+    Cookies.set("accessToken", accessToken, { expires: 1 });
+    Cookies.set("refreshToken", refreshToken, { expires: 1 });
     set({ refreshToken, accessToken, user, isLogin: true });
   },
   logout: () => {
-    Cookies.remove("AccessToken");
-    Cookies.remove("RefreshToken");
+    Cookies.remove("accessToken");
+    Cookies.remove("refreshToken");
     set({ accessToken: null, refreshToken: null, user: null, isLogin: false });
   },
 }));
