@@ -1,4 +1,3 @@
-import { COLORS } from "@/public/theme/colors";
 import { Box, BoxProps, Stack, Typography } from "@mui/material";
 import Image from "next/image";
 
@@ -15,17 +14,17 @@ const CARD_CONTENT: Record<
   small: {
     title: "소형이사",
     subTitle: "원룸, 투룸, 20평대 미만",
-    img: "/images/landing/hand.svg",
+    img: "/Images/landing/hand.svg",
   },
   home: {
     title: "가정이사",
     subTitle: "쓰리룸, 20평대 미만",
-    img: "/images/landing/car.svg",
+    img: "/Images/landing/car.svg",
   },
   office: {
     title: "기업, 사무실 이사",
     subTitle: "사무실 , 상업공간",
-    img: "/images/landing/building.svg",
+    img: "/Images/landing/building.svg",
   },
 };
 
@@ -49,7 +48,12 @@ export const CardList = ({ variant }: CardListProps) => {
     <Box {...Style}>
       <Stack>
         <Typography variant="B_20">{title}</Typography>
-        <Typography variant="R_14" color={COLORS.Grayscale[400]}>
+        <Typography
+          variant="R_14"
+          sx={(theme) => ({
+            color: theme.palette.Grayscale[400],
+          })}
+        >
           {subTitle}
         </Typography>
       </Stack>
@@ -64,10 +68,10 @@ export const CardList = ({ variant }: CardListProps) => {
 const SmallStyle: BoxProps = {
   width: ["327px", "327px", "432px"],
   height: ["240px", "240px", "598px"],
-  bgcolor: COLORS.PrimaryBlue[100],
   pl: 4,
   pt: 6,
-  sx: {
+  sx: (theme) => ({
+    bgcolor: theme.palette.PrimaryBlue[100],
     borderRadius: "32px",
     overflow: "hidden",
     position: "relative",
@@ -75,7 +79,7 @@ const SmallStyle: BoxProps = {
       transform: "translateX(0)",
       opacity: 1,
     },
-  },
+  }),
 };
 
 const HomeStyle: BoxProps = {

@@ -6,6 +6,8 @@ import { Header } from "./header/Header";
 import { DarkModeToggle } from "./ColorModeToggle";
 import { usePathname } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import { PATH } from "@/src/lib/constants";
+import { SubHeader } from "./header/SubHeader";
 
 type CustomLayoutProps = {
   children: ReactNode;
@@ -14,7 +16,31 @@ type CustomLayoutProps = {
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const isMainPage = pathname === "/";
+  // 페이지 중 bgColor 가 들어가는 페이지
+  const colorPages = [
+    PATH.main,
+    PATH.userRequest,
+    PATH.userEstimateReceive,
+    PATH.userWishlist,
+    PATH.moverEstimateConfirm,
+    PATH.moverEstimateReject,
+  ];
+  const noPaddingPages = [PATH.userEstimateReceive];
+  const subHeaderPages = [
+    PATH.userRequest,
+    PATH.userEstimate,
+    PATH.userEstimateReceive,
+    PATH.moverEstimateConfirm,
+    PATH.moverEstimateReject,
+    PATH.userWishlist,
+    PATH.userReviewPending,
+    PATH.userReviewCompleted,
+  ];
+
+  const isColorPage = colorPages.includes(pathname);
+  const isPadding = noPaddingPages.includes(pathname);
+  const isSubHeader = subHeaderPages.includes(pathname);
+
   const { SnackbarComponent } = useSnackbar();
 
   useEffect(() => {
@@ -28,11 +54,15 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   return (
     <Stack
       minHeight={"100vh"}
-      width={"100vw"}
-      bgcolor={isMainPage ? "#F5F5F5" : "transparent"}
+      width={"100%"}
+      sx={(theme) => ({
+        bgcolor: isColorPage ? theme.palette.NeutralGray[50] : "transparent",
+        alignContent: "center",
+      })}
     >
       <Header />
-      <Box px={["26px", "72px", "260px"]}>
+      {isSubHeader && <SubHeader />}
+      <Box px={isPadding ? 0 : ["26px", "72px", "260px"]}>
         {children}
         {SnackbarComponent}
       </Box>

@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Progress } from "./components/progress";
 import { Stars } from "./components/stars";
-import { COLORS } from "@/public/theme/colors";
+
 interface ReviewChartProps {
   data: {
     average: number;
@@ -23,7 +23,7 @@ export const ReviewChart = ({ data }: ReviewChartProps) => {
   const isSmall = useMediaQuery(theme.breakpoints.down("mobile"));
 
   const BoxStyle: StackProps = {
-    bgcolor: isMedium ? "" : "#F7F7F7",
+    bgcolor: isMedium ? "" : theme.palette.NeutralGray[300],
     borderRadius: "32px",
     px: ["21.5px", "21.5px", "60px"],
     py: ["16px", "16px", "40px"],
@@ -31,7 +31,7 @@ export const ReviewChart = ({ data }: ReviewChartProps) => {
   };
   const ProgressBoxStyle: StackProps = {
     display: "flex",
-    bgcolor: !isMedium ? "" : "#F7F7F7",
+    bgcolor: !isMedium ? "" : theme.palette.NeutralGray[300],
     borderRadius: "32px",
     px: ["21.5px", "21.5px", "60px"],
     py: ["16px", "16px", "40px"],
@@ -59,7 +59,9 @@ export const ReviewChart = ({ data }: ReviewChartProps) => {
           <Typography
             fontSize={isMedium ? "24px" : "38px"}
             fontWeight={700}
-            color={COLORS.Grayscale[100]}
+            sx={(theme) => ({
+              color: theme.palette.Grayscale[100],
+            })}
           >
             / 5
           </Typography>

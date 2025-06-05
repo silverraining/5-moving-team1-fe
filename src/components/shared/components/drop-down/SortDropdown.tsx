@@ -26,7 +26,6 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
-import { COLORS } from "@/public/theme/colors";
 
 export interface SortOption {
   label: string;
@@ -72,29 +71,29 @@ export default function SortDropdown({
         }}
       >
         <Typography
-          sx={{
+          sx={(theme) => ({
             fontWeight: 500,
             fontSize: ["12px", "14px"],
-            color: COLORS.Black[300],
-          }}
+            color: theme.palette.Black[300],
+          })}
         >
           {selectedOption.label}
         </Typography>
         <KeyboardArrowDownIcon
-          sx={{
+          sx={(theme) => ({
             fontSize: 20,
             marginLeft: "4px",
             transform: isOpen ? "rotate(180deg)" : "rotate(0)",
             transition: "transform 0.2s ease",
-            color: COLORS.Grayscale[200],
-          }}
+            color: theme.palette.Grayscale[200],
+          })}
         />
       </Box>
 
       {/* 드롭다운 목록 */}
       {isOpen && (
         <Box
-          sx={{
+          sx={(theme) => ({
             position: "absolute",
             top: "100%",
             left: "50%",
@@ -102,39 +101,39 @@ export default function SortDropdown({
             width: ["91px", "114px"],
             backgroundColor: "white",
             boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.1)",
-            border: `1px solid ${COLORS.Line[100]}`,
+            border: `1px solid ${theme.palette.Line[100]}`,
             borderRadius: "8px",
             zIndex: 10,
             marginTop: "4px",
-          }}
+          })}
         >
           {options.map((option) => (
             <Box
               key={option.value}
               onClick={() => handleSelect(option)}
-              sx={{
+              sx={(theme) => ({
                 padding: "12px 16px",
                 cursor: "pointer",
                 backgroundColor:
                   selectedOption.value === option.value
-                    ? COLORS.PrimaryBlue[100]
-                    : COLORS.White[100],
+                    ? theme.palette.PrimaryBlue[100]
+                    : theme.palette.White[100],
                 "&:hover": {
-                  backgroundColor: COLORS.PrimaryBlue[100],
+                  backgroundColor: theme.palette.PrimaryBlue[100],
                 },
                 borderRadius: "8px",
-              }}
+              })}
             >
               <Typography
-                sx={{
+                sx={(theme) => ({
                   fontSize: ["12px", "14px"],
                   color:
                     selectedOption.value === option.value
-                      ? COLORS.PrimaryBlue[300]
-                      : COLORS.Black[400],
+                      ? theme.palette.PrimaryBlue[300]
+                      : theme.palette.Black[400],
                   fontWeight: 400,
                   whiteSpace: "nowrap",
-                }}
+                })}
               >
                 {option.label}
               </Typography>

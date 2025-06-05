@@ -1,9 +1,9 @@
-import { COLORS } from "@/public/theme/colors";
-import { Box, OutlinedInput, InputProps, SxProps } from "@mui/material";
+import { Box, OutlinedInput, InputProps, SxProps, Theme } from "@mui/material";
 import Image from "next/image";
 
 interface SearchProps extends Omit<InputProps, "fullWidth"> {
   variation: "left" | "right";
+  bgColor?: string;
 }
 
 export const SearchInput: React.FC<SearchProps> = (props) => {
@@ -17,7 +17,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
           <Image
             width={36}
             height={36}
-            src={"/images/input/search.svg"}
+            src={"/Images/input/search.svg"}
             alt="search Icon"
             style={{ marginRight: "8px" }}
           />
@@ -31,7 +31,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
                 width={36}
                 height={36}
                 onClick={props.onClick}
-                src={"/images/input/delete.svg"}
+                src={"/Images/input/delete.svg"}
                 alt="delete Icon"
                 style={{ cursor: "pointer" }}
               />
@@ -39,32 +39,42 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
             <Image
               width={36}
               height={36}
-              src={"/images/input/search.svg"}
+              src={"/Images/input/search.svg"}
               alt="search Icon"
             />
           </Box>
         )
       }
       fullWidth
-      sx={{
-        ...SearchStyles,
-      }}
+      sx={(theme) => ({
+        bgcolor: props.bgColor ? props.bgColor : theme.palette.NeutralGray[100],
+        borderRadius: "16px",
+        width: "100%",
+        height: ["52px", "52px", "64px"],
+        border: "0px",
+        paddingX: ["16px", "16px", "24px"],
+        paddingY: "14px",
+        color: theme.palette.Grayscale[400],
+        fontSize: ["14px", "14px", "20px"],
+        fontStyle: "normal",
+        fontWeight: 400,
+        textAlign: "center",
+        ":focus": { color: theme.palette.Black[400] },
+        "& .MuiOutlinedInput-notchedOutline": {
+          border: "none", //  border 제거
+        },
+        "&.Mui-focused .MuiOutlinedInput-input": {
+          color: theme.palette.Black[400], // focus 시 글자색
+        },
+        //자동 완성시 배경색 변경 방지
+        "& input:-webkit-autofill": {
+          WebkitBoxShadow: `0 0 0px 1000px white inset !important`,
+          boxShadow: `0 0 0px 1000px white inset !important`,
+          WebkitTextFillColor: theme.palette.text.primary,
+          transition: "background-color 5000s ease-in-out 0s !important",
+        },
+        ...(typeof props.sx === "function" ? props.sx(theme) : props.sx),
+      })}
     />
   );
-};
-
-const SearchStyles: SxProps = {
-  width: "100%",
-  bgcolor: "#FAFAFA",
-  height: ["52px", "52px", "64px"],
-  borderRadius: "16px",
-  border: "0px",
-  paddingX: ["16px", "16px", "24px"],
-  paddingY: "14px",
-  color: COLORS.Grayscale[400],
-  fontSize: ["14px", "14px", "20px"],
-  fontStyle: "normal",
-  fontWeight: 400,
-  textAlign: "center",
-  ":focus": { color: COLORS.Black[400] },
 };

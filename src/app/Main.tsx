@@ -1,5 +1,4 @@
 "use client";
-
 import {
   Button,
   Stack,
@@ -9,7 +8,8 @@ import {
 } from "@mui/material";
 import Link from "next/link";
 import { CardList } from "../components/shared/components/card/CardList";
-import { PATH } from "../hooks/constants";
+import { PATH } from "../lib/constants";
+
 export const Main = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -38,7 +38,7 @@ export const Main = () => {
         gap={["8px", "8px", "16px"]}
         justifyContent={"center"}
       >
-        <Link href={PATH.userlogin}>
+        <Link href={PATH.userLogin}>
           <Button
             fullWidth
             variant="contained"
@@ -52,7 +52,7 @@ export const Main = () => {
             로그인
           </Button>
         </Link>
-        <Link href={PATH.signup}>
+        <Link href={PATH.userSignup}>
           <Button
             fullWidth
             variant="outlined"

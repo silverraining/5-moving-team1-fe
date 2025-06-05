@@ -1,4 +1,3 @@
-import { COLORS } from "@/public/theme/colors";
 import {
   Box,
   Button,
@@ -30,16 +29,19 @@ export const CheckBoxList = ({
   const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
   const size = isMobile ? "sm" : isDesktop ? "xl" : "md";
 
+  const isDisabled = !selected;
+
   return (
     <Box
       sx={{
         display: "flex",
         flexDirection: "column",
         gap: ["8px", "16px"],
-        backgroundColor: "#FFFFFF",
-        borderRadius: "0px 24px 24px 24px",
+        backgroundColor: theme.palette.White[100],
+        borderRadius: isMobile ? "24px 4px 24px 24px" : "32px 0px 32px 32px",
         width: ["280px", "560px"],
         boxShadow: "4px 4px 10px 0px #E0E0E040",
+        padding: isMobile ? "16px" : "40px",
       }}
     >
       {options.map((option) => {
@@ -48,25 +50,27 @@ export const CheckBoxList = ({
           <Button
             key={option}
             onClick={() => onChange(option)}
-            sx={{
+            sx={(theme) => ({
               display: "flex",
               alignItems: "center",
               justifyContent: "flex-start",
               gap: "8px",
-              width: ["280px", "560px"],
+              width: "100%",
               height: ["52px", "84px"],
               paddingLeft: ["16px", "32px"],
               border: "1px solid",
               borderRadius: "16px",
-              borderColor: isSelected ? COLORS.PrimaryBlue[300] : "#E6E6E6",
+              borderColor: isSelected
+                ? theme.palette.PrimaryBlue[300]
+                : theme.palette.Line[200],
               backgroundColor: isSelected
-                ? COLORS.PrimaryBlue[50]
+                ? theme.palette.PrimaryBlue[50]
                 : "transparent",
-              color: "#000",
+              color: theme.palette.Black[600],
               cursor: "pointer",
 
               boxShadow: "4px 4px 10px 0px #C3D9F233",
-            }}
+            })}
           >
             <Image
               src={
@@ -90,18 +94,24 @@ export const CheckBoxList = ({
 
       <Button
         onClick={onConfirm}
-        sx={{
+        disabled={isDisabled}
+        sx={(theme) => ({
           marginTop: ["16px", "24px"],
-          width: ["280px", "560px"],
+          width: "100%",
           height: ["54px", "64px"],
-          backgroundColor: COLORS.PrimaryBlue[300],
-          color: "#FFF",
+          backgroundColor: isDisabled
+            ? theme.palette.Grayscale[100]
+            : theme.palette.PrimaryBlue[300],
+          color: theme.palette.White[100],
           border: "none",
           borderRadius: "16px",
           cursor: "pointer",
-        }}
+        })}
       >
-        <Typography variant={size === "sm" ? "SB_16" : "SB_20"} color="#FFF">
+        <Typography
+          variant={size === "sm" ? "SB_16" : "SB_20"}
+          color={theme.palette.White[100]}
+        >
           선택 완료
         </Typography>
       </Button>

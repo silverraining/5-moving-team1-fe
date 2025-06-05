@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import { COLORS } from "@/public/theme/colors";
 
 interface PaginationProps {
   currentPage: number;
@@ -144,7 +143,10 @@ const Pagination: React.FC<PaginationProps> = ({
           width: buttonSize,
           height: buttonSize,
           borderRadius: "6px",
-          color: currentPage === 1 ? COLORS.Grayscale[300] : COLORS.Black[400],
+          color:
+            currentPage === 1
+              ? theme.palette.Grayscale[300]
+              : theme.palette.Black[400],
         }}
       >
         <ChevronLeftIcon />
@@ -163,8 +165,8 @@ const Pagination: React.FC<PaginationProps> = ({
               padding: "10px",
               color:
                 page === currentPage
-                  ? COLORS.Black[400]
-                  : COLORS.Grayscale[300],
+                  ? theme.palette.Black[400]
+                  : theme.palette.Grayscale[300],
             }}
           >
             <Typography
@@ -196,7 +198,7 @@ const Pagination: React.FC<PaginationProps> = ({
               minWidth: 0,
               borderRadius: "6px",
               padding: "10px",
-              color: COLORS.Grayscale[300],
+              color: theme.palette.Grayscale[300],
             }}
           >
             <Typography variant={isSmall ? "R_16" : "R_14"}>{page}</Typography>
@@ -213,8 +215,8 @@ const Pagination: React.FC<PaginationProps> = ({
           borderRadius: "6px",
           color:
             currentPage === totalPages
-              ? COLORS.Grayscale[300]
-              : COLORS.Black[400],
+              ? theme.palette.Grayscale[300]
+              : theme.palette.Black[400],
         }}
       >
         <ChevronRightIcon />

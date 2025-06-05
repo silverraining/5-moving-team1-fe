@@ -1,7 +1,6 @@
 "use client";
 
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { COLORS } from "@/public/theme/colors";
 import CustomScrollY from "@/src/lib/customScrollY";
 
 interface DropDownListProps {
@@ -27,8 +26,8 @@ export default function DropDownList({
       ? 179
       : 144
     : isRegion
-    ? 320
-    : 256;
+      ? 320
+      : 256;
 
   const getItemStyle = (isSelected: boolean) => ({
     boxSizing: "border-box",
@@ -38,9 +37,9 @@ export default function DropDownList({
     alignItems: "center",
     justifyContent: "flex-start",
     cursor: "pointer",
-    backgroundColor: isSelected ? COLORS.PrimaryBlue[50] : "transparent",
+    backgroundColor: isSelected ? theme.palette.PrimaryBlue[50] : "transparent",
     "&:hover": {
-      backgroundColor: COLORS.PrimaryBlue[50],
+      backgroundColor: theme.palette.PrimaryBlue[50],
     },
   });
 
@@ -68,10 +67,10 @@ export default function DropDownList({
         mt: "4px",
         width: wrapperWidth,
         height: wrapperHeight,
-        backgroundColor: COLORS.White[100],
+        backgroundColor: theme.palette.White[100],
         borderRadius: isTablet ? "8px" : "16px",
         boxShadow: "4px 4px 10px rgba(224, 224, 224, 0.25)",
-        border: `1px solid ${COLORS.Line[200]}`,
+        border: `1px solid ${theme.palette.Line[200]}`,
         overflow: "hidden",
         zIndex: 10,
         backgroundImage: isRegion

@@ -1,72 +1,71 @@
-import { COLORS } from "@/public/theme/colors";
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
+import { ChipProps } from "@/src/types/card";
 import Image from "next/image";
-
-export interface ChipProps {
-  type: "small" | "home" | "office" | "designation" | "wait" | "complete";
+interface ChipCategoryProps extends ChipProps {
+  forceMobileSize?: boolean;
 }
 
-const categoryData = {
-  small: {
-    label: "소형이사",
-    bg: COLORS.PrimaryBlue[100],
-    text: COLORS.PrimaryBlue[300],
-    img: "/images/chip/box.svg",
-    alt: "소형이사",
-  },
-  home: {
-    label: "가정이사",
-    bg: COLORS.PrimaryBlue[100],
-    text: COLORS.PrimaryBlue[300],
-    img: "/images/chip/home.svg",
-    alt: "가정이사",
-  },
-  office: {
-    label: "사무실이사",
-    bg: COLORS.PrimaryBlue[100],
-    text: COLORS.PrimaryBlue[300],
-    img: "/images/chip/company.svg",
-    alt: "사무실이사",
-  },
-  designation: {
-    label: "지정 견적 요청",
-    bg: COLORS.SecondaryRed[100],
-    text: COLORS.SecondaryRed[200],
-    img: "/images/chip/document.svg",
-    alt: "지정 견적 요청",
-  },
-  wait: {
-    label: "견적 대기",
-    bg: "#F2F3F8",
-    text: COLORS.PrimaryBlue[400],
-    img: null,
-    alt: "견적 대기",
-  },
-  complete: {
-    label: "견적 확정",
-    bg: "#F2F3F8",
-    text: COLORS.PrimaryBlue[400],
-    img: null,
-    alt: "견적 확정",
-  },
-} as const;
-
-export const ChipCategory = ({ type = "small" }: ChipProps) => {
-  const data = categoryData[type];
+export const ChipCategory = ({
+  type = "small",
+  forceMobileSize = false,
+}: ChipCategoryProps) => {
   const theme = useTheme();
 
-  const isSmall = useMediaQuery(`(max-width:400px)`);
-  const isMobile = useMediaQuery(theme.breakpoints.down("desktop"));
-  const size = isSmall ? "xs" : isMobile ? "sm" : "md";
+  const categoryData = {
+    small: {
+      label: "소형이사",
+      bg: theme.palette.PrimaryBlue[100],
+      text: theme.palette.PrimaryBlue[300],
+      img: "/Images/chip/box.svg",
+      alt: "소형이사",
+    },
+    home: {
+      label: "가정이사",
+      bg: theme.palette.PrimaryBlue[100],
+      text: theme.palette.PrimaryBlue[300],
+      img: "/Images/chip/home.svg",
+      alt: "가정이사",
+    },
+    office: {
+      label: "사무실이사",
+      bg: theme.palette.PrimaryBlue[100],
+      text: theme.palette.PrimaryBlue[300],
+      img: "/Images/chip/company.svg",
+      alt: "사무실이사",
+    },
+    designation: {
+      label: "지정 견적 요청",
+      bg: theme.palette.SecondaryRed[100],
+      text: theme.palette.SecondaryRed[200],
+      img: "/Images/chip/document.svg",
+      alt: "지정 견적 요청",
+    },
+    wait: {
+      label: "견적 대기",
+      bg: theme.palette.Background[100],
+      text: theme.palette.PrimaryBlue[400],
+      img: null,
+      alt: "견적 대기",
+    },
+    complete: {
+      label: "견적 확정",
+      bg: theme.palette.Background[100],
+      text: theme.palette.PrimaryBlue[400],
+      img: null,
+      alt: "견적 확정",
+    },
+  } as const;
+
+  const data = categoryData[type];
 
   const sizeMap = {
-    xs: { img: 20, height: 24, borderRadius: 4 },
+    xs: { img: 20, height: 24, borderRadius: "4px" },
     sm: {
       img: 20,
       font: 13,
       height: 26,
-      lineHeight: 22,
-      borderRadius: 4,
+      lineHeight: "22px",
+      borderRadius: "4px",
       gap: 0.25,
       px: "6px",
     },
@@ -74,12 +73,17 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
       img: 24,
       font: 18,
       height: 34,
-      lineHeight: 24,
-      borderRadius: 8,
+      lineHeight: "24px",
+      borderRadius: "8px",
       gap: 0.5,
       px: "8px",
     },
   } as const;
+
+  //  모바일 사이즈 강제 적용
+  const isSmall = useMediaQuery(`(max-width:400px)`);
+  const isMobile = useMediaQuery(theme.breakpoints.down("desktop"));
+  const size = forceMobileSize ? "sm" : isSmall ? "xs" : isMobile ? "sm" : "md";
   let sizeStyle = sizeMap[size];
 
   if (!data) return null;
@@ -147,3 +151,5 @@ export const ChipCategory = ({ type = "small" }: ChipProps) => {
     </Box>
   );
 };
+
+export type { ChipProps };

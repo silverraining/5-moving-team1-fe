@@ -4,97 +4,88 @@ import {
   Box,
   Button,
   Drawer,
-  Link,
   Stack,
   useMediaQuery,
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
 import { DrawerList } from "../DrawerList";
-
 import { useDrawer } from "@/src/hooks/utill";
 import { UserTabs } from "./UserTabs";
 import { MenuTabs } from "./MenuTabs";
 import { AuthStore } from "@/src/store/authStore";
+import { PATH } from "@/src/lib/constants";
+import { useRouter } from "next/navigation";
+import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import {
+  CUSTOMER_MENU,
+  GUEST_MENU,
+  MOVER_MENU,
+} from "@/src/lib/headerConstants";
+import Link from "next/link";
 
 export const Header = () => {
+  const router = useRouter();
+  const { openSnackbar } = useSnackbar();
   const { open, toggleDrawer } = useDrawer();
-  const { user, token } = AuthStore();
-  const isLogin = token;
-  const isCustomer = user?.roll === "customer";
-  const isMover = user?.roll === "mover";
+  const { user, isLogin, logout } = AuthStore();
+  const isCustomer = user?.role === "CUSTOMER";
+  const isMover = user?.role === "MOVER";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-  const customerMenu = ["견적 요청", "기사님 찾기", "내 견적 관리"];
-  const moverMenu = ["받은 요청", "내 견적 관리"];
-  const guestMenu = ["기사님 찾기"];
 
-  const TabMenu = isCustomer ? customerMenu : isMover ? moverMenu : guestMenu;
-  const DrawerMenu = isCustomer
-    ? customerMenu
+  const TabMenu = isCustomer
+    ? CUSTOMER_MENU
     : isMover
-      ? moverMenu
-      : ["로그인", ...guestMenu];
-
+      ? MOVER_MENU
+      : GUEST_MENU;
+  const DrawerMenu = isCustomer
+    ? CUSTOMER_MENU
+    : isMover
+      ? MOVER_MENU
+      : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+  const hendleLogout = () => {
+    logout();
+    router.replace(PATH.main);
+    openSnackbar("로그아웃 되었습니다", "success", 2000, "standard");
+  };
   return (
     <Box
       display={"flex"}
-      px={["24px", "24px", "120px"]}
+      px={["24px", "72px", "260px"]}
       height={["54px", "54px", "88px"]}
       alignItems={"center"}
       justifyContent={"space-between"}
-      bgcolor={"white"}
+      bgcolor={theme.palette.White[100]}
     >
       <Stack direction={"row"} alignItems="center" spacing={2}>
-        <Link href={"/"} display={"flex"} alignItems={"center"}>
+        <Link href={PATH.main} passHref>
           <Image
-            src={"/images/logo/logo.svg"}
+            src={"/Images/logo/logo.svg"}
             width={88}
             height={34}
             alt="logo"
           />
         </Link>
-        {!isSmall && <MenuTabs menu={TabMenu} />}
+        {!isSmall && <MenuTabs menu={TabMenu} showIndicator={false} />}
       </Stack>
       {!isSmall ? (
         isLogin ? (
-          <UserTabs
-            isSmall={isSmall}
-            user={
-              user
-                ? {
-                    id: user.id,
-                    name: user.name,
-                    role: user.roll ?? null,
-                    token: token ?? null,
-                  }
-                : undefined
-            }
-          />
+          <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
         ) : (
-          <Button variant="contained" sx={{ width: "116px", height: "44px" }}>
-            로그인
-          </Button>
+          <Link href={PATH.userLogin} passHref>
+            <Button variant="contained" sx={{ width: "116px", height: "44px" }}>
+              로그인
+            </Button>
+          </Link>
         )
       ) : (
         <Stack direction={"row"} alignItems={"center"} gap={"24px"}>
           {isLogin && (
-            <UserTabs
-              isSmall={isSmall}
-              user={
-                user
-                  ? {
-                      id: user.id,
-                      name: user.name,
-                      role: user.roll ?? null,
-                      token: token ?? null,
-                    }
-                  : undefined
-              }
-            />
+            <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
           )}
           <Image
-            src={"/images/header/menu.svg"}
+            src={"/Images/header/menu.svg"}
             width={24}
             height={24}
             alt="menu"

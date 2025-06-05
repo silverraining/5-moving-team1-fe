@@ -8,6 +8,7 @@ import { Box } from "@mui/material";
 
 interface DropDownWrapperProps {
   type: "region" | "service";
+  label: string;
 }
 
 export default function DropDownWrapper({ type }: DropDownWrapperProps) {

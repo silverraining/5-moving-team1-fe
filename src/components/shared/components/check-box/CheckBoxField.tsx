@@ -1,4 +1,3 @@
-import { COLORS } from "@/public/theme/colors";
 import {
   Box,
   Button,
@@ -31,7 +30,7 @@ export const CheckBoxField = ({ selected, onChange }: CheckBoxProps) => {
           <Button
             key={option}
             onClick={() => onChange(option)}
-            sx={{
+            sx={(theme) => ({
               display: "flex",
               alignItems: "center",
               gap: "12px",
@@ -40,14 +39,16 @@ export const CheckBoxField = ({ selected, onChange }: CheckBoxProps) => {
               padding: ["10px 16px"],
               border: "1px solid",
               borderRadius: "16px",
-              borderColor: isSelected ? COLORS.PrimaryBlue[300] : "#E6E6E6",
+              borderColor: isSelected
+                ? theme.palette.PrimaryBlue[300]
+                : theme.palette.Line[200],
               backgroundColor: isSelected
-                ? COLORS.PrimaryBlue[300]
+                ? theme.palette.PrimaryBlue[300]
                 : "transparent",
               cursor: "pointer",
 
               boxShadow: "4px 4px 10px 0px #C3D9F233",
-            }}
+            })}
           >
             <Image
               src={

@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { PickersCalendarHeaderProps } from "@mui/x-date-pickers/PickersCalendarHeader";
-import { COLORS } from "@/public/theme/colors";
 
 export const CustomCalendarHeader = (props: PickersCalendarHeaderProps) => {
   const { currentMonth, onMonthChange } = props;
@@ -39,7 +38,7 @@ export const CustomCalendarHeader = (props: PickersCalendarHeaderProps) => {
       </IconButton>
       <Typography
         variant={isSmall ? "SB_16" : "SB_20"}
-        sx={{ color: COLORS.Black[400] }}
+        sx={(theme) => ({ color: theme.palette.Black[400] })}
       >
         {currentMonth.format("YYYY. MM")}
       </Typography>

@@ -1,6 +1,5 @@
 import { PickersActionBarProps } from "@mui/x-date-pickers/PickersActionBar";
 import { Button, useTheme, useMediaQuery } from "@mui/material";
-import { COLORS } from "@/public/theme/colors";
 
 interface CustomActionBarProps extends PickersActionBarProps {
   onAccept?: () => void;
@@ -20,20 +19,20 @@ export const CustomActionBar = ({
       onClick={onAccept}
       disabled={disabled}
       fullWidth
-      sx={{
+      sx={(theme) => ({
         width: isSmall ? 279 : 560,
         height: isSmall ? 54 : 64,
         padding: "16px",
         mx: isSmall ? "24px" : "40px",
-        backgroundColor: disabled ? COLORS.Grayscale[100] : undefined,
+        backgroundColor: disabled ? theme.palette.Grayscale[100] : undefined,
         borderRadius: "16px",
         ...(isSmall ? theme.typography.SB_16 : theme.typography.SB_20),
 
         "&.Mui-disabled": {
-          backgroundColor: COLORS.Grayscale[100],
-          color: "#ffffff",
+          backgroundColor: theme.palette.Grayscale[100],
+          color: theme.palette.White[100],
         },
-      }}
+      })}
     >
       선택완료
     </Button>

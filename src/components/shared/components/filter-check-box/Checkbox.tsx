@@ -1,5 +1,4 @@
 import { Box, Checkbox as MuiCheckbox, Typography } from "@mui/material";
-import { COLORS } from "@/public/theme/colors";
 
 interface CheckboxProps {
   label: string;
@@ -16,35 +15,37 @@ export const Checkbox = ({
 }: CheckboxProps) => {
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
         width: "90%",
         padding: "12px 16px",
-        backgroundColor: checked ? COLORS.PrimaryBlue[50] : "transparent",
+        backgroundColor: checked
+          ? theme.palette.PrimaryBlue[50]
+          : "transparent",
         cursor: "pointer",
-      }}
-      onClick={() => onChange(!checked)}
+      })}
+      onClick={(theme) => onChange(!checked)}
     >
       <Box sx={{ display: "flex", alignItems: "center" }}>
         <Typography
-          sx={{
+          sx={(theme) => ({
             fontWeight: checked ? 600 : 400,
             fontSize: "18px",
-            color: COLORS.Black[400],
-          }}
+            color: theme.palette.Black[400],
+          })}
         >
           {label}
         </Typography>
         {count !== undefined && (
           <Typography
-            sx={{
+            sx={(theme) => ({
               ml: 1,
-              color: COLORS.Black[400],
+              color: theme.palette.Black[400],
               fontSize: "18px",
               fontWeight: 400,
-            }}
+            })}
           >
             ({count})
           </Typography>
@@ -56,12 +57,12 @@ export const Checkbox = ({
           e.stopPropagation();
           onChange(!checked);
         }}
-        sx={{
-          color: COLORS.Grayscale[100],
+        sx={(theme) => ({
+          color: theme.palette.Grayscale[100],
           "&.Mui-checked": {
-            color: COLORS.PrimaryBlue[300],
+            color: theme.palette.PrimaryBlue[300],
           },
-        }}
+        })}
       />
     </Box>
   );

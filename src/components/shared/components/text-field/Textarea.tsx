@@ -1,6 +1,5 @@
 "use client";
 
-import { COLORS } from "@/public/theme/colors";
 import {
   InputProps,
   OutlinedInput,
@@ -8,17 +7,23 @@ import {
   Typography,
   useMediaQuery,
   useTheme,
+  SxProps,
+  Theme,
 } from "@mui/material";
 import { UseFormRegisterReturn } from "react-hook-form";
 
 interface TextareaProps extends Omit<InputProps, "fullWidth"> {
   register: UseFormRegisterReturn;
   errorMessage?: string;
+  border?: boolean;
+  sx?: SxProps<Theme>;
 }
 
 export const Textarea = ({
   register,
   errorMessage,
+  border = true,
+  sx: customSx,
   ...props
 }: TextareaProps) => {
   const theme = useTheme();
@@ -38,17 +43,24 @@ export const Textarea = ({
           p: 0,
           fontSize,
           alignItems: "flex-start",
+          "& fieldset": {
+            border: border ? "1px solid" : "none",
+          },
           "& textarea": {
             px: ["14px", "14px", "24px"],
             pt: "14px",
             resize: "none",
             overflow: "auto",
           },
+          ...customSx,
         }}
         {...props}
       />
       {errorMessage && (
-        <Typography variant={font} color={COLORS.SecondaryRed[200]}>
+        <Typography
+          variant={font}
+          sx={(theme) => ({ color: theme.palette.SecondaryRed[200] })}
+        >
           {errorMessage}
         </Typography>
       )}

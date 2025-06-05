@@ -19,11 +19,11 @@ export default function DropDownList({
 
   return (
     <Box
-      sx={{
+      sx={(theme) => ({
         position: "absolute",
         width: 328,
         height: isRegion ? 320 : 256,
-        backgroundColor: "#FFFFFF",
+        backgroundColor: theme.palette.White[100],
         borderRadius: "16px",
         boxShadow: "4px 4px 10px rgba(224, 224, 224, 0.25)",
         display: "flex",
@@ -32,7 +32,7 @@ export default function DropDownList({
         padding: 0,
         overflowY: isRegion ? "auto" : "visible",
         zIndex: 10,
-      }}
+      })}
     >
       {items.map((item) => {
         const isSelected = selectedItem === item;
@@ -41,15 +41,17 @@ export default function DropDownList({
           <Box
             key={item}
             onClick={() => onSelect(item)}
-            sx={{
+            sx={(theme) => ({
               width: isRegion ? "50%" : "100%",
               padding: isRegion ? "12px 16px" : "14px 24px",
               cursor: "pointer",
-              backgroundColor: isSelected ? "#F5FAFF" : "transparent",
+              backgroundColor: isSelected
+                ? theme.palette.PrimaryBlue[50]
+                : "transparent",
               "&:hover": {
-                backgroundColor: "#F5FAFF",
+                backgroundColor: theme.palette.PrimaryBlue[50],
               },
-            }}
+            })}
           >
             <Typography variant="M_16">{item}</Typography>
           </Box>

@@ -35,7 +35,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           flexDirection: "column",
           justifyContent: "space-between",
           gap: isSmall ? "16px" : "24px",
-          backgroundColor: "#ffffff",
+          backgroundColor: theme.palette.White[100],
           py: isSmall ? "14px" : "24px",
           borderRadius: isSmall ? "16px" : "32px",
           boxShadow: "2px 2px 10px rgba(224, 224, 224, 0.2)",
@@ -88,7 +88,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           color: "black",
           border: "none",
           "&.Mui-selected": {
-            backgroundColor: "#1976d2",
+            backgroundColor: theme.palette.PrimaryBlue[500],
             color: "white",
           },
         },

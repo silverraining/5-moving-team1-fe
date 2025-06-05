@@ -1,4 +1,3 @@
-import { COLORS } from "@/public/theme/colors";
 import { Box, LinearProgress, Stack, Typography } from "@mui/material";
 interface ProgressProps {
   max: number;
@@ -23,17 +22,20 @@ export const Progress = ({ max, value, label, isSmall }: ProgressProps) => {
         <LinearProgress
           variant="determinate"
           value={percentage}
-          sx={{
-            backgroundColor: "#EFEFEF",
+          sx={(theme) => ({
+            backgroundColor: theme.palette.NeutralGray[300],
             "& .MuiLinearProgress-bar": {
-              backgroundColor: COLORS.SecondaryYellow[100],
+              backgroundColor: theme.palette.SecondaryYellow[100],
             },
             height: "8px",
             borderRadius: "15px",
-          }}
+          })}
         />
       </Box>
-      <Typography variant="B_20" color={COLORS.Grayscale[300]}>
+      <Typography
+        variant="B_20"
+        sx={(theme) => ({ color: theme.palette.Grayscale[300] })}
+      >
         {value}
       </Typography>
     </Stack>

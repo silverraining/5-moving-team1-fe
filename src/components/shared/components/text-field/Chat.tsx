@@ -1,5 +1,5 @@
 "use client";
-import { COLORS } from "@/public/theme/colors";
+
 import { Box, BoxProps, Stack, Typography, useTheme } from "@mui/material";
 
 interface ChatProps {
@@ -27,7 +27,7 @@ export const Chat = ({ content, variant }: ChatProps) => {
       sx: {
         whiteSpace: "pre-wrap",
         wordBreak: "break-word",
-        backgroundColor: COLORS.PrimaryBlue[300],
+        backgroundColor: theme.palette.PrimaryBlue[300],
         borderBottomRightRadius: ["24px", "24px", "30px"],
         borderBottomLeftRadius: ["24px", "24px", "30px"],
         borderTopLeftRadius: ["24px", "24px", "30px"],
@@ -38,7 +38,7 @@ export const Chat = ({ content, variant }: ChatProps) => {
       sx: {
         whiteSpace: "pre-wrap",
         wordBreak: "break-word",
-        backgroundColor: COLORS.PrimaryBlue[100],
+        backgroundColor: theme.palette.PrimaryBlue[100],
         borderBottomRightRadius: ["24px", "24px", "30px"],
         borderBottomLeftRadius: ["24px", "24px", "30px"],
         borderTopLeftRadius: ["24px", "24px", "30px"],
@@ -65,7 +65,7 @@ export const Chat = ({ content, variant }: ChatProps) => {
             variant === "sent"
               ? "black"
               : variant === "system"
-                ? COLORS.PrimaryBlue[300]
+                ? theme.palette.PrimaryBlue[300]
                 : "white"
           }
         >

@@ -32,7 +32,6 @@
 
 import { Box, Typography, Checkbox as MuiCheckbox } from "@mui/material";
 import { Checkbox } from "./Checkbox";
-import { COLORS } from "@/public/theme/colors";
 
 interface CheckboxItem {
   label: string;
@@ -64,21 +63,21 @@ export const CheckboxList = ({
       }}
     >
       <Box
-        sx={{
+        sx={(theme) => ({
           display: "flex",
           justifyContent: "space-between",
           alignItems: "center",
           padding: "16px 20px",
-          borderBottom: `1px solid ${COLORS.Line[200]}`,
-          bgcolor: COLORS.White[100],
-        }}
+          borderBottom: `1px solid ${theme.palette.Line[200]}`,
+          bgcolor: theme.palette.White[100],
+        })}
       >
         <Typography
-          sx={{
+          sx={(theme) => ({
             fontWeight: 500,
             fontSize: "20px",
-            color: COLORS.Black[400],
-          }}
+            color: theme.palette.Black[400],
+          })}
         >
           {title}
         </Typography>
@@ -95,22 +94,22 @@ export const CheckboxList = ({
               checked={allChecked}
               onChange={(e) => onSelectAll(e.target.checked)}
               onClick={(e) => e.stopPropagation()}
-              sx={{
+              sx={(theme) => ({
                 padding: 0,
-                color: COLORS.Grayscale[100],
+                color: theme.palette.Grayscale[100],
                 "&.Mui-checked": {
-                  color: COLORS.PrimaryBlue[300],
+                  color: theme.palette.PrimaryBlue[300],
                 },
-              }}
+              })}
               size="small"
             />
             <Typography
-              sx={{
+              sx={(theme) => ({
                 fontSize: "16px",
                 fontWeight: 400,
-                color: COLORS.Grayscale[300],
+                color: theme.palette.Grayscale[300],
                 ml: 1,
-              }}
+              })}
             >
               전체선택
             </Typography>
@@ -121,12 +120,12 @@ export const CheckboxList = ({
         {items.map((item, index) => (
           <Box
             key={index}
-            sx={{
+            sx={(theme) => ({
               borderBottom:
                 index < items.length - 1
-                  ? `1px solid ${COLORS.Line[100]}`
+                  ? `1px solid ${theme.palette.Line[100]}`
                   : "none",
-            }}
+            })}
           >
             <Checkbox
               label={item.label}

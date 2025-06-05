@@ -8,10 +8,7 @@ import {
   Box,
   styled,
   Button,
-  useTheme,
-  useMediaQuery,
 } from "@mui/material";
-import { COLORS } from "@/public/theme/colors";
 import { SearchInput } from "../text-field/Search";
 import AddressCard from "./AddressCard";
 import Image from "next/image";
@@ -49,7 +46,7 @@ const StyledDialogContent = styled(DialogContent)({
   padding: "0 24px 24px 24px",
 });
 
-const StyledButton = styled(Button)({
+const StyledButton = styled(Button)(({ theme }) => ({
   width: "100%",
   height: "56px",
   borderRadius: "16px",
@@ -57,10 +54,10 @@ const StyledButton = styled(Button)({
   fontSize: ["16px", "16px", "20px"],
   fontWeight: "semibold",
   "&.Mui-disabled": {
-    backgroundColor: COLORS.Grayscale[200],
-    color: COLORS.White[100],
+    backgroundColor: theme.palette.Grayscale[200],
+    color: theme.palette.White[100],
   },
-});
+}));
 
 const AddressModal: React.FC<AddressModalProps> = ({
   open,
@@ -126,7 +123,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         </Typography>
         <IconButton onClick={onClose}>
           <Image
-            src="/images/header/X.svg"
+            src="/Images/header/X.svg"
             alt="close"
             width={24}
             height={24}
@@ -159,12 +156,12 @@ const AddressModal: React.FC<AddressModalProps> = ({
           variant="contained"
           disabled={!selectedAddress}
           onClick={handleComplete}
-          sx={{
+          sx={(theme) => ({
             backgroundColor: selectedAddress
-              ? COLORS.PrimaryBlue[300]
+              ? theme.palette.PrimaryBlue[300]
               : undefined,
             fontSize: ["16px", "16px", "20px"],
-          }}
+          })}
         >
           선택완료
         </StyledButton>

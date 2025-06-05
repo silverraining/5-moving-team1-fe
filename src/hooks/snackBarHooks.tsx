@@ -1,8 +1,7 @@
 import React from "react";
-import { Snackbar, Alert, Stack, Typography } from "@mui/material";
+import { Snackbar, Alert, Stack, Typography, useTheme } from "@mui/material";
 import { useSnackbarStore } from "../store/snackBarStore";
 import Image from "next/image";
-import { COLORS } from "@/public/theme/colors";
 
 type Severity = "success" | "error" | "warning" | "info";
 
@@ -16,13 +15,13 @@ interface UseSnackbarReturn {
   SnackbarComponent: React.ReactNode;
 }
 
-const infoStyles = {
-  bg: COLORS.PrimaryBlue[100],
-  text: COLORS.PrimaryBlue[300],
-  icon: "/images/info.svg",
-};
-
 export function useSnackbar(): UseSnackbarReturn {
+  const theme = useTheme();
+  const infoStyles = {
+    bg: theme.palette.PrimaryBlue[100],
+    text: theme.palette.PrimaryBlue[300],
+    icon: "/Images/info.svg",
+  };
   const {
     open,
     message,
@@ -48,10 +47,9 @@ export function useSnackbar(): UseSnackbarReturn {
         open={open}
         autoHideDuration={duration}
         onClose={handleClose}
-        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
         sx={{
           position: "fixed",
-          bottom: 16,
           left: "50%",
           transform: "translateX(-50%)",
           zIndex: (theme) => theme.zIndex.snackbar,

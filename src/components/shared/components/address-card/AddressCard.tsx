@@ -7,7 +7,6 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
-import { COLORS } from "@/public/theme/colors";
 
 type AddressCardProps = {
   zipCode: string;
@@ -20,23 +19,23 @@ type AddressCardProps = {
 const StyledCard = styled(Card)<{ selected: boolean }>(
   ({ selected, theme }) => ({
     borderRadius: "16px",
-    border: `1px solid ${selected ? COLORS.PrimaryBlue[200] : COLORS.Line[100]}`,
-    backgroundColor: selected ? COLORS.PrimaryBlue[50] : "white",
+    border: `1px solid ${selected ? theme.palette.PrimaryBlue[200] : theme.palette.Line[100]}`,
+    backgroundColor: selected ? theme.palette.PrimaryBlue[50] : "white",
     boxShadow: "none",
     cursor: "pointer",
     transition: "all 0.2s ease-in-out",
     width: "100%",
     marginBottom: "8px",
     "&:hover": {
-      borderColor: COLORS.PrimaryBlue[200],
-      backgroundColor: COLORS.PrimaryBlue[50],
+      borderColor: theme.palette.PrimaryBlue[200],
+      backgroundColor: theme.palette.PrimaryBlue[50],
     },
   })
 );
 
-const StyledLabel = styled(Typography)({
-  color: COLORS.PrimaryBlue[300],
-  backgroundColor: COLORS.PrimaryBlue[100],
+const StyledLabel = styled(Typography)(({ theme }) => ({
+  color: theme.palette.PrimaryBlue[300],
+  backgroundColor: theme.palette.PrimaryBlue[100],
   padding: "2px 8.5px",
   borderRadius: "14px",
   fontWeight: "semibold",
@@ -44,7 +43,7 @@ const StyledLabel = styled(Typography)({
   textAlign: "center",
   fontSize: ["12px", "12px", "14px"],
   minWidth: ["32px", "32px", "48px"],
-});
+}));
 
 const AddressContainer = styled(Box)({
   display: "flex",

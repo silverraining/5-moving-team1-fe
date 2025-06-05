@@ -11,7 +11,6 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-import { COLORS } from "@/public/theme/colors";
 
 interface FilterProps {
   open: boolean;
@@ -81,15 +80,21 @@ const FilterModal = ({
         {/* 헤더 */}
         <Stack direction="row" p={1} justifyContent="space-between" pt={"12px"}>
           <Stack direction="row" spacing={3}>
-            <Typography color={COLORS.Black[400]} variant="B_18">
+            <Typography
+              sx={(theme) => ({ color: theme.palette.Black[400] })}
+              variant="B_18"
+            >
               이사 유형
             </Typography>
-            <Typography color={COLORS.Grayscale[300]} variant="SB_18">
+            <Typography
+              sx={(theme) => ({ color: theme.palette.Grayscale[300] })}
+              variant="SB_18"
+            >
               필터
             </Typography>
           </Stack>
           <Image
-            src={"/images/modal/x.svg"}
+            src={"/Images/modal/x.svg"}
             width={24}
             height={24}
             alt="close"
@@ -159,9 +164,13 @@ const CheckboxRow = ({
   <Stack direction="row" justifyContent="space-between" alignItems="center">
     <Typography
       height={isAllRow ? "52px" : "68px"}
-      color={isAllRow ? COLORS.Grayscale[300] : COLORS.Black[400]}
       variant="M_16"
       alignContent={"center"}
+      sx={(theme) => ({
+        color: isAllRow
+          ? theme.palette.Grayscale[300]
+          : theme.palette.Black[400],
+      })}
     >
       {label}
     </Typography>
