@@ -5,6 +5,7 @@ import { UseFormRegisterReturn } from "react-hook-form";
 
 interface OutlineProps extends Omit<InputProps, "fullWidth"> {
   type?: string;
+  border: boolean;
   register: UseFormRegisterReturn;
   errorMessage?: string;
 }
@@ -12,6 +13,7 @@ interface OutlineProps extends Omit<InputProps, "fullWidth"> {
 export const Outline = ({
   type,
   register,
+  border = true,
   errorMessage = "",
   ...props
 }: OutlineProps) => {
@@ -50,7 +52,7 @@ export const Outline = ({
             fontSize: "20px",
           },
           "& fieldset": {
-            borderWidth: "1px",
+            borderWidth: border ? "1px" : 0,
             borderColor: errorMessage
               ? theme.palette.SecondaryRed[200]
               : theme.palette.Line[200],
