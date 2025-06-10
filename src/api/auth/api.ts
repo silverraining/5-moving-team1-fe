@@ -12,7 +12,8 @@ type LoginResponse = {
  * @param data  로그인 정보
  * @param data.email 이메일
  * @param data.password 비밀번호
- * @param data.userType 사용자 유형 (예: CUSTOMER, MOVER)
+ * @param data.role 사용자 유형 (예: CUSTOMER, MOVER)
+ * @param data.provider 사용자 가입 경로
  * @returns
  * 로그인 성공 시 accessToken, refreshToken, user 정보를 포함한 응답
  * @throws 로그인 실패 시 에러 메시지
@@ -20,11 +21,12 @@ type LoginResponse = {
  */
 export const login = async (data: Login): Promise<LoginResponse> => {
   try {
-    const { email, password, role } = data;
-    const response = await apiClient.post(`/auth/login/local`, {
+    const { email, password, role, provider = "LOCAL" } = data;
+    const response = await apiClient.post(`/auth/login/local/?state=${role}`, {
       email,
       password,
       role,
+      provider: provider,
     });
     return response.data;
   } catch (error) {
