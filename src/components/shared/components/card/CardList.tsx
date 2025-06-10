@@ -1,4 +1,7 @@
-import { Box, BoxProps, Stack, Typography } from "@mui/material";
+"use client";
+
+import React, { useEffect, useRef, useState } from "react";
+import { Box, Stack, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Image from "next/image";
 
 type VariantType = "small" | "office" | "home";
@@ -28,126 +31,100 @@ const CARD_CONTENT: Record<
   },
 };
 
-export const CardList = ({ variant }: CardListProps) => {
-  const { title, subTitle, img } = CARD_CONTENT[variant];
-  const Style =
-    variant === "small"
-      ? SmallStyle
-      : variant === "home"
-        ? HomeStyle
-        : OfficeStyle;
+const IMAGE_RATIO: Record<VariantType, number> = {
+  small: 284.16 / 182.4,
+  home: 291.6 / 174,
+  office: 316.92 / 131.14,
+};
 
-  const imageStyle =
-    variant === "small"
-      ? SmallImageStyle
-      : variant === "home"
-        ? HomeImageStyle
-        : OfficeImageStyle;
+export const CardList = ({ variant }: CardListProps) => {
+  const theme = useTheme();
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [containerWidth, setContainerWidth] = useState<number>(0);
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+
+  useEffect(() => {
+    function updateWidth() {
+      if (containerRef.current) {
+        setContainerWidth(containerRef.current.offsetWidth);
+      }
+    }
+
+    updateWidth();
+
+    window.addEventListener("resize", updateWidth);
+    return () => window.removeEventListener("resize", updateWidth);
+  }, []);
+
+  const { title, subTitle, img } = CARD_CONTENT[variant];
+
+  // isSmall일 때 무조건 최소 이미지 사이즈 지정, 아닐 때는 containerWidth 기준
+  const imageWidth = isSmall
+    ? variant === "small"
+      ? 284 // small은 고정 최소값
+      : 290 // 다른 variant들은 적당히 고정값 지정 가능
+    : containerWidth
+      ? containerWidth * 0.5
+      : 0;
+
+  const imageHeight = imageWidth / IMAGE_RATIO[variant];
+
+  const baseHeight = variant === "small" ? 598 : 287;
+  const height = isSmall ? 240 : baseHeight;
+
+  const baseSx = {
+    bgcolor:
+      variant === "small"
+        ? theme.palette.PrimaryBlue[100]
+        : theme.palette.White[100],
+    borderRadius: "32px",
+    overflow: "hidden",
+    position: "relative",
+    pl: 4,
+    pt: 6,
+    width: "100%",
+    maxWidth: variant === "small" ? (isSmall ? "100%" : 432) : 764,
+    minWidth: 327,
+    height,
+    boxSizing: "border-box",
+    cursor: "pointer",
+    "&:hover .slide-in": {
+      transform: variant === "office" ? "translateY(0)" : "translateX(0)",
+      opacity: 1,
+      transition: "all 1s ease",
+    },
+  };
+
+  const imageSx = {
+    position: "absolute" as const,
+    bottom: variant === "small" ? 0 : variant === "home" ? -15 : -0,
+    right: variant === "small" ? -imageWidth * 0.3 : 0,
+    transform: variant === "office" ? "translateY(60%)" : "translateX(50%)",
+    opacity: 1,
+    transition: "all 1s ease",
+  };
 
   return (
-    <Box {...Style}>
-      <Stack>
+    <Box sx={baseSx} ref={containerRef}>
+      <Stack spacing={1}>
         <Typography variant="B_20">{title}</Typography>
-        <Typography
-          variant="R_14"
-          sx={(theme) => ({
-            color: theme.palette.Grayscale[400],
-          })}
-        >
+        <Typography variant="R_14" sx={{ color: theme.palette.Grayscale[400] }}>
           {subTitle}
         </Typography>
       </Stack>
 
-      <Box {...imageStyle}>
-        <Image src={img} alt="hand" width={486} height={290} />
+      <Box className="slide-in" sx={imageSx}>
+        {imageWidth > 0 && (
+          <Image
+            src={img}
+            alt={title}
+            width={imageWidth}
+            height={imageHeight}
+            loading="lazy"
+            style={{ pointerEvents: "none", userSelect: "none" }}
+          />
+        )}
       </Box>
     </Box>
   );
-};
-
-const SmallStyle: BoxProps = {
-  width: ["327px", "327px", "432px"],
-  height: ["240px", "240px", "598px"],
-  pl: 4,
-  pt: 6,
-  sx: (theme) => ({
-    bgcolor: theme.palette.PrimaryBlue[100],
-    borderRadius: "32px",
-    overflow: "hidden",
-    position: "relative",
-    "&:hover .slide-in": {
-      transform: "translateX(0)",
-      opacity: 1,
-    },
-  }),
-};
-
-const HomeStyle: BoxProps = {
-  width: ["327px", "327px", "764px"],
-  height: ["240px", "240px", "287px"],
-  bgcolor: "white",
-  pl: 4,
-  pt: 6,
-  sx: {
-    borderRadius: "32px",
-    overflow: "hidden",
-    position: "relative",
-    "&:hover .slide-in": {
-      transform: "translateX(0)",
-      opacity: 1,
-    },
-  },
-};
-
-const OfficeStyle: BoxProps = {
-  width: ["327px", "327px", "764px"],
-  height: ["240px", "240px", "287px"],
-  bgcolor: "white",
-  pl: 4,
-  pt: 6,
-  sx: {
-    borderRadius: "32px",
-    overflow: "hidden",
-    position: "relative",
-    "&:hover .slide-in": {
-      transform: "translateY(0)",
-      opacity: 1,
-    },
-  },
-};
-
-const SmallImageStyle: BoxProps = {
-  className: "slide-in",
-  sx: {
-    position: "absolute",
-    bottom: 0,
-    right: -100,
-    transform: "translateX(50%)",
-    opacity: 1,
-    transition: "all 1s ease",
-  },
-};
-
-const HomeImageStyle: BoxProps = {
-  className: "slide-in",
-  sx: {
-    position: "absolute",
-    bottom: -15,
-    right: 0,
-    transform: "translateX(60%)",
-    opacity: 1,
-    transition: "all 1s ease",
-  },
-};
-
-const OfficeImageStyle: BoxProps = {
-  className: "slide-in",
-  sx: {
-    position: "absolute",
-    bottom: -50,
-    right: 0,
-    transform: "translateY(60%)",
-    opacity: 1,
-    transition: "all 1.5s ease",
-  },
 };
