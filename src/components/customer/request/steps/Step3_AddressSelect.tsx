@@ -8,6 +8,7 @@ import { useState } from "react";
 import { useEstimateStore } from "@/src/store/requestStore";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import AddressModal from "@/src/components/shared/components/address-card/AddressModal";
+import dayjs from "dayjs";
 
 type Step3Props = {
   onSelectFrom: (from: string) => void;
@@ -100,7 +101,10 @@ export default function Step3_AddressSelect({
                   gap: isSmall ? "4px" : "6px",
                 }}
               >
-                <Chat variant="received" content={moveDate} />
+                <Chat
+                  variant="received"
+                  content={dayjs(moveDate).format("YYYY년 M월 D일")}
+                />
                 <Typography
                   onClick={onBackStep2}
                   variant={isSmall ? "M_12" : "R_16"}

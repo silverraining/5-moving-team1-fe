@@ -6,6 +6,7 @@ import { Calendar } from "@/src/components/shared/components/date-picker/Calenda
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import dayjs, { Dayjs } from "dayjs";
 import { useEstimateStore } from "@/src/store/requestStore";
+import { convertToLabel } from "@/src/utils/convertToLabel";
 
 interface Step2Props {
   onSelect: (date: string) => void;
@@ -23,7 +24,7 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
 
   const handleAccept = (value: Dayjs | null) => {
     if (value) {
-      const formatted = value.format("YYYY년 M월 D일");
+      const formatted = value.format("YYYY-MM-DD");
       setMoveDate(formatted); // 전역 상태 업데이트
       onSelect(formatted); // 스텝 이동과 함께 날짜 전달
     }
@@ -57,7 +58,7 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
                 gap: isSmall ? "4px" : "6px",
               }}
             >
-              <Chat variant="received" content={moveType} />
+              <Chat variant="received" content={convertToLabel(moveType)} />
               <Typography
                 onClick={onBack}
                 variant={isSmall ? "M_12" : "R_16"}
