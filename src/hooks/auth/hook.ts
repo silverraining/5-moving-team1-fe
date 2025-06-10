@@ -13,7 +13,7 @@ import {
   SignUpSchemaType,
 } from "@/src/schemas/auth/signup.schema";
 
-export const useLoginForm = (userType: Role) => {
+export const useLoginForm = (role: Role) => {
   const { mutate } = useLogin();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
@@ -24,7 +24,7 @@ export const useLoginForm = (userType: Role) => {
 
   const onSubmit = (data: LoginSchemaType) => {
     mutate(
-      { ...data, userType }, // 외부에서 받은 고정값 삽입
+      { ...data, role }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: () => {
           openSnackbar("로그인 성공", "success", 1000, "standard");
@@ -47,7 +47,7 @@ export const useLoginForm = (userType: Role) => {
   };
 };
 
-export const useSignupForm = (userType: Role) => {
+export const useSignupForm = (role: Role) => {
   const { mutate } = useSignup();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
@@ -57,9 +57,9 @@ export const useSignupForm = (userType: Role) => {
   });
 
   const onSubmit = (data: SignUpSchemaType) => {
-    const path = userType === "CUSTOMER" ? PATH.userLogin : PATH.moverLogin;
+    const path = role === "CUSTOMER" ? PATH.userLogin : PATH.moverLogin;
     mutate(
-      { ...data, userType }, // 외부에서 받은 고정값 삽입
+      { ...data, role }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: () => {
           openSnackbar("회원가입 성공", "success", 1000, "standard");

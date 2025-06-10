@@ -15,9 +15,6 @@ export const useLogin = (): UseMutationResult<
     onSuccess: (data) => {
       setAuth(data.accessToken, data.refreshToken, data.user);
     },
-    onError: (error) => {
-      console.error("로그인 실패", error);
-    },
   });
 };
 
