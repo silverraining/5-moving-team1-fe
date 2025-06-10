@@ -1,5 +1,6 @@
 import { Login, Signup, User } from "@/src/types/auth";
 import apiClient from "../axiosclient";
+import axios from "axios";
 
 type LoginResponse = {
   accessToken: string;
@@ -27,6 +28,9 @@ export const login = async (data: Login): Promise<LoginResponse> => {
     });
     return response.data;
   } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error("로그인 실패");
   }
 };
@@ -53,7 +57,10 @@ export const signup = async (data: Signup): Promise<LoginResponse["user"]> => {
       role,
     });
     return response.data;
-  } catch (error) {
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
     throw new Error("회원가입 실패");
   }
 };
