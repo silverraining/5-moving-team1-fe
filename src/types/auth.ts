@@ -4,7 +4,7 @@ import { EstimateOffer, EstimateRequest, Like, Review } from "./estimate";
 export type Login = {
   email: string;
   password: string;
-  userType: string;
+  role: string;
 };
 
 export type Signup = {
@@ -12,7 +12,7 @@ export type Signup = {
   email: string;
   phone: string;
   password: string;
-  userType: string;
+  role: string;
 };
 export type Role = "CUSTOMER" | "MOVER";
 

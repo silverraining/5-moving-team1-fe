@@ -19,11 +19,11 @@ type LoginResponse = {
  */
 export const login = async (data: Login): Promise<LoginResponse> => {
   try {
-    const { email, password, userType } = data;
+    const { email, password, role } = data;
     const response = await apiClient.post(`/auth/login/local`, {
       email,
       password,
-      userType,
+      role,
     });
     return response.data;
   } catch (error) {
@@ -44,13 +44,13 @@ export const login = async (data: Login): Promise<LoginResponse> => {
  */
 export const signup = async (data: Signup): Promise<LoginResponse["user"]> => {
   try {
-    const { email, password, userType, name, phone } = data;
+    const { email, password, role, name, phone } = data;
     const response = await apiClient.post(`/auth/register`, {
       name,
       email,
       phone,
       password,
-      userType,
+      role,
     });
     return response.data;
   } catch (error) {
