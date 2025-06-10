@@ -1,5 +1,11 @@
-import { useQuery } from "@tanstack/react-query";
-import { moverDetail, moverList, MoverListRequest } from "./api";
+import { useQuery, useMutation } from "@tanstack/react-query";
+import {
+  moverDetail,
+  moverList,
+  MoverListRequest,
+  CustomerProfileRequest,
+  registerCustomerProfile,
+} from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
 export const useMoverList = (params: MoverListRequest, enabled = true) => {
@@ -22,5 +28,12 @@ export const useMoverDetail = (moverId: string, enabled = true) => {
     queryFn: () => moverDetail(moverId),
     enabled: !!moverId && enabled, // moverId 없으면 요청 비활성화
     staleTime: 1000 * 60 * 5, // 5분 캐시 유지
+  });
+};
+
+/** 일반 유저 프로필 등록 hook */
+export const useRegisterCustomerProfile = () => {
+  return useMutation({
+    mutationFn: (data: CustomerProfileRequest) => registerCustomerProfile(data),
   });
 };
