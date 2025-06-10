@@ -83,51 +83,32 @@ export const createAppTheme = (mode: "light" | "dark") => {
           {
             props: { variant: "contained" },
             style: {
-              backgroundColor:
-                mode === "light"
-                  ? COLORS.PrimaryBlue[300]
-                  : COLORS.SecondaryYellow[100],
+              backgroundColor: paletteColors.PrimaryBlue[300],
+
               borderRadius: "16px",
               ":hover": {
-                backgroundColor:
-                  mode === "light"
-                    ? COLORS.PrimaryBlue[200]
-                    : COLORS.SecondaryYellow[100],
+                backgroundColor: paletteColors.PrimaryBlue[200],
               },
               "&.Mui-disabled": {
-                backgroundColor:
-                  mode === "light"
-                    ? COLORS.Grayscale[100]
-                    : COLORS.Grayscale[300],
+                backgroundColor: paletteColors.Grayscale[100],
               },
             },
           },
           {
             props: { variant: "outlined" },
             style: {
-              borderColor:
-                mode === "light"
-                  ? COLORS.PrimaryBlue[300]
-                  : COLORS.SecondaryYellow[100],
-              color:
-                mode === "light"
-                  ? COLORS.PrimaryBlue[200]
-                  : COLORS.SecondaryYellow[100],
+              backgroundColor: paletteColors.White[100],
+              borderColor: paletteColors.PrimaryBlue[300],
+              color: paletteColors.PrimaryBlue[200],
               borderRadius: "16px",
               ":hover": {
                 backgroundColor: "white",
-                borderColor:
-                  mode === "light"
-                    ? COLORS.PrimaryBlue[300]
-                    : COLORS.SecondaryYellow[100],
+                borderColor: paletteColors.PrimaryBlue[300],
               },
-              hover: { backgroundColor: COLORS.Grayscale[50] },
+              hover: { backgroundColor: paletteColors.Grayscale[50] },
               "&.Mui-disabled": {
                 cursor: "not-allowed",
-                borderColor:
-                  mode === "light"
-                    ? COLORS.Grayscale[100]
-                    : COLORS.Grayscale[400],
+                borderColor: paletteColors.Grayscale[100],
                 color: COLORS.Grayscale[300],
               },
             },
@@ -135,10 +116,7 @@ export const createAppTheme = (mode: "light" | "dark") => {
           {
             props: { variant: "text" },
             style: {
-              color:
-                mode === "light"
-                  ? COLORS.PrimaryBlue[300]
-                  : COLORS.SecondaryYellow[100],
+              color: paletteColors.PrimaryBlue[300],
               borderRadius: "16px",
             },
           },
@@ -147,19 +125,13 @@ export const createAppTheme = (mode: "light" | "dark") => {
       MuiFormHelperText: {
         styleOverrides: {
           root: {
-            color:
-              mode === "light"
-                ? COLORS.SecondaryRed[200]
-                : DARK_COLORS.SecondaryRed[200],
+            color: paletteColors.SecondaryRed[200],
             marginLeft: 0,
             fontSize: "16px",
             lineHeight: "26px",
             fontWeight: 500,
             "&.Mui-error": {
-              color:
-                mode === "light"
-                  ? COLORS.SecondaryRed[200]
-                  : DARK_COLORS.SecondaryRed[200],
+              color: paletteColors.SecondaryRed[200],
               fontSize: "16px",
               lineHeight: "26px",
               fontWeight: 500,
