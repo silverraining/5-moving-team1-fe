@@ -1,12 +1,15 @@
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   moverDetail,
   moverList,
   MoverListRequest,
   CustomerProfileRequest,
   registerCustomerProfile,
+  UpdateCustomerProfileRequest,
+  updateCustomerProfile,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
+import { API_BASE_URL } from "@/src/lib/constants";
 
 export const useMoverList = (params: MoverListRequest, enabled = true) => {
   const {
@@ -31,9 +34,21 @@ export const useMoverDetail = (moverId: string, enabled = true) => {
   });
 };
 
-/** 일반 유저 프로필 등록 hook */
+/** 일반 유저 프로필 등록 hook
+ * TODO: 등록 후 쿼리 무효화
+ */
 export const useRegisterCustomerProfile = () => {
   return useMutation({
     mutationFn: (data: CustomerProfileRequest) => registerCustomerProfile(data),
+  });
+};
+
+/** 일반 유저 프로필 수정 hook
+ * TODO: 수정 후 쿼리 무효화
+ */
+export const useUpdateCustomerProfile = () => {
+  return useMutation({
+    mutationFn: (data: UpdateCustomerProfileRequest) =>
+      updateCustomerProfile(data),
   });
 };

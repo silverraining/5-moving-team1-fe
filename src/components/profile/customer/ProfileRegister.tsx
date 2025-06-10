@@ -24,15 +24,16 @@ export const ProfileRegister = () => {
 
   const { openSnackbar } = useSnackbarStore();
 
-  // 이미지 업로드 커스텀 훅 사용
+  // 일반 유저 프로필 등록 hook
+  const { mutateAsync: registerCustomerProfile } = useRegisterCustomerProfile();
+
+  // 이미지 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading, error } =
     useImageUpload({
       showSnackbar: true, // 이미지 업로드 관련 피드백을 바로 보여줌
       onUploadSuccess: (url) => {},
       onUploadError: (errorMessage) => {},
     });
-
-  const { mutateAsync: registerProfile } = useRegisterCustomerProfile();
 
   const handleServiceToggle = (service: ServiceType) => {
     setSelectedServices((prev) =>
@@ -84,7 +85,7 @@ export const ProfileRegister = () => {
       );
 
       // 프로필 등록 요청
-      await registerProfile({
+      await registerCustomerProfile({
         imageUrl: s3ImageUrl,
         serviceType,
         serviceRegion,

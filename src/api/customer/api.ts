@@ -53,3 +53,30 @@ export const registerCustomerProfile = async (data: CustomerProfileRequest) => {
     throw error;
   }
 };
+
+/** 일반 유저 프로필 수정 요청 타입 */
+export interface UpdateCustomerProfileRequest {
+  name: string;
+  phone: string;
+  password?: string;
+  newPassword?: string;
+  imageUrl: string;
+  serviceType: {
+    SMALL: boolean;
+    HOME: boolean;
+    OFFICE: boolean;
+  };
+  serviceRegion: Record<ServiceRegion, boolean>;
+}
+
+/** 일반 유저 프로필 수정 api */
+export const updateCustomerProfile = async (
+  data: UpdateCustomerProfileRequest
+) => {
+  try {
+    const response = await apiClient.patch("/customer/me", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

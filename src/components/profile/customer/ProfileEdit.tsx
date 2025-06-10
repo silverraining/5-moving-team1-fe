@@ -11,6 +11,9 @@ import { PersonalInfoSection } from "../PersonalInfoSection";
 import { PasswordChangeSection } from "../PasswordChangeSection";
 import { useSnackbarStore } from "../../../store/snackBarStore";
 import { useImageUpload } from "../../../api/upload-image/uploadImage.hooks";
+import { useUpdateCustomerProfile } from "../../../api/customer/hook";
+import { ServiceType, ServiceRegion } from "@/src/types/common";
+import { useRouter } from "next/navigation";
 import {
   ProfileEditFormData,
   profileEditSchema,
@@ -22,23 +25,27 @@ interface ProfileEditProps {
     name: string;
     email: string;
     phone: string;
-    serviceType: string[];
-    serviceRegion: string[];
+    serviceType: ServiceType[];
+    serviceRegion: ServiceRegion[];
     imageUrl?: string;
   };
 }
 
 export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
-  const [selectedServices, setSelectedServices] = useState<string[]>(
+  const router = useRouter();
+  const [selectedServices, setSelectedServices] = useState<ServiceType[]>(
     initialData?.serviceType || []
   );
-  const [selectedRegions, setSelectedRegions] = useState<string[]>(
+  const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>(
     initialData?.serviceRegion || []
   );
 
   const { openSnackbar } = useSnackbarStore();
 
-  // 이미지 업로드 커스텀 훅 사용
+  // 일반 유저 프로필 수정 hook
+  const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
+
+  // 이미지 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -64,7 +71,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
     mode: "onChange",
   });
 
-  const handleServiceToggle = (service: string) => {
+  const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
       ? selectedServices.filter((s) => s !== service)
       : [...selectedServices, service];
@@ -72,7 +79,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
     setValue("serviceType", newServices);
   };
 
-  const handleRegionToggle = (region: string) => {
+  const handleRegionToggle = (region: ServiceRegion) => {
     const newRegions = selectedRegions.includes(region)
       ? selectedRegions.filter((r) => r !== region)
       : [...selectedRegions, region];
@@ -82,34 +89,53 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
 
   const onSubmit = async (data: ProfileEditFormData) => {
     try {
+      if (isUploading) {
+        openSnackbar("이미지 업로드가 완료될 때까지 기다려주세요.", "warning");
+        return;
+      }
+
       // 비밀번호 변경 시 추가 검증
       if (data.newPassword && data.newPassword !== data.confirmPassword) {
         openSnackbar("새 비밀번호가 일치하지 않습니다.", "error");
         return;
       }
 
-      const profileData = {
-        ...data,
-        imageUrl: s3ImageUrl || data.imageUrl,
+      // 서비스 타입 형식 변환
+      const serviceType = {
+        SMALL: selectedServices.includes("SMALL"),
+        HOME: selectedServices.includes("HOME"),
+        OFFICE: selectedServices.includes("OFFICE"),
       };
 
-      //TODO: API 연결
-      const response = await fetch("/api/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(profileData),
+      // 지역 형식 변환
+      const serviceRegion = Object.values(ServiceRegion).reduce(
+        (acc, region) => ({
+          ...acc,
+          [region]: selectedRegions.includes(region),
+        }),
+        {} as Record<ServiceRegion, boolean>
+      );
+
+      await updateCustomerProfile({
+        name: data.name,
+        phone: data.phone,
+        password: data.currentPassword,
+        newPassword: data.newPassword,
+        imageUrl: s3ImageUrl || data.imageUrl || "",
+        serviceType,
+        serviceRegion,
       });
 
-      if (!response.ok) {
-        throw new Error("프로필 수정에 실패했습니다.");
-      }
-
       openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
+      router.push("/");
     } catch (error) {
       console.error("프로필 수정 중 오류:", error);
-      openSnackbar("프로필 수정 중 오류가 발생했습니다.", "error");
+      openSnackbar(
+        error instanceof Error
+          ? error.message
+          : "프로필 수정 중 오류가 발생했습니다.",
+        "error"
+      );
     }
   };
 
