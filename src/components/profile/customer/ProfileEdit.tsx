@@ -129,7 +129,6 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
       openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
       router.push("/");
     } catch (error) {
-      console.error("프로필 수정 중 오류:", error);
       openSnackbar(
         error instanceof Error
           ? error.message
