@@ -10,6 +10,10 @@ import { useImageUpload } from "../../../api/upload-image/uploadImage.hooks";
 import { useRegisterCustomerProfile } from "../../../api/customer/hook";
 import { ServiceType, ServiceRegion } from "@/src/types/common";
 import { useRouter } from "next/navigation";
+import {
+  convertToServiceTypeObject,
+  convertToServiceRegionObject,
+} from "../../../utils/utill";
 
 /**
  * TODO
@@ -18,9 +22,10 @@ import { useRouter } from "next/navigation";
  */
 
 export const ProfileRegister = () => {
-  const router = useRouter();
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
+
+  const router = useRouter();
 
   const { openSnackbar } = useSnackbarStore();
 
@@ -68,27 +73,11 @@ export const ProfileRegister = () => {
         return;
       }
 
-      // 서비스 타입 형식 변환
-      const serviceType = {
-        SMALL: selectedServices.includes("SMALL"),
-        HOME: selectedServices.includes("HOME"),
-        OFFICE: selectedServices.includes("OFFICE"),
-      };
-
-      // 지역 형식 변환
-      const serviceRegion = Object.values(ServiceRegion).reduce(
-        (acc, region) => ({
-          ...acc,
-          [region]: selectedRegions.includes(region),
-        }),
-        {} as Record<ServiceRegion, boolean>
-      );
-
       // 프로필 등록 요청
       await registerCustomerProfile({
         imageUrl: s3ImageUrl,
-        serviceType,
-        serviceRegion,
+        serviceType: convertToServiceTypeObject(selectedServices),
+        serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
 
       openSnackbar("프로필이 성공적으로 등록되었습니다.", "success");
