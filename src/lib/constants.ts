@@ -98,7 +98,5 @@ export const PATH = {
   userReviewCompleted: "/customer/reviews/completed",
 };
 
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL;
-// process.env.NODE_ENV === "development"
-//   ? "http://localhost:5000/api"
-//   : process.env.NEXT_PUBLIC_API_URL;
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000/api"; // 기본값
