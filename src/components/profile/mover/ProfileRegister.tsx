@@ -14,26 +14,28 @@ import {
   moverProfileRegisterSchema,
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
+import { ServiceRegion } from "@/src/types/common";
+import { ServiceType } from "@/src/types/common";
+import { useRegisterMoverProfile } from "@/src/api/mover/hooks";
+import {
+  convertToServiceTypeObject,
+  convertToServiceRegionObject,
+} from "../../../utils/util";
 
-interface ProfileRegisterProps {
-  // 초기 개인정보 데이터 (회원가입 시 입력된 기본 정보)
-  initialData?: {
-    name: string;
-    email: string;
-    phone: string;
-  };
-}
-
-export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
-  const router = useRouter();
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+export const ProfileRegister = () => {
+  const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
+  const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
   const [serviceError, setServiceError] = useState<boolean>(false);
   const [regionError, setRegionError] = useState<boolean>(false);
 
+  const router = useRouter();
+
   const { openSnackbar } = useSnackbarStore();
 
-  // 이미지 업로드 커스텀 훅 사용
+  // 기사님 프로필 등록 hook
+  const { mutateAsync: registerMoverProfile } = useRegisterMoverProfile();
+
+  // 이미지 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -48,34 +50,31 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
   } = useForm<MoverProfileRegisterFormData>({
     resolver: zodResolver(moverProfileRegisterSchema),
     defaultValues: {
-      name: initialData?.name || "",
-      email: initialData?.email || "",
-      phone: initialData?.phone || "",
-      serviceType: [],
-      serviceRegion: [],
       nickname: "",
-      experience: "",
+      experience: 0,
       intro: "",
       description: "",
+      serviceType: [],
+      serviceRegion: [],
     },
     mode: "onChange",
   });
 
-  const handleServiceToggle = (service: string) => {
+  const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
       ? selectedServices.filter((s) => s !== service)
       : [...selectedServices, service];
     setSelectedServices(newServices);
-    setValue("serviceType", newServices);
+    setValue("serviceType", newServices, { shouldValidate: true });
     setServiceError(newServices.length === 0);
   };
 
-  const handleRegionToggle = (region: string) => {
+  const handleRegionToggle = (region: ServiceRegion) => {
     const newRegions = selectedRegions.includes(region)
       ? selectedRegions.filter((r) => r !== region)
       : [...selectedRegions, region];
     setSelectedRegions(newRegions);
-    setValue("serviceRegion", newRegions);
+    setValue("serviceRegion", newRegions, { shouldValidate: true });
     setRegionError(newRegions.length === 0);
   };
 
@@ -93,29 +92,23 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
 
       const profileData = {
         ...data,
-        serviceType: selectedServices,
-        serviceRegion: selectedRegions,
-        imageUrl: s3ImageUrl,
+        serviceType: convertToServiceTypeObject(selectedServices),
+        serviceRegion: convertToServiceRegionObject(selectedRegions),
+        imageUrl: s3ImageUrl || null,
       };
 
-      //TODO: API 연결
-      const response = await fetch("/api/mover/profile", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(profileData),
-      });
-
-      if (!response.ok) {
-        throw new Error("기사님 프로필 등록에 실패했습니다.");
-      }
+      await registerMoverProfile(profileData);
 
       openSnackbar("기사님 프로필이 성공적으로 등록되었습니다.", "success");
-      router.push("/mover/profile");
+      router.push("/");
     } catch (error) {
       console.error("프로필 등록 중 오류:", error);
-      openSnackbar("프로필 등록 중 오류가 발생했습니다.", "error");
+      openSnackbar(
+        error instanceof Error
+          ? error.message
+          : "프로필 등록 중 오류가 발생했습니다.",
+        "error"
+      );
     }
   };
 
@@ -487,6 +480,7 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
               {/* 시작하기 버튼 */}
               <Button
                 variant="contained"
+                type="submit"
                 fullWidth
                 sx={{
                   height: "56px",
@@ -498,7 +492,11 @@ export const ProfileRegister = ({ initialData }: ProfileRegisterProps) => {
                     backgroundColor: (theme) => theme.palette.PrimaryBlue[400],
                   },
                 }}
-                disabled={!isValid}
+                disabled={
+                  !isValid ||
+                  selectedServices.length === 0 ||
+                  selectedRegions.length === 0
+                }
               >
                 시작하기
               </Button>
