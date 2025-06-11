@@ -9,6 +9,8 @@ import { useEstimateStore } from "@/src/store/requestStore";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import AddressModal from "@/src/components/shared/components/address-card/AddressModal";
 import dayjs from "dayjs";
+import { convertToLabel } from "@/src/utils/convertToLabel";
+import { postEstimateRequest } from "@/src/api/customer/request/api";
 
 type Step3Props = {
   onSelectFrom: (from: string) => void;
@@ -35,15 +37,25 @@ export default function Step3_AddressSelect({
   const [openToModal, setOpenToModal] = useState(false);
   const { openSnackbar, SnackbarComponent } = useSnackbar();
 
-  const handleConfirm = () => {
-    if (fromAddress && toAddress) {
-      // 1. 부모에 전달
-      onSelect(fromAddress, toAddress);
-      // [TEST용: 견적확정 후 스낵바 띄우고 페이지 이동 / 견적확정 후처리 확인 필요]
-      // 2. 스낵바 메시지 띄우기
-      openSnackbar("견적 확정 완료", "success", 5000);
-      // 3. 동일페이지로 이동
-      router.push("/customer/request");
+  const handleConfirm = async () => {
+    if (fromAddress && toAddress && moveType && moveDate) {
+      try {
+        // POST 요청 보내기
+        await postEstimateRequest({
+          fromAddress,
+          toAddress,
+          moveType,
+          moveDate,
+        });
+
+        openSnackbar("견적 확정 완료", "success", 5000);
+        router.push("/customer/request");
+      } catch (error) {
+        openSnackbar("견적 확정에 실패했습니다. 다시 시도해주세요.", "error");
+        console.error(error);
+      }
+    } else {
+      openSnackbar("모든 정보를 입력해주세요.", "warning");
     }
   };
 
@@ -76,7 +88,7 @@ export default function Step3_AddressSelect({
                   gap: isSmall ? "4px" : "6px",
                 }}
               >
-                <Chat variant="received" content={moveType} />
+                <Chat variant="received" content={convertToLabel(moveType)} />
                 <Typography
                   onClick={onBackStep1}
                   variant={isSmall ? "M_12" : "R_16"}

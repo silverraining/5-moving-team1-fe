@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box, useTheme, useMediaQuery } from "@mui/material";
+import { Box, useTheme, useMediaQuery, CircularProgress } from "@mui/material";
 import { Progress } from "../../shared/components/progress/progress";
 import Step1_MoveType from "./steps/Step1_MoveType";
 import Step2_MoveDate from "./steps/Step2_MoveDate";
@@ -68,25 +68,7 @@ export default function EstimateRequestFlow() {
 
   const hasRequestedEstimate = (existingEstimates?.length ?? 0) > 0;
 
-  // 3. step===4에서 POST요청 실행
-  const { mutate: sendEstimateRequest } = useMutation({
-    mutationFn: postEstimateRequest,
-    onSuccess: () => {
-      setStep(-1); // 성공하면 InProgressPage 이동
-    },
-    onError: (err) => {
-      alert("요청에 실패했습니다.");
-      console.error(err);
-    },
-  });
-
-  useEffect(() => {
-    if (step === 4 && moveType && moveDate && fromAddress && toAddress) {
-      sendEstimateRequest({ moveType, moveDate, fromAddress, toAddress });
-    }
-  }, [step]);
-
-  // 4. 주소 둘 다 있으면 자동으로 step 4로 전환
+  // 3. 주소 둘 다 있으면 자동으로 step 4로 전환
   useEffect(() => {
     const showConfirm = !!fromAddress && !!toAddress;
 
@@ -95,16 +77,28 @@ export default function EstimateRequestFlow() {
     }
   }, [fromAddress, toAddress]);
 
-  // 5. 로딩 처리
-  if (isEstimateLoading || isLoading)
-    return <div className="p-10">로딩 중...</div>;
+  // 4. 로딩 처리
+  if (isEstimateLoading || isLoading) {
+    return (
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
 
-  // 6. 기존에 요청된 견적이 있으면 바로 이동
+  // 5. 기존에 요청된 견적이 있으면 바로 이동
   if (hasRequestedEstimate || step === -1) {
     return <InProgressPage />;
   }
 
-  // 7. 이벤트 핸들러들
+  // 6. 이벤트 핸들러들
   const handleSelectStep1 = (value: string) => {
     setMoveType(value);
     localStorage.setItem("moveType", value);
@@ -134,23 +128,10 @@ export default function EstimateRequestFlow() {
   };
 
   if (isLoading) return <div className="p-10">로딩 중...</div>;
-  console.log("req body 값 확인", moveType);
-  // 8. 실제 화면 렌더링
+  // 7. 실제 화면 렌더링
   return (
     <>
-      {step !== null &&
-        step > 0 &&
-        step <= 4 && ( // step이 null일 경우, Progress 렌더링 X
-          <Box sx={{ py: isSmall ? "24px" : "32px" }}>
-            <Progress value={step as 1 | 2 | 3 | 4} />
-          </Box>
-        )}
-
-      <Box
-        sx={{
-          padding: "8px",
-        }}
-      >
+      <Box sx={{ paddingTop: isSmall ? "24px" : "40px" }}>
         {step === 1 && <Step1_MoveType onSelect={handleSelectStep1} />}
         {step === 2 && (
           <Step2_MoveDate

@@ -20,10 +20,6 @@ export default function InProgressPage() {
 
   return (
     <>
-      <Box sx={{ py: isSmall ? "24px" : "32px" }}>
-        {/* value 0이면 게이지 바가 안보이는 걸로 추가 필요 */}
-        <Progress value={0} />
-      </Box>
       <Stack
         sx={{
           width: "100%",
