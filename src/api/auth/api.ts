@@ -31,8 +31,6 @@ export const login = async (data: Login): Promise<LoginResponse> => {
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {
-      console.error("Login Error Response:", error.response?.data);
-
       throw new Error(error.response.data.message);
     }
     throw new Error("로그인 실패");
