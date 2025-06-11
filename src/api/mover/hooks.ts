@@ -1,7 +1,11 @@
 import { useMutation, useQuery } from "@tanstack/react-query";
 // 경로는 실제에 맞게 조정
 import { ServiceType } from "@/src/types/common";
-import { estimateRequest, registerMoverProfile } from "./api";
+import {
+  estimateRequest,
+  registerMoverProfile,
+  updateMoverProfile,
+} from "./api";
 
 interface UseEstimateRequestQueryParams {
   serviceType: ServiceType[];
@@ -28,5 +32,12 @@ export const useEstimateRequest = ({
 export const useRegisterMoverProfile = () => {
   return useMutation({
     mutationFn: registerMoverProfile,
+  });
+};
+
+/** 기사님 프로필 수정 hook */
+export const useUpdateMoverProfile = () => {
+  return useMutation({
+    mutationFn: updateMoverProfile,
   });
 };

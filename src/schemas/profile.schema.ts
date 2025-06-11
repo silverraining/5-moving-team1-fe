@@ -64,9 +64,12 @@ export const moverProfileRegisterSchema = z.object({
     .max(20, "별명은 최대 20자까지 가능합니다.")
     .regex(/^[가-힣a-zA-Z0-9]+$/, "한글/영문/숫자만 허용됩니다."),
   experience: z
-    .number()
+    .number({
+      required_error: "경력을 입력해주세요.",
+      invalid_type_error: "숫자만 입력 가능합니다.",
+    })
     .min(1, "경력을 입력해주세요.")
-    .max(2, "경력은 최대 2자리까지 가능합니다."),
+    .max(99, "경력은 최대 2자리까지 가능합니다."),
   intro: z
     .string()
     .min(8, "한 줄 소개는 최소 8자 이상이어야 합니다.")

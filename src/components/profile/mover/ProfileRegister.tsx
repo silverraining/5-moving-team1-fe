@@ -267,7 +267,8 @@ export const ProfileRegister = () => {
                       </Typography>
                       <Box sx={{ mt: "16px" }}>
                         <TextField
-                          {...register("experience")}
+                          {...register("experience", { valueAsNumber: true })}
+                          type="number"
                           variant="outlined"
                           fullWidth
                           placeholder="기사님의 경력을 입력해주세요"

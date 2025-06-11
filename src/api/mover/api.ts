@@ -27,7 +27,7 @@ export const estimateRequest = async ({
   }
 };
 
-/** 기사님 프로필 등록 요청 타입 */
+/** 기사님 프로필 등록 및 수정 요청 타입 */
 export interface MoverProfileRequest {
   nickname: string;
   imageUrl?: string | null;
@@ -42,6 +42,16 @@ export interface MoverProfileRequest {
 export const registerMoverProfile = async (data: MoverProfileRequest) => {
   try {
     const response = await apiClient.post("/mover", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 기사님 프로필 수정 api */
+export const updateMoverProfile = async (data: MoverProfileRequest) => {
+  try {
+    const response = await apiClient.patch("/mover/me", data);
     return response.data;
   } catch (error) {
     throw error;
