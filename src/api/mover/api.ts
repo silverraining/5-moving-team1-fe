@@ -57,3 +57,22 @@ export const updateMoverProfile = async (data: MoverProfileRequest) => {
     throw error;
   }
 };
+
+interface UpdateGeneralMoverProfileRequest {
+  name: string;
+  phone: string;
+  password?: string;
+  newPassword?: string;
+}
+
+/** 기사님 기본 정보 수정 api */
+export const updateGeneralMoverProfile = async (
+  data: UpdateGeneralMoverProfileRequest
+) => {
+  try {
+    const response = await apiClient.patch("/mover/me", data);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
