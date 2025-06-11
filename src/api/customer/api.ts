@@ -80,3 +80,29 @@ export const updateCustomerProfile = async (
     throw error;
   }
 };
+
+/** 고객 프로필 응답 타입 */
+export interface CustomerProfileResponse {
+  name: string;
+  email: string;
+  phone: string;
+  id: string;
+  imageUrl: string;
+  serviceType: {
+    SMALL: boolean;
+    HOME: boolean;
+    OFFICE: boolean;
+  };
+  serviceRegion: Record<ServiceRegion, boolean>;
+}
+
+/** 고객 프로필 조회 api */
+export const getCustomerProfile =
+  async (): Promise<CustomerProfileResponse> => {
+    try {
+      const response = await apiClient.get("/customer/me");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };

@@ -7,9 +7,12 @@ import {
   registerCustomerProfile,
   UpdateCustomerProfileRequest,
   updateCustomerProfile,
+  getCustomerProfile,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
-import { API_BASE_URL } from "@/src/lib/constants";
+
+// 고객 프로필 관련 쿼리 키
+const CUSTOMER_PROFILE_KEY = ["customer", "profile"] as const;
 
 export const useMoverList = (params: MoverListRequest, enabled = true) => {
   const {
@@ -43,12 +46,24 @@ export const useRegisterCustomerProfile = () => {
   });
 };
 
-/** 일반 유저 프로필 수정 hook
- * TODO: 수정 후 쿼리 무효화
- */
+/** 일반 유저 프로필 조회 hook */
+export const useGetCustomerProfile = (enabled = true) => {
+  return useQuery({
+    queryKey: CUSTOMER_PROFILE_KEY,
+    queryFn: getCustomerProfile,
+    enabled,
+  });
+};
+
+/** 일반 유저 프로필 수정 hook */
 export const useUpdateCustomerProfile = () => {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (data: UpdateCustomerProfileRequest) =>
       updateCustomerProfile(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: CUSTOMER_PROFILE_KEY });
+    },
   });
 };

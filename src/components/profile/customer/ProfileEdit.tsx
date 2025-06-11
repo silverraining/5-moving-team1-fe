@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Stack, Typography, Button } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUpload } from "../ImageUpload";
@@ -11,40 +11,35 @@ import { PersonalInfoSection } from "../PersonalInfoSection";
 import { PasswordChangeSection } from "../PasswordChangeSection";
 import { useSnackbarStore } from "../../../store/snackBarStore";
 import { useImageUpload } from "../../../api/upload-image/uploadImage.hooks";
-import { useUpdateCustomerProfile } from "../../../api/customer/hook";
+import {
+  useUpdateCustomerProfile,
+  useGetCustomerProfile,
+} from "../../../api/customer/hook";
 import { ServiceType, ServiceRegion } from "@/src/types/common";
 import { useRouter } from "next/navigation";
 import {
   ProfileEditFormData,
   profileEditSchema,
 } from "../../../schemas/profile.schema";
+import {
+  convertToServiceTypeArray,
+  convertToServiceTypeObject,
+  convertToServiceRegionArray,
+  convertToServiceRegionObject,
+} from "../../../utils/utill";
 
-interface ProfileEditProps {
-  // 초기 프로필 데이터
-  initialData?: {
-    name: string;
-    email: string;
-    phone: string;
-    serviceType: ServiceType[];
-    serviceRegion: ServiceRegion[];
-    imageUrl?: string;
-  };
-}
+export const ProfileEdit = () => {
+  const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
+  const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
 
-export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
   const router = useRouter();
-  const [selectedServices, setSelectedServices] = useState<ServiceType[]>(
-    initialData?.serviceType || []
-  );
-  const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>(
-    initialData?.serviceRegion || []
-  );
 
   const { openSnackbar } = useSnackbarStore();
 
+  // 일반 유저 프로필 조회 hook
+  const { data: profileData, isLoading } = useGetCustomerProfile();
   // 일반 유저 프로필 수정 hook
   const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
-
   // 이미지 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
@@ -58,18 +53,35 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
     formState: { errors, isValid },
     setValue,
     control,
+    reset,
   } = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
-    defaultValues: {
-      name: initialData?.name || "",
-      email: initialData?.email || "",
-      phone: initialData?.phone || "",
-      serviceType: initialData?.serviceType || [],
-      serviceRegion: initialData?.serviceRegion || [],
-      imageUrl: initialData?.imageUrl,
-    },
     mode: "onChange",
   });
+
+  // 프로필 데이터로 폼 초기화
+  useEffect(() => {
+    if (profileData) {
+      const serviceTypeArray = convertToServiceTypeArray(
+        profileData.serviceType
+      );
+      const serviceRegionArray = convertToServiceRegionArray(
+        profileData.serviceRegion
+      );
+
+      setSelectedServices(serviceTypeArray);
+      setSelectedRegions(serviceRegionArray);
+
+      reset({
+        name: profileData.name,
+        email: profileData.email,
+        phone: profileData.phone,
+        serviceType: serviceTypeArray,
+        serviceRegion: serviceRegionArray,
+        imageUrl: profileData.imageUrl,
+      });
+    }
+  }, [profileData, reset]);
 
   const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
@@ -100,35 +112,20 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
         return;
       }
 
-      // 서비스 타입 형식 변환
-      const serviceType = {
-        SMALL: selectedServices.includes("SMALL"),
-        HOME: selectedServices.includes("HOME"),
-        OFFICE: selectedServices.includes("OFFICE"),
-      };
-
-      // 지역 형식 변환
-      const serviceRegion = Object.values(ServiceRegion).reduce(
-        (acc, region) => ({
-          ...acc,
-          [region]: selectedRegions.includes(region),
-        }),
-        {} as Record<ServiceRegion, boolean>
-      );
-
       await updateCustomerProfile({
         name: data.name,
         phone: data.phone,
         password: data.currentPassword,
         newPassword: data.newPassword,
-        imageUrl: s3ImageUrl || data.imageUrl || "",
-        serviceType,
-        serviceRegion,
+        imageUrl: s3ImageUrl ? s3ImageUrl : data.imageUrl || "",
+        serviceType: convertToServiceTypeObject(selectedServices),
+        serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
 
       openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
       router.push("/");
     } catch (error) {
+      console.error("프로필 수정 중 오류:", error);
       openSnackbar(
         error instanceof Error
           ? error.message
@@ -137,6 +134,10 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
       );
     }
   };
+
+  if (isLoading) {
+    return <div>로딩 중...</div>; // 또는 적절한 로딩 컴포넌트
+  }
 
   return (
     <Box
@@ -202,7 +203,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
                 register={register}
                 control={control}
                 errors={errors}
-                initialData={initialData}
+                initialData={profileData}
               />
 
               {/* 비밀번호 변경 */}
@@ -230,7 +231,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={initialData?.imageUrl}
+                  initialImage={profileData?.imageUrl}
                 />
               </Box>
 
