@@ -1,11 +1,19 @@
 import axios from "axios";
 import apiClient from "../../axiosclient";
 
+export interface AddressPayload {
+  sido: string;
+  sidoEnglish: string;
+  sigungu: string;
+  roadAddress: string;
+  fullAddress: string;
+}
+
 export type RequestEstimate = {
   moveType: string;
   moveDate: string;
-  fromAddress: string;
-  toAddress: string;
+  fromAddress: AddressPayload;
+  toAddress: AddressPayload;
 };
 
 export enum EstimateOfferStatus {

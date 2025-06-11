@@ -11,13 +11,23 @@ import AddressModal from "@/src/components/shared/components/address-card/Addres
 import dayjs from "dayjs";
 import { convertToLabel } from "@/src/utils/convertToLabel";
 import { postEstimateRequest } from "@/src/api/customer/request/api";
+import { parseAddress } from "@/src/utils/parseAddress";
+import { AddressPayload } from "@/src/api/customer/request/api";
+
+type ParsedAddress = {
+  sido: string; // 시도
+  sidoEnglish: string; // 시도 영어 (filter에 사용)
+  sigungu: string; // 시군구
+  roadAddress: string; // 도로명 주소
+  fullAddress: string; // 전체 주소
+};
 
 type Step3Props = {
-  onSelectFrom: (from: string) => void;
-  onSelectTo: (to: string) => void;
+  onSelectFrom: (from: ParsedAddress) => void;
+  onSelectTo: (to: ParsedAddress) => void;
   onBackStep1: () => void;
   onBackStep2: () => void;
-  onSelect: (from: string, to: string) => void;
+  onSelect: (from: ParsedAddress, to: ParsedAddress) => void;
 };
 
 export default function Step3_AddressSelect({
@@ -42,8 +52,8 @@ export default function Step3_AddressSelect({
       try {
         // POST 요청 보내기
         await postEstimateRequest({
-          fromAddress,
-          toAddress,
+          fromAddress: fromAddress as AddressPayload,
+          toAddress: toAddress as AddressPayload,
           moveType,
           moveDate,
         });
@@ -59,6 +69,8 @@ export default function Step3_AddressSelect({
     }
   };
 
+  console.log("출발지 확인", fromAddress);
+  console.log("도착지 확인", toAddress);
   return (
     <>
       <Stack spacing={isSmall ? "8px" : "24px"}>
@@ -133,8 +145,8 @@ export default function Step3_AddressSelect({
             )}
             <Chat variant="sent" content={`이사 지역을 선택해주세요.`} />
             <EditableBox
-              fromLabel={fromAddress}
-              toLabel={toAddress}
+              fromLabel={fromAddress?.fullAddress || ""}
+              toLabel={toAddress?.fullAddress || ""}
               onFromClick={() => setOpenFromModal(true)}
               onToClick={() => setOpenToModal(true)}
               onConfirmClick={handleConfirm}
@@ -147,7 +159,8 @@ export default function Step3_AddressSelect({
           onClose={() => setOpenFromModal(false)}
           title="출발지를 선택해주세요"
           onSelect={(address) => {
-            onSelectFrom(address.roadAddress);
+            const parsed = parseAddress(address);
+            onSelectFrom(parsed);
             setOpenFromModal(false);
           }}
         />
@@ -158,7 +171,8 @@ export default function Step3_AddressSelect({
           onClose={() => setOpenToModal(false)}
           title="도착지를 선택해주세요"
           onSelect={(address) => {
-            onSelectTo(address.roadAddress);
+            const parsed = parseAddress(address);
+            onSelectTo(parsed);
             setOpenToModal(false);
           }}
         />

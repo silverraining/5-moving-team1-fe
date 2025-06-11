@@ -4,13 +4,21 @@ import Image from "next/image";
 interface SearchProps extends Omit<InputProps, "fullWidth"> {
   variation: "left" | "right";
   bgColor?: string;
+  onClick?: () => void;
+  onDeleteClick?: () => void;
 }
 
 export const SearchInput: React.FC<SearchProps> = (props) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && props.onClick) {
+      props.onClick();
+    }
+  };
   return (
     <OutlinedInput
       placeholder={props.placeholder}
       onChange={props.onChange}
+      onKeyDown={handleKeyDown} // Enter 키 동작 추가
       value={props.value}
       startAdornment={
         props.variation === "left" && (
@@ -30,7 +38,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
               <Image
                 width={36}
                 height={36}
-                onClick={props.onClick}
+                onClick={props.onDeleteClick}
                 src={"/Images/input/delete.svg"}
                 alt="delete Icon"
                 style={{ cursor: "pointer" }}
@@ -39,8 +47,10 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
             <Image
               width={36}
               height={36}
+              onClick={props.onClick}
               src={"/Images/input/search.svg"}
               alt="search Icon"
+              style={{ cursor: "pointer" }}
             />
           </Box>
         )
