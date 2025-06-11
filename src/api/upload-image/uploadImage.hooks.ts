@@ -3,6 +3,12 @@ import { uploadImageToS3 } from "./uploadImage.api";
 import { fileToBase64 } from "../../utils/imageUpload.utils";
 import { useSnackbarStore } from "../../store/snackBarStore";
 
+/**
+ * TODO
+ * 1. 파일 크기 제한
+ * 2. 드래그 앤 드롭
+ */
+
 export interface UseImageUploadOptions {
   onUploadSuccess?: (s3Url: string) => void;
   onUploadError?: (error: string) => void;

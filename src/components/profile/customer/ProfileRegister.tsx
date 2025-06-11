@@ -7,34 +7,52 @@ import { ServiceSelector } from "../ServiceSelector";
 import { RegionSelector } from "../RegionSelector";
 import { useSnackbarStore } from "../../../store/snackBarStore";
 import { useImageUpload } from "../../../api/upload-image/uploadImage.hooks";
+import { useRegisterCustomerProfile } from "../../../api/customer/hook";
+import { ServiceType, ServiceRegion } from "@/src/types/common";
+import { useRouter } from "next/navigation";
+import {
+  convertToServiceTypeObject,
+  convertToServiceRegionObject,
+} from "../../../utils/utill";
+
+/**
+ * TODO
+ * 1. 파일 크기 제한
+ * 2. 드래그 앤 드롭
+ */
 
 export const ProfileRegister = () => {
-  const [selectedServices, setSelectedServices] = useState<string[]>([]);
-  const [selectedRegions, setSelectedRegions] = useState<string[]>([]);
+  const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
+  const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
+
+  const router = useRouter();
 
   const { openSnackbar } = useSnackbarStore();
 
-  // 이미지 업로드 커스텀 훅 사용
-  const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
+  // 일반 유저 프로필 등록 hook
+  const { mutateAsync: registerCustomerProfile } = useRegisterCustomerProfile();
+
+  // 이미지 업로드 hook
+  const { s3ImageUrl, handleFileUpload, previewImage, isUploading, error } =
     useImageUpload({
-      showSnackbar: false, // 프로필 등록 완료 시에만 스낵바 표시
+      showSnackbar: true, // 이미지 업로드 관련 피드백을 바로 보여줌
+      onUploadSuccess: (url) => {},
+      onUploadError: (errorMessage) => {},
     });
 
-  const handleServiceToggle = (service: string) => {
-    setSelectedServices(
-      (prev) =>
-        prev.includes(service)
-          ? prev.filter((s) => s !== service) // 이미 선택된 경우 제거
-          : [...prev, service] // 선택되지 않은 경우 추가
+  const handleServiceToggle = (service: ServiceType) => {
+    setSelectedServices((prev) =>
+      prev.includes(service)
+        ? prev.filter((s) => s !== service)
+        : [...prev, service]
     );
   };
 
-  const handleRegionToggle = (region: string) => {
-    setSelectedRegions(
-      (prev) =>
-        prev.includes(region)
-          ? prev.filter((r) => r !== region) // 이미 선택된 경우 제거
-          : [...prev, region] // 선택되지 않은 경우 추가
+  const handleRegionToggle = (region: ServiceRegion) => {
+    setSelectedRegions((prev) =>
+      prev.includes(region)
+        ? prev.filter((r) => r !== region)
+        : [...prev, region]
     );
   };
 
@@ -45,31 +63,32 @@ export const ProfileRegister = () => {
    */
   const handleSubmit = async () => {
     try {
-      // 1. 프로필 데이터 준비
-      const profileData = {
-        serviceType: selectedServices,
-        serviceRegion: selectedRegions,
-        imageUrl: s3ImageUrl, // S3에 업로드된 이미지 URL
-      };
-
-      // 2. 프로필 등록 API 호출
-      //TODO: axios 사용하여 실제 api 연결
-      //TODO: 모든 프로필 관련 로직 완성시 훅으로 분리
-      const response = await fetch("/api/customer", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(profileData),
-      });
-
-      if (!response.ok) {
-        throw new Error("프로필 등록에 실패했습니다.");
+      if (isUploading) {
+        openSnackbar("이미지 업로드가 완료될 때까지 기다려주세요.", "warning");
+        return;
       }
 
+      if (!s3ImageUrl) {
+        openSnackbar("프로필 이미지를 업로드해주세요.", "error");
+        return;
+      }
+
+      // 프로필 등록 요청
+      await registerCustomerProfile({
+        imageUrl: s3ImageUrl,
+        serviceType: convertToServiceTypeObject(selectedServices),
+        serviceRegion: convertToServiceRegionObject(selectedRegions),
+      });
+
       openSnackbar("프로필이 성공적으로 등록되었습니다.", "success");
+      router.push("/");
     } catch (error) {
-      openSnackbar("프로필 등록 중 오류가 발생했습니다.", "error");
+      openSnackbar(
+        error instanceof Error
+          ? error.message
+          : "프로필 등록 중 오류가 발생했습니다.",
+        "error"
+      );
     }
   };
 
@@ -209,7 +228,9 @@ export const ProfileRegister = () => {
       <Button
         variant="contained"
         fullWidth
-        onClick={handleSubmit}
+        onClick={() => {
+          handleSubmit();
+        }}
         disabled={selectedServices.length === 0 || selectedRegions.length === 0}
         sx={{
           height: "56px",

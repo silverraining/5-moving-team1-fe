@@ -2,16 +2,17 @@
 
 import { Box } from "@mui/material";
 import { ChipArea } from "../shared/components/chip/ChipArea";
+import { ServiceType } from "@/src/types/common";
 
 interface ServiceSelectorProps {
-  selectedServices: string[];
-  onServiceToggle: (service: string) => void;
+  selectedServices: ServiceType[];
+  onServiceToggle: (service: ServiceType) => void;
 }
 
-const services = [
-  { id: "small" as const, label: "소형이사" },
-  { id: "home" as const, label: "가정이사" },
-  { id: "office" as const, label: "사무실이사" },
+const services: { id: ServiceType; label: string }[] = [
+  { id: "SMALL", label: "소형이사" },
+  { id: "HOME", label: "가정이사" },
+  { id: "OFFICE", label: "사무실이사" },
 ];
 
 export const ServiceSelector = ({
