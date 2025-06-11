@@ -1,4 +1,4 @@
-import { generateMockReviews } from "../mock/moverHendler";
+// import { generateMockReviews } from "../mock/moverHandler";
 import { MoverProfile } from "../types/auth";
 import { EstimateRequestStatus, ServiceRegion } from "../types/common";
 import { EstimateRequest } from "../types/estimate";
@@ -85,9 +85,9 @@ export const ESTIMATEREQUEST: EstimateRequest = {
     likes: [],
   },
 };
-const reviewData = generateMockReviews(30, ESTIMATEREQUEST.customerProfile);
+// const reviewData = generateMockReviews(30, ESTIMATEREQUEST.customerProfile);
 
-MOVER_LIST.forEach((mover) => {
-  mover.reviews = reviewData;
-});
-MOVER_DTAIL.reviews = reviewData;
+// MOVER_LIST.forEach((mover) => {
+//   mover.reviews = reviewData;
+// });
+// MOVER_DTAIL.reviews = reviewData;
