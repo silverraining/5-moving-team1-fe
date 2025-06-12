@@ -27,7 +27,7 @@ export const useLoginForm = (role: Role) => {
       { ...data, role }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: () => {
-          openSnackbar("로그인 성공", "success", 1000, "standard");
+          openSnackbar("로그인 성공", "success", 500, "standard");
           router.push("/");
         },
         onError: (error) => {
