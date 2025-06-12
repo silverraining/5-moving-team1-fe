@@ -23,8 +23,7 @@ export const generateMoverList = (count: number) => {
  * const array = convertToServiceTypeArray(response); // ['SMALL', 'OFFICE']
  *
  * @description
- * - API 응답으로 받은 서비스 타입 객체를 UI 컴포넌트에서 사용할 배열로 변환
- * - 주로 프로필 데이터를 받아올 때 사용
+ * - 백엔드 API 응답형식(객체)을 UI 컴포넌트에서 사용할 배열로 변환
  */
 export const convertToServiceTypeArray = (serviceType: {
   [key in ServiceType]: boolean;
@@ -44,8 +43,7 @@ export const convertToServiceTypeArray = (serviceType: {
  * // { SMALL: true, HOME: false, OFFICE: true }
  *
  * @description
- * - UI에서 관리하는 선택된 서비스 배열을 API 요청 형식의 객체로 변환
- * - 주로 프로필 수정/등록 요청 시 사용
+ * - UI에서 관리하는 선택된 서비스 배열을 백엔드 API 요청 형식(객체)으로 변환
  */
 export const convertToServiceTypeObject = (services: ServiceType[]) => {
   return {
@@ -64,8 +62,7 @@ export const convertToServiceTypeObject = (services: ServiceType[]) => {
  * const array = convertToServiceRegionArray(response); // ['Seoul', 'Incheon']
  *
  * @description
- * - API 응답으로 받은 지역 객체를 UI 컴포넌트에서 사용할 배열로 변환
- * - 주로 프로필 데이터를 받아올 때 사용
+ * - 백엔드 API 응답형식(객체)을 UI 컴포넌트에서 사용할 배열로 변환
  */
 export const convertToServiceRegionArray = (serviceRegion: {
   [key in ServiceRegion]: boolean;
@@ -85,8 +82,7 @@ export const convertToServiceRegionArray = (serviceRegion: {
  * // { Seoul: true, Busan: false, Incheon: true, ... }
  *
  * @description
- * - UI에서 관리하는 선택된 지역 배열을 API 요청 형식의 객체로 변환
- * - 주로 프로필 수정/등록 요청 시 사용
+ * - UI에서 관리하는 선택된 지역 배열을 백엔드 API 요청 형식(객체)으로 변환
  */
 export const convertToServiceRegionObject = (
   regions: ServiceRegion[]
