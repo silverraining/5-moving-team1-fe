@@ -9,11 +9,14 @@ import Step2_MoveDate from "./steps/Step2_MoveDate";
 import Step3_AddressSelect from "./steps/Step3_AddressSelect";
 import { useEstimateStore } from "@/src/store/requestStore";
 import InProgressPage from "./steps/InProgressPage";
-import { useQuery, useMutation } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueries } from "@tanstack/react-query";
 import {
-  postEstimateRequest,
-  fetchMyEstimateOffers,
+  fetchMyActiveEstimateRequest,
+  fetchPendingOffersByRequestId,
+  EstimateOffer,
 } from "@/src/api/customer/request/api";
+import { ParsedAddress } from "@/src/utils/parseAddress";
+import { AuthStore } from "@/src/store/authStore";
 
 export default function EstimateRequestFlow() {
   const theme = useTheme();
@@ -21,6 +24,7 @@ export default function EstimateRequestFlow() {
 
   const [isLoading, setIsLoading] = useState(true);
 
+  // 0. zustand 상태 가져오기
   const {
     moveType,
     moveDate,
@@ -34,24 +38,44 @@ export default function EstimateRequestFlow() {
     setStep,
   } = useEstimateStore();
 
-  // [TEST용: 나중에 여기를 API 호출 후, 데이터확인하고 페이지 이동시키기]
-  // 1. 새로고침 시에도 localStorage에서 상태 복구
+  // 1. 초기 진입 시 localStorage에서 상태 복구
   useEffect(() => {
+    const safeJSONParse = <T,>(value: string | null): T | null => {
+      try {
+        return value ? JSON.parse(value) : null;
+      } catch (e) {
+        console.warn("❗ JSON parse error:", value, e);
+        return null;
+      }
+    };
+
     // 최초 진입 시 localStorage에서 복구 및 step 설정
     const localMoveType = localStorage.getItem("moveType") || "";
     const localMoveDate = localStorage.getItem("moveDate") || "";
-    const localFromAddress = localStorage.getItem("fromAddress") || "";
-    const localToAddress = localStorage.getItem("toAddress") || "";
+    const localFromAddress = safeJSONParse<ParsedAddress>(
+      localStorage.getItem("fromAddress")
+    );
+    const localToAddress = safeJSONParse<ParsedAddress>(
+      localStorage.getItem("toAddress")
+    );
 
     // store가 비어 있으면 localStorage 값으로 복구
     if (!moveType) setMoveType(localMoveType);
     if (!moveDate) setMoveDate(localMoveDate);
-    if (!fromAddress) setFromAddress(localFromAddress);
-    if (!toAddress) setToAddress(localToAddress);
+    if (!fromAddress && localFromAddress) setFromAddress(localFromAddress);
+    if (!toAddress && localToAddress) setToAddress(localToAddress);
+
+    // 실제로 모두 유효한 값일 때만 step을 -1로 세팅
+    const isNonEmptyString = (value: string | null): boolean =>
+      typeof value === "string" && value.trim().length > 0;
 
     const hasInProgress =
-      localMoveType && localMoveDate && localFromAddress && localToAddress;
+      isNonEmptyString(localMoveType) &&
+      isNonEmptyString(localMoveDate) &&
+      localFromAddress !== null &&
+      localToAddress !== null;
 
+    // 상태가 다 채워져 있으면 step -1 (InProgress), 아니면 step 1부터 시작
     if (hasInProgress) {
       setStep(-1);
     } else {
@@ -60,15 +84,47 @@ export default function EstimateRequestFlow() {
     setIsLoading(false);
   }, []);
 
-  // 2. 기존 견적 유무 확인
-  const { data: existingEstimates, isLoading: isEstimateLoading } = useQuery({
-    queryKey: ["myEstimate"],
-    queryFn: fetchMyEstimateOffers,
-  });
+  //  2. 로그인 유저 정보
+  const accessToken = AuthStore((state) => state.accessToken);
+  const user = AuthStore((state) => state.user);
+  const userIdOrToken = user?.id || accessToken || ""; // 로그인 여부 판단
 
-  const hasRequestedEstimate = (existingEstimates?.length ?? 0) > 0;
+  // 3. 활성화된 견적 요청 ID 조회
+  const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
+    {
+      queryKey: ["activeEstimateRequests", userIdOrToken],
+      queryFn: fetchMyActiveEstimateRequest,
+      staleTime: 0,
+      enabled: !!userIdOrToken,
+    }
+  );
 
-  // 3. 주소 둘 다 있으면 자동으로 step 4로 전환
+  const activeEstimateId = activeEstimateRequests?.[0]?.estimateRequestId;
+
+  // 4. 요청 ID로 제안 상태(PENDING, CONFIRMED 등) 조회
+  const estimateOfferQueries = useQueries({
+    queries:
+      activeEstimateRequests?.map((request) => ({
+        queryKey: ["pendingEstimateOffer", request.estimateRequestId],
+        queryFn: () => fetchPendingOffersByRequestId(request.estimateRequestId),
+        enabled: !!request.estimateRequestId,
+      })) ?? [],
+  }) as {
+    data?: EstimateOffer[];
+    isLoading: boolean;
+  }[];
+
+  const isPendingOffersLoading = estimateOfferQueries.some((q) => q.isLoading);
+
+  // 5. 진행 중인 제안(PENDING, CONFIRMED)이 있는지 확인
+  const hasActivePendingOrConfirmedOffer = estimateOfferQueries.some((query) =>
+    query.data?.some(
+      (offer) =>
+        offer.requestStatus === "PENDING" || offer.requestStatus === "CONFIRMED"
+    )
+  );
+
+  // 6. 주소가 모두 입력되면 자동으로 step 4로 전환 (검토 단계)
   useEffect(() => {
     const showConfirm = !!fromAddress && !!toAddress;
 
@@ -77,8 +133,12 @@ export default function EstimateRequestFlow() {
     }
   }, [fromAddress, toAddress]);
 
-  // 4. 로딩 처리
-  if (isEstimateLoading || isLoading) {
+  // 7. 통합 로딩 처리
+  if (
+    isLoading ||
+    isLoadingActive ||
+    (activeEstimateId && isPendingOffersLoading)
+  ) {
     return (
       <Box
         sx={{
@@ -93,12 +153,12 @@ export default function EstimateRequestFlow() {
     );
   }
 
-  // 5. 기존에 요청된 견적이 있으면 바로 이동
-  if (hasRequestedEstimate || step === -1) {
+  // 8. 견적 제안이 있거나, 저장된 상태가 step=-1일 때 InProgressPage 페이지로
+  if (hasActivePendingOrConfirmedOffer || step === -1) {
     return <InProgressPage />;
   }
 
-  // 6. 이벤트 핸들러들
+  //  9. 단계별 핸들러 정의
   const handleSelectStep1 = (value: string) => {
     setMoveType(value);
     localStorage.setItem("moveType", value);
@@ -111,24 +171,24 @@ export default function EstimateRequestFlow() {
     setStep(3);
   };
 
-  const handleSelectStep3 = (from: string, to: string) => {
+  const handleSelectStep3 = (from: ParsedAddress, to: ParsedAddress) => {
     setFromAddress(from);
     setToAddress(to);
     setStep(-1); // 모두 완료 시, InProgressPage로 이동
   };
 
-  const handleSelectFromAddress = (from: string) => {
+  const handleSelectFromAddress = (from: ParsedAddress) => {
     setFromAddress(from);
-    localStorage.setItem("fromAddress", from); // [TEST용: 로컬에 저장 / 추후 백엔드에 저장된걸로 수정]
+    localStorage.setItem("fromAddress", JSON.stringify(from));
   };
 
-  const handleSelectToAddress = (to: string) => {
+  const handleSelectToAddress = (to: ParsedAddress) => {
     setToAddress(to);
-    localStorage.setItem("toAddress", to); // [TEST용: 로컬에 저장 / 추후 백엔드에 저장된걸로 수정]
+    localStorage.setItem("toAddress", JSON.stringify(to));
   };
 
   if (isLoading) return <div className="p-10">로딩 중...</div>;
-  // 7. 실제 화면 렌더링
+  // 10. 실제 화면 렌더링
   return (
     <>
       <Box sx={{ paddingTop: isSmall ? "24px" : "40px" }}>
