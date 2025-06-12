@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 import {
   convertToServiceTypeObject,
   convertToServiceRegionObject,
-} from "../../../utils/utill";
+} from "../../../utils/util";
 
 /**
  * TODO
@@ -75,7 +75,7 @@ export const ProfileRegister = () => {
 
       // 프로필 등록 요청
       await registerCustomerProfile({
-        imageUrl: s3ImageUrl,
+        imageUrl: s3ImageUrl || null,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
