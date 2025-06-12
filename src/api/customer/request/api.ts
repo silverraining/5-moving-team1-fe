@@ -1,18 +1,11 @@
 import apiClient from "../../axiosclient";
-
-export interface AddressPayload {
-  sido: string;
-  sidoEnglish: string;
-  sigungu: string;
-  roadAddress: string;
-  fullAddress: string;
-}
+import { ParsedAddress } from "@/src/utils/parseAddress";
 
 export type RequestEstimate = {
   moveType: string;
   moveDate: string;
-  fromAddress: AddressPayload;
-  toAddress: AddressPayload;
+  fromAddress: ParsedAddress;
+  toAddress: ParsedAddress;
 };
 
 // fetchMyActiveEstimateRequest 응답 타입

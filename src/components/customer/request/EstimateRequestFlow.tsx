@@ -171,12 +171,6 @@ export default function EstimateRequestFlow() {
     setStep(3);
   };
 
-  const handleSelectStep3 = (from: ParsedAddress, to: ParsedAddress) => {
-    setFromAddress(from);
-    setToAddress(to);
-    // setStep(-1); // 모두 완료 시, InProgressPage로 이동
-  };
-
   const handleSelectFromAddress = (from: ParsedAddress) => {
     setFromAddress(from);
     localStorage.setItem("fromAddress", JSON.stringify(from));
@@ -205,7 +199,6 @@ export default function EstimateRequestFlow() {
             onSelectTo={handleSelectToAddress}
             onBackStep1={() => setStep(1)}
             onBackStep2={() => setStep(2)}
-            onSelect={handleSelectStep3}
           />
         )}
       </Box>

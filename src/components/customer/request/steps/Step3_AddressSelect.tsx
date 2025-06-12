@@ -12,7 +12,6 @@ import dayjs from "dayjs";
 import { convertToLabel } from "@/src/utils/convertToLabel";
 import { postEstimateRequest } from "@/src/api/customer/request/api";
 import { parseAddress, ModalAddress } from "@/src/utils/parseAddress";
-import { AddressPayload } from "@/src/api/customer/request/api";
 
 type ParsedAddress = {
   sido: string; // 시도
@@ -27,7 +26,6 @@ type Step3Props = {
   onSelectTo: (to: ParsedAddress) => void;
   onBackStep1: () => void;
   onBackStep2: () => void;
-  onSelect: (from: ParsedAddress, to: ParsedAddress) => void;
 };
 
 export default function Step3_AddressSelect({
@@ -35,7 +33,6 @@ export default function Step3_AddressSelect({
   onSelectTo,
   onBackStep1,
   onBackStep2,
-  onSelect,
 }: Step3Props) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -47,14 +44,8 @@ export default function Step3_AddressSelect({
   const [openToModal, setOpenToModal] = useState(false);
   const { openSnackbar, SnackbarComponent } = useSnackbar();
 
-  const [selectedFrom, setSelectedFrom] = useState<ParsedAddress | null>(null);
-  const [selectedTo, setSelectedTo] = useState<ParsedAddress | null>(null);
-
-  useEffect(() => {
-    if (selectedFrom && selectedTo) {
-      onSelect(selectedFrom, selectedTo);
-    }
-  }, [selectedFrom, selectedTo, onSelect]);
+  // const [selectedFrom, setSelectedFrom] = useState<ParsedAddress | null>(null);
+  // const [selectedTo, setSelectedTo] = useState<ParsedAddress | null>(null);
 
   const handleConfirmClick = async () => {
     try {
@@ -79,17 +70,20 @@ export default function Step3_AddressSelect({
     }
   };
 
+  const setFromAddress = useEstimateStore((state) => state.setFromAddress);
+  const setToAddress = useEstimateStore((state) => state.setToAddress);
+
   const handleSelectFrom = (address: ModalAddress) => {
     const parsed = parseAddress(address);
-    setSelectedFrom(parsed);
     onSelectFrom(parsed);
+    setFromAddress(parsed);
     setOpenFromModal(false);
   };
 
   const handleSelectTo = (address: ModalAddress) => {
     const parsed = parseAddress(address);
-    setSelectedTo(parsed);
     onSelectTo(parsed);
+    setToAddress(parsed);
     setOpenToModal(false);
   };
 
