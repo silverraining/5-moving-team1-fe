@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import {
-  Box,
   Stack,
   Typography,
   Button,
@@ -10,7 +9,6 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { useRouter } from "next/navigation";
-import { Progress } from "@/src/components/shared/components/progress/progress";
 
 export default function InProgressPage() {
   const theme = useTheme();

@@ -174,7 +174,7 @@ export default function EstimateRequestFlow() {
   const handleSelectStep3 = (from: ParsedAddress, to: ParsedAddress) => {
     setFromAddress(from);
     setToAddress(to);
-    setStep(-1); // 모두 완료 시, InProgressPage로 이동
+    // setStep(-1); // 모두 완료 시, InProgressPage로 이동
   };
 
   const handleSelectFromAddress = (from: ParsedAddress) => {

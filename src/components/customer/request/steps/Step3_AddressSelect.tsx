@@ -4,14 +4,14 @@ import { Stack, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import { EditableBox } from "@/src/components/shared/components/input/InputAddress";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useEstimateStore } from "@/src/store/requestStore";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import AddressModal from "@/src/components/shared/components/address-card/AddressModal";
 import dayjs from "dayjs";
 import { convertToLabel } from "@/src/utils/convertToLabel";
 import { postEstimateRequest } from "@/src/api/customer/request/api";
-import { parseAddress } from "@/src/utils/parseAddress";
+import { parseAddress, ModalAddress } from "@/src/utils/parseAddress";
 import { AddressPayload } from "@/src/api/customer/request/api";
 
 type ParsedAddress = {
@@ -47,30 +47,52 @@ export default function Step3_AddressSelect({
   const [openToModal, setOpenToModal] = useState(false);
   const { openSnackbar, SnackbarComponent } = useSnackbar();
 
-  const handleConfirm = async () => {
-    if (fromAddress && toAddress && moveType && moveDate) {
-      try {
-        // POST 요청 보내기
-        await postEstimateRequest({
-          fromAddress: fromAddress as AddressPayload,
-          toAddress: toAddress as AddressPayload,
-          moveType,
-          moveDate,
-        });
+  const [selectedFrom, setSelectedFrom] = useState<ParsedAddress | null>(null);
+  const [selectedTo, setSelectedTo] = useState<ParsedAddress | null>(null);
 
-        openSnackbar("견적 확정 완료", "success", 5000);
-        router.push("/customer/request");
-      } catch (error) {
-        openSnackbar("견적 확정에 실패했습니다. 다시 시도해주세요.", "error");
-        console.error(error);
+  useEffect(() => {
+    if (selectedFrom && selectedTo) {
+      onSelect(selectedFrom, selectedTo);
+    }
+  }, [selectedFrom, selectedTo, onSelect]);
+
+  const handleConfirmClick = async () => {
+    try {
+      if (!moveType || !moveDate || !fromAddress || !toAddress) {
+        openSnackbar("모든 정보를 입력해주세요.", "warning");
+        return;
       }
-    } else {
-      openSnackbar("모든 정보를 입력해주세요.", "warning");
+
+      // POST 요청 보내기
+      await postEstimateRequest({
+        moveType,
+        moveDate,
+        fromAddress,
+        toAddress,
+      });
+
+      openSnackbar("견적 확정 완료", "success", 5000);
+      router.push("/customer/request");
+    } catch (error) {
+      openSnackbar("견적 확정에 실패했습니다. 다시 시도해주세요.", "error");
+      console.error(error);
     }
   };
 
-  console.log("출발지 확인", fromAddress);
-  console.log("도착지 확인", toAddress);
+  const handleSelectFrom = (address: ModalAddress) => {
+    const parsed = parseAddress(address);
+    setSelectedFrom(parsed);
+    onSelectFrom(parsed);
+    setOpenFromModal(false);
+  };
+
+  const handleSelectTo = (address: ModalAddress) => {
+    const parsed = parseAddress(address);
+    setSelectedTo(parsed);
+    onSelectTo(parsed);
+    setOpenToModal(false);
+  };
+
   return (
     <>
       <Stack spacing={isSmall ? "8px" : "24px"}>
@@ -149,7 +171,7 @@ export default function Step3_AddressSelect({
               toLabel={toAddress?.fullAddress || ""}
               onFromClick={() => setOpenFromModal(true)}
               onToClick={() => setOpenToModal(true)}
-              onConfirmClick={handleConfirm}
+              onConfirmClick={handleConfirmClick}
             />
           </Stack>
         </Box>
@@ -158,11 +180,7 @@ export default function Step3_AddressSelect({
           open={openFromModal}
           onClose={() => setOpenFromModal(false)}
           title="출발지를 선택해주세요"
-          onSelect={(address) => {
-            const parsed = parseAddress(address);
-            onSelectFrom(parsed);
-            setOpenFromModal(false);
-          }}
+          onSelect={handleSelectFrom}
         />
 
         {/* 도착지 모달 */}
@@ -170,11 +188,7 @@ export default function Step3_AddressSelect({
           open={openToModal}
           onClose={() => setOpenToModal(false)}
           title="도착지를 선택해주세요"
-          onSelect={(address) => {
-            const parsed = parseAddress(address);
-            onSelectTo(parsed);
-            setOpenToModal(false);
-          }}
+          onSelect={handleSelectTo}
         />
       </Stack>
       {SnackbarComponent}
