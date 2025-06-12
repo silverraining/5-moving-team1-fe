@@ -5,7 +5,6 @@ export type Login = {
   email: string;
   password: string;
   role: string;
-  provider: string;
 };
 
 export type Signup = {

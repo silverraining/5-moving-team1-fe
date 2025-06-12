@@ -26,7 +26,7 @@ import {
   convertToServiceTypeObject,
   convertToServiceRegionArray,
   convertToServiceRegionObject,
-} from "../../../utils/utill";
+} from "../../../utils/util";
 
 export const ProfileEdit = () => {
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
@@ -117,7 +117,7 @@ export const ProfileEdit = () => {
         phone: data.phone,
         password: data.currentPassword,
         newPassword: data.newPassword,
-        imageUrl: s3ImageUrl ? s3ImageUrl : data.imageUrl || "",
+        imageUrl: s3ImageUrl || null,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });

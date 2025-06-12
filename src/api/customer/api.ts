@@ -33,15 +33,9 @@ export const moverDetail = async (moverId: string) => {
 
 /** 일반 유저 프로필 등록 요청 타입 */
 export interface CustomerProfileRequest {
-  imageUrl: string;
-  serviceType: {
-    SMALL: boolean;
-    HOME: boolean;
-    OFFICE: boolean;
-  };
-  serviceRegion: {
-    [key in ServiceRegion]: boolean;
-  };
+  imageUrl?: string | null;
+  serviceType: Record<ServiceType, boolean>;
+  serviceRegion: Record<ServiceRegion, boolean>;
 }
 
 /** 일반 유저 프로필 등록 api */
@@ -60,12 +54,8 @@ export interface UpdateCustomerProfileRequest {
   phone: string;
   password?: string;
   newPassword?: string;
-  imageUrl: string;
-  serviceType: {
-    SMALL: boolean;
-    HOME: boolean;
-    OFFICE: boolean;
-  };
+  imageUrl?: string | null;
+  serviceType: Record<ServiceType, boolean>;
   serviceRegion: Record<ServiceRegion, boolean>;
 }
 
@@ -88,11 +78,7 @@ export interface CustomerProfileResponse {
   phone: string;
   id: string;
   imageUrl: string;
-  serviceType: {
-    SMALL: boolean;
-    HOME: boolean;
-    OFFICE: boolean;
-  };
+  serviceType: Record<ServiceType, boolean>;
   serviceRegion: Record<ServiceRegion, boolean>;
 }
 

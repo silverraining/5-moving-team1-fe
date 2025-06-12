@@ -14,35 +14,44 @@ import {
   moverProfileRegisterSchema,
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
+import { useUpdateMoverProfile } from "@/src/api/mover/hooks";
+import { ServiceRegion, ServiceType } from "@/src/types/common";
+import {
+  convertToServiceTypeObject,
+  convertToServiceRegionObject,
+} from "../../../utils/util";
 
-interface ProfileEditProps {
-  initialData?: {
-    name: string;
-    email: string;
-    phone: string;
-    nickname: string;
-    experience: string;
-    intro: string;
-    description: string;
-    serviceType: string[];
-    serviceRegion: string[];
-    imageUrl?: string;
-  };
-}
+// TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
+// interface ProfileEditProps {
+//   initialData?: {
+//     name: string;
+//     email: string;
+//     phone: string;
+//     nickname: string;
+//     experience: number;
+//     intro: string;
+//     description: string;
+//     serviceType: ServiceType[];
+//     serviceRegion: ServiceRegion[];
+//     imageUrl?: string;
+//   };
+// }
 
-export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
-  const router = useRouter();
-  const [selectedServices, setSelectedServices] = useState<string[]>(
-    initialData?.serviceType || []
-  );
-  const [selectedRegions, setSelectedRegions] = useState<string[]>(
-    initialData?.serviceRegion || []
-  );
+export const ProfileEdit = () => {
+  const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
+  const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
   const [serviceError, setServiceError] = useState<boolean>(false);
   const [regionError, setRegionError] = useState<boolean>(false);
 
+  const router = useRouter();
+
   const { openSnackbar } = useSnackbarStore();
 
+  // 기사님 프로필 수정 hook
+  const { mutateAsync: updateMoverProfile, isPending: isUpdating } =
+    useUpdateMoverProfile();
+
+  // 이미지 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -56,34 +65,31 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
   } = useForm<MoverProfileRegisterFormData>({
     resolver: zodResolver(moverProfileRegisterSchema),
     defaultValues: {
-      name: initialData?.name || "",
-      email: initialData?.email || "",
-      phone: initialData?.phone || "",
-      serviceType: initialData?.serviceType || [],
-      serviceRegion: initialData?.serviceRegion || [],
-      nickname: initialData?.nickname || "",
-      experience: initialData?.experience || "",
-      intro: initialData?.intro || "",
-      description: initialData?.description || "",
+      nickname: "",
+      experience: 0,
+      intro: "",
+      description: "",
+      serviceType: [],
+      serviceRegion: [],
     },
     mode: "onChange",
   });
 
-  const handleServiceToggle = (service: string) => {
+  const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
       ? selectedServices.filter((s) => s !== service)
       : [...selectedServices, service];
     setSelectedServices(newServices);
-    setValue("serviceType", newServices);
+    setValue("serviceType", newServices, { shouldValidate: true });
     setServiceError(newServices.length === 0);
   };
 
-  const handleRegionToggle = (region: string) => {
+  const handleRegionToggle = (region: ServiceRegion) => {
     const newRegions = selectedRegions.includes(region)
       ? selectedRegions.filter((r) => r !== region)
       : [...selectedRegions, region];
     setSelectedRegions(newRegions);
-    setValue("serviceRegion", newRegions);
+    setValue("serviceRegion", newRegions, { shouldValidate: true });
     setRegionError(newRegions.length === 0);
   };
 
@@ -103,29 +109,23 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
 
       const profileData = {
         ...data,
-        serviceType: selectedServices,
-        serviceRegion: selectedRegions,
-        imageUrl: s3ImageUrl || initialData?.imageUrl,
+        serviceType: convertToServiceTypeObject(selectedServices),
+        serviceRegion: convertToServiceRegionObject(selectedRegions),
+        imageUrl: s3ImageUrl || null,
       };
 
-      //TODO: API 연결
-      const response = await fetch("/api/mover/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(profileData),
-      });
-
-      if (!response.ok) {
-        throw new Error("기사님 프로필 수정에 실패했습니다.");
-      }
+      await updateMoverProfile(profileData);
 
       openSnackbar("기사님 프로필이 성공적으로 수정되었습니다.", "success");
-      router.push("/mover/profile");
+      router.push("/");
     } catch (error) {
       console.error("프로필 수정 중 오류:", error);
-      openSnackbar("프로필 수정 중 오류가 발생했습니다.", "error");
+      openSnackbar(
+        error instanceof Error
+          ? error.message
+          : "프로필 수정 중 오류가 발생했습니다.",
+        "error"
+      );
     }
   };
 
@@ -244,7 +244,7 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={initialData?.imageUrl}
+                  initialImage={null}
                 />
               </Box>
 
@@ -275,7 +275,8 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
                   </Typography>
                   <Box sx={{ mt: "16px" }}>
                     <TextField
-                      {...register("experience")}
+                      {...register("experience", { valueAsNumber: true })}
+                      type="number"
                       variant="outlined"
                       fullWidth
                       placeholder="기사님의 경력을 입력해주세요"
@@ -507,7 +508,12 @@ export const ProfileEdit = ({ initialData }: ProfileEditProps) => {
             type="submit"
             variant="contained"
             fullWidth
-            disabled={!isValid}
+            disabled={
+              !isValid ||
+              isUpdating ||
+              selectedServices.length === 0 ||
+              selectedRegions.length === 0
+            }
             sx={{
               height: "56px",
               borderRadius: "16px",

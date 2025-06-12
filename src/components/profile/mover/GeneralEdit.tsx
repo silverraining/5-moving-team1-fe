@@ -12,18 +12,16 @@ import {
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
 
-interface GeneralEditProps {
-  initialData?: {
-    name: string;
-    email: string;
-    phone: string;
-    currentPassword?: string;
-    newPassword?: string;
-    confirmPassword?: string;
-  };
-}
+// TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
+// interface GeneralEditProps {
+//   initialData?: {
+//     name: string;
+//     email: string;
+//     phone: string;
+//   };
+// }
 
-export const GeneralEdit = ({ initialData }: GeneralEditProps) => {
+export const GeneralEdit = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
 
@@ -34,13 +32,10 @@ export const GeneralEdit = ({ initialData }: GeneralEditProps) => {
     formState: { errors, isValid },
   } = useForm<ProfileEditFormData>({
     resolver: zodResolver(profileEditSchema),
-    defaultValues: initialData || {
+    defaultValues: {
       name: "",
-      email: "",
+      email: "codeit@codeit.kr",
       phone: "",
-      currentPassword: "",
-      newPassword: "",
-      confirmPassword: "",
     },
     mode: "onChange",
   });
@@ -63,132 +58,97 @@ export const GeneralEdit = ({ initialData }: GeneralEditProps) => {
         mx: "auto",
         p: 3,
         minHeight: "100vh",
-        display: "flex",
-        flexDirection: "column",
       }}
     >
+      <Typography
+        variant="SB_32"
+        sx={{
+          color: (theme) => theme.palette.Black[400],
+        }}
+      >
+        기본정보 수정
+      </Typography>
+
       <form onSubmit={handleSubmit(onSubmit)}>
         <Box
           sx={{
-            display: "flex",
-            flexDirection: "column",
-            flex: 1,
+            display: "grid",
+            gridTemplateColumns: ["1fr", "1fr", "repeat(2, minmax(0, 1fr))"],
+            columnGap: "80px",
+            rowGap: "24px",
+            maxWidth: "1200px",
+            mt: "32px",
+            mx: "auto",
           }}
         >
-          {/* 헤더 */}
-          <Stack
-            sx={{
-              borderBottom: "1px solid",
-              borderColor: (theme) => theme.palette.Line[100],
-              display: "flex",
-              flexDirection: "column",
-              gap: "32px",
-              pb: "32px",
-            }}
-          >
-            <Typography
-              variant="SB_32"
-              sx={(theme) => ({
-                color: theme.palette.Black[400],
-              })}
-            >
-              기본정보 수정
-            </Typography>
-          </Stack>
-
-          {/* 메인 컨텐츠 2열 레이아웃 */}
+          {/* 왼쪽 섹션 */}
           <Box
             sx={{
               display: "flex",
-              gap: "80px",
-              mt: "32px",
-              flexDirection: ["column", "column", "row"],
-              justifyContent: "space-between",
-              width: "100%",
+              flexDirection: "column",
+              gap: "32px",
             }}
           >
-            {/* 왼쪽 열: 개인정보 */}
-            <Box
+            <PersonalInfoSection
+              register={register}
+              control={control}
+              errors={errors}
+            />
+            <Button
+              variant="outlined"
+              fullWidth
+              onClick={() => window.history.back()}
               sx={{
-                flex: 1,
-                minWidth: ["100%", "100%", "400px"],
-                maxWidth: ["100%", "100%", "500px"],
+                height: "56px",
+                borderRadius: "16px",
+                fontSize: "18px",
+                fontWeight: 600,
+                borderColor: (theme) => theme.palette.PrimaryBlue[300],
+                color: (theme) => theme.palette.PrimaryBlue[300],
+                "&:hover": {
+                  borderColor: (theme) => theme.palette.PrimaryBlue[400],
+                  backgroundColor: "transparent",
+                },
+                mt: "auto",
               }}
             >
-              <PersonalInfoSection
-                register={register}
-                control={control}
-                errors={errors}
-                initialData={initialData}
-              />
-            </Box>
-
-            {/* 오른쪽 열: 비밀번호 */}
-            <Box
-              sx={{
-                flex: 1,
-                minWidth: ["100%", "100%", "400px"],
-                maxWidth: ["100%", "100%", "500px"],
-              }}
-            >
-              <PasswordChangeSection register={register} errors={errors} />
-            </Box>
+              취소
+            </Button>
           </Box>
-        </Box>
 
-        {/* 버튼 그룹 */}
-        <Box
-          sx={{
-            display: "flex",
-            gap: "16px",
-            mt: 4,
-            mb: 2,
-          }}
-        >
-          {/* 취소 버튼 */}
-          <Button
-            variant="outlined"
-            fullWidth
-            onClick={() => window.history.back()}
+          {/* 오른쪽 섹션 */}
+          <Box
             sx={{
-              height: "56px",
-              borderRadius: "16px",
-              fontSize: "18px",
-              fontWeight: 600,
-              borderColor: (theme) => theme.palette.PrimaryBlue[300],
-              color: (theme) => theme.palette.PrimaryBlue[300],
-              "&:hover": {
-                borderColor: (theme) => theme.palette.PrimaryBlue[400],
-                backgroundColor: "transparent",
-              },
+              display: "flex",
+              flexDirection: "column",
+              gap: "32px",
             }}
           >
-            취소
-          </Button>
-
-          {/* 수정하기 버튼 */}
-          <Button
-            type="submit"
-            variant="contained"
-            fullWidth
-            disabled={!isValid}
-            sx={{
-              height: "56px",
-              borderRadius: "16px",
-              fontSize: "18px",
-              fontWeight: 600,
-              backgroundColor: (theme) => theme.palette.PrimaryBlue[300],
-              "&:disabled": {
-                backgroundColor: (theme) => theme.palette.grey[300],
-                color: (theme) => theme.palette.White[100],
-              },
-              "&:hover": {
-                backgroundColor: (theme) => theme.palette.PrimaryBlue[400],
-              },
-            }}
-          >
-            수정하기
-          </Button>
+            <PasswordChangeSection register={register} errors={errors} />
+            <Button
+              type="submit"
+              variant="contained"
+              fullWidth
+              disabled={!isValid}
+              sx={{
+                height: "56px",
+                borderRadius: "16px",
+                fontSize: "18px",
+                fontWeight: 600,
+                backgroundColor: (theme) => theme.palette.PrimaryBlue[300],
+                "&:disabled": {
+                  backgroundColor: (theme) => theme.palette.grey[300],
+                  color: (theme) => theme.palette.White[100],
+                },
+                "&:hover": {
+                  backgroundColor: (theme) => theme.palette.PrimaryBlue[400],
+                },
+                mt: "auto",
+              }}
+            >
+              수정하기
+            </Button>
+          </Box>
         </Box>
       </form>
     </Box>

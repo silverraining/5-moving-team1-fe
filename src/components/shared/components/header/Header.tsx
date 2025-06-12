@@ -23,12 +23,14 @@ import {
   MOVER_MENU,
 } from "@/src/lib/headerConstants";
 import Link from "next/link";
+import { useLogout } from "@/src/api/auth/hooks";
 
 export const Header = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbar();
   const { open, toggleDrawer } = useDrawer();
   const { user, isLogin, logout } = AuthStore();
+  const { mutate } = useLogout();
   const isCustomer = user?.role === "CUSTOMER";
   const isMover = user?.role === "MOVER";
   const theme = useTheme();
@@ -44,10 +46,23 @@ export const Header = () => {
     : isMover
       ? MOVER_MENU
       : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+
   const hendleLogout = () => {
-    logout();
-    router.replace(PATH.main);
-    openSnackbar("로그아웃 되었습니다", "success", 2000, "standard");
+    mutate(undefined, {
+      onSuccess: () => {
+        openSnackbar("로그아웃 되었습니다", "success", 1000, "standard");
+        logout();
+        router.replace(PATH.main);
+      },
+      onError: (error) => {
+        openSnackbar(
+          error instanceof Error ? error.message : "로그아웃 실패",
+          "error",
+          1000,
+          "standard"
+        );
+      },
+    });
   };
   return (
     <Box
