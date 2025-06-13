@@ -92,3 +92,42 @@ export const getCustomerProfile =
       throw error;
     }
   };
+
+/** PENDING, CONFIRMED 상태의 견적 요청 ID만 반환 api */
+export const EstimateRequestActive = async () => {
+  try {
+    const response = await apiClient.get("/estimate-request/active", {});
+    console.log("EstimateRequestActive 응답:", response);
+    return response.data;
+  } catch (error) {
+    console.error("EstimateRequestActive 에러:", error);
+    throw error;
+  }
+};
+
+/** 견적 관리 받았던 견적 api */
+export const EstimateRequestList = async () => {
+  try {
+    const response = await apiClient.get("/estimate-request/history", {});
+    console.log("EstimateRequestList 응답:", response);
+    return response.data;
+  } catch (error) {
+    console.error("EstimateRequestList 에러:", error);
+    throw error;
+  }
+};
+
+/** 견적 관리 대기 중인 견적 api */
+export const EstimateOfferList = async (requestId: string) => {
+  try {
+    const response = await apiClient.get(
+      `/estimate-offer/${requestId}/pending`,
+      {}
+    );
+    console.log("EstimateOfferList 응답:", response);
+    return response.data;
+  } catch (error) {
+    console.error("EstimateOfferList 에러:", error);
+    throw error;
+  }
+};
