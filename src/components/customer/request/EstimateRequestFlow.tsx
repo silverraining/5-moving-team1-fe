@@ -3,13 +3,12 @@
 
 import { useState, useEffect } from "react";
 import { Box, useTheme, useMediaQuery, CircularProgress } from "@mui/material";
-import { Progress } from "../../shared/components/progress/progress";
 import Step1_MoveType from "./steps/Step1_MoveType";
 import Step2_MoveDate from "./steps/Step2_MoveDate";
 import Step3_AddressSelect from "./steps/Step3_AddressSelect";
 import { useEstimateStore } from "@/src/store/requestStore";
 import InProgressPage from "./steps/InProgressPage";
-import { useQuery, useMutation, useQueries } from "@tanstack/react-query";
+import { useQuery, useQueries } from "@tanstack/react-query";
 import {
   fetchMyActiveEstimateRequest,
   fetchPendingOffersByRequestId,
@@ -38,8 +37,52 @@ export default function EstimateRequestFlow() {
     setStep,
   } = useEstimateStore();
 
+  //  2. 로그인 유저 정보
+  const accessToken = AuthStore((state) => state.accessToken);
+  const user = AuthStore((state) => state.user);
+  const userIdOrToken = user?.id || accessToken || ""; // 로그인 여부 판단
+
+  // 3. 활성화된 견적 요청 ID 조회
+  const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
+    {
+      queryKey: ["activeEstimateRequests", userIdOrToken],
+      queryFn: fetchMyActiveEstimateRequest,
+      staleTime: 0,
+      enabled: !!userIdOrToken,
+    }
+  );
+  console.log("유저 로그인 여부 판단", userIdOrToken);
+
+  // 4. 요청 ID로 제안 상태(PENDING, CONFIRMED 등) 조회
+  const estimateOfferQueries = useQueries({
+    queries:
+      activeEstimateRequests?.map((request) => ({
+        queryKey: ["pendingEstimateOffer", request.estimateRequestId],
+        queryFn: () => fetchPendingOffersByRequestId(request.estimateRequestId),
+        enabled: !!request.estimateRequestId,
+      })) ?? [],
+  }) as {
+    data?: EstimateOffer[];
+    isLoading: boolean;
+  }[];
+
+  const isPendingOffersLoading = estimateOfferQueries.some((q) => q.isLoading);
+
+  // 5. 진행 중인 제안(PENDING, CONFIRMED)이 있는지 확인
+  const hasActivePendingOrConfirmedOffer =
+    !isPendingOffersLoading &&
+    estimateOfferQueries.some((query) =>
+      query.data?.some(
+        (offer) =>
+          offer.requestStatus === "PENDING" ||
+          offer.requestStatus === "CONFIRMED"
+      )
+    );
+
   // 1. 초기 진입 시 localStorage에서 상태 복구
   useEffect(() => {
+    if (isLoadingActive || isPendingOffersLoading) return;
+
     const safeJSONParse = <T,>(value: string | null): T | null => {
       try {
         return value ? JSON.parse(value) : null;
@@ -75,70 +118,35 @@ export default function EstimateRequestFlow() {
       localFromAddress !== null &&
       localToAddress !== null;
 
-    // 상태가 다 채워져 있으면 step -1 (InProgress), 아니면 step 1부터 시작
-    if (hasInProgress) {
-      setStep(-1);
-    } else {
-      setStep(1);
-    }
+    const nextStep = hasActivePendingOrConfirmedOffer
+      ? -1
+      : hasInProgress
+        ? 4
+        : 1;
+
+    setStep(nextStep);
+
     setIsLoading(false);
-  }, []);
-
-  //  2. 로그인 유저 정보
-  const accessToken = AuthStore((state) => state.accessToken);
-  const user = AuthStore((state) => state.user);
-  const userIdOrToken = user?.id || accessToken || ""; // 로그인 여부 판단
-
-  // 3. 활성화된 견적 요청 ID 조회
-  const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
-    {
-      queryKey: ["activeEstimateRequests", userIdOrToken],
-      queryFn: fetchMyActiveEstimateRequest,
-      staleTime: 0,
-      enabled: !!userIdOrToken,
-    }
-  );
-
-  const activeEstimateId = activeEstimateRequests?.[0]?.estimateRequestId;
-
-  // 4. 요청 ID로 제안 상태(PENDING, CONFIRMED 등) 조회
-  const estimateOfferQueries = useQueries({
-    queries:
-      activeEstimateRequests?.map((request) => ({
-        queryKey: ["pendingEstimateOffer", request.estimateRequestId],
-        queryFn: () => fetchPendingOffersByRequestId(request.estimateRequestId),
-        enabled: !!request.estimateRequestId,
-      })) ?? [],
-  }) as {
-    data?: EstimateOffer[];
-    isLoading: boolean;
-  }[];
-
-  const isPendingOffersLoading = estimateOfferQueries.some((q) => q.isLoading);
-
-  // 5. 진행 중인 제안(PENDING, CONFIRMED)이 있는지 확인
-  const hasActivePendingOrConfirmedOffer = estimateOfferQueries.some((query) =>
-    query.data?.some(
-      (offer) =>
-        offer.requestStatus === "PENDING" || offer.requestStatus === "CONFIRMED"
-    )
-  );
+  }, [
+    isLoadingActive,
+    isPendingOffersLoading,
+    hasActivePendingOrConfirmedOffer,
+  ]);
 
   // 6. 주소가 모두 입력되면 자동으로 step 4로 전환 (검토 단계)
   useEffect(() => {
     const showConfirm = !!fromAddress && !!toAddress;
 
+    // 진행 중 제안이 있으면 step 전환 금지
+    if (hasActivePendingOrConfirmedOffer) return;
+
     if (showConfirm && step !== 4) {
       setStep(4);
     }
-  }, [fromAddress, toAddress]);
+  }, [fromAddress, toAddress, hasActivePendingOrConfirmedOffer]);
 
   // 7. 통합 로딩 처리
-  if (
-    isLoading ||
-    isLoadingActive ||
-    (activeEstimateId && isPendingOffersLoading)
-  ) {
+  if (isLoading || isLoadingActive || isPendingOffersLoading) {
     return (
       <Box
         sx={{
@@ -181,7 +189,6 @@ export default function EstimateRequestFlow() {
     localStorage.setItem("toAddress", JSON.stringify(to));
   };
 
-  if (isLoading) return <div className="p-10">로딩 중...</div>;
   // 10. 실제 화면 렌더링
   return (
     <>

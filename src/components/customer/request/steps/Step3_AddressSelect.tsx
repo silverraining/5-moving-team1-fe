@@ -4,7 +4,7 @@ import { Stack, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import { EditableBox } from "@/src/components/shared/components/input/InputAddress";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useEstimateStore } from "@/src/store/requestStore";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import AddressModal from "@/src/components/shared/components/address-card/AddressModal";
@@ -44,9 +44,6 @@ export default function Step3_AddressSelect({
   const [openToModal, setOpenToModal] = useState(false);
   const { openSnackbar, SnackbarComponent } = useSnackbar();
 
-  // const [selectedFrom, setSelectedFrom] = useState<ParsedAddress | null>(null);
-  // const [selectedTo, setSelectedTo] = useState<ParsedAddress | null>(null);
-
   const handleConfirmClick = async () => {
     try {
       if (!moveType || !moveDate || !fromAddress || !toAddress) {
@@ -63,7 +60,7 @@ export default function Step3_AddressSelect({
       });
 
       openSnackbar("견적 확정 완료", "success", 5000);
-      router.push("/customer/request");
+      router.push("/customer/moverlist");
     } catch (error) {
       openSnackbar("견적 확정에 실패했습니다. 다시 시도해주세요.", "error");
       console.error(error);
