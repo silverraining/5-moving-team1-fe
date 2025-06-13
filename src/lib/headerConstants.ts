@@ -18,7 +18,7 @@ export const GUEST_MENU: TabType = [
 
 export const USER_REQUEST: TabType = [
   { label: "대기중인 견적", href: PATH.userEstimate },
-  { label: "받았던 견적", href: PATH.userEstimateReceive },
+  { label: "받았던 견적", href: PATH.userEstimateHistory },
 ];
 
 export const USER_REVIEW: TabType = [
