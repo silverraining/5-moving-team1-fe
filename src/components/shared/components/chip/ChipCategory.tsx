@@ -1,53 +1,54 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { ChipProps } from "@/src/types/card";
 import Image from "next/image";
-interface ChipCategoryProps extends ChipProps {
+import { ChipData } from "@/src/types/card";
+interface ChipCategoryProps {
+  data: ChipData;
   forceMobileSize?: boolean;
 }
 
 export const ChipCategory = ({
-  type = "small",
+  data,
   forceMobileSize = false,
 }: ChipCategoryProps) => {
   const theme = useTheme();
 
   const categoryData = {
-    small: {
+    SMALL: {
       label: "소형이사",
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
       img: "/Images/chip/box.svg",
       alt: "소형이사",
     },
-    home: {
+    HOME: {
       label: "가정이사",
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
       img: "/Images/chip/home.svg",
       alt: "가정이사",
     },
-    office: {
+    OFFICE: {
       label: "사무실이사",
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
       img: "/Images/chip/company.svg",
       alt: "사무실이사",
     },
-    designation: {
+    TARGET: {
       label: "지정 견적 요청",
       bg: theme.palette.SecondaryRed[100],
       text: theme.palette.SecondaryRed[200],
       img: "/Images/chip/document.svg",
       alt: "지정 견적 요청",
     },
-    wait: {
+    PENDING: {
       label: "견적 대기",
       bg: theme.palette.Background[100],
       text: theme.palette.PrimaryBlue[400],
       img: null,
       alt: "견적 대기",
     },
-    complete: {
+    CONFIRMED: {
       label: "견적 확정",
       bg: theme.palette.Background[100],
       text: theme.palette.PrimaryBlue[400],
@@ -55,8 +56,6 @@ export const ChipCategory = ({
       alt: "견적 확정",
     },
   } as const;
-
-  const data = categoryData[type];
 
   const sizeMap = {
     xs: { img: 20, height: 24, borderRadius: "4px" },
@@ -86,6 +85,22 @@ export const ChipCategory = ({
   const size = forceMobileSize ? "sm" : isSmall ? "xs" : isMobile ? "sm" : "md";
   let sizeStyle = sizeMap[size];
 
+  let category: keyof typeof categoryData | undefined = undefined;
+
+  if (data.isTargeted) category = "TARGET";
+  if (data.status === "PENDING") category = "PENDING";
+  if (data.status === "CONFIRMED") category = "CONFIRMED";
+  if (
+    data.chipType === "SMALL" ||
+    data.chipType === "HOME" ||
+    data.chipType === "OFFICE"
+  )
+    category = data.chipType;
+
+  if (!category) return null;
+
+  const cat = categoryData[category];
+
   if (!data) return null;
 
   if (size === "xs") {
@@ -95,17 +110,17 @@ export const ChipCategory = ({
           width: "fit-content",
           height: sizeStyle.height,
           borderRadius: sizeStyle.borderRadius,
-          backgroundColor: data.bg,
+          backgroundColor: cat.bg,
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
           boxShadow: "4px 4px 8px 0px #D9D9D91A",
         }}
       >
-        {data.img && (
+        {cat.img && (
           <Image
-            src={data.img}
-            alt={data.alt}
+            src={cat.img}
+            alt={cat.alt}
             width={sizeStyle.img}
             height={sizeStyle.img}
           />
@@ -121,7 +136,7 @@ export const ChipCategory = ({
         width: "fit-content",
         height: sizeStyle.height,
         borderRadius: sizeStyle.borderRadius,
-        backgroundColor: data.bg,
+        backgroundColor: cat.bg,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -130,10 +145,10 @@ export const ChipCategory = ({
         boxShadow: "4px 4px 8px 0px #D9D9D91A",
       }}
     >
-      {data.img && (
+      {cat.img && (
         <Image
-          src={data.img}
-          alt={data.alt}
+          src={cat.img}
+          alt={cat.alt}
           width={sizeStyle.img}
           height={sizeStyle.img}
         />
@@ -143,13 +158,11 @@ export const ChipCategory = ({
           fontSize: sizeStyle.font,
           lineHeight: `${sizeStyle.lineHeight}px`,
           fontWeight: 600,
-          color: data.text,
+          color: cat.text,
         }}
       >
-        {data.label}
+        {cat.label}
       </Typography>
     </Box>
   );
 };
-
-export type { ChipProps };
