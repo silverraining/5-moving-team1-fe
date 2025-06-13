@@ -1,37 +1,30 @@
-export type ChipProps = {
-  type: "small" | "home" | "office" | "designation" | "wait" | "complete";
-};
+import {
+  Address,
+  EstimateOfferStatus,
+  EstimateRequestStatus,
+  ServiceType,
+} from "./common";
 
-export type EstimateRequest = {
-  types: ChipProps["type"][];
-  id: string;
-  date: string;
-  movingDay: string;
-  from: string;
-  to: string;
-  estimateList?: CardData[];
-};
+export interface ChipData {
+  chipType?: ServiceType;
+  status?: EstimateRequestStatus;
+  isTargeted?: boolean;
+}
 
 export type CardData = {
-  types: ChipProps["type"][];
-  message?: string;
-  imgSrc: string;
-  name: string;
-  like: number;
+  types: ServiceType;
+  status: EstimateOfferStatus;
+  price?: number;
+  nickname: string;
+  experience: number;
+  moveDate: Date;
+  imageUrl?: string;
+  intro: string;
   rating: number;
-  count: number;
-  career: number;
-  confirm: number;
+  reviewCount: number;
+  likeCount: number;
   isLiked: boolean;
-  cost?: number;
-  date?: string;
-  from?: string;
-  to?: string;
-  ReviewCheck?: boolean;
-  review?: number;
-  writeReview?: string;
-  nickname?: string;
-  movingDay?: string;
-  reject?: boolean;
-  address: string[];
+  confirmedCount: number;
+  fromAddress: Address;
+  toAddress: Address;
 };

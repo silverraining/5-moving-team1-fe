@@ -3,6 +3,8 @@ import {
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
+  Address,
+  MinimalAddress,
 } from "./common";
 
 export type EstimateOffer = {
@@ -11,15 +13,23 @@ export type EstimateOffer = {
   price: number;
   comment: string;
   status: EstimateOfferStatus;
+  requestStatus: EstimateRequestStatus;
+  confirmedCount: number;
   isTargeted: boolean;
   isConfirmed: boolean;
   confirmedAt?: Date;
   completedAt?: Date; //이사 완료시점  ex)리뷰 작성 기간 제한
   createdAt: Date;
+  moveDate: Date;
   updatedAt: Date;
+  moveType: ServiceType;
   estimateRequest: EstimateRequest;
-  moverProfile: MoverProfile;
+  mover: MoverProfile;
   review: Review;
+  toAddress: Address;
+  fromAddress: Address;
+  toAddressMinimal: MinimalAddress;
+  fromAddressMinimal: MinimalAddress;
 };
 
 export type EstimateRequest = {
@@ -27,11 +37,12 @@ export type EstimateRequest = {
   customerId: string;
   estimateOfferId: string;
   moveType: ServiceType;
+  price: number;
   status: EstimateRequestStatus;
   moveDate: Date; // 연월일시 + 시간
   targetMoverIds?: string[]; // 3개 제한
-  fromAddress: object; // 객체로 저장 JSON
-  toAddress: object; // 객체로 저장 JSON
+  fromAddress: Address;
+  toAddress: Address;
   createdAt: Date;
   updatedAt: Date;
   estimateOffers: EstimateOffer[] | []; // 1:N 관계
