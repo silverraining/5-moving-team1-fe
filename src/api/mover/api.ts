@@ -70,7 +70,7 @@ export const updateGeneralMoverProfile = async (
   data: UpdateGeneralMoverProfileRequest
 ) => {
   try {
-    const response = await apiClient.patch("/mover/me", data);
+    const response = await apiClient.patch("/user/me", data);
     return response.data;
   } catch (error) {
     throw error;
