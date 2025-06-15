@@ -1,5 +1,6 @@
 import apiClient from "../../axiosclient";
 import { ParsedAddress } from "@/src/utils/parseAddress";
+import Cookies from "js-cookie";
 
 export type RequestEstimate = {
   moveType: string;
@@ -106,8 +107,21 @@ export const fetchMyActiveEstimateRequest = async (): Promise<
   ActiveEstimateRequest[]
 > => {
   try {
-    const response = await apiClient.get("/estimate-request/active");
-    console.log("활성화된 견적있나 응답값:", response.data);
+    // 👉 실제 Authorization 토큰 확인
+    const token = Cookies.get("accessToken");
+    console.log("🔐 현재 accessToken (쿠키에서 읽은 값):", token);
+
+    // 👉 요청 날리기 (캐시 방지용 헤더 포함)
+    const response = await apiClient.get("/estimate-request/active", {
+      headers: {
+        "Cache-Control": "no-store",
+        Pragma: "no-cache",
+        Expires: "0",
+        Authorization: `Bearer ${token}`, // interceptor랑 중복이지만 강제 확인용
+      },
+    });
+
+    console.log("📦 활성화된 견적있나 응답값:", response.data);
     return response.data;
   } catch (error) {
     console.error("활성 견적 요청 조회 실패:", error);

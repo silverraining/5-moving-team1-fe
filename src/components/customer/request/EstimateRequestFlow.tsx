@@ -49,7 +49,7 @@ export default function EstimateRequestFlow() {
 
     // 새 유저 로그인 시 기존 localStorage 초기화
     const prevUser = localStorage.getItem("prevUserId");
-    if (prevUser !== userIdOrToken) {
+    if (prevUser !== userIdOrToken && userIdOrToken) {
       localStorage.setItem("prevUserId", userIdOrToken);
       useEstimateStore.persist.clearStorage();
       useEstimateStore.setState({
@@ -67,13 +67,15 @@ export default function EstimateRequestFlow() {
     apiClient.defaults.headers.common["Authorization"]
   );
 
+  const isReady =
+    typeof window !== "undefined" && !!userIdOrToken && !!accessToken;
   // 3. 활성화된 견적 요청 ID 조회
   const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
     {
       queryKey: ["activeEstimateRequests", userIdOrToken],
       queryFn: fetchMyActiveEstimateRequest,
       staleTime: 0,
-      enabled: !!userIdOrToken,
+      enabled: isReady,
     }
   );
   console.log("유저 로그인 여부 판단", userIdOrToken);
