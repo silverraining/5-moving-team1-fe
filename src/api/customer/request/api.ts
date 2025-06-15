@@ -87,6 +87,8 @@ export const fetchPendingOffersByRequestId = async (
     const response = await apiClient.get(
       `/estimate-offer/${requestId}/pending`
     );
+    const url = `/estimate-offer/${requestId}/pending`;
+    console.log("요청 URL:", url);
     console.log("활성화된 견적 id에 대한 값", response.data);
 
     return response.data;

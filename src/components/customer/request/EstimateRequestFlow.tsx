@@ -7,8 +7,8 @@ import Step1_MoveType from "./steps/Step1_MoveType";
 import Step2_MoveDate from "./steps/Step2_MoveDate";
 import Step3_AddressSelect from "./steps/Step3_AddressSelect";
 import { useEstimateStore } from "@/src/store/requestStore";
-import InProgressPage from "./steps/InProgressPage";
 import { useQuery, useQueries } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import {
   fetchMyActiveEstimateRequest,
   fetchPendingOffersByRequestId,
@@ -16,10 +16,12 @@ import {
 } from "@/src/api/customer/request/api";
 import { ParsedAddress } from "@/src/utils/parseAddress";
 import { AuthStore } from "@/src/store/authStore";
+import apiClient from "@/src/api/axiosclient";
 
 export default function EstimateRequestFlow() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+  const router = useRouter();
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -41,6 +43,29 @@ export default function EstimateRequestFlow() {
   const accessToken = AuthStore((state) => state.accessToken);
   const user = AuthStore((state) => state.user);
   const userIdOrToken = user?.id || accessToken || ""; // 로그인 여부 판단
+
+  useEffect(() => {
+    if (!userIdOrToken) return;
+
+    // 새 유저 로그인 시 기존 localStorage 초기화
+    const prevUser = localStorage.getItem("prevUserId");
+    if (prevUser !== userIdOrToken) {
+      localStorage.setItem("prevUserId", userIdOrToken);
+      useEstimateStore.persist.clearStorage();
+      useEstimateStore.setState({
+        moveType: "",
+        moveDate: "",
+        fromAddress: null,
+        toAddress: null,
+        step: null,
+      });
+    }
+  }, [userIdOrToken]);
+
+  console.log(
+    "🎈현재 Authorization 헤더",
+    apiClient.defaults.headers.common["Authorization"]
+  );
 
   // 3. 활성화된 견적 요청 ID 조회
   const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
@@ -82,6 +107,11 @@ export default function EstimateRequestFlow() {
   // 1. 초기 진입 시 localStorage에서 상태 복구
   useEffect(() => {
     if (isLoadingActive || isPendingOffersLoading) return;
+
+    if (hasActivePendingOrConfirmedOffer) {
+      router.replace("/customer/request/inprogress");
+      return;
+    }
 
     const safeJSONParse = <T,>(value: string | null): T | null => {
       try {
@@ -161,10 +191,10 @@ export default function EstimateRequestFlow() {
     );
   }
 
-  // 8. 견적 제안이 있거나, 저장된 상태가 step=-1일 때 InProgressPage 페이지로
-  if (hasActivePendingOrConfirmedOffer || step === -1) {
-    return <InProgressPage />;
-  }
+  // // 8. 견적 제안이 있거나, 저장된 상태가 step=-1일 때 InProgressPage 페이지로
+  // if (hasActivePendingOrConfirmedOffer || step === -1) {
+  //   return <InProgressPage />;
+  // }
 
   //  9. 단계별 핸들러 정의
   const handleSelectStep1 = (value: string) => {
