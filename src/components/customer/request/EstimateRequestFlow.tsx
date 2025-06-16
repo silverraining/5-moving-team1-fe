@@ -11,18 +11,19 @@ import { useQuery, useQueries } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import {
   fetchMyActiveEstimateRequest,
-  fetchPendingOffersByRequestId,
-  EstimateOffer,
+  // fetchPendingOffersByRequestId,
+  // EstimateOffer,
 } from "@/src/api/customer/request/api";
 import { ParsedAddress } from "@/src/utils/parseAddress";
 import { AuthStore } from "@/src/store/authStore";
 import apiClient from "@/src/api/axiosclient";
+import { useSnackbarStore } from "@/src/store/snackBarStore";
 
 export default function EstimateRequestFlow() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const router = useRouter();
-
+  const { openSnackbar } = useSnackbarStore();
   const [isLoading, setIsLoading] = useState(true);
 
   // 0. zustand 상태 가져오기
@@ -69,6 +70,7 @@ export default function EstimateRequestFlow() {
 
   const isReady =
     typeof window !== "undefined" && !!userIdOrToken && !!accessToken;
+
   // 3. 활성화된 견적 요청 ID 조회
   const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
     {
@@ -80,38 +82,45 @@ export default function EstimateRequestFlow() {
   );
   console.log("유저 로그인 여부 판단", userIdOrToken);
 
-  // 4. 요청 ID로 제안 상태(PENDING, CONFIRMED 등) 조회
-  const estimateOfferQueries = useQueries({
-    queries:
-      activeEstimateRequests?.map((request) => ({
-        queryKey: ["pendingEstimateOffer", request.estimateRequestId],
-        queryFn: () => fetchPendingOffersByRequestId(request.estimateRequestId),
-        enabled: !!request.estimateRequestId,
-      })) ?? [],
-  }) as {
-    data?: EstimateOffer[];
-    isLoading: boolean;
-  }[];
+  // // 4. 요청 ID로 제안 상태(PENDING, CONFIRMED 등) 조회
+  // const estimateOfferQueries = useQueries({
+  //   queries:
+  //     activeEstimateRequests?.map((request) => ({
+  //       queryKey: ["pendingEstimateOffer", request.estimateRequestId],
+  //       queryFn: () => fetchPendingOffersByRequestId(request.estimateRequestId),
+  //       enabled: !!request.estimateRequestId,
+  //     })) ?? [],
+  // }) as {
+  //   data?: EstimateOffer[];
+  //   isLoading: boolean;
+  // }[];
 
-  const isPendingOffersLoading = estimateOfferQueries.some((q) => q.isLoading);
+  // const isPendingOffersLoading = estimateOfferQueries.some((q) => q.isLoading);
 
-  // 5. 진행 중인 제안(PENDING, CONFIRMED)이 있는지 확인
-  const hasActivePendingOrConfirmedOffer =
-    !isPendingOffersLoading &&
-    estimateOfferQueries.some((query) =>
-      query.data?.some(
-        (offer) =>
-          offer.requestStatus === "PENDING" ||
-          offer.requestStatus === "CONFIRMED"
-      )
-    );
+  // // 5. 진행 중인 제안(PENDING, CONFIRMED)이 있는지 확인
+  // const hasActivePendingOrConfirmedOffer =
+  //   !isPendingOffersLoading &&
+  //   estimateOfferQueries.some((query) =>
+  //     query.data?.some(
+  //       (offer) =>
+  //         offer.requestStatus === "PENDING" ||
+  //         offer.requestStatus === "CONFIRMED"
+  //     )
+  //   );
+  // ✅ 수정된 조건: 활성화된 견적 요청이 존재하면 바로 inprogress 페이지로
+  const hasActiveEstimateRequest =
+    Array.isArray(activeEstimateRequests) && activeEstimateRequests.length > 0;
 
   // 1. 초기 진입 시 localStorage에서 상태 복구
   useEffect(() => {
-    if (isLoadingActive || isPendingOffersLoading) return;
+    if (isLoadingActive) return;
 
-    if (hasActivePendingOrConfirmedOffer) {
-      router.replace("/customer/request/inprogress");
+    if (activeEstimateRequests) {
+      openSnackbar(
+        "현재 진행중인 이사 견적이 있습니다. 진행 중인 이사 완료 후 새로운 견적을 받아보세요.",
+        "success"
+      );
+      router.replace("/customer/moverlist");
       return;
     }
 
@@ -150,35 +159,25 @@ export default function EstimateRequestFlow() {
       localFromAddress !== null &&
       localToAddress !== null;
 
-    const nextStep = hasActivePendingOrConfirmedOffer
-      ? -1
-      : hasInProgress
-        ? 4
-        : 1;
-
+    const nextStep = hasInProgress ? 4 : 1;
     setStep(nextStep);
-
     setIsLoading(false);
-  }, [
-    isLoadingActive,
-    isPendingOffersLoading,
-    hasActivePendingOrConfirmedOffer,
-  ]);
+  }, [isLoadingActive, hasActiveEstimateRequest]);
 
   // 6. 주소가 모두 입력되면 자동으로 step 4로 전환 (검토 단계)
   useEffect(() => {
     const showConfirm = !!fromAddress && !!toAddress;
 
     // 진행 중 제안이 있으면 step 전환 금지
-    if (hasActivePendingOrConfirmedOffer) return;
+    if (hasActiveEstimateRequest) return;
 
     if (showConfirm && step !== 4) {
       setStep(4);
     }
-  }, [fromAddress, toAddress, hasActivePendingOrConfirmedOffer]);
+  }, [fromAddress, toAddress, hasActiveEstimateRequest]);
 
   // 7. 통합 로딩 처리
-  if (isLoading || isLoadingActive || isPendingOffersLoading) {
+  if (isLoading || isLoadingActive) {
     return (
       <Box
         sx={{
