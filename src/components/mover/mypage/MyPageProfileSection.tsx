@@ -3,10 +3,11 @@
 import { Box, Divider, Typography } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import CardListProfileWrapper from "@/src/components/mover/mypage/CardListProfileWrapper";
-import { CardData } from "@/src/types/card";
+
+import { MoverProfileCardData } from "@/src/api/mover/api";
 
 interface MyPageProfileSectionProps {
-  data: CardData;
+  data: MoverProfileCardData;
 }
 
 export const MyPageProfileSection = ({ data }: MyPageProfileSectionProps) => {

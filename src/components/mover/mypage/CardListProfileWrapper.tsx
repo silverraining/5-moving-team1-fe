@@ -4,9 +4,10 @@ import { CardListProfile } from "@/src/components/mover/mypage/CardListProfile-r
 import { CardData } from "@/src/types/card";
 import Image from "next/image";
 import { Box, Button, Typography } from "@mui/material";
+import { MoverProfileCardData } from "@/src/api/mover/api";
 
 interface Props {
-  data: CardData;
+  data: MoverProfileCardData;
 }
 /**
  * @file CardListProfileWrapper.tsx

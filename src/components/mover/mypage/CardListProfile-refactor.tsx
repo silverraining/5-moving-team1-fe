@@ -1,12 +1,12 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { CardData } from "@/src/types/card";
 import Image from "next/image";
-
 import { joinAddress } from "@/src/lib/joinAddress";
 import { typeMapper } from "@/src/lib/typeMapper";
+import { MoverProfileCardData } from "@/src/api/mover/api";
+import { convertRegionToKoreanLabels } from "@/src/utils/util";
 
 interface CardProps {
-  data: CardData;
+  data: MoverProfileCardData;
   onMyClick?: () => void;
   onBasicClick?: () => void;
   buttonLabels?: {
@@ -19,8 +19,8 @@ interface CardProps {
  * @file CardListProfile-refactor.tsx
  * @description
  * 기사님 소개 카드 컴포넌트
- * 기존 CardListProfile 컴포넌트 리팩토링함
- *
+ * 기존 CardListProfile 컴포넌트 수정해서 기사님 마이페이지에 사용중
+ * TODO: 반응형
  */
 export const CardListProfile = ({
   data,
@@ -29,6 +29,8 @@ export const CardListProfile = ({
   buttonLabels,
   reverseButtons,
 }: CardProps) => {
+  const regionLabels = convertRegionToKoreanLabels(data.serviceRegion);
+
   const buttons = [
     <Button
       key="primary"
@@ -128,7 +130,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.name}
+                {data.nickname}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -141,7 +143,7 @@ export const CardListProfile = ({
                   textOverflow: "ellipsis",
                 })}
               >
-                {data.message}
+                {data.intro}
               </Typography>
             </Box>
             <Stack
@@ -182,7 +184,7 @@ export const CardListProfile = ({
               }}
             >
               <Image
-                src={data.imgSrc}
+                src={data.imageUrl || "/Images/profile/maleProfile.svg"}
                 alt="프로필 이미지"
                 fill
                 style={{
@@ -227,7 +229,7 @@ export const CardListProfile = ({
                       color: theme.palette.Black[300],
                     })}
                   >
-                    {data.rating}
+                    {data.averageRating.toFixed(1)}
                   </Typography>
                   <Typography
                     sx={(theme) => ({
@@ -237,7 +239,7 @@ export const CardListProfile = ({
                       color: theme.palette.Grayscale[300],
                     })}
                   >
-                    ({data.count})
+                    ({data.reviewCount})
                   </Typography>
                 </Box>
                 {/* Divider */}
@@ -264,7 +266,7 @@ export const CardListProfile = ({
                       whiteSpace: "nowrap",
                     })}
                   >
-                    {data.career}년
+                    {data.experience}년
                   </Typography>
                 </Box>
                 {/* Divider */}
@@ -283,7 +285,7 @@ export const CardListProfile = ({
                       },
                     })}
                   >
-                    {data.confirm}건 <span>확정</span>
+                    {data.confirmedCount}건 <span>확정</span>
                   </Typography>
                 </Box>
               </Stack>
@@ -304,7 +306,9 @@ export const CardListProfile = ({
                     </Typography>
                   </Box>
                   <Typography sx={{ fontSize: 14 }}>
-                    {joinAddress(typeMapper(data.types))}
+                    {joinAddress(
+                      typeMapper(data.serviceType ? data.serviceType : [])
+                    )}
                   </Typography>
                 </Box>
 
@@ -322,7 +326,7 @@ export const CardListProfile = ({
                     </Typography>
                   </Box>
                   <Typography sx={{ fontSize: 14 }}>
-                    {joinAddress(data.address)}
+                    {regionLabels.join(", ")}
                   </Typography>
                 </Box>
               </Box>

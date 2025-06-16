@@ -1,23 +1,22 @@
 "use client";
-import { Box, Divider, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { ReviewChart } from "@/src/components/shared/components/review-chart/ReviewChart";
 import { ReviewList } from "@/src/components/shared/components/review/ReviewList";
-//TODO: moverDetail 파일에서 더미데이터 import -> API연결 후 제거
 import {
   mockReviewData,
   mockReviews,
-  mockMoverData,
 } from "@/src/components/mover/MoverDetail";
 import { useTheme } from "@mui/material/styles";
 import { MyPageProfileSection } from "@/src/components/mover/mypage/MyPageProfileSection";
-
+import { useMoverMypage } from "@/src/api/mover/hooks";
 export default function MyPage() {
   const theme = useTheme();
-
+  const { data: moverData, isPending } = useMoverMypage();
+  if (isPending || !moverData) return <div>로딩중입니다...</div>; //TODO: 스켈레톤 추가
   return (
     <Box display="flex" flexDirection="column" alignItems="center" pt="32px">
       {/* 프로필 섹션 */}
-      <MyPageProfileSection data={mockMoverData} />
+      <MyPageProfileSection data={moverData} />
 
       {/* 리뷰 섹션 */}
       <Box mb="40px" width="100%" maxWidth="1400px" px="24px">
