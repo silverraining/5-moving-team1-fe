@@ -1,5 +1,4 @@
 import { Box, Typography } from "@mui/material";
-import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { maskNickname } from "@/src/lib/maskNickname";
 import { EstimateOffer } from "@/src/types/estimate";
