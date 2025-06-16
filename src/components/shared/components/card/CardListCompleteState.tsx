@@ -18,7 +18,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.status,
+      status: data.requestStatus,
       // isTargeted: data.isTargeted,
     },
   ];

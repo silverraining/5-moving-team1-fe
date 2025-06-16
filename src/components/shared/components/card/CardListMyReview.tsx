@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData, ChipData } from "@/src/types/card";
+import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
