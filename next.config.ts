@@ -9,7 +9,10 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
-    domains: ["moving-app-uploads.s3.ap-northeast-2.amazonaws.com"],
+    domains: [
+      "moving-app-uploads.s3.ap-northeast-2.amazonaws.com",
+      "example.com",
+    ],
   },
 };
 
