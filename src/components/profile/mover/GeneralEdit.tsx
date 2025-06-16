@@ -7,10 +7,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useSnackbarStore } from "../../../store/snackBarStore";
 import {
-  ProfileEditFormData,
-  profileEditSchema,
+  GeneralEditFormData,
+  generalEditSchema,
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
+import { useUpdateGeneralMoverProfile } from "../../../api/mover/hooks";
 
 // TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
 // interface GeneralEditProps {
@@ -24,28 +25,36 @@ import { useRouter } from "next/navigation";
 export const GeneralEdit = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
+  const { mutateAsync: updateProfile } = useUpdateGeneralMoverProfile();
 
   const {
     register,
     handleSubmit,
     control,
     formState: { errors, isValid },
-  } = useForm<ProfileEditFormData>({
-    resolver: zodResolver(profileEditSchema),
+  } = useForm<GeneralEditFormData>({
+    resolver: zodResolver(generalEditSchema),
     defaultValues: {
       name: "",
       email: "codeit@codeit.kr",
       phone: "",
+      currentPassword: undefined,
+      newPassword: undefined,
+      confirmPassword: undefined,
     },
     mode: "onChange",
   });
 
-  const onSubmit = async (data: ProfileEditFormData) => {
+  const onSubmit = async (data: GeneralEditFormData) => {
     try {
-      // TODO: 기존 비밀번호 확인 로직
-      // TODO: API 호출 구현
+      await updateProfile({
+        name: data.name,
+        phone: data.phone,
+        password: data.currentPassword,
+        newPassword: data.newPassword,
+      });
       openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
-      router.push("/mover/profile");
+      router.push("/"); // TODO: 수정 후 페이지 이동
     } catch (error) {
       openSnackbar("프로필 수정 중 오류가 발생했습니다.", "error");
     }
@@ -94,6 +103,29 @@ export const GeneralEdit = () => {
               control={control}
               errors={errors}
             />
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              gap: "32px",
+            }}
+          >
+            <PasswordChangeSection register={register} errors={errors} />
+          </Box>
+
+          {/* 버튼 그룹 */}
+          <Box
+            sx={{
+              gridColumn: "1/-1",
+              display: "flex",
+              flexDirection: { xs: "column", md: "row" },
+              gap: 2,
+              mt: 4,
+              justifyContent: { md: "space-between" },
+            }}
+          >
             <Button
               variant="outlined"
               fullWidth
@@ -109,22 +141,12 @@ export const GeneralEdit = () => {
                   borderColor: (theme) => theme.palette.PrimaryBlue[400],
                   backgroundColor: "transparent",
                 },
-                mt: "auto",
+                order: { xs: 2, md: 1 },
+                maxWidth: { md: "calc(50% - 8px)" },
               }}
             >
               취소
             </Button>
-          </Box>
-
-          {/* 오른쪽 섹션 */}
-          <Box
-            sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "32px",
-            }}
-          >
-            <PasswordChangeSection register={register} errors={errors} />
             <Button
               type="submit"
               variant="contained"
@@ -143,7 +165,8 @@ export const GeneralEdit = () => {
                 "&:hover": {
                   backgroundColor: (theme) => theme.palette.PrimaryBlue[400],
                 },
-                mt: "auto",
+                order: { xs: 1, md: 2 },
+                maxWidth: { md: "calc(50% - 8px)" },
               }}
             >
               수정하기

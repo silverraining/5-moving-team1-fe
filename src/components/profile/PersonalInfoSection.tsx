@@ -7,16 +7,19 @@ import {
   Controller,
   Control,
 } from "react-hook-form";
-import { ProfileEditFormData } from "../../schemas/profile.schema";
+import {
+  ProfileEditFormData,
+  GeneralEditFormData,
+} from "../../schemas/profile.schema";
 import {
   formatPhoneNumber,
   removePhoneNumberFormat,
 } from "../../utils/formatPhonNumber";
 
 interface PersonalInfoSectionProps {
-  register: UseFormRegister<ProfileEditFormData>;
-  control: Control<ProfileEditFormData>;
-  errors: FieldErrors<ProfileEditFormData>;
+  register: UseFormRegister<ProfileEditFormData | GeneralEditFormData>;
+  control: Control<ProfileEditFormData | GeneralEditFormData>;
+  errors: FieldErrors<ProfileEditFormData | GeneralEditFormData>;
   initialData?: {
     name?: string;
     email?: string;
