@@ -38,7 +38,8 @@ export type EstimateRequest = {
   estimateOfferId: string;
   moveType: ServiceType;
   price: number;
-  status: EstimateRequestStatus;
+  status: EstimateOfferStatus;
+  requestStatus: EstimateRequestStatus;
   moveDate: Date; // 연월일시 + 시간
   targetMoverIds?: string[]; // 3개 제한
   fromAddress: Address;
