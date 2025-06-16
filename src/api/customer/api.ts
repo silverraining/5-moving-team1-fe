@@ -97,10 +97,8 @@ export const getCustomerProfile =
 export const EstimateRequestActive = async () => {
   try {
     const response = await apiClient.get("/estimate-request/active", {});
-    console.log("EstimateRequestActive 응답:", response);
     return response.data;
   } catch (error) {
-    console.error("EstimateRequestActive 에러:", error);
     throw error;
   }
 };
@@ -109,10 +107,8 @@ export const EstimateRequestActive = async () => {
 export const EstimateRequestList = async () => {
   try {
     const response = await apiClient.get("/estimate-request/history", {});
-    console.log("EstimateRequestList 응답:", response);
     return response.data;
   } catch (error) {
-    console.error("EstimateRequestList 에러:", error);
     throw error;
   }
 };
@@ -124,10 +120,8 @@ export const EstimateOfferList = async (requestId: string) => {
       `/estimate-offer/${requestId}/pending`,
       {}
     );
-    console.log("EstimateOfferList 응답:", response);
     return response.data;
   } catch (error) {
-    console.error("EstimateOfferList 에러:", error);
     throw error;
   }
 };
