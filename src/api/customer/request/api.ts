@@ -79,29 +79,7 @@ export const postEstimateRequest = async (data: RequestEstimate) => {
 };
 
 /**
- * 2. 특정 요청 ID에 대한 기사님 견적 제안 리스트 조회 (대기 상태인 것만)
- */
-export const fetchPendingOffersByRequestId = async (
-  requestId: string
-): Promise<EstimateOffer[]> => {
-  try {
-    const response = await apiClient.get(
-      `/estimate-offer/${requestId}/pending`
-    );
-    const url = `/estimate-offer/${requestId}/pending`;
-    console.log("요청 URL:", url);
-    console.log("활성화된 견적 id에 대한 값", response.data);
-
-    return response.data;
-  } catch (error) {
-    console.error("대기 중인 견적 제안 조회 실패:", error);
-    console.log("실패 시 requestId:", requestId);
-    throw error;
-  }
-};
-
-/**
- * 3. 활성화된 내 견적 요청 조회 (이미 요청한 적이 있는지 확인용)
+ * 2. 진행중인 내 견적 요청 조회 (이미 요청한 적이 있는지 확인용)
  */
 export const fetchMyActiveEstimateRequest = async (): Promise<
   ActiveEstimateRequest[]
@@ -109,7 +87,6 @@ export const fetchMyActiveEstimateRequest = async (): Promise<
   try {
     // 👉 실제 Authorization 토큰 확인
     const token = Cookies.get("accessToken");
-    console.log("🔐 현재 accessToken (쿠키에서 읽은 값):", token);
 
     // 👉 요청 날리기 (캐시 방지용 헤더 포함)
     const response = await apiClient.get("/estimate-request/active", {
@@ -121,10 +98,8 @@ export const fetchMyActiveEstimateRequest = async (): Promise<
       },
     });
 
-    console.log("📦 활성화된 견적있나 응답값:", response.data);
     return response.data;
   } catch (error) {
-    console.error("활성 견적 요청 조회 실패:", error);
     throw error;
   }
 };

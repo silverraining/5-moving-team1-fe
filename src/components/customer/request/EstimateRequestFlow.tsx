@@ -7,16 +7,11 @@ import Step1_MoveType from "./steps/Step1_MoveType";
 import Step2_MoveDate from "./steps/Step2_MoveDate";
 import Step3_AddressSelect from "./steps/Step3_AddressSelect";
 import { useEstimateStore } from "@/src/store/requestStore";
-import { useQuery, useQueries } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
-import {
-  fetchMyActiveEstimateRequest,
-  // fetchPendingOffersByRequestId,
-  // EstimateOffer,
-} from "@/src/api/customer/request/api";
+import { fetchMyActiveEstimateRequest } from "@/src/api/customer/request/api";
 import { ParsedAddress } from "@/src/utils/parseAddress";
 import { AuthStore } from "@/src/store/authStore";
-import apiClient from "@/src/api/axiosclient";
 import { useSnackbarStore } from "@/src/store/snackBarStore";
 
 export default function EstimateRequestFlow() {
@@ -40,7 +35,7 @@ export default function EstimateRequestFlow() {
     setStep,
   } = useEstimateStore();
 
-  //  2. 로그인 유저 정보
+  //  1. 로그인 유저 정보
   const accessToken = AuthStore((state) => state.accessToken);
   const user = AuthStore((state) => state.user);
   const userIdOrToken = user?.id || accessToken || ""; // 로그인 여부 판단
@@ -48,7 +43,7 @@ export default function EstimateRequestFlow() {
   useEffect(() => {
     if (!userIdOrToken) return;
 
-    // 새 유저 로그인 시 기존 localStorage 초기화
+    // 2. 새 유저 로그인 시 기존 localStorage 초기화
     const prevUser = localStorage.getItem("prevUserId");
     if (prevUser !== userIdOrToken && userIdOrToken) {
       localStorage.setItem("prevUserId", userIdOrToken);
@@ -63,15 +58,10 @@ export default function EstimateRequestFlow() {
     }
   }, [userIdOrToken]);
 
-  console.log(
-    "🎈현재 Authorization 헤더",
-    apiClient.defaults.headers.common["Authorization"]
-  );
-
   const isReady =
     typeof window !== "undefined" && !!userIdOrToken && !!accessToken;
 
-  // 3. 활성화된 견적 요청 ID 조회
+  // 3. 진행중인 견적 요청 있는지 조회
   const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
     {
       queryKey: ["activeEstimateRequests", userIdOrToken],
@@ -80,45 +70,19 @@ export default function EstimateRequestFlow() {
       enabled: isReady,
     }
   );
-  console.log("유저 로그인 여부 판단", userIdOrToken);
 
-  // // 4. 요청 ID로 제안 상태(PENDING, CONFIRMED 등) 조회
-  // const estimateOfferQueries = useQueries({
-  //   queries:
-  //     activeEstimateRequests?.map((request) => ({
-  //       queryKey: ["pendingEstimateOffer", request.estimateRequestId],
-  //       queryFn: () => fetchPendingOffersByRequestId(request.estimateRequestId),
-  //       enabled: !!request.estimateRequestId,
-  //     })) ?? [],
-  // }) as {
-  //   data?: EstimateOffer[];
-  //   isLoading: boolean;
-  // }[];
-
-  // const isPendingOffersLoading = estimateOfferQueries.some((q) => q.isLoading);
-
-  // // 5. 진행 중인 제안(PENDING, CONFIRMED)이 있는지 확인
-  // const hasActivePendingOrConfirmedOffer =
-  //   !isPendingOffersLoading &&
-  //   estimateOfferQueries.some((query) =>
-  //     query.data?.some(
-  //       (offer) =>
-  //         offer.requestStatus === "PENDING" ||
-  //         offer.requestStatus === "CONFIRMED"
-  //     )
-  //   );
-  // ✅ 수정된 조건: 활성화된 견적 요청이 존재하면 바로 inprogress 페이지로
+  // 수정된 조건: 활성화된 견적 요청이 존재하면 바로 moverlist 페이지로
   const hasActiveEstimateRequest =
     Array.isArray(activeEstimateRequests) && activeEstimateRequests.length > 0;
 
-  // 1. 초기 진입 시 localStorage에서 상태 복구
+  // 초기 진입 시 localStorage에서 상태 복구
   useEffect(() => {
     if (isLoadingActive) return;
 
-    if (activeEstimateRequests) {
+    if (hasActiveEstimateRequest) {
       openSnackbar(
-        "현재 진행중인 이사 견적이 있습니다. 진행 중인 이사 완료 후 새로운 견적을 받아보세요.",
-        "success"
+        "진행 중인 이사 견적이 있어 새 견적은 받을 수 없습니다.",
+        "error"
       );
       router.replace("/customer/moverlist");
       return;
@@ -164,7 +128,7 @@ export default function EstimateRequestFlow() {
     setIsLoading(false);
   }, [isLoadingActive, hasActiveEstimateRequest]);
 
-  // 6. 주소가 모두 입력되면 자동으로 step 4로 전환 (검토 단계)
+  // 4. 주소가 모두 입력되면 자동으로 step 4로 전환 (검토 단계)
   useEffect(() => {
     const showConfirm = !!fromAddress && !!toAddress;
 
@@ -176,7 +140,7 @@ export default function EstimateRequestFlow() {
     }
   }, [fromAddress, toAddress, hasActiveEstimateRequest]);
 
-  // 7. 통합 로딩 처리
+  // 5. 통합 로딩 처리
   if (isLoading || isLoadingActive) {
     return (
       <Box
@@ -192,12 +156,7 @@ export default function EstimateRequestFlow() {
     );
   }
 
-  // // 8. 견적 제안이 있거나, 저장된 상태가 step=-1일 때 InProgressPage 페이지로
-  // if (hasActivePendingOrConfirmedOffer || step === -1) {
-  //   return <InProgressPage />;
-  // }
-
-  //  9. 단계별 핸들러 정의
+  //  6. 단계별 핸들러 정의
   const handleSelectStep1 = (value: string) => {
     setMoveType(value);
     localStorage.setItem("moveType", value);
@@ -220,7 +179,7 @@ export default function EstimateRequestFlow() {
     localStorage.setItem("toAddress", JSON.stringify(to));
   };
 
-  // 10. 실제 화면 렌더링
+  // 7. 실제 화면 렌더링
   return (
     <>
       <Box sx={{ paddingTop: isSmall ? "24px" : "40px" }}>
