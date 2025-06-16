@@ -1,15 +1,25 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
+import { CardData, ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
+import { EstimateOffer } from "@/src/types/estimate";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
 }
 
 export const CardListMyReview = ({ data }: CardProps) => {
+  const info = data.mover;
+
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
   return (
     <Box
       display="flex"
@@ -33,8 +43,8 @@ export const CardListMyReview = ({ data }: CardProps) => {
         alignItems="center"
       >
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
-          {data.types.map((type, index) => (
-            <ChipCategory key={index} type={type} />
+          {chips.map((chip, idx) => (
+            <ChipCategory key={idx} data={chip} />
           ))}
         </Box>
         <Box display="flex">
@@ -47,7 +57,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
               display: ["none", "none", "block"],
             })}
           >
-            작성일 {formatKoreanDate(data.date ?? "", false)}
+            작성일 {formatKoreanDate(data.moveDate ?? "", false)}
           </Typography>
         </Box>
       </Box>
@@ -66,7 +76,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
       >
         <Box width={[46, 46, 96]} height={[46, 46, 96]} position="relative">
           <Image
-            src={data.imgSrc}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -93,10 +103,10 @@ export const CardListMyReview = ({ data }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name} 기사님
+              {info.nickname} 기사님
             </Typography>
             <Box display={["flex", "flex", "none"]} gap="4px">
-              {Array.from({ length: data.review ?? 0 }).map((_, i) => (
+              {Array.from({ length: info.rating ?? 0 }).map((_, i) => (
                 <Box
                   key={i}
                   position="relative"
@@ -140,7 +150,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {formatKoreanDate(data.movingDay ?? "", false)}
+                {formatKoreanDate(data.moveDate ?? "", false)}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -163,12 +173,12 @@ export const CardListMyReview = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {(data.cost ?? 0).toLocaleString()}원
+                {(data.price ?? 0).toLocaleString()}원
               </Typography>
             </Box>
           </Box>
           <Box display={["none", "none", "flex"]} gap="4px">
-            {Array.from({ length: data.review ?? 0 }).map((_, i) => (
+            {Array.from({ length: info.rating ?? 0 }).map((_, i) => (
               <Box
                 key={i}
                 position="relative"
@@ -195,7 +205,9 @@ export const CardListMyReview = ({ data }: CardProps) => {
             color: theme.palette.Grayscale[500],
           })}
         >
-          {data.writeReview}
+          {typeof info.reviews === "string"
+            ? info.reviews
+            : "아직 작성된 리뷰가 없습니다."}
         </Typography>
         <Typography
           display={["flex", "flex", "none"]}
@@ -207,7 +219,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
             color: theme.palette.Grayscale[300],
           })}
         >
-          작성일 {formatKoreanDate(data.date ?? "", false)}
+          작성일 {formatKoreanDate(data.moveDate ?? "", false)}
         </Typography>
       </Box>
     </Box>

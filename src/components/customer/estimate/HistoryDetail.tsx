@@ -8,7 +8,7 @@ import { EstimateInfo } from "./EstimateInfo";
 import Label from "./Label";
 import { EstimateOfferStatus } from "@/src/types/common";
 
-export default function ReceiveDetail({ customerId }: { customerId: string }) {
+export default function HistoryDetail({ customerId }: { customerId: string }) {
   const handleLikeClick = () => {
     alert(`좋아요 버튼 누름`);
   };

@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
-import { CardData } from "@/src/types/card";
 import Image from "next/image";
-
 import { joinAddress } from "@/src/lib/joinAddress";
 import { typeMapper } from "@/src/lib/typeMapper";
+import { EstimateOffer } from "@/src/types/estimate";
+import { ChipData } from "@/src/types/card";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
   onMyClick?: () => void;
   onBasicClick?: () => void;
 }
@@ -16,6 +16,15 @@ export const CardListProfile = ({
   onMyClick,
   onBasicClick,
 }: CardProps) => {
+  const info = data.mover;
+
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
   return (
     <Box
       display="flex"
@@ -57,7 +66,7 @@ export const CardListProfile = ({
             position="relative"
           >
             <Image
-              src={data.imgSrc}
+              src={info.imageUrl || "/Images/default_profile.png"}
               alt={"프로필 이미지"}
               fill
               style={{
@@ -76,7 +85,7 @@ export const CardListProfile = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name}
+              {info.nickname}
             </Typography>
             <Typography
               sx={(theme) => ({
@@ -89,7 +98,7 @@ export const CardListProfile = ({
                 textOverflow: "ellipsis",
               })}
             >
-              {data.message}
+              {info.intro}
             </Typography>
           </Box>
           <Box
@@ -163,7 +172,7 @@ export const CardListProfile = ({
             position="relative"
           >
             <Image
-              src={data.imgSrc}
+              src={info.imageUrl || "/Images/default_profile.png"}
               alt={"프로필 이미지"}
               fill
               style={{
@@ -199,7 +208,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.rating}
+                {info.rating}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -209,7 +218,7 @@ export const CardListProfile = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                ({data.count})
+                ({info.reviewCount})
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -232,7 +241,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.career}년
+                {info.experience}년
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -245,7 +254,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.confirm}
+                {info.confirmedCount}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -293,7 +302,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {joinAddress(typeMapper(data.types))}
+                {joinAddress(typeMapper(info.serviceType))}
               </Typography>
             </Box>
 
@@ -325,7 +334,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {joinAddress(data.address)}
+                {data.toAddress.roadAddress}
               </Typography>
             </Box>
           </Box>
