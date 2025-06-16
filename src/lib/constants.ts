@@ -45,6 +45,9 @@ export const PATH = {
   /** 기사 프로필 수정 페이지 (/mover/profile/edit) */
   moverProfileEdit: "/mover/profile/edit",
 
+  /**기사 마이페이지 (/mover/mypage) */
+  moverMypage: "/mover/mypage",
+
   /** 기사가 받은 견적 리스트 페이지 (/mover/estimate/requested) */
   moverRequest: "/mover/estimate/requested",
 
