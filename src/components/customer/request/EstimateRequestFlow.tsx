@@ -36,9 +36,9 @@ export default function EstimateRequestFlow() {
   } = useEstimateStore();
 
   //  1. 로그인 유저 정보
-  const accessToken = AuthStore((state) => state.accessToken);
+  const isLogin = AuthStore((state) => state.isLogin);
   const user = AuthStore((state) => state.user);
-  const userIdOrToken = user?.id || accessToken || ""; // 로그인 여부 판단
+  const userIdOrToken = user?.id || "";
 
   useEffect(() => {
     if (!userIdOrToken) return;
@@ -58,8 +58,7 @@ export default function EstimateRequestFlow() {
     }
   }, [userIdOrToken]);
 
-  const isReady =
-    typeof window !== "undefined" && !!userIdOrToken && !!accessToken;
+  const isReady = typeof window !== "undefined" && isLogin;
 
   // 3. 진행중인 견적 요청 있는지 조회
   const { data: activeEstimateRequests, isLoading: isLoadingActive } = useQuery(
