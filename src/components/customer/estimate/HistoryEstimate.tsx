@@ -28,7 +28,7 @@ export default function HistoryEstimate() {
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
   if (isError) return <Typography>에러가 발생했습니다.</Typography>;
-  if (!data || data.length === 0)
+  if (!data?.items || data.items.length === 0)
     return <Typography>견적 요청이 없습니다.</Typography>;
 
   return (
@@ -40,7 +40,7 @@ export default function HistoryEstimate() {
       })}
     >
       <Stack marginTop={["0px", "32px", "64px"]}>
-        {data.map((info: EstimateRequest) =>
+        {data.items.map((info: EstimateRequest) =>
           !info.estimateOffers || info.estimateOffers.length === 0 ? null : (
             <Stack
               padding={["48px 40px"]}
@@ -65,7 +65,14 @@ export default function HistoryEstimate() {
                 <Stack gap={"56px"}>
                   {info.estimateOffers.map(
                     (card: EstimateOffer, idx: number) => (
-                      <Stack key={idx}>
+                      <Stack
+                        key={idx}
+                        onClick={() =>
+                          alert(
+                            `견적서 아이디 ${card.estimateRequestId}  기사 아이디 ${card.moverId}`
+                          )
+                        }
+                      >
                         {/* 카드 정보 */}
                         <CardListCost
                           data={card}

@@ -8,9 +8,9 @@ import {
   UpdateCustomerProfileRequest,
   updateCustomerProfile,
   getCustomerProfile,
-  EstimateRequestList,
-  EstimateOfferList,
   EstimateRequestActive,
+  EstimateOfferPending,
+  EstimateRequestHistory,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
@@ -80,18 +80,18 @@ export const useEstimateRequestActive = () => {
 };
 
 /** 견적 관리 받았던 견적 hook */
-export const useEstimateRequestList = () => {
+export const useEstimateRequestHistory = () => {
   return useQuery({
-    queryKey: ["EstimateRequestList"],
-    queryFn: EstimateRequestList,
+    queryKey: ["EstimateRequestHistory"],
+    queryFn: EstimateRequestHistory,
   });
 };
 
 /** 견적 관리 대기 중인 견적 hook */
-export const useEstimateOfferList = (requestId: string) => {
+export const useEstimateOfferPending = (requestId: string) => {
   return useQuery({
-    queryKey: ["EstimateOfferList", requestId],
-    queryFn: () => EstimateOfferList(requestId),
+    queryKey: ["EstimateOfferPending", requestId],
+    queryFn: () => EstimateOfferPending(requestId),
     enabled: !!requestId,
   });
 };
