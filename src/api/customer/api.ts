@@ -105,7 +105,7 @@ export const EstimateRequestActive = async () => {
 };
 
 /** 받았던 견적 타입 */
-export type EstimateRequestListResponse = {
+export type EstimateRequestHistoryResponse = {
   items: EstimateRequest[];
   hasNext: boolean;
   nextCursor: string | null;
@@ -113,8 +113,8 @@ export type EstimateRequestListResponse = {
 };
 
 /** 견적 관리 받았던 견적 api */
-export const EstimateRequestList =
-  async (): Promise<EstimateRequestListResponse> => {
+export const EstimateRequestHistory =
+  async (): Promise<EstimateRequestHistoryResponse> => {
     try {
       const response = await apiClient.get("/estimate-request/history", {});
       return response.data;
@@ -124,7 +124,7 @@ export const EstimateRequestList =
   };
 
 /** 대기 중인 견적 타입 */
-export type EstimateOfferListResponse = {
+export type EstimateOfferPendingResponse = {
   items: EstimateOffer[];
   hasNext: boolean;
   nextCursor: string | null;
@@ -132,9 +132,9 @@ export type EstimateOfferListResponse = {
 };
 
 /** 견적 관리 대기 중인 견적 api */
-export const EstimateOfferList = async (
+export const EstimateOfferPending = async (
   requestId: string
-): Promise<EstimateOfferListResponse> => {
+): Promise<EstimateOfferPendingResponse> => {
   try {
     const response = await apiClient.get(
       `/estimate-offer/${requestId}/pending`,
