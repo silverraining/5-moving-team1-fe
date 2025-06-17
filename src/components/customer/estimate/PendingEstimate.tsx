@@ -2,7 +2,7 @@
 import { Grid, Typography } from "@mui/material";
 import { CardListWait } from "@/src/components/shared/components/card/CardListWait";
 import {
-  useEstimateOfferList,
+  useEstimateOfferPending,
   useEstimateRequestActive,
 } from "@/src/api/customer/hook";
 import { EstimateOffer } from "@/src/types/estimate";
@@ -19,7 +19,7 @@ export default function PendingEstimate() {
   const requestId = requestIds?.[0]?.estimateRequestId;
 
   // 3. 해당 ID로 견적서 리스트 받아오기
-  const { data, isLoading, error } = useEstimateOfferList(requestId);
+  const { data, isLoading, error } = useEstimateOfferPending(requestId);
 
   if (isLoadingIds) return <Typography>견적서 데이터 로딩중...</Typography>;
   if (errorIds) return <Typography>견적서 데이터 에러 발생!</Typography>;

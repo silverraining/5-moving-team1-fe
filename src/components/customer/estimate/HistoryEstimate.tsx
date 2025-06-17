@@ -5,7 +5,7 @@ import { CardListCost } from "../../shared/components/card/CardListCost";
 import Dropdown, { SortOption } from "./Dropdown";
 import { useState } from "react";
 import { EstimateSection } from "./EstimateSection";
-import { useEstimateRequestList } from "@/src/api/customer/hook"; // 훅 import
+import { useEstimateRequestHistory } from "@/src/api/customer/hook"; // 훅 import
 import { EstimateOffer, EstimateRequest } from "@/src/types/estimate";
 
 export default function HistoryEstimate() {
@@ -24,7 +24,7 @@ export default function HistoryEstimate() {
     alert(`좋아요 버튼 누름`);
   };
 
-  const { data, isLoading, isError } = useEstimateRequestList();
+  const { data, isLoading, isError } = useEstimateRequestHistory();
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
   if (isError) return <Typography>에러가 발생했습니다.</Typography>;
