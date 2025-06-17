@@ -16,7 +16,7 @@ export interface DropDownButtonProps {
   height?: string | { mobile?: string; tablet?: string; desktop?: string };
   padding?: string | { mobile?: string; tablet?: string; desktop?: string };
   typographyVariant?: "M_14" | "M_18" | "SB_16" | "B_16";
-  Radius?: string | { mobile?: string; tablet?: string; desktop?: string };
+  radius?: string | { mobile?: string; tablet?: string; desktop?: string };
   iconSize?: boolean;
 }
 export default function DropDownButton({

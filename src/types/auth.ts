@@ -34,6 +34,7 @@ export type CustomerProfile = {
   id: string;
   userId: string;
   imageUrl: string;
+  nickname: string;
   serviceType: ServiceType[];
   serviceRegion: ServiceRegion;
   createdAt: Date;
@@ -49,6 +50,8 @@ export type MoverProfile = {
   imageUrl: string;
   experience: number;
   intro: string;
+  rating: number;
+  reviewCount: number;
   description: string;
   averageRating: number;
   confirmedCount: number;
@@ -56,6 +59,8 @@ export type MoverProfile = {
   updatedAt: Date;
   serviceType: ServiceType[];
   serviceRegions: ServiceRegion[];
+  likeCount: number;
+  isLiked: boolean;
   likedCustomers?: Like[];
   reviews?: Review[];
   estimateOffers?: EstimateOffer[];

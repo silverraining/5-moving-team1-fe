@@ -1,10 +1,11 @@
 import { Box, BoxProps, Skeleton, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
 import Image from "next/image";
 import { useResponsiveValue } from "@/src/hooks/useResponsiveValue";
+import { EstimateOffer } from "@/src/types/estimate";
+import { ChipData } from "@/src/types/card";
 interface CardProps extends BoxProps {
-  data: CardData;
+  data: EstimateOffer;
   onLikeClick?: () => void;
   forceMobileSize?: boolean;
 }
@@ -16,6 +17,17 @@ export const CardListSave = ({
   ...props
 }: CardProps) => {
   const responsive = useResponsiveValue(forceMobileSize);
+
+  // 카드 데이터
+  const info = data.mover;
+  // Chip 데이터
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
 
   return (
     <Box
@@ -47,12 +59,8 @@ export const CardListSave = ({
           flexDirection="row"
           gap={responsive(["8px", "12px", "12px"])}
         >
-          {data.types.map((type, index) => (
-            <ChipCategory
-              key={index}
-              type={type}
-              forceMobileSize={forceMobileSize}
-            />
+          {chips.map((chip, idx) => (
+            <ChipCategory key={idx} data={chip} />
           ))}
         </Box>
       </Box>
@@ -65,7 +73,7 @@ export const CardListSave = ({
           paddingY: responsive(["10px", "10px", "16px"]),
         })}
       >
-        {data.message}
+        {info.intro}
       </Typography>
       {/* 아래 */}
       <Box
@@ -83,7 +91,7 @@ export const CardListSave = ({
           position="relative"
         >
           <Image
-            src={data.imgSrc}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -107,12 +115,12 @@ export const CardListSave = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name} 기사님
+              {info.nickname} 기사님
             </Typography>
             <Box display="flex" alignItems="center">
               <Image
                 src={
-                  data.isLiked
+                  info.isLiked
                     ? "/Images/like/like.svg"
                     : "/Images/like/unlike.svg"
                 }
@@ -130,7 +138,7 @@ export const CardListSave = ({
                   color: theme.palette.PrimaryBlue[400],
                 })}
               >
-                {data.like}
+                {info.likeCount}
               </Typography>
             </Box>
           </Box>
@@ -162,7 +170,7 @@ export const CardListSave = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.rating}
+                {info.rating}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -172,7 +180,7 @@ export const CardListSave = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                ({data.count})
+                ({info.reviewCount})
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -198,7 +206,7 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                {data.career}년
+                {info.experience}년
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -213,7 +221,7 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                {data.confirm}건
+                {info.confirmedCount}건
               </Typography>
               <Typography
                 sx={(theme) => ({

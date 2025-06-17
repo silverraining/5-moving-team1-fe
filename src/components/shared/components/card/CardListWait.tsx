@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
 import Image from "next/image";
-
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
+import { EstimateOffer } from "@/src/types/estimate";
+import { ChipData } from "@/src/types/card";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
   onLikeClick?: () => void;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
@@ -18,6 +18,18 @@ export const CardListWait = ({
   onConfirmClick,
   onDetailClick,
 }: CardProps) => {
+  // 카드 데이터
+  const info = data.mover;
+
+  // Chip 데이터
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
+
   return (
     <Box
       display="flex"
@@ -43,8 +55,8 @@ export const CardListWait = ({
     >
       <Box>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
-          {data.types.map((type, index) => (
-            <ChipCategory key={index} type={type} />
+          {chips.map((chip, index) => (
+            <ChipCategory key={index} data={chip} />
           ))}
         </Box>
       </Box>
@@ -60,7 +72,7 @@ export const CardListWait = ({
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
-            src={data.imgSrc}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -84,12 +96,12 @@ export const CardListWait = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name} 기사님
+              {info.nickname} 기사님
             </Typography>
             <Box display="flex" alignItems="center">
               <Image
                 src={
-                  data.isLiked
+                  info.isLiked
                     ? "/Images/like/like.svg"
                     : "/Images/like/unlike.svg"
                 }
@@ -107,7 +119,7 @@ export const CardListWait = ({
                   color: theme.palette.PrimaryBlue[400],
                 })}
               >
-                {data.like}
+                {info.likeCount}
               </Typography>
             </Box>
           </Box>
@@ -138,7 +150,7 @@ export const CardListWait = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.rating}
+                {info.rating}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -148,7 +160,7 @@ export const CardListWait = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                ({data.count})
+                ({info.reviewCount})
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -171,7 +183,7 @@ export const CardListWait = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.career}년
+                {info.experience}년
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -184,7 +196,7 @@ export const CardListWait = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.confirm}
+                {info.confirmedCount}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -246,7 +258,7 @@ export const CardListWait = ({
                 wordBreak: "keep-all",
               })}
             >
-              {formatKoreanDate(data.date ?? "")}
+              {formatKoreanDate(data.moveDate ?? "")}
             </Typography>
           </Box>
           <Box
@@ -293,7 +305,10 @@ export const CardListWait = ({
                   wordBreak: "keep-all",
                 })}
               >
-                {data.from}
+                {[
+                  data.fromAddressMinimal.sido,
+                  data.fromAddressMinimal.sigungu,
+                ].join(" ")}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -335,7 +350,10 @@ export const CardListWait = ({
                   wordBreak: "keep-all",
                 })}
               >
-                {data.to}
+                {[
+                  data.toAddressMinimal.sido,
+                  data.toAddressMinimal.sigungu,
+                ].join(" ")}
               </Typography>
             </Box>
           </Box>
@@ -364,7 +382,7 @@ export const CardListWait = ({
               color: theme.palette.Black[400],
             })}
           >
-            {(data.cost ?? 0).toLocaleString()}원
+            {(data.price ?? 0).toLocaleString()}원
           </Typography>
         </Box>
         <Box

@@ -3,11 +3,14 @@
 import { Box, Stack, Typography } from "@mui/material";
 import { UseFormRegister, FieldErrors } from "react-hook-form";
 import TextField from "../shared/components/text-field";
-import { ProfileEditFormData } from "../../schemas/profile.schema";
+import {
+  ProfileEditFormData,
+  GeneralEditFormData,
+} from "../../schemas/profile.schema";
 
 interface PasswordChangeSectionProps {
-  register: UseFormRegister<ProfileEditFormData>;
-  errors: FieldErrors<ProfileEditFormData>;
+  register: UseFormRegister<ProfileEditFormData | GeneralEditFormData>;
+  errors: FieldErrors<ProfileEditFormData | GeneralEditFormData>;
 }
 
 export const PasswordChangeSection = ({
