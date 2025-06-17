@@ -1,14 +1,15 @@
 import { Box, Typography } from "@mui/material";
-import { CardData } from "@/src/types/card";
-import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { maskNickname } from "@/src/lib/maskNickname";
+import { EstimateOffer } from "@/src/types/estimate";
+import { StarRating } from "../review/StarRating";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
 }
 
 export const CardListReview = ({ data }: CardProps) => {
+  const info = data.mover;
   return (
     <Box
       border={"1px solid"}
@@ -28,7 +29,7 @@ export const CardListReview = ({ data }: CardProps) => {
               color: theme.palette.Black[400],
             })}
           >
-            {maskNickname(data.nickname ?? "")}
+            {maskNickname(info.nickname ?? "")}
           </Typography>
         </Box>
         <Box
@@ -45,29 +46,17 @@ export const CardListReview = ({ data }: CardProps) => {
               color: theme.palette.Grayscale[300],
             })}
           >
-            {formatKoreanDate(data.date ?? "", false)}
+            {formatKoreanDate(data.createdAt ?? "", false)}
           </Typography>
         </Box>
       </Box>
       <Box display="flex" gap="4px">
-        {Array.from({ length: data.review ?? 1 }).map((_, i) => (
-          <Box
-            key={i}
-            position="relative"
-            width={[20, 20, 24]}
-            height={[20, 20, 24]}
-          >
-            <Image
-              src="/Images/star/star_active.svg"
-              alt="별점 사진"
-              fill
-              style={{ objectFit: "contain" }}
-            />
-          </Box>
-        ))}
+        <StarRating rating={info.rating} />
       </Box>
       <Box>
-        <Typography>{data.writeReview}</Typography>
+        {info.reviews?.map((review, idx) => (
+          <Typography key={idx}>{review.comment}</Typography>
+        ))}
       </Box>
     </Box>
   );

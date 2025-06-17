@@ -25,13 +25,13 @@ export default function PendingEstimate() {
   if (errorIds) return <Typography>견적서 데이터 에러 발생!</Typography>;
   if (isLoading) return <Typography>견적서 데이터 로딩중...</Typography>;
   if (error) return <Typography>견적서 데이터 에러 발생!</Typography>;
-  if (!data || !Array.isArray(data) || data.length === 0)
+  if (!data?.items || !Array.isArray(data?.items) || data?.items.length === 0)
     return <Typography>견적 데이터 없음</Typography>;
 
   // 4. 실제 데이터 렌더링
   return (
     <Grid container spacing={2}>
-      {data.map((card: EstimateOffer, index) => (
+      {data.items.map((card: EstimateOffer, index) => (
         <Grid
           key={index}
           size={[12, 12, 6]}

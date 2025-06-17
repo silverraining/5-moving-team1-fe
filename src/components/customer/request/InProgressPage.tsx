@@ -1,29 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import {
-  Box,
-  Stack,
-  Typography,
-  Button,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
-import { useRouter } from "next/navigation";
-import { Progress } from "@/src/components/shared/components/progress/progress";
+import { Stack, Typography, useTheme, useMediaQuery } from "@mui/material";
+// import { useRouter } from "next/navigation";
 
 export default function InProgressPage() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
-  const router = useRouter();
+  // const router = useRouter();
 
   return (
     <>
-      <Box sx={{ py: isSmall ? "24px" : "32px" }}>
-        {/* value 0이면 게이지 바가 안보이는 걸로 추가 필요 */}
-        <Progress value={0} />
-      </Box>
       <Stack
         sx={{
           width: "100%",
@@ -48,7 +36,8 @@ export default function InProgressPage() {
           <br />
           진행 중인 이사 완료 후 새로운 견적을 받아보세요.
         </Typography>
-        <Button
+        {/* 버튼을 눌렀을 때 이동할 기사님에게 견적받지 않은 견적도 확인할 수 있는 페이지가 없어서 일단 없음 처리 */}
+        {/* <Button
           onClick={() => router.push("/customer/estimate/pending")}
           sx={{
             height: isSmall ? "54px" : "64px",
@@ -67,7 +56,7 @@ export default function InProgressPage() {
           >
             받은 견적 보러가기
           </Typography>
-        </Button>
+        </Button> */}
       </Stack>
     </>
   );

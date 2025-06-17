@@ -1,12 +1,12 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
-
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
+import { EstimateOffer } from "@/src/types/estimate";
+import { ChipData } from "@/src/types/card";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
 }
@@ -16,6 +16,16 @@ export const CardListRequest = ({
   onConfirmClick,
   onDetailClick,
 }: CardProps) => {
+  // 카드 데이터
+  const info = data.mover;
+  // Chip 데이터
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
   return (
     <Box
       display="flex"
@@ -40,8 +50,8 @@ export const CardListRequest = ({
         justifyContent={"space-between"}
       >
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
-          {data.types.map((type, index) => (
-            <ChipCategory key={index} type={type} />
+          {chips.map((chip, idx) => (
+            <ChipCategory key={idx} data={chip} />
           ))}
         </Box>
         <Typography
@@ -53,7 +63,7 @@ export const CardListRequest = ({
             color: theme.palette.Grayscale[500],
           })}
         >
-          {dayjs(data.date).fromNow()}
+          {dayjs(info.createdAt).fromNow()}
         </Typography>
       </Box>
 
@@ -81,7 +91,7 @@ export const CardListRequest = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name} 고객님
+              {info.nickname} 고객님
             </Typography>
             <Typography
               display={["inline-block", "none"]}
@@ -92,7 +102,7 @@ export const CardListRequest = ({
                 color: theme.palette.Grayscale[500],
               })}
             >
-              {dayjs(data.date).fromNow()}
+              {dayjs(info.createdAt).fromNow()}
             </Typography>
           </Box>
         </Box>
@@ -135,7 +145,7 @@ export const CardListRequest = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {formatKoreanDate(data.movingDay ?? "")}
+              {formatKoreanDate(data.moveDate ?? "")}
             </Typography>
           </Box>
           <Box display={"flex"} gap={["4px"]}>
@@ -167,7 +177,7 @@ export const CardListRequest = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.from}
+                {data.fromAddress.fullAddress}
               </Typography>
             </Box>
             <Box
@@ -202,7 +212,7 @@ export const CardListRequest = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.to}
+                {data.toAddress.fullAddress}
               </Typography>
             </Box>
           </Box>

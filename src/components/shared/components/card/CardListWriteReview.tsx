@@ -1,16 +1,31 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
+import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
+import { EstimateOffer } from "@/src/types/estimate";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
   onReviewClick?: () => void;
 }
 
 export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
+  // 카드 데이터
+  const info = data.mover;
+  // Chip 데이터
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
+
+  // 리뷰가 있는지 확인
+  const isReviewed = (info.reviews?.length ?? 0) > 0;
+
   return (
     <Box
       display="flex"
@@ -31,8 +46,8 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
     >
       <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
-          {data.types.map((type, index) => (
-            <ChipCategory key={index} type={type} />
+          {chips.map((chip, idx) => (
+            <ChipCategory key={idx} data={chip} />
           ))}
         </Box>
       </Box>
@@ -49,7 +64,7 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
-            src={data.imgSrc}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -74,7 +89,7 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name} 기사님
+              {info.nickname} 기사님
             </Typography>
           </Box>
           <Box
@@ -104,7 +119,7 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {formatKoreanDate(data.movingDay ?? "", false)}
+                {formatKoreanDate(data.moveDate, false)}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -127,24 +142,24 @@ export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {(data.cost ?? 0).toLocaleString()}원
+                {(data.price ?? 0).toLocaleString()}원
               </Typography>
             </Box>
           </Box>
         </Box>
       </Box>
       <Button
-        disabled={data.ReviewCheck}
+        disabled={isReviewed}
         onClick={onReviewClick}
         variant="contained"
         sx={(theme) => ({
-          bgcolor: data.ReviewCheck
+          bgcolor: isReviewed
             ? theme.palette.Grayscale[100]
             : theme.palette.PrimaryBlue[300],
           height: [48, 48, 64],
         })}
       >
-        {!data.ReviewCheck ? "리뷰 작성하기" : "리뷰 작성 완료"}
+        {!isReviewed ? "리뷰 작성하기" : "리뷰 작성 완료"}
       </Button>
     </Box>
   );

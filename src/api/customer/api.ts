@@ -1,5 +1,6 @@
 import { ServiceRegion, ServiceType } from "@/src/types/common";
 import apiClient from "../axiosclient";
+import { EstimateOffer, EstimateRequest } from "@/src/types/estimate";
 
 export type MoverListRequest = {
   location?: ServiceRegion;
@@ -97,37 +98,50 @@ export const getCustomerProfile =
 export const EstimateRequestActive = async () => {
   try {
     const response = await apiClient.get("/estimate-request/active", {});
-    console.log("EstimateRequestActive 응답:", response);
     return response.data;
   } catch (error) {
-    console.error("EstimateRequestActive 에러:", error);
     throw error;
   }
+};
+
+/** 받았던 견적 타입 */
+export type EstimateRequestHistoryResponse = {
+  items: EstimateRequest[];
+  hasNext: boolean;
+  nextCursor: string | null;
+  totalCount: number;
 };
 
 /** 견적 관리 받았던 견적 api */
-export const EstimateRequestList = async () => {
-  try {
-    const response = await apiClient.get("/estimate-request/history", {});
-    console.log("EstimateRequestList 응답:", response);
-    return response.data;
-  } catch (error) {
-    console.error("EstimateRequestList 에러:", error);
-    throw error;
-  }
+export const EstimateRequestHistory =
+  async (): Promise<EstimateRequestHistoryResponse> => {
+    try {
+      const response = await apiClient.get("/estimate-request/history", {});
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+/** 대기 중인 견적 타입 */
+export type EstimateOfferPendingResponse = {
+  items: EstimateOffer[];
+  hasNext: boolean;
+  nextCursor: string | null;
+  totalCount: number;
 };
 
 /** 견적 관리 대기 중인 견적 api */
-export const EstimateOfferList = async (requestId: string) => {
+export const EstimateOfferPending = async (
+  requestId: string
+): Promise<EstimateOfferPendingResponse> => {
   try {
     const response = await apiClient.get(
       `/estimate-offer/${requestId}/pending`,
       {}
     );
-    console.log("EstimateOfferList 응답:", response);
     return response.data;
   } catch (error) {
-    console.error("EstimateOfferList 에러:", error);
     throw error;
   }
 };

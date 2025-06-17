@@ -39,7 +39,7 @@ export const CheckBoxList = ({
         gap: ["8px", "16px"],
         backgroundColor: theme.palette.White[100],
         borderRadius: isMobile ? "24px 4px 24px 24px" : "32px 0px 32px 32px",
-        width: ["280px", "560px"],
+        width: ["312px", "640px"],
         boxShadow: "4px 4px 10px 0px #E0E0E040",
         padding: isMobile ? "16px" : "40px",
       }}
