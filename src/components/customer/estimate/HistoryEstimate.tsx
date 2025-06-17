@@ -40,35 +40,45 @@ export default function HistoryEstimate() {
       })}
     >
       <Stack marginTop={["0px", "32px", "64px"]}>
-        {data.map((info: EstimateRequest) => (
-          <Stack
-            padding={["48px 40px"]}
-            margin={"0px 0px 32px 0px"}
-            borderRadius={["0px", "24px", "48px"]}
-            border={"0.5px solid"}
-            gap={"48px"}
-            key={info.id}
-            sx={(theme) => ({
-              backgroundColor: theme.palette.White[100],
-              borderColor: theme.palette.Line[100],
-            })}
-          >
-            {/* 견적 정보 + 견적 목록 */}
-            <EstimateSection title="견적서 목록">
-              <Dropdown options={sortOption} onChange={handleOptionChange} />
-              <Stack gap={"56px"}>
-                {info.estimateOffers.map((card: EstimateOffer, idx: number) => (
-                  <Stack key={idx}>
-                    {/* 견적 정보 */}
-                    <EstimateInfo info={card} />
-                    {/* 카드 정보 */}
-                    <CardListCost data={card} onLikeClick={handleLikeClick} />
-                  </Stack>
-                ))}
-              </Stack>
-            </EstimateSection>
-          </Stack>
-        ))}
+        {data.map((info: EstimateRequest) =>
+          !info.estimateOffers || info.estimateOffers.length === 0 ? null : (
+            <Stack
+              padding={["48px 40px"]}
+              margin={"0px 0px 32px 0px"}
+              borderRadius={["0px", "24px", "48px"]}
+              border={"0.5px solid"}
+              gap={"48px"}
+              key={info.id}
+              sx={(theme) => ({
+                backgroundColor: theme.palette.White[100],
+                borderColor: theme.palette.Line[100],
+              })}
+            >
+              {/* 견적 정보 */}
+              <EstimateSection title="견적 정보">
+                <EstimateInfo info={info.estimateOffers[0]} />
+              </EstimateSection>
+
+              {/*  견적 목록 */}
+              <EstimateSection title="견적서 목록">
+                <Dropdown options={sortOption} onChange={handleOptionChange} />
+                <Stack gap={"56px"}>
+                  {info.estimateOffers.map(
+                    (card: EstimateOffer, idx: number) => (
+                      <Stack key={idx}>
+                        {/* 카드 정보 */}
+                        <CardListCost
+                          data={card}
+                          onLikeClick={handleLikeClick}
+                        />
+                      </Stack>
+                    )
+                  )}
+                </Stack>
+              </EstimateSection>
+            </Stack>
+          )
+        )}
       </Stack>
     </Stack>
   );

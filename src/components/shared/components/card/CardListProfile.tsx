@@ -3,7 +3,6 @@ import Image from "next/image";
 import { joinAddress } from "@/src/lib/joinAddress";
 import { typeMapper } from "@/src/lib/typeMapper";
 import { EstimateOffer } from "@/src/types/estimate";
-import { ChipData } from "@/src/types/card";
 
 interface CardProps {
   data: EstimateOffer;
@@ -18,13 +17,6 @@ export const CardListProfile = ({
 }: CardProps) => {
   const info = data.mover;
 
-  const chips: ChipData[] = [
-    {
-      chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
-    },
-  ];
   return (
     <Box
       display="flex"
