@@ -12,6 +12,7 @@ const nextConfig: NextConfig = {
     domains: [
       "moving-app-uploads.s3.ap-northeast-2.amazonaws.com",
       "example.com",
+      "i.namu.wiki",
     ],
   },
 };
