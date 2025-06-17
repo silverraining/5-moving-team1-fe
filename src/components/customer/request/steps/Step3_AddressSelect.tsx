@@ -12,6 +12,7 @@ import dayjs from "dayjs";
 import { convertToLabel } from "@/src/utils/convertToLabel";
 import { postEstimateRequest } from "@/src/api/customer/request/api";
 import { parseAddress, ModalAddress } from "@/src/utils/parseAddress";
+import { PATH } from "@/src/lib/constants";
 
 type ParsedAddress = {
   sido: string; // 시도
@@ -44,31 +45,48 @@ export default function Step3_AddressSelect({
   const [openToModal, setOpenToModal] = useState(false);
   const { openSnackbar, SnackbarComponent } = useSnackbar();
 
-  const handleConfirmClick = async () => {
-    try {
-      if (!moveType || !moveDate || !fromAddress || !toAddress) {
-        openSnackbar("모든 정보를 입력해주세요.", "warning");
-        return;
-      }
+  const setFromAddress = useEstimateStore((state) => state.setFromAddress);
+  const setToAddress = useEstimateStore((state) => state.setToAddress);
 
-      // POST 요청 보내기
+  // 견적입력정보 개별 유효성 검사
+  const validateFields = (): boolean => {
+    if (!moveType) {
+      openSnackbar("이사 종류를 선택해주세요.", "error");
+      return false;
+    }
+    if (!moveDate) {
+      openSnackbar("이사 예정일을 선택해주세요.", "error");
+      return false;
+    }
+    if (!fromAddress) {
+      openSnackbar("출발지를 선택해주세요.", "error");
+      return false;
+    }
+    if (!toAddress) {
+      openSnackbar("도착지를 선택해주세요.", "error");
+      return false;
+    }
+    return true;
+  };
+
+  const handleConfirmClick = async () => {
+    if (!validateFields()) return; // ✅ 유효성 검사 추가
+
+    try {
       await postEstimateRequest({
         moveType,
         moveDate,
-        fromAddress,
-        toAddress,
+        fromAddress: fromAddress!,
+        toAddress: toAddress!,
       });
 
       openSnackbar("견적 확정 완료", "success", 5000);
-      router.push("/customer/moverlist");
+      router.replace(PATH.moverList);
     } catch (error) {
       openSnackbar("견적 확정에 실패했습니다. 다시 시도해주세요.", "error");
       console.error(error);
     }
   };
-
-  const setFromAddress = useEstimateStore((state) => state.setFromAddress);
-  const setToAddress = useEstimateStore((state) => state.setToAddress);
 
   const handleSelectFrom = (address: ModalAddress) => {
     const parsed = parseAddress(address);
