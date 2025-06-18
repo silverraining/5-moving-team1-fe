@@ -1,4 +1,4 @@
-import { Stack, Typography } from "@mui/material";
+import { Stack, Typography, Box } from "@mui/material";
 import { MenuTabs } from "./MenuTabs";
 import { Progress } from "../progress/progress";
 import { usePathname } from "next/navigation";
@@ -78,7 +78,7 @@ export const SubHeader = () => {
       sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
     >
       {tabMenuElement}
-      {progressElement}
+      <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>{progressElement}</Box>
       {labelElement}
     </Stack>
   );
