@@ -73,6 +73,19 @@ export interface ReviewStatistics {
   max: number;
 }
 
+export interface AddressDto {
+  sido: string;
+  sidoEnglish: string;
+  sigungu: string;
+  roadAddress: string;
+  fullAddress: string;
+}
+
+export interface AddressMinimal {
+  sido: string;
+  sigungu: string;
+}
+
 export {
   EstimateOfferStatus,
   EstimateRequestStatus,

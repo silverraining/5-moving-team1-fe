@@ -3,24 +3,30 @@ import {
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
+  AddressDto,
+  AddressMinimal,
 } from "./common";
 
-export type EstimateOffer = {
+export interface EstimateOffer {
   estimateRequestId: string;
   moverId: string;
   price: number;
-  comment: string;
   status: EstimateOfferStatus;
+  requestStatus: string;
   isTargeted: boolean;
   isConfirmed: boolean;
-  confirmedAt?: Date;
-  completedAt?: Date; //이사 완료시점  ex)리뷰 작성 기간 제한
+  confirmedAt: Date;
+  moveDate: Date;
+  moveType: ServiceType;
   createdAt: Date;
-  updatedAt: Date;
-  estimateRequest: EstimateRequest;
-  moverProfile: MoverProfile;
-  review: Review;
-};
+
+  fromAddress?: AddressDto;
+  toAddress?: AddressDto;
+  fromAddressMinimal?: AddressMinimal;
+  toAddressMinimal?: AddressMinimal;
+
+  mover: MoverProfile;
+}
 
 export type EstimateRequest = {
   id: string;
