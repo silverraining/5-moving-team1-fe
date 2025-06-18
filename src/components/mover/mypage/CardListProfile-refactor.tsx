@@ -1,4 +1,11 @@
-import { Box, Button, Stack, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Stack,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 import Image from "next/image";
 import { joinAddress } from "@/src/lib/joinAddress";
 import { typeMapper } from "@/src/lib/typeMapper";
@@ -20,74 +27,93 @@ interface CardProps {
  * @description
  * 기사님 소개 카드 컴포넌트
  * 기존 CardListProfile 컴포넌트 수정해서 기사님 마이페이지에 사용중
- * TODO: 반응형
+ *
  */
 export const CardListProfile = ({
   data,
   onMyClick,
   onBasicClick,
   buttonLabels,
-  reverseButtons,
+  reverseButtons = false,
 }: CardProps) => {
-  const regionLabels = convertRegionToKoreanLabels(data.serviceRegion);
+  const theme = useTheme();
+  const isDesktopUp = useMediaQuery(theme.breakpoints.up("desktop"));
+  const regionLabels = convertRegionToKoreanLabels(data.serviceRegions);
 
-  const buttons = [
+  const buttonPrimary = (
     <Button
       key="primary"
       onClick={onMyClick}
       variant="contained"
-      sx={(theme) => ({
-        width: ["100%", 296, 280],
-        height: [48, 48, 64],
-        bgcolor: theme.palette.PrimaryBlue[300],
-        borderRadius: ["8px", "8px", "16px"],
-      })}
+      sx={{
+        px: "68px",
+        py: "12px",
+        flex: 1,
+        minWidth: 0,
+        maxWidth: "100%",
+        borderRadius: "16px",
+        overflow: "hidden",
+      }}
     >
       <Typography
-        sx={(theme) => ({
+        sx={{
           fontSize: [16, 16, 20],
           lineHeight: ["26px", "26px", "32px"],
           fontWeight: 600,
           color: theme.palette.White[100],
-        })}
+          whiteSpace: "nowrap",
+        }}
       >
         {buttonLabels?.primary ?? "견적 보내기"}
       </Typography>
-    </Button>,
+    </Button>
+  );
 
+  const buttonSecondary = (
     <Button
       key="secondary"
       onClick={onBasicClick}
       variant="outlined"
-      sx={(theme) => ({
-        width: ["100%", 296, 280],
-        height: [48, 48, 64],
-        borderRadius: ["8px", "8px", "16px"],
+      sx={{
+        px: "68px",
+        py: "12px",
+        flex: 1,
+        minWidth: 0,
+        maxWidth: "100%",
+        borderRadius: "16px",
         border: `1px solid ${theme.palette.Grayscale[300]}`,
-      })}
+      }}
     >
       <Typography
-        sx={(theme) => ({
+        sx={{
           fontSize: [16, 16, 20],
           lineHeight: ["26px", "26px", "32px"],
           fontWeight: 600,
           color: theme.palette.Grayscale[300],
-        })}
+          whiteSpace: "nowrap",
+        }}
       >
         {buttonLabels?.secondary ?? "반려"}
       </Typography>
-    </Button>,
-  ];
+    </Button>
+  );
+
+  const buttons = reverseButtons
+    ? [buttonSecondary, buttonPrimary]
+    : [buttonPrimary, buttonSecondary];
+
   return (
     <>
       <Box
         display="flex"
         flexDirection="column"
         justifyContent="space-between"
-        bgcolor={"transparent"}
-        gap={"10px"}
-        width="100%"
-        minWidth={["327px", "600px", "1000px"]}
+        sx={{
+          flexGrow: 1,
+          overflow: "hidden",
+          minWidth: ["375px", "600px", "744px"],
+          maxWidth: "100%",
+        }}
       >
         <Box
           display="flex"
@@ -113,14 +139,35 @@ export const CardListProfile = ({
             direction="row"
             spacing={["14px", "16px"]}
             mb="24px"
+            flexWrap="nowrap"
             justifyContent={["flex-start", "flex-start", "space-between"]}
+            alignItems="center"
+            width="100%"
           >
-            <Box
-              display={["inline-block", "inline-block", "none"]}
-              width={[46, 46, 56]}
-              height={[46, 46, 56]}
-              position="relative"
-            ></Box>
+            {/* 이미지 (모바일 전용) */}
+            {!isDesktopUp && (
+              <Box
+                width="46px"
+                height="46px"
+                position="relative"
+                flexShrink={0}
+                sx={{
+                  borderRadius: "100px",
+                  overflow: "hidden",
+                  backgroundColor: "#D9D9D9",
+                }}
+              >
+                <Image
+                  src={data.imageUrl || "/Images/profile/maleProfile.svg"}
+                  alt="프로필 이미지"
+                  fill
+                  style={{
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+            )}
+
             <Box maxWidth={["80%", "80%", "45%"]}>
               <Typography
                 sx={(theme) => ({
@@ -146,22 +193,28 @@ export const CardListProfile = ({
                 {data.intro}
               </Typography>
             </Box>
-            <Stack
-              direction={["column", "row", "row"]}
-              spacing={["8px", "8px", "11px"]}
-              display={["none", "none", "flex"]}
-              gap={["8px", "8px", "11px"]}
-            >
-              {reverseButtons ? [...buttons].reverse() : buttons}
-            </Stack>
-          </Stack>
+            {/* 데스크탑 전용 버튼 */}
+            {isDesktopUp && (
+              <Stack
+                direction="row"
+                spacing={2}
+                sx={{
+                  flexShrink: 1,
+                  flexWrap: "wrap",
 
+                  minWidth: 400,
+                }}
+              >
+                {buttons}
+              </Stack>
+            )}
+          </Stack>
           {/* 내부 박스 (이미지, 정보) */}
           <Box
             display="flex"
             flexDirection="row"
             alignItems="center"
-            gap="20px"
+            gap="24px"
             padding={["10px", "24px 18px"]}
             border="1px solid"
             borderRadius="6px"
@@ -172,26 +225,28 @@ export const CardListProfile = ({
             })}
           >
             {/* 1. 프로필 이미지 */}
-            <Box
-              width="80px"
-              height="80px"
-              position="relative"
-              flexShrink={0}
-              sx={{
-                borderRadius: "100px",
-                overflow: "hidden",
-                backgroundColor: "#D9D9D9",
-              }}
-            >
-              <Image
-                src={data.imageUrl || "/Images/profile/maleProfile.svg"}
-                alt="프로필 이미지"
-                fill
-                style={{
-                  objectFit: "cover",
+            {isDesktopUp && (
+              <Box
+                width="80px"
+                height="80px"
+                position="relative"
+                flexShrink={0}
+                sx={{
+                  borderRadius: "100px",
+                  overflow: "hidden",
+                  backgroundColor: "#D9D9D9",
                 }}
-              />
-            </Box>
+              >
+                <Image
+                  src={data.imageUrl || "/Images/profile/maleProfile.svg"}
+                  alt="프로필 이미지"
+                  fill
+                  style={{
+                    objectFit: "cover",
+                  }}
+                />
+              </Box>
+            )}
 
             {/* 2. 정보 영역 */}
             <Box
@@ -205,7 +260,7 @@ export const CardListProfile = ({
                 direction="row"
                 spacing="16px"
                 alignItems="center"
-                justifyContent={["space-between", "flex-start"]}
+                justifyContent="flex-start"
                 flexGrow={1}
               >
                 {/* 평점 */}
@@ -301,7 +356,13 @@ export const CardListProfile = ({
                       backgroundColor: theme.palette.Background[400],
                     })}
                   >
-                    <Typography sx={{ fontSize: 14, color: "#999999" }}>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "#999999",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
                       제공 서비스
                     </Typography>
                   </Box>
@@ -312,7 +373,7 @@ export const CardListProfile = ({
                   </Typography>
                 </Box>
 
-                <Box display="flex" gap="8px" alignItems="center">
+                <Box display="flex" gap="8px" alignItems="center" pr="8px">
                   <Box
                     borderRadius="4px"
                     px="6px"
@@ -321,11 +382,25 @@ export const CardListProfile = ({
                       backgroundColor: theme.palette.Background[400],
                     })}
                   >
-                    <Typography sx={{ fontSize: 14, color: "#999999" }}>
+                    <Typography
+                      sx={{
+                        fontSize: 14,
+                        color: "#999999",
+                        whiteSpace: "nowrap",
+                      }}
+                    >
                       지역
                     </Typography>
                   </Box>
-                  <Typography sx={{ fontSize: 14 }}>
+                  <Typography
+                    sx={{
+                      fontSize: 14,
+                      whiteSpace: {
+                        xs: "normal",
+                        md: "nowrap",
+                      },
+                    }}
+                  >
                     {regionLabels.join(", ")}
                   </Typography>
                 </Box>
@@ -333,15 +408,17 @@ export const CardListProfile = ({
             </Box>
           </Box>
         </Box>
-
-        {/* tablet, mobile시 버튼 있는 곳 */}
-        <Box
-          display={["flex", "flex", "none"]}
-          gap={["8px", "8px", "11px"]}
-          flexDirection={["column", "row", "row"]}
-        >
-          {reverseButtons ? [...buttons].reverse() : buttons}
-        </Box>
+        {/* tablet, mobile시 버튼 1200px 미만에서만 노출  */}
+        {!isDesktopUp && (
+          <Box
+            display="flex"
+            gap={["8px", "8px", "11px"]}
+            flexDirection={["column", "row"]}
+            mt={2}
+          >
+            {buttons}
+          </Box>
+        )}
       </Box>
     </>
   );

@@ -3,8 +3,16 @@
 import { CardListProfile } from "@/src/components/mover/mypage/CardListProfile-refactor";
 import { CardData } from "@/src/types/card";
 import Image from "next/image";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useMediaQuery,
+  useTheme,
+} from "@mui/material";
 import { MoverProfileCardData } from "@/src/api/mover/api";
+import { useRouter } from "next/navigation";
+import { PATH } from "@/src/lib/constants";
 
 interface Props {
   data: MoverProfileCardData;
@@ -19,11 +27,14 @@ interface Props {
  * 데스크탑 사이즈에서  reverseButtons를 통해 버튼 위치 반전하도록함
  */
 export default function CardListProfileWrapper({ data }: Props) {
+  const router = useRouter();
+  const theme = useTheme();
+  const isDesktopUp = useMediaQuery(theme.breakpoints.up("desktop"));
   return (
     <CardListProfile
       data={data}
-      onMyClick={() => console.log("기본 정보 수정 클릭")}
-      onBasicClick={() => console.log("내 프로필 수정 클릭")}
+      onMyClick={() => router.push(PATH.moverProfileEdit)}
+      onBasicClick={() => router.push(PATH.moverEdit)}
       buttonLabels={{
         secondary: (
           <Box component="span" display="inline-flex" alignItems="center">
@@ -50,7 +61,7 @@ export default function CardListProfileWrapper({ data }: Props) {
           </Box>
         ),
       }}
-      reverseButtons // 버튼 순서 반전
+      reverseButtons={isDesktopUp} // 버튼 순서 반전
     />
   );
 }
