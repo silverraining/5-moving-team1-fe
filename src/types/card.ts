@@ -28,3 +28,19 @@ export type CardData = {
   fromAddress: Address;
   toAddress: Address;
 };
+
+export type likeMoverListResItem = {
+  id: string;
+  nickname: string;
+  imageUrl: string;
+  experience: number;
+  serviceType: {
+    SMALL: boolean;
+    HOME: boolean;
+    OFFICE: boolean;
+  };
+  review_count: number;
+  average_rating: number;
+  confirmed_estimate_count: number;
+  likeCount: number;
+};
