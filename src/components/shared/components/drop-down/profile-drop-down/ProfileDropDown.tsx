@@ -19,7 +19,10 @@ export default function ProfileDropDown({
 }: ProfileDropDownProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
-  const profileHref = user?.role === "MOVER" ? PATH.main : PATH.main;
+  const profileHref =
+    user?.role === "MOVER"
+      ? PATH.moverProfileRegister
+      : PATH.userProfileRegister;
   const rievewHref =
     user?.role === "MOVER" ? PATH.moverReview : PATH.userReviewPending;
 
@@ -41,7 +44,7 @@ export default function ProfileDropDown({
         boxSizing: "border-box",
       })}
     >
-      <ProfileMenuItem nickname="김가나" bold type="nickname" />
+      <ProfileMenuItem nickname={user?.name} bold type="nickname" />
       <Link
         href={profileHref}
         style={{ width: "100%", textDecoration: "none" }}
