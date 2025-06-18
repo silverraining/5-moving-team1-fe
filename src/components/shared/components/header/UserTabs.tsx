@@ -99,7 +99,10 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
         {!isSmall && (
           <Typography
             variant="M_18"
-            sx={(theme) => ({ color: theme.palette.Black[400] })}
+            sx={(theme) => ({
+              color: theme.palette.Black[400],
+              alignContent: "center",
+            })}
           >
             {user?.name}
           </Typography>

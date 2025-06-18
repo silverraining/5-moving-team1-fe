@@ -8,7 +8,6 @@ type LoginResponse = {
   user: User;
 };
 /**
- *
  * @param data  로그인 정보
  * @param data.email 이메일
  * @param data.password 비밀번호
@@ -64,11 +63,13 @@ export const signup = async (data: Signup): Promise<LoginResponse["user"]> => {
     throw new Error("회원가입 실패");
   }
 };
-
+/**
+ * 로그아웃 API
+ * @returns
+ */
 export const logout = async (): Promise<void> => {
   try {
     const response = await apiClient.post(`/auth/logout`);
-    console.log(1);
     return response.data;
   } catch (error: unknown) {
     if (axios.isAxiosError(error) && error.response) {

@@ -1,37 +1,74 @@
 "use client";
 
-import { useMoverList } from "@/src/api/customer/hook";
+import { useLikeList } from "@/src/api/like/hooks";
 import {
   CardListSave,
   CardListSaveSkeleton,
 } from "@/src/components/shared/components/card/CardListSave";
-import { MoverProfile } from "@/src/types/auth";
-import { CardData, ChipProps } from "@/src/types/card";
-import { ServiceRegion } from "@/src/types/common";
+import { likeMoverListResItem } from "@/src/types/card";
+import {
+  EstimateOfferStatus,
+  EstimateRequestStatus,
+  ServiceType,
+} from "@/src/types/common";
+import { EstimateOffer } from "@/src/types/estimate";
 import { Stack } from "@mui/material";
 
 const Wishlist = () => {
-  const { data, isLoading } = useMoverList({});
-  const mapMoverProfileToCardData = (mover: MoverProfile): CardData => {
+  const { data, isLoading } = useLikeList();
+
+  const transformLikeMoverToEstimateOffer = (
+    item: likeMoverListResItem
+  ): EstimateOffer => {
     return {
-      types: mover.serviceType.map((type) =>
-        type.toLowerCase()
-      ) as ChipProps["type"][],
-      imgSrc: mover.imageUrl,
-      name: mover.nickname,
-      like: 0,
-      rating: mover.averageRating,
-      count: mover.reviews?.length ?? 0,
-      career: mover.experience,
-      confirm: mover.confirmedCount,
-      isLiked: false,
-      address: mover.serviceRegions.map(
-        (region) =>
-          ServiceRegion[region.toUpperCase() as keyof typeof ServiceRegion]
-      ),
+      estimateRequestId: "",
+      moverId: item.id,
+      price: 0,
+      comment: "",
+      status: EstimateOfferStatus.REQUESTED,
+      requestStatus: EstimateRequestStatus.PENDING,
+      confirmedCount: item.confirmed_estimate_count,
+      isTargeted: false,
+      isConfirmed: false,
+      confirmedAt: undefined,
+      completedAt: undefined,
+      createdAt: new Date(),
+      moveDate: new Date(),
+      updatedAt: new Date(),
+      moveType: "HOME",
+      estimateRequest: undefined as any,
+      mover: {
+        id: item.id,
+        nickname: item.nickname,
+        imageUrl: item.imageUrl,
+        experience: item.experience,
+        serviceType: Object.keys(item.serviceType).filter(
+          (key) => item.serviceType[key as keyof typeof item.serviceType]
+        ) as ServiceType[],
+        reviewCount: item.review_count,
+        averageRating: item.average_rating,
+        likeCount: item.likeCount,
+        userId: "",
+        intro: "",
+        rating: 0,
+        description: "",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        confirmedCount: 0,
+        serviceRegions: [],
+        isLiked: true,
+      },
+      review: undefined as any,
+      fromAddress: undefined as any,
+      toAddress: undefined as any,
+      fromAddressMinimal: undefined as any,
+      toAddressMinimal: undefined as any,
     };
   };
-  const cardDataList: CardData[] = data?.map(mapMoverProfileToCardData);
+
+  const transformedData = data
+    ? data.map((item) => transformLikeMoverToEstimateOffer(item))
+    : [];
   return (
     <Stack
       direction="row"
@@ -49,11 +86,11 @@ const Wishlist = () => {
               <CardListSaveSkeleton />
             </Stack>
           ))
-        : cardDataList?.map((mover: CardData, idx: number) => (
+        : transformedData?.map((mover, idx: number) => (
             <Stack key={idx}>
               <CardListSave
                 data={mover}
-                onClick={() => console.log(mover.name)}
+                onClick={() => console.log(mover.moverId)}
               />
             </Stack>
           ))}
