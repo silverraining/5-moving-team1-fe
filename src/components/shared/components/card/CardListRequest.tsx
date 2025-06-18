@@ -2,11 +2,12 @@ import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
-import { EstimateOffer } from "@/src/types/estimate";
+import {} from "@/src/types/estimate";
 import { ChipData } from "@/src/types/card";
+import { CardData } from "@/src/types/card";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: ReceivedEstimateRequest;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
 }
@@ -16,16 +17,21 @@ export const CardListRequest = ({
   onConfirmClick,
   onDetailClick,
 }: CardProps) => {
+  console.log("⚽ CardListRequest data:", data);
+
   // 카드 데이터
-  const info = data.mover;
+  const info = data;
   // Chip 데이터
-  const chips: ChipData[] = [
-    {
-      chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
-    },
-  ];
+  // moveType이 유효한 값이면 칩으로 추가
+  const chips: ChipData[] = [];
+
+  if (data.moveType) {
+    chips.push({ chipType: data.moveType });
+  }
+
+  if (data.isTargeted) {
+    chips.push({ chipType: "TARGET", isTargeted: true });
+  }
   return (
     <Box
       display="flex"
@@ -91,7 +97,7 @@ export const CardListRequest = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 고객님
+              {info.customerName} 고객님
             </Typography>
             <Typography
               display={["inline-block", "none"]}
@@ -177,7 +183,8 @@ export const CardListRequest = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.fromAddress.fullAddress}
+                {data.fromAddressMinimal?.sido}{" "}
+                {data.fromAddressMinimal?.sigungu}
               </Typography>
             </Box>
             <Box
@@ -212,7 +219,7 @@ export const CardListRequest = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.toAddress.fullAddress}
+                {data.toAddressMinimal?.sido} {data.toAddressMinimal?.sigungu}
               </Typography>
             </Box>
           </Box>

@@ -78,7 +78,6 @@ export type ReceivedEstimateRequest = {
   customerName: string;
   price: number;
   status: EstimateOfferStatus;
-  requestStatus: string;
   isTargeted: boolean;
   isConfirmed: boolean;
   confirmedAt: Date;
