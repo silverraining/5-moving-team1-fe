@@ -90,6 +90,11 @@ export default function ReceivedRequestsFlow() {
       ? []
       : testDataList.map(transformToCardData);
 
+    // 실제 API로 받은 데이터 목록 정리
+    const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
+
+    console.log("estimateItems:", estimateItems);
+
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
       setKeyword(e.target.value);
     };
@@ -178,7 +183,7 @@ export default function ReceivedRequestsFlow() {
       closeRejectModal();
     };
 
-    if (isLoading) {
+    if (isLoading || !data || !estimateItems) {
       return <CircularProgress />;
     }
 
@@ -337,8 +342,8 @@ export default function ReceivedRequestsFlow() {
                       <CardListRequest
                         key={item.id}
                         data={mapEstimateToCardData(item)}
-                        onConfirmClick={() => handleSendClick(estimateItems)}
-                        onDetailClick={() => handleRejectClick(estimateItems)}
+                        onConfirmClick={() => handleSendClick(item)}
+                        onDetailClick={() => handleRejectClick(item)}
                       />
                     ))}
                   </Box>

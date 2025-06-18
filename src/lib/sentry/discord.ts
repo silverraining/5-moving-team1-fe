@@ -11,16 +11,16 @@ export async function sendDiscordAlert({
   if (!DISCORD_WEBHOOK_URL) return;
 
   const err = error instanceof Error ? error : new Error(String(error));
-  const truncate = (text: string | undefined, max = 800) =>
-    text?.slice(0, max) || "No stack";
+  const stack = maskStackTrace(err.stack);
+  const message = err.message;
 
   const content = [
     "🚨 **[500 Error Alert]**",
     `**Method**: \`${method}\``,
     `**URL**: ${url}`,
-    `**Message**: \`${err.message}\``,
+    `**Message**: \`${message}\``,
     "**Stack:**",
-    `\`\`\`${truncate(err.stack)}\`\`\``,
+    `\`\`\`${stack}\`\`\``,
   ].join("\n");
 
   try {
@@ -37,4 +37,20 @@ export async function sendDiscordAlert({
   } catch (e) {
     console.error("❌ Discord Webhook 오류", e);
   }
+}
+
+/**
+ * 스택트레이스 경로 마스킹
+ */
+function maskStackTrace(stack?: string): string {
+  if (!stack) return "No stack";
+
+  const normalized = stack.replace(/\\/g, "/"); // Windows 경로 슬래시 변환
+  const projectRoot = process.cwd().replace(/\\/g, "/");
+
+  return normalized
+    .split("\n")
+    .slice(0, 5)
+    .map((line) => line.replace(projectRoot, "[app-root]"))
+    .join("\n");
 }

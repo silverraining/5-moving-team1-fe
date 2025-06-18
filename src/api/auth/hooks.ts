@@ -1,6 +1,6 @@
 import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { AuthStore } from "@/src/store/authStore";
-import { login, signup } from "./api";
+import { login, logout, signup } from "./api";
 import { Login, User, Signup } from "@/src/types/auth";
 
 export const useLogin = (): UseMutationResult<
@@ -21,5 +21,11 @@ export const useLogin = (): UseMutationResult<
 export const useSignup = (): UseMutationResult<User, Error, Signup> => {
   return useMutation({
     mutationFn: (data: Signup) => signup(data),
+  });
+};
+
+export const useLogout = (): UseMutationResult<void, Error, void> => {
+  return useMutation({
+    mutationFn: () => logout(),
   });
 };

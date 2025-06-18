@@ -8,12 +8,10 @@ type LoginResponse = {
   user: User;
 };
 /**
- *
  * @param data  로그인 정보
  * @param data.email 이메일
  * @param data.password 비밀번호
  * @param data.role 사용자 유형 (예: CUSTOMER, MOVER)
- * @param data.provider 사용자 가입 경로
  * @returns
  * 로그인 성공 시 accessToken, refreshToken, user 정보를 포함한 응답
  * @throws 로그인 실패 시 에러 메시지
@@ -21,12 +19,11 @@ type LoginResponse = {
  */
 export const login = async (data: Login): Promise<LoginResponse> => {
   try {
-    const { email, password, role, provider = "LOCAL" } = data;
-    const response = await apiClient.post(`/auth/login/local/?state=${role}`, {
+    const { email, password, role } = data;
+    const response = await apiClient.post(`/auth/login/`, {
       email,
       password,
       role,
-      provider: provider,
     });
     return response.data;
   } catch (error) {
@@ -64,5 +61,20 @@ export const signup = async (data: Signup): Promise<LoginResponse["user"]> => {
       throw new Error(error.response.data.message);
     }
     throw new Error("회원가입 실패");
+  }
+};
+/**
+ * 로그아웃 API
+ * @returns
+ */
+export const logout = async (): Promise<void> => {
+  try {
+    const response = await apiClient.post(`/auth/logout`);
+    return response.data;
+  } catch (error: unknown) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error("로그아웃 실패");
   }
 };

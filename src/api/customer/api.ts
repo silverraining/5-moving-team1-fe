@@ -1,5 +1,6 @@
 import { ServiceRegion, ServiceType } from "@/src/types/common";
 import apiClient from "../axiosclient";
+import { EstimateOffer, EstimateRequest } from "@/src/types/estimate";
 
 export type MoverListRequest = {
   location?: ServiceRegion;
@@ -92,3 +93,55 @@ export const getCustomerProfile =
       throw error;
     }
   };
+
+/** PENDING, CONFIRMED 상태의 견적 요청 ID만 반환 api */
+export const EstimateRequestActive = async () => {
+  try {
+    const response = await apiClient.get("/estimate-request/active", {});
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 받았던 견적 타입 */
+export type EstimateRequestHistoryResponse = {
+  items: EstimateRequest[];
+  hasNext: boolean;
+  nextCursor: string | null;
+  totalCount: number;
+};
+
+/** 견적 관리 받았던 견적 api */
+export const EstimateRequestHistory =
+  async (): Promise<EstimateRequestHistoryResponse> => {
+    try {
+      const response = await apiClient.get("/estimate-request/history", {});
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
+/** 대기 중인 견적 타입 */
+export type EstimateOfferPendingResponse = {
+  items: EstimateOffer[];
+  hasNext: boolean;
+  nextCursor: string | null;
+  totalCount: number;
+};
+
+/** 견적 관리 대기 중인 견적 api */
+export const EstimateOfferPending = async (
+  requestId: string
+): Promise<EstimateOfferPendingResponse> => {
+  try {
+    const response = await apiClient.get(
+      `/estimate-offer/${requestId}/pending`,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

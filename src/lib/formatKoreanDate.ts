@@ -1,7 +1,7 @@
-import dayjs from "dayjs";
+import dayjs from "./dayjsConfig";
 
 export const formatKoreanDate = (
-  input: string,
+  input: string | Date | dayjs.Dayjs,
   includeWeekday: boolean = true
 ): string => {
   const date = dayjs(input);

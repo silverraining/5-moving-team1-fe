@@ -23,12 +23,17 @@ import {
   MOVER_MENU,
 } from "@/src/lib/headerConstants";
 import Link from "next/link";
+import { useLogout } from "@/src/api/auth/hooks";
+import Cookies from "js-cookie";
+import { EventSourcePolyfill } from "event-source-polyfill";
+import { useEffect } from "react";
 
 export const Header = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbar();
   const { open, toggleDrawer } = useDrawer();
   const { user, isLogin, logout } = AuthStore();
+  const { mutate } = useLogout();
   const isCustomer = user?.role === "CUSTOMER";
   const isMover = user?.role === "MOVER";
   const theme = useTheme();
@@ -44,11 +49,52 @@ export const Header = () => {
     : isMover
       ? MOVER_MENU
       : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+
   const hendleLogout = () => {
-    logout();
-    router.replace(PATH.main);
-    openSnackbar("로그아웃 되었습니다", "success", 2000, "standard");
+    mutate(undefined, {
+      onSuccess: () => {
+        openSnackbar("로그아웃 되었습니다", "success", 1000, "standard");
+        logout();
+        router.replace(PATH.main);
+      },
+      onError: (error) => {
+        openSnackbar(
+          error instanceof Error ? error.message : "로그아웃 실패",
+          "error",
+          1000,
+          "standard"
+        );
+      },
+    });
   };
+
+  useEffect(() => {
+    const token = Cookies.get("accessToken");
+    if (!token) return;
+
+    const eventSource = new EventSourcePolyfill(
+      "http://localhost:5000/api/notifications/stream",
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        withCredentials: true,
+      }
+    );
+    eventSource.onmessage = (event) => {
+      if (event.data === "dummy") {
+        console.log("Heartbeat received");
+        return;
+      }
+      try {
+        const notification = JSON.parse(event.data);
+        console.log("새 알림:", notification);
+      } catch {
+        console.log("SSE message (non-JSON):", event.data);
+      }
+    };
+  }, []);
+
   return (
     <Box
       display={"flex"}

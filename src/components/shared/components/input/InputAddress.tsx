@@ -1,5 +1,11 @@
 import { COLORS } from "@/public/theme/colors";
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Typography,
+  useTheme,
+  useMediaQuery,
+} from "@mui/material";
 
 interface EditableBoxProps {
   fromLabel: string;
@@ -16,6 +22,9 @@ export const EditableBox = ({
   onToClick,
   onConfirmClick,
 }: EditableBoxProps) => {
+  const theme = useTheme();
+  const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+
   const hasFrom = !!fromLabel;
   const hasTo = !!toLabel;
   const showConfirm = hasFrom && hasTo;
@@ -27,7 +36,7 @@ export const EditableBox = ({
       flexDirection="column"
       padding={["20px 24px", "32px"]}
       alignItems="center"
-      gap={2}
+      gap={["16px", "16px", "20px"]}
       borderRadius="32px 0 32px 32px "
       sx={{
         backgroundColor: COLORS.White[100],
@@ -35,7 +44,12 @@ export const EditableBox = ({
       boxSizing={"border-box"}
     >
       {/* 출발지 */}
-      <Box display={"flex"} flexDirection={"column"} alignItems={"flex-end"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"flex-end"}
+        gap={"8px"}
+      >
         <Button
           variant="outlined"
           onClick={onFromClick}
@@ -67,7 +81,12 @@ export const EditableBox = ({
       </Box>
 
       {/* 도착지 */}
-      <Box display={"flex"} flexDirection={"column"} alignItems={"flex-end"}>
+      <Box
+        display={"flex"}
+        flexDirection={"column"}
+        alignItems={"flex-end"}
+        gap={"8px"}
+      >
         <Button
           variant="outlined"
           onClick={onToClick}
@@ -110,7 +129,9 @@ export const EditableBox = ({
             borderRadius: "16px",
           }}
         >
-          견적 확정하기
+          <Typography variant={isSmall ? "SB_16" : "SB_20"}>
+            견적 확정하기
+          </Typography>
         </Button>
       )}
     </Box>

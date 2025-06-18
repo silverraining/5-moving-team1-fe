@@ -12,6 +12,8 @@ import {
 import { SearchInput } from "../text-field/Search";
 import AddressCard from "./AddressCard";
 import Image from "next/image";
+import { convertSidoToEnglish } from "@/src/utils/parseAddress";
+import { ModalAddress } from "@/src/utils/parseAddress";
 
 interface Address {
   zipCode: string;
@@ -22,7 +24,7 @@ interface Address {
 interface AddressModalProps {
   open: boolean;
   onClose: () => void;
-  onSelect: (address: Address) => void;
+  onSelect: (address: ModalAddress) => void;
   title?: "출발지를 선택해주세요" | "도착지를 선택해주세요";
 }
 
@@ -66,8 +68,10 @@ const AddressModal: React.FC<AddressModalProps> = ({
   title,
 }) => {
   const [searchValue, setSearchValue] = useState("");
-  const [addresses, setAddresses] = useState<Address[]>([]);
-  const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
+  const [addresses, setAddresses] = useState<ModalAddress[]>([]);
+  const [selectedAddress, setSelectedAddress] = useState<ModalAddress | null>(
+    null
+  );
 
   /**
    * 카카오 우편번호 서비스 API 연동 방법:
@@ -86,22 +90,50 @@ const AddressModal: React.FC<AddressModalProps> = ({
    *      }
    *    }).open();
    */
-  const handleSearch = (value: string) => {
-    setSearchValue(value);
-    // TODO: 카카오 우편번호 서비스 API 연동
-    // 임시 데이터
-    setAddresses([
-      {
-        zipCode: "04538",
-        roadAddress: "서울 중구 삼일대로 343 (대신파이낸스센터)",
-        jibunAddress: "서울 중구 저동1가 114",
+
+  // ✅ 추가: 카카오 주소 검색 팝업 호출 함수
+  const openKakaoPostcode = () => {
+    if (typeof window === "undefined") return;
+
+    new window.daum.Postcode({
+      oncomplete: function (data) {
+        const roadAddress = data.roadAddress;
+        const fullAddress = roadAddress;
+        const [sido, sigungu] = roadAddress.split(" ");
+        const parsedAddress: ModalAddress = {
+          zipCode: data.zonecode,
+          roadAddress: data.roadAddress,
+          jibunAddress: data.jibunAddress,
+          sido,
+          sigungu,
+          sidoEnglish: convertSidoToEnglish(sido),
+          fullAddress,
+        };
+
+        // ✅ 주소 선택 및 반영
+        setSelectedAddress(parsedAddress);
+        setSearchValue(data.roadAddress);
+        setAddresses([parsedAddress]); // ✅ 한 건만 표시
       },
-    ]);
+    }).open();
   };
 
-  const handleAddressSelect = (address: Address) => {
-    setSelectedAddress(address);
-  };
+  // const handleSearch = (value: string) => {
+  //   setSearchValue(value);
+  //   // TODO: 카카오 우편번호 서비스 API 연동
+  //   // 임시 데이터
+  //   setAddresses([
+  //     {
+  //       zipCode: "04538",
+  //       roadAddress: "서울 중구 삼일대로 343 (대신파이낸스센터)",
+  //       jibunAddress: "서울 중구 저동1가 114",
+  //     },
+  //   ]);
+  // };
+
+  // const handleAddressSelect = (address: Address) => {
+  //   setSelectedAddress(address);
+  // };
 
   const handleComplete = () => {
     if (selectedAddress) {
@@ -136,8 +168,9 @@ const AddressModal: React.FC<AddressModalProps> = ({
             variation="right"
             placeholder="도로명, 지번, 건물명으로 검색"
             value={searchValue}
-            onChange={(e) => handleSearch(e.target.value)}
-            onClick={() => setSearchValue("")}
+            onChange={(e) => setSearchValue(e.target.value)} // ✅ 검색어 입력 가능
+            onClick={openKakaoPostcode} // ✅ 검색 아이콘 클릭 시 카카오 팝업 호출
+            onDeleteClick={() => setSearchValue("")}
           />
         </Box>
         <Box>
@@ -147,8 +180,13 @@ const AddressModal: React.FC<AddressModalProps> = ({
               zipCode={address.zipCode}
               roadAddress={address.roadAddress}
               jibunAddress={address.jibunAddress}
-              onClick={() => handleAddressSelect(address)}
               selected={selectedAddress?.zipCode === address.zipCode}
+              onClick={() => setSelectedAddress(address)}
+              // zipCode={address.zipCode}
+              // roadAddress={address.roadAddress}
+              // jibunAddress={address.jibunAddress}
+              // onClick={() => handleAddressSelect(address)}
+              // selected={selectedAddress?.zipCode === address.zipCode}
             />
           ))}
         </Box>

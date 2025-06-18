@@ -3,41 +3,47 @@ import {
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
-  AddressDto,
-  AddressMinimal,
+  Address,
+  MinimalAddress,
 } from "./common";
 
-export interface EstimateOffer {
+export type EstimateOffer = {
   estimateRequestId: string;
   moverId: string;
   price: number;
+  comment: string;
   status: EstimateOfferStatus;
-  requestStatus: string;
+  requestStatus: EstimateRequestStatus;
+  confirmedCount: number;
   isTargeted: boolean;
   isConfirmed: boolean;
-  confirmedAt: Date;
-  moveDate: Date;
-  moveType: ServiceType;
+  confirmedAt?: Date;
+  completedAt?: Date; //이사 완료시점  ex)리뷰 작성 기간 제한
   createdAt: Date;
-
-  fromAddress?: AddressDto;
-  toAddress?: AddressDto;
-  fromAddressMinimal?: AddressMinimal;
-  toAddressMinimal?: AddressMinimal;
-
+  moveDate: Date;
+  updatedAt: Date;
+  moveType: ServiceType;
+  estimateRequest: EstimateRequest;
   mover: MoverProfile;
-}
+  review: Review;
+  toAddress: Address;
+  fromAddress: Address;
+  toAddressMinimal: MinimalAddress;
+  fromAddressMinimal: MinimalAddress;
+};
 
 export type EstimateRequest = {
   id: string;
   customerId: string;
   estimateOfferId: string;
   moveType: ServiceType;
-  status: EstimateRequestStatus;
+  price: number;
+  status: EstimateOfferStatus;
+  requestStatus: EstimateRequestStatus;
   moveDate: Date; // 연월일시 + 시간
   targetMoverIds?: string[]; // 3개 제한
-  fromAddress: object; // 객체로 저장 JSON
-  toAddress: object; // 객체로 저장 JSON
+  fromAddress: Address;
+  toAddress: Address;
   createdAt: Date;
   updatedAt: Date;
   estimateOffers: EstimateOffer[] | []; // 1:N 관계
@@ -64,4 +70,26 @@ export type Like = {
   createdAt: Date;
   moverProfile: MoverProfile;
   customerProfile: CustomerProfile;
+};
+
+export type ReceivedEstimateRequest = {
+  estimateRequestId: string;
+  moverId: string;
+  customerName: string;
+  price: number;
+  status: EstimateOfferStatus;
+  requestStatus: string;
+  isTargeted: boolean;
+  isConfirmed: boolean;
+  confirmedAt: Date;
+  moveDate: Date;
+  moveType: ServiceType;
+  createdAt: Date;
+
+  fromAddress?: Address;
+  toAddress?: Address;
+  fromAddressMinimal?: MinimalAddress;
+  toAddressMinimal?: MinimalAddress;
+
+  mover: MoverProfile;
 };

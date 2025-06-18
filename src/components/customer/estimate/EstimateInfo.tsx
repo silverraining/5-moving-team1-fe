@@ -1,8 +1,9 @@
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
-import { EstimateRequest } from "@/src/types/card";
+import { EstimateOffer } from "@/src/types/estimate";
+import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 
 interface EstimateInfoProps {
-  info: EstimateRequest;
+  info: EstimateOffer;
 }
 
 export function EstimateInfo({ info }: EstimateInfoProps) {
@@ -38,7 +39,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               color: theme.palette.Black[400],
             })}
           >
-            {info.date}
+            {formatKoreanDate(info.createdAt, false)}
           </Typography>
         </Stack>
         <Stack flexDirection={"row"} gap={["68px", "68px", "72px"]}>
@@ -57,7 +58,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               color: theme.palette.Black[400],
             })}
           >
-            {info.types.join(", ")}
+            {info.moveType}
           </Typography>
         </Stack>
         <Stack flexDirection={"row"} gap={["68px", "68px", "72px"]}>
@@ -76,7 +77,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               color: theme.palette.Black[400],
             })}
           >
-            {info.movingDay}
+            {formatKoreanDate(info.moveDate, false)}
           </Typography>
         </Stack>
         <Stack flexDirection={"row"} gap={["68px", "68px", "72px"]}>
@@ -95,7 +96,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               color: theme.palette.Black[400],
             })}
           >
-            {info.from}
+            {info.fromAddress.fullAddress}
           </Typography>
         </Stack>
         <Stack flexDirection={"row"} gap={["68px", "68px", "72px"]}>
@@ -114,7 +115,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               color: theme.palette.Black[400],
             })}
           >
-            {info.to}
+            {info.toAddress.fullAddress}
           </Typography>
         </Stack>
       </Box>

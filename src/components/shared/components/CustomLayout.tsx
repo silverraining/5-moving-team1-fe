@@ -20,16 +20,16 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const colorPages = [
     PATH.main,
     PATH.userRequest,
-    PATH.userEstimateReceive,
+    PATH.userEstimateHistory,
     PATH.userWishlist,
     PATH.moverEstimateConfirm,
     PATH.moverEstimateReject,
   ];
-  const noPaddingPages = [PATH.userEstimateReceive];
+  const noPaddingPages = [PATH.userEstimateHistory];
   const subHeaderPages = [
     PATH.userRequest,
     PATH.userEstimate,
-    PATH.userEstimateReceive,
+    PATH.userEstimateHistory,
     PATH.moverEstimateConfirm,
     PATH.moverEstimateReject,
     PATH.userWishlist,

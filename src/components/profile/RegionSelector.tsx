@@ -65,7 +65,7 @@ export const RegionSelector = ({
   onRegionToggle,
 }: RegionSelectorProps) => {
   return (
-    <Stack spacing={"18px"}>
+    <Stack spacing={"18px"} width={"450px"}>
       {regions.map((regionRow, rowIndex) => (
         <Box
           key={rowIndex}

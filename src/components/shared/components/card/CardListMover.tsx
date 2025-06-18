@@ -1,15 +1,25 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
+import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
+import { EstimateOffer } from "@/src/types/estimate";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateOffer;
   onLikeClick?: () => void;
 }
 
 export const CardListMover = ({ data, onLikeClick }: CardProps) => {
+  const info = data.mover;
+
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
   return (
     <Box
       display="flex"
@@ -35,8 +45,8 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
         marginBottom="16px"
       >
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
-          {data.types.map((type, index) => (
-            <ChipCategory key={index} type={type} />
+          {chips.map((chip, idx) => (
+            <ChipCategory key={idx} data={chip} />
           ))}
         </Box>
         <Typography
@@ -47,7 +57,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             color: theme.palette.Black[300],
           })}
         >
-          {data.message}
+          {info.intro}
         </Typography>
       </Box>
 
@@ -64,7 +74,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
-            src={data.imgSrc}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -89,12 +99,12 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {data.name} 기사님
+              {info.nickname} 기사님
             </Typography>
             <Box display="flex" alignItems="center" ml="auto">
               <Image
                 src={
-                  data.isLiked
+                  info.isLiked
                     ? "/Images/like/like.svg"
                     : "/Images/like/unlike.svg"
                 }
@@ -112,7 +122,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.PrimaryBlue[400],
                 })}
               >
-                {data.like}
+                {info.likeCount}
               </Typography>
             </Box>
           </Box>
@@ -144,7 +154,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.rating}
+                {info.rating}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -154,7 +164,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                ({data.count})
+                ({info.reviewCount})
               </Typography>
             </Box>
             {/* Divider */}
@@ -181,7 +191,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   whiteSpace: "nowrap",
                 })}
               >
-                {data.career}년
+                {info.experience}년
               </Typography>
             </Box>
             {/* Divider */}
@@ -200,7 +210,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   },
                 })}
               >
-                {data.confirm}건 <span>확정</span>
+                {info.confirmedCount}건 <span>확정</span>
               </Typography>
             </Box>
           </Box>

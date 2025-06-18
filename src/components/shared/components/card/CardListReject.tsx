@@ -1,16 +1,26 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { CardData } from "@/src/types/card";
+import { ChipData } from "@/src/types/card";
 
 import dayjs from "@/src/lib/dayjsConfig";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
+import { EstimateRequest } from "@/src/types/estimate";
 
 interface CardProps {
-  data: CardData;
+  data: EstimateRequest;
 }
 
 export const CardListReject = ({ data }: CardProps) => {
+  const info = data.customerProfile;
+  // chip 데이터
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      // isTargeted: data.isTargeted,
+    },
+  ];
   return (
     <Box
       position={"relative"}
@@ -30,7 +40,7 @@ export const CardListReject = ({ data }: CardProps) => {
       boxShadow="2px 2px 10px 0px rgba(220, 220, 220, 0.14), -2px -2px 10px 0px rgba(220, 220, 220, 0.14)"
       boxSizing={"border-box"}
     >
-      {data.reject && (
+      {data.status == "REJECTED" && (
         <Box
           display={"flex"}
           alignItems={"center"}
@@ -65,8 +75,8 @@ export const CardListReject = ({ data }: CardProps) => {
 
       <Box display={"flex"} justifyContent={"space-between"}>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
-          {data.types.map((type, index) => (
-            <ChipCategory key={index} type={type} />
+          {chips.map((type, index) => (
+            <ChipCategory key={index} data={type} />
           ))}
         </Box>
         <Typography
@@ -78,7 +88,7 @@ export const CardListReject = ({ data }: CardProps) => {
             color: theme.palette.Grayscale[500],
           })}
         >
-          {dayjs(data.date).fromNow()}
+          {dayjs(data.createdAt).fromNow()}
         </Typography>
       </Box>
 
@@ -115,7 +125,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.name} 고객님
+                {info.nickname} 고객님
               </Typography>
               <Typography
                 display={["inline-block", "none", "none"]}
@@ -126,7 +136,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Grayscale[500],
                 })}
               >
-                {dayjs(data.date).fromNow()}
+                {dayjs(data.createdAt).fromNow()}
               </Typography>
             </Box>
             <Box display={["flex", "none", "none"]}>
@@ -156,7 +166,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {formatKoreanDate(data.movingDay ?? "")}
+                {formatKoreanDate(data.moveDate ?? "")}
               </Typography>
             </Box>
           </Box>
@@ -203,7 +213,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   wordBreak: "break-all",
                 })}
               >
-                {formatKoreanDate(data.movingDay ?? "")}
+                {formatKoreanDate(data.moveDate ?? "")}
               </Typography>
             </Box>
             <Box
@@ -239,7 +249,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.from}
+                {data.fromAddress.fullAddress}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -271,7 +281,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.to}
+                {data.toAddress.fullAddress}
               </Typography>
             </Box>
           </Box>

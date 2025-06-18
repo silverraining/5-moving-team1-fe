@@ -1,8 +1,6 @@
 import apiClient from "@/src/api/axiosclient";
-import { CardData } from "@/src/types/card";
-import { ChipProps } from "@/src/types/card";
-import { AddressMinimal, ServiceType } from "@/src/types/common";
-import { EstimateOffer } from "@/src/types/estimate";
+import { MinimalAddress, ServiceType } from "@/src/types/common";
+import { ReceivedEstimateRequest } from "@/src/types/estimate";
 
 export interface EstimateRequestItem {
   id: string;
@@ -10,14 +8,14 @@ export interface EstimateRequestItem {
   moveType: ServiceType;
   moveDate: string;
 
-  fromAddressMinimal?: AddressMinimal;
-  toAddressMinimal?: AddressMinimal;
+  fromAddressMinimal?: MinimalAddress;
+  toAddressMinimal?: MinimalAddress;
 
   isTargeted?: boolean;
   customerName?: string;
 
   offerCount: number;
-  estimateOffers: EstimateOffer[];
+  estimateOffers: ReceivedEstimateRequest[];
 }
 
 // 무한스크롤 등 목록 응답용
@@ -31,32 +29,36 @@ export interface EstimateRequestResponse {
 // 변환 함수
 export interface CardData {
   id: string;
-  types: ServiceType[]; // ChipProps (예: ["소형이사"])
+  types: string[];
   name: string;
-  date: Date;
-  movingDay: string;
+  createdAt: Date;
+  movingDay: Date;
   from: string;
   to: string;
+  offerCount: number;
+  estimateOffers: ReceivedEstimateRequest[];
 }
 
 export const mapEstimateToCardData = (item: EstimateRequestItem): CardData => {
-  const moveTypeMap: Record<ServiceType, string> = {
-    SMALL: "소형이사",
-    HOME: "가정이사",
-    OFFICE: "사무실이사",
-  };
+  // const moveTypeMap: Record<ServiceType, string> = {
+  //   SMALL: "소형이사",
+  //   HOME: "가정이사",
+  //   OFFICE: "사무실이사",
+  // };
 
   return {
     id: item.id,
-    types: [moveTypeMap[item.moveType]],
+    types: [item.moveType],
     name: item.customerName ?? "이름 없음",
-    date: new Date(item.createdAt),
-    movingDay: item.moveDate,
+    createdAt: new Date(item.createdAt),
+    movingDay: new Date(item.moveDate),
     from: item.fromAddressMinimal?.sido ?? "출발지 없음",
     to: item.toAddressMinimal?.sigungu ?? "도착지 없음",
+
+    offerCount: item.offerCount,
+    estimateOffers: item.estimateOffers ?? [], // 배열 없으면 빈 배열로 처리
   };
 };
-
 /**
  * 4. 기사 측에서 받은 이사 견적 요청 목록 조회 (with cursor)
  */

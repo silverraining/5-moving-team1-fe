@@ -58,7 +58,7 @@ export default function Dropdown({ options, onChange }: SortDropdownProps) {
           height="100%"
           padding={{ mobile: "10px", tablet: "10px", desktop: "15px" }}
           typographyVariant={isMobile ? "M_14" : isTablet ? "M_14" : "M_18"}
-          Radius={{ mobile: "8px", tablet: "8px", desktop: "16px" }}
+          radius={{ mobile: "8px", tablet: "8px", desktop: "16px" }}
           iconSize={true}
         />
       </Box>

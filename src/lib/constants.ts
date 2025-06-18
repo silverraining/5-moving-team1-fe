@@ -81,11 +81,11 @@ export const PATH = {
   /** 내가 만든 견적 상세 페이지 (/customer/estimate/pending/:id) */
   userEstimateDetail: (id: string) => `/customer/estimate/pending/${id}`,
 
-  /** 받았던 견적 리스트 페이지 (/customer/estimate/receive) */
-  userEstimateReceive: "/customer/estimate/receive",
+  /** 받았던 견적 리스트 페이지 (/customer/estimate/history) */
+  userEstimateHistory: "/customer/estimate/history",
 
-  /** 받았던 견적 상세 페이지 (/customer/estimate/receive/:id) */
-  userEstimateReceiveDetail: (id: string) => `/customer/estimate/receive/${id}`,
+  /** 받았던 견적 상세 페이지 (/customer/estimate/history/:id) */
+  userEstimateHistoryDetail: (id: string) => `/customer/estimate/history/${id}`,
 
   /** 일반 유저의 찜한 기사 리스트 페이지 (/customer/wishlist) */
   userWishlist: "/customer/wishlist",

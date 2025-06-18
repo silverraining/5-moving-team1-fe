@@ -4,6 +4,7 @@ import { Stack, Box, useTheme, useMediaQuery } from "@mui/material";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import { CheckBoxList } from "@/src/components/shared/components/check-box/CheckBoxList";
 import { useEstimateStore } from "@/src/store/requestStore";
+import { convertToEnum, convertToLabel } from "@/src/utils/convertToLabel";
 
 interface Step1Props {
   onSelect: (value: string) => void;
@@ -35,8 +36,11 @@ export default function Step1_MoveType({ onSelect }: Step1Props) {
         }}
       >
         <CheckBoxList
-          selected={moveType}
-          onChange={setMoveType}
+          selected={convertToLabel(moveType)}
+          onChange={(label) => {
+            const enumValue = convertToEnum(label); // ❗️라벨 → ENUM
+            setMoveType(enumValue);
+          }}
           onConfirm={handleConfirm}
         />
       </Box>

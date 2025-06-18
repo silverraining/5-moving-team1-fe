@@ -83,9 +83,56 @@ export const moverProfileRegisterSchema = z.object({
   imageUrl: z.string().optional(),
 });
 
+const generalEditFields = {
+  name: z
+    .string()
+    .min(2, "이름은 최소 2자 이상이어야 합니다.")
+    .max(20, "이름은 최대 20자까지 가능합니다."),
+  email: z.string().email("유효한 이메일 주소를 입력해주세요.").optional(),
+  phone: z.string().regex(/^010\d{8}$/, "유효한 전화번호를 입력해주세요."),
+  currentPassword: z.string().optional(),
+  newPassword: z
+    .string()
+    .min(8, { message: "비밀번호는 최소 8자리입니다" })
+    .max(20, { message: "비밀번호는 최대 20자리입니다" })
+    .regex(/^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&]).{8,20}$/, {
+      message: "비밀번호는 영문, 숫자, 특수문자를 모두 포함해야 합니다",
+    })
+    .optional(),
+  confirmPassword: z.string().optional(),
+};
+
+export const generalEditSchema = z
+  .object(generalEditFields)
+  .refine(
+    (data) => {
+      if (data.newPassword || data.currentPassword || data.confirmPassword) {
+        return data.currentPassword && data.newPassword && data.confirmPassword;
+      }
+      return true;
+    },
+    {
+      message: "비밀번호를 변경하려면 모든 비밀번호 필드를 입력해주세요.",
+      path: ["confirmPassword"],
+    }
+  )
+  .refine(
+    (data) => {
+      if (data.newPassword && data.confirmPassword) {
+        return data.newPassword === data.confirmPassword;
+      }
+      return true;
+    },
+    {
+      message: "비밀번호가 일치하지 않습니다.",
+      path: ["confirmPassword"],
+    }
+  );
+
 export type PersonalInfoFormData = z.infer<typeof personalInfoSchema>;
 export type PasswordChangeFormData = z.infer<typeof passwordChangeSchema>;
 export type ProfileEditFormData = z.infer<typeof profileEditSchema>;
 export type MoverProfileRegisterFormData = z.infer<
   typeof moverProfileRegisterSchema
 >;
+export type GeneralEditFormData = z.infer<typeof generalEditSchema>;
