@@ -2,6 +2,10 @@ import { EstimateRequest } from "@/src/types/estimate";
 import apiClient from "../axiosclient";
 import { ServiceRegion, ServiceType } from "@/src/types/common";
 import { MoverProfile } from "@/src/types/auth";
+import {
+  convertToServiceRegionArray,
+  convertToServiceTypeArray,
+} from "@/src/utils/util";
 
 interface EstimateRequestRquest {
   serviceType: ServiceType[];
@@ -79,8 +83,8 @@ export const fetchMoverProfileCard =
         experience: data.experience ?? 0,
         reviewCount: data.review_count ?? 0,
         confirmedCount: data.confirmed_estimate_count ?? 0,
-        serviceType: data.serviceType?.split(",") ?? [],
-        serviceRegions: data.serviceRegion?.split(",") ?? [],
+        serviceType: convertToServiceTypeArray(data.serviceType),
+        serviceRegions: convertToServiceRegionArray(data.serviceRegion),
       };
     } catch (error) {
       throw new Error("기사님 프로필 정보를 불러오지 못했습니다.");
