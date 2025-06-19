@@ -1,7 +1,6 @@
 import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import {
-  Box,
   Button,
   Checkbox,
   Divider,
@@ -11,8 +10,9 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 
-interface FilterItem {
+export interface FilterItem {
   label: string;
   checked: boolean;
   count: number;
@@ -23,8 +23,8 @@ interface FilterProps {
   onClose: () => void;
   moveTypeItems: FilterItem[];
   filterItems: FilterItem[];
-  onMoveTypeChange: (label: string, checked: boolean) => void;
-  onFilterChange: (label: string, checked: boolean) => void;
+  selectedTab: "moveType" | "filter";
+  onTabChange: (tab: "moveType" | "filter") => void;
   onSubmit: (moveTypeItems: FilterItem[], filterItems: FilterItem[]) => void;
 }
 
@@ -33,39 +33,60 @@ const FilterModal = ({
   onClose,
   moveTypeItems,
   filterItems,
-  onMoveTypeChange,
-  onFilterChange,
+  selectedTab,
+  onTabChange,
   onSubmit,
 }: FilterProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
 
-  const [selectedTab, setSelectedTab] = React.useState<"moveType" | "filter">(
-    "moveType"
-  );
+  const [localMoveTypeItems, setLocalMoveTypeItems] = useState(moveTypeItems);
+  const [localFilterItems, setLocalFilterItems] = useState(filterItems);
+  // 조회하기 버튼 클릭 시, 필터링 적용되게 하기 위해 추가
+  useEffect(() => {
+    setLocalMoveTypeItems(moveTypeItems);
+    setLocalFilterItems(filterItems);
+  }, [moveTypeItems, filterItems]);
 
   const totalMoveCount = moveTypeItems.reduce(
     (sum, item) => sum + item.count,
     0
   );
-  const allMoveChecked = moveTypeItems.every((item) => item.checked);
+  const allMoveChecked = localMoveTypeItems.every((item) => item.checked);
   const someMoveChecked =
-    moveTypeItems.some((item) => item.checked) && !allMoveChecked;
+    localMoveTypeItems.some((item) => item.checked) && !allMoveChecked;
 
   const totalFilterCount = filterItems.reduce(
     (sum, item) => sum + item.count,
     0
   );
-  const allFilterChecked = filterItems.every((item) => item.checked);
+  const allFilterChecked = localFilterItems.every((item) => item.checked);
   const someFilterChecked =
-    filterItems.some((item) => item.checked) && !allFilterChecked;
+    localFilterItems.some((item) => item.checked) && !allFilterChecked;
+
+  // 조회하기 버튼 클릭 시, 필터링 적용되게 하기 위해 추가
+  const handleMoveTypeChange = (label: string, checked: boolean) => {
+    setLocalMoveTypeItems((prev) =>
+      prev.map((item) => (item.label === label ? { ...item, checked } : item))
+    );
+  };
+
+  const handleFilterChange = (label: string, checked: boolean) => {
+    setLocalFilterItems((prev) =>
+      prev.map((item) => (item.label === label ? { ...item, checked } : item))
+    );
+  };
 
   const handleAllMoveTypeChange = (checked: boolean) => {
-    moveTypeItems.forEach((item) => onMoveTypeChange(item.label, checked));
+    setLocalMoveTypeItems((prev) => prev.map((item) => ({ ...item, checked })));
   };
 
   const handleAllFilterChange = (checked: boolean) => {
-    filterItems.forEach((item) => onFilterChange(item.label, checked));
+    setLocalFilterItems((prev) => prev.map((item) => ({ ...item, checked })));
+  };
+
+  const handleSubmit = () => {
+    onSubmit(localMoveTypeItems, localFilterItems);
   };
 
   return (
@@ -105,15 +126,21 @@ const FilterModal = ({
         <Stack direction="row" p={1} justifyContent="space-between" pt={"12px"}>
           <Stack direction="row" spacing={3}>
             <Typography
-              onClick={() => setSelectedTab("moveType")}
-              sx={(theme) => ({ color: theme.palette.Black[400] })}
+              onClick={() => onTabChange("moveType")}
+              sx={(theme) => ({
+                color: theme.palette.Black[400],
+                cursor: "pointer",
+              })}
               variant="B_18"
             >
               이사 유형
             </Typography>
             <Typography
-              onClick={() => setSelectedTab("filter")}
-              sx={(theme) => ({ color: theme.palette.Grayscale[300] })}
+              onClick={() => onTabChange("filter")}
+              sx={(theme) => ({
+                color: theme.palette.Grayscale[300],
+                cursor: "pointer",
+              })}
               variant="SB_18"
             >
               필터
@@ -140,13 +167,13 @@ const FilterModal = ({
               isAllRow
             />
             <Divider sx={{ mb: 1 }} />
-            {moveTypeItems.map((item) => (
+            {localMoveTypeItems.map((item) => (
               <React.Fragment key={item.label}>
                 <CheckboxRow
                   label={`${item.label} (${item.count})`}
                   checked={item.checked}
                   onChange={(e) =>
-                    onMoveTypeChange(item.label, e.target.checked)
+                    handleMoveTypeChange(item.label, e.target.checked)
                   }
                 />
                 <Divider />
@@ -167,12 +194,14 @@ const FilterModal = ({
             />
             <Divider sx={{ mb: 1 }} />
 
-            {filterItems.map((item) => (
+            {localFilterItems.map((item) => (
               <React.Fragment key={item.label}>
                 <CheckboxRow
                   label={`${item.label} (${item.count})`}
                   checked={item.checked}
-                  onChange={(e) => onFilterChange(item.label, e.target.checked)}
+                  onChange={(e) =>
+                    handleFilterChange(item.label, e.target.checked)
+                  }
                 />
                 <Divider />
               </React.Fragment>
@@ -184,7 +213,7 @@ const FilterModal = ({
           variant="contained"
           sx={{ mt: "auto", borderRadius: "16px", height: "54px" }}
           fullWidth
-          onClick={() => onSubmit(moveTypeItems, filterItems)}
+          onClick={handleSubmit}
         >
           조회하기
         </Button>
