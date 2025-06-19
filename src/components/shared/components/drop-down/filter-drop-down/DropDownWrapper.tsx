@@ -9,9 +9,10 @@ import { Box } from "@mui/material";
 interface DropDownWrapperProps {
   type: "region" | "service";
   label: string;
+  forceMobileSize?: boolean;
 }
 
-export default function DropDownWrapper({ type }: DropDownWrapperProps) {
+export default function DropDownWrapper({ type, forceMobileSize }: DropDownWrapperProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string>(
     type === "region" ? "지역" : "서비스"
@@ -55,6 +56,7 @@ export default function DropDownWrapper({ type }: DropDownWrapperProps) {
         label={selectedItem}
         isSelected={isOpen}
         onClick={toggleDropdown}
+        forceMobileSize={forceMobileSize}
       />
       {isOpen && (
         <DropDownList
