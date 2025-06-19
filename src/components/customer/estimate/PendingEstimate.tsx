@@ -6,6 +6,8 @@ import {
   useEstimateRequestActive,
 } from "@/src/api/customer/hook";
 import { EstimateOffer } from "@/src/types/estimate";
+import { useRouter } from "next/navigation";
+import { PATH } from "@/src/lib/constants";
 
 export default function PendingEstimate() {
   // 1. ID 배열 받아오기
@@ -14,6 +16,8 @@ export default function PendingEstimate() {
     isLoading: isLoadingIds,
     error: errorIds,
   } = useEstimateRequestActive();
+
+  const router = useRouter();
 
   // 2. 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
   const requestId = requestIds?.[0]?.estimateRequestId;
@@ -40,7 +44,11 @@ export default function PendingEstimate() {
         >
           <CardListWait
             data={card}
-            onDetailClick={() => alert(`상세보기 버튼 누름`)}
+            onDetailClick={() =>
+              router.push(
+                `${PATH.userEstimateDetail(card.estimateRequestId)}?moverId=${card.moverId}`
+              )
+            }
             onLikeClick={() => alert(`좋아요 버튼 누름`)}
             onConfirmClick={() => alert(`견적을 선택 완료했습니다!`)}
           />

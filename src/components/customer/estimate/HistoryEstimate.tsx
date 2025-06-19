@@ -5,8 +5,10 @@ import { CardListCost } from "../../shared/components/card/CardListCost";
 import Dropdown, { SortOption } from "./Dropdown";
 import { useState } from "react";
 import { EstimateSection } from "./EstimateSection";
-import { useEstimateRequestHistory } from "@/src/api/customer/hook"; // 훅 import
+import { useEstimateRequestHistory } from "@/src/api/customer/hook";
 import { EstimateOffer, EstimateRequest } from "@/src/types/estimate";
+import { useRouter } from "next/navigation";
+import { PATH } from "@/src/lib/constants";
 
 export default function HistoryEstimate() {
   const sortOption = [
@@ -23,6 +25,8 @@ export default function HistoryEstimate() {
   const handleLikeClick = () => {
     alert(`좋아요 버튼 누름`);
   };
+
+  const router = useRouter();
 
   const { data, isLoading, isError } = useEstimateRequestHistory();
 
@@ -68,10 +72,17 @@ export default function HistoryEstimate() {
                       <Stack
                         key={idx}
                         onClick={() =>
-                          alert(
-                            `견적서 아이디 ${card.estimateRequestId}  기사 아이디 ${card.moverId}`
+                          router.push(
+                            `${PATH.userEstimateHistoryDetail(card.estimateRequestId)}?moverId=${card.moverId}`
                           )
                         }
+                        sx={{
+                          cursor: "pointer",
+                          "&:hover": {
+                            boxShadow:
+                              "2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24",
+                          },
+                        }}
                       >
                         {/* 카드 정보 */}
                         <CardListCost
