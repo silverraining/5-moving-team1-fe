@@ -44,13 +44,13 @@ export type CustomerProfile = {
 };
 
 export type MoverProfile = {
-  id: string;
+  id: string; //moverProfileId
   userId: string;
   nickname: string;
   imageUrl: string;
   experience: number;
   intro: string;
-  rating: number;
+  rating: number; //averageRating 과 차이점 뭔지?
   reviewCount: number;
   description: string;
   averageRating: number;
@@ -65,5 +65,6 @@ export type MoverProfile = {
   reviews?: Review[];
   estimateOffers?: EstimateOffer[];
   user?: User;
-  designatedRequests?: EstimateRequest[];
+  designatedRequests?: EstimateRequest[]; // isTargeted 인가요?
+  //isTargeted?: boolean; // 이건 chipData 처리
 };

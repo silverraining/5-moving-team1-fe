@@ -1,0 +1,22 @@
+.simplebar-scrollbar::before {
+  background-color: #888 !important;
+  border-radius: 3px;
+  width: 6px;
+  opacity: 0.4;
+}
+
+.simplebar-scrollbar.simplebar-visible:before {
+  opacity: 0.6;
+}
+
+.simplebar-track.simplebar-vertical {
+  background-color: #f1f1f1;
+  border-radius: 3px;
+  width: 6px;
+  right: 2px;
+}
+
+/* Hide horizontal scrollbar */
+.simplebar-track.simplebar-horizontal {
+  display: none;
+} 

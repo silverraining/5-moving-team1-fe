@@ -1,7 +1,9 @@
 "use client";
 
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
-import CustomScrollY from "@/src/lib/customScrollY";
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
+import './SimpleBarCustom.css';
 
 interface DropDownListProps {
   type: "region" | "service";
@@ -58,6 +60,17 @@ export default function DropDownList({
     );
   });
 
+  const content = (
+    <Box
+      sx={{
+        display: isRegion ? "grid" : "block",
+        gridTemplateColumns: isRegion ? "1fr 1fr" : "none",
+      }}
+    >
+      {listContent}
+    </Box>
+  );
+
   return (
     <Box
       sx={{
@@ -80,23 +93,19 @@ export default function DropDownList({
         backgroundSize: "100% 100%",
       }}
     >
-      <Box
-        sx={{
-          height: "100%",
-          overflowY: type === "region" ? "auto" : "hidden",
-          overflowX: "hidden",
-          ...CustomScrollY,
-        }}
-      >
-        <Box
-          sx={{
-            display: isRegion ? "grid" : "block",
-            gridTemplateColumns: isRegion ? "1fr 1fr" : "none",
+      {isRegion ? (
+        <SimpleBar
+          style={{ 
+            maxHeight: '100%',
+            height: '100%',
           }}
+          autoHide={false}
         >
-          {listContent}
-        </Box>
-      </Box>
+          {content}
+        </SimpleBar>
+      ) : (
+        content
+      )}
     </Box>
   );
 }
