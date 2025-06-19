@@ -4,22 +4,45 @@ import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
 import { EstimateOffer } from "@/src/types/estimate";
+import { CardData } from "@/src/types/card";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: CardData | EstimateOffer;
   onLikeClick?: () => void;
 }
 
 export const CardListMover = ({ data, onLikeClick }: CardProps) => {
-  const info = data.mover;
+  // CardData 타입 판별 함수
+  function isCardData(obj: unknown): obj is CardData {
+    return (
+      typeof obj === "object" &&
+      obj !== null &&
+      Array.isArray((obj as CardData).chips)
+    );
+  }
 
-  const chips: ChipData[] = [
-    {
-      chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
-    },
-  ];
+  const chips: ChipData[] =
+    isCardData(data) && data.chips && data.chips.length > 0
+      ? data.chips
+      : [
+          {
+            chipType: isCardData(data) ? data.moveType : undefined,
+            status: isCardData(data) ? data.requestStatus : undefined,
+            isTargeted: isCardData(data) ? data.isTargeted : undefined,
+          },
+        ];
+
+  // CardData와 EstimateOffer 공통 필드 안전 접근
+  const intro = isCardData(data) ? data.intro : "";
+  const imageUrl = isCardData(data) ? data.imageUrl : undefined;
+  const nickname = isCardData(data) ? data.nickname : "";
+  const isLiked = isCardData(data) ? data.isLiked : false;
+  const likeCount = isCardData(data) ? data.likeCount : 0;
+  const rating = isCardData(data) ? data.averageRating : 0;
+  const reviewCount = isCardData(data) ? data.reviewCount : 0;
+  const experience = isCardData(data) ? data.experience : 0;
+  const confirmedCount = isCardData(data) ? data.confirmedCount : 0;
+
   return (
     <Box
       display="flex"
@@ -57,7 +80,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             color: theme.palette.Black[300],
           })}
         >
-          {info.intro}
+          {intro}
         </Typography>
       </Box>
 
@@ -74,7 +97,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
-            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
+            src={imageUrl || "/Images/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -99,14 +122,12 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {nickname} 기사님
             </Typography>
             <Box display="flex" alignItems="center" ml="auto">
               <Image
                 src={
-                  info.isLiked
-                    ? "/Images/like/like.svg"
-                    : "/Images/like/unlike.svg"
+                  isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"
                 }
                 alt="좋아요 버튼"
                 width={24}
@@ -122,7 +143,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.PrimaryBlue[400],
                 })}
               >
-                {info.likeCount}
+                {likeCount}
               </Typography>
             </Box>
           </Box>
@@ -154,7 +175,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {rating}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -164,7 +185,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                ({info.reviewCount})
+                ({reviewCount})
               </Typography>
             </Box>
             {/* Divider */}
@@ -191,7 +212,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   whiteSpace: "nowrap",
                 })}
               >
-                {info.experience}년
+                {experience}년
               </Typography>
             </Box>
             {/* Divider */}
@@ -210,7 +231,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   },
                 })}
               >
-                {info.confirmedCount}건 <span>확정</span>
+                {confirmedCount}건 <span>확정</span>
               </Typography>
             </Box>
           </Box>
