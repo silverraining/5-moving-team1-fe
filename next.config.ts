@@ -2,6 +2,7 @@ import { withSentryConfig } from "@sentry/nextjs";
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  output: "export",
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -16,6 +17,7 @@ const nextConfig: NextConfig = {
       "cdn.jsdelivr.net",
       "avatars.githubusercontent.com",
     ],
+    unoptimized: true,
   },
 };
 
