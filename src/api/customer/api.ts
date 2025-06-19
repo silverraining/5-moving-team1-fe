@@ -145,3 +145,19 @@ export const EstimateOfferPending = async (
     throw error;
   }
 };
+
+/** 대기 중인, 받았던 견적 상세보기 api */
+export const EstimateOfferDetail = async (
+  requestId: string,
+  moverId: string
+) => {
+  try {
+    const response = await apiClient.get(
+      `/estimate-offer/${requestId}/${moverId}/pending`,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

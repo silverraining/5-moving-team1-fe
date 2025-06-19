@@ -11,6 +11,7 @@ import {
   EstimateRequestActive,
   EstimateOfferPending,
   EstimateRequestHistory,
+  EstimateOfferDetail,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
@@ -93,5 +94,14 @@ export const useEstimateOfferPending = (requestId: string) => {
     queryKey: ["EstimateOfferPending", requestId],
     queryFn: () => EstimateOfferPending(requestId),
     enabled: !!requestId,
+  });
+};
+
+/** 대기 중인, 받았던 견적 상세보기 hook */
+export const useEstimateOfferDetail = (requestId: string, moverId: string) => {
+  return useQuery({
+    queryKey: ["EstimateOfferDetail", requestId, moverId],
+    queryFn: () => EstimateOfferDetail(requestId, moverId),
+    enabled: !!requestId && !!moverId,
   });
 };
