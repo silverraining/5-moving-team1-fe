@@ -19,11 +19,7 @@ import { SearchInput } from "../../../shared/components/text-field/Search";
 import MoveSortDropdown from "./MoveSortDropdown";
 import FilterModal from "../../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
-import {
-  testDataList,
-  TransformedCardData,
-  transformToCardData,
-} from "./mockEstimateRequests";
+import { testDataList } from "./mockEstimateRequests";
 import useModalStates from "@/src/hooks/useModalStates";
 import { useReceivedEstimateRequests } from "@/src/hooks/useReceivedEstimateRequests";
 import {
@@ -113,11 +109,6 @@ export default function ReceivedRequestsFlow() {
       data,
     });
     console.log("API에서 받아온 데이터 구조 확인:", data);
-
-    // // 빈 상태 테스트면 빈 배열, 아니면 기존 데이터 변환
-    // const transformedList: TransformedCardData[] = isEmptyTest
-    //   ? []
-    //   : testDataList.map(transformToCardData);
 
     // 실제 API로 받은 데이터 목록 정리
     const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];

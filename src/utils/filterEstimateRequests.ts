@@ -90,6 +90,39 @@ export function areItemsEqual<
   });
 }
 
+// 태블릿,모바일 환경에서 CheckboxList 대신사용되는 FilerModal 사용을 위한 변환 함수
+export function convertCheckedToFilterItems(
+  checked: {
+    all: boolean;
+    small: boolean;
+    home: boolean;
+    office: boolean;
+  },
+  currentMoveTypeItems: { label: string; count: number; checked: boolean }[],
+  currentFilterItems: { label: string; count: number; checked: boolean }[]
+) {
+  // moveTypeItems 업데이트
+  const newMoveTypeItems = currentMoveTypeItems.map((item) => {
+    if (item.label === "소형이사") {
+      return { ...item, checked: checked.all || checked.small };
+    }
+    if (item.label === "가정이사") {
+      return { ...item, checked: checked.all || checked.home };
+    }
+    if (item.label === "사무실이사") {
+      return { ...item, checked: checked.all || checked.office };
+    }
+    return item;
+  });
+
+  // filterItems는 현재 FilterModal에 포함되어 있지 않으므로, 기존 상태 유지 혹은 필요시 따로 처리
+  // 예를 들어 모바일 모달에서도 "지정 견적 요청", "서비스 가능 지역" 체크박스를 넣었다면 여기도 변환해야 함
+  // 지금 FilterModal에 포함 안 돼 있으면 기존 filterItems 유지
+  const newFilterItems = [...currentFilterItems];
+
+  return { newMoveTypeItems, newFilterItems };
+}
+
 /* 한글 주소를 enum 값과 매칭하는 매핑 함수( (from또는to)AddressMinimal.sido의 값과 기사님 서비스 가능 지역(ServiceRegion)이 일치하는지 확인하기 위함)
 받아오는 값 서울, 경기 부산광역시, 대전광역시, 광주 확인 - 이외에 다르게 받아오는 데이터 있는 경우 수정 필요*/
 export const SIDO_TO_SERVICE_REGION: Record<string, ServiceRegion> = {

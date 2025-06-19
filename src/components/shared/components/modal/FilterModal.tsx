@@ -12,37 +12,61 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 
+interface FilterItem {
+  label: string;
+  checked: boolean;
+  count: number;
+}
+
 interface FilterProps {
   open: boolean;
   onClose: () => void;
-  count: { all: number; small: number; home: number; office: number };
-  checked: {
-    all: boolean;
-    small: boolean;
-    home: boolean;
-    office: boolean;
-  };
-  indeterminate: boolean;
-  onAllChange: (value: boolean) => void;
-  onIndividualChange: (
-    key: "small" | "home" | "office",
-    value: boolean
-  ) => void;
-  onSubmit: (checked: FilterProps["checked"]) => void;
+  moveTypeItems: FilterItem[];
+  filterItems: FilterItem[];
+  onMoveTypeChange: (label: string, checked: boolean) => void;
+  onFilterChange: (label: string, checked: boolean) => void;
+  onSubmit: (moveTypeItems: FilterItem[], filterItems: FilterItem[]) => void;
 }
 
 const FilterModal = ({
   open,
   onClose,
-  count,
-  checked,
-  indeterminate,
-  onAllChange,
-  onIndividualChange,
+  moveTypeItems,
+  filterItems,
+  onMoveTypeChange,
+  onFilterChange,
   onSubmit,
 }: FilterProps) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
+
+  const [selectedTab, setSelectedTab] = React.useState<"moveType" | "filter">(
+    "moveType"
+  );
+
+  const totalMoveCount = moveTypeItems.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+  const allMoveChecked = moveTypeItems.every((item) => item.checked);
+  const someMoveChecked =
+    moveTypeItems.some((item) => item.checked) && !allMoveChecked;
+
+  const totalFilterCount = filterItems.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+  const allFilterChecked = filterItems.every((item) => item.checked);
+  const someFilterChecked =
+    filterItems.some((item) => item.checked) && !allFilterChecked;
+
+  const handleAllMoveTypeChange = (checked: boolean) => {
+    moveTypeItems.forEach((item) => onMoveTypeChange(item.label, checked));
+  };
+
+  const handleAllFilterChange = (checked: boolean) => {
+    filterItems.forEach((item) => onFilterChange(item.label, checked));
+  };
 
   return (
     <Dialog
@@ -81,12 +105,14 @@ const FilterModal = ({
         <Stack direction="row" p={1} justifyContent="space-between" pt={"12px"}>
           <Stack direction="row" spacing={3}>
             <Typography
+              onClick={() => setSelectedTab("moveType")}
               sx={(theme) => ({ color: theme.palette.Black[400] })}
               variant="B_18"
             >
               이사 유형
             </Typography>
             <Typography
+              onClick={() => setSelectedTab("filter")}
               sx={(theme) => ({ color: theme.palette.Grayscale[300] })}
               variant="SB_18"
             >
@@ -104,40 +130,61 @@ const FilterModal = ({
         </Stack>
 
         {/* 체크박스 */}
-        <Stack spacing={0} flexGrow={1}>
-          <CheckboxRow
-            label={`전체선택${count.all}`}
-            checked={checked.all}
-            indeterminate={indeterminate}
-            onChange={(e) => onAllChange(e.target.checked)}
-            isAllRow
-          />
-          <Divider sx={{ mb: 1 }} />
-          <CheckboxRow
-            label={`소형이사${count.small}`}
-            checked={checked.small}
-            onChange={(e) => onIndividualChange("small", e.target.checked)}
-          />
-          <Divider />
-          <CheckboxRow
-            label={`가정이사${count.home}`}
-            checked={checked.home}
-            onChange={(e) => onIndividualChange("home", e.target.checked)}
-          />
-          <Divider />
-          <CheckboxRow
-            label={`사무실이사${count.office}`}
-            checked={checked.office}
-            onChange={(e) => onIndividualChange("office", e.target.checked)}
-          />
-        </Stack>
+        {selectedTab === "moveType" && (
+          <Stack spacing={0} flexGrow={1}>
+            <CheckboxRow
+              label={`전체선택${totalMoveCount}`}
+              checked={allMoveChecked}
+              indeterminate={someMoveChecked}
+              onChange={(e) => handleAllMoveTypeChange(e.target.checked)}
+              isAllRow
+            />
+            <Divider sx={{ mb: 1 }} />
+            {moveTypeItems.map((item) => (
+              <React.Fragment key={item.label}>
+                <CheckboxRow
+                  label={`${item.label} (${item.count})`}
+                  checked={item.checked}
+                  onChange={(e) =>
+                    onMoveTypeChange(item.label, e.target.checked)
+                  }
+                />
+                <Divider />
+              </React.Fragment>
+            ))}
+          </Stack>
+        )}
+        <Divider sx={{ my: 2 }} />
+        {/* 필터 체크박스 */}
+        {selectedTab === "filter" && (
+          <Stack spacing={0} flexGrow={1}>
+            <CheckboxRow
+              label={`전체선택 (${totalFilterCount})`}
+              checked={allFilterChecked}
+              indeterminate={someFilterChecked}
+              onChange={(e) => handleAllFilterChange(e.target.checked)}
+              isAllRow
+            />
+            <Divider sx={{ mb: 1 }} />
 
+            {filterItems.map((item) => (
+              <React.Fragment key={item.label}>
+                <CheckboxRow
+                  label={`${item.label} (${item.count})`}
+                  checked={item.checked}
+                  onChange={(e) => onFilterChange(item.label, e.target.checked)}
+                />
+                <Divider />
+              </React.Fragment>
+            ))}
+          </Stack>
+        )}
         {/* 하단 버튼 */}
         <Button
           variant="contained"
           sx={{ mt: "auto", borderRadius: "16px", height: "54px" }}
           fullWidth
-          onClick={() => onSubmit(checked)}
+          onClick={() => onSubmit(moveTypeItems, filterItems)}
         >
           조회하기
         </Button>
