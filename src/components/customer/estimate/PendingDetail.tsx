@@ -4,7 +4,7 @@ import { CardListMover } from "../../shared/components/card/CardListMover";
 import { EstimateSection } from "./EstimateSection";
 import { SnsShare } from "../../shared/components/sns-share/SnsShare";
 import { EstimateInfo } from "./EstimateInfo";
-import { useEstimateOfferPendingDetail } from "@/src/api/customer/hook";
+import { useEstimateOfferDetail } from "@/src/api/customer/hook";
 
 export default function PendingDetail({
   requestId,
@@ -24,7 +24,7 @@ export default function PendingDetail({
   };
 
   // 👉 실제 데이터 패칭
-  const { data, isLoading, isError } = useEstimateOfferPendingDetail(
+  const { data, isLoading, isError } = useEstimateOfferDetail(
     requestId,
     moverId
   );

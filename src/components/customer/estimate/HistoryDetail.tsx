@@ -5,7 +5,7 @@ import { EstimateSection } from "./EstimateSection";
 import { SnsShare } from "../../shared/components/sns-share/SnsShare";
 import { EstimateInfo } from "./EstimateInfo";
 import Label from "./Label";
-import { useEstimateOfferPendingDetail } from "@/src/api/customer/hook";
+import { useEstimateOfferDetail } from "@/src/api/customer/hook";
 
 export default function HistoryDetail({
   requestId,
@@ -18,7 +18,7 @@ export default function HistoryDetail({
     alert(`좋아요 버튼 누름`);
   };
 
-  const { data, isLoading, isError } = useEstimateOfferPendingDetail(
+  const { data, isLoading, isError } = useEstimateOfferDetail(
     requestId,
     moverId
   );

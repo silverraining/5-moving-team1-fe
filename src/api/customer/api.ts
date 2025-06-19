@@ -146,8 +146,8 @@ export const EstimateOfferPending = async (
   }
 };
 
-/** 대기 중인 견적 상세보기 api */
-export const EstimateOfferPendingDetail = async (
+/** 대기 중인, 받았던 견적 상세보기 api */
+export const EstimateOfferDetail = async (
   requestId: string,
   moverId: string
 ) => {
