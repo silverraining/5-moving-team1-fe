@@ -14,7 +14,7 @@ import { useDrawer } from "@/src/hooks/utill";
 import { UserTabs } from "./UserTabs";
 import { MenuTabs } from "./MenuTabs";
 import { AuthStore } from "@/src/store/authStore";
-import { PATH } from "@/src/lib/constants";
+import { PATH, API_BASE_URL } from "@/src/lib/constants";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import {
@@ -42,13 +42,13 @@ export const Header = () => {
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : GUEST_MENU;
+    ? MOVER_MENU
+    : GUEST_MENU;
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+    ? MOVER_MENU
+    : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     mutate(undefined, {
@@ -73,7 +73,7 @@ export const Header = () => {
     if (!token) return;
 
     const eventSource = new EventSourcePolyfill(
-      "http://localhost:5000/api/notifications/stream",
+      `${API_BASE_URL}/notifications/stream`,
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -136,6 +136,7 @@ export const Header = () => {
             height={24}
             alt="menu"
             onClick={toggleDrawer(true)}
+            style={{ cursor: "pointer" }}
           />
         </Stack>
       )}
