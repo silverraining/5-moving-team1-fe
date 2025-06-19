@@ -1,6 +1,7 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import { ChipData } from "@/src/types/card";
+
 interface ChipCategoryProps {
   data: ChipData;
   forceMobileSize?: boolean;
@@ -83,86 +84,69 @@ export const ChipCategory = ({
   const isSmall = useMediaQuery(`(max-width:400px)`);
   const isMobile = useMediaQuery(theme.breakpoints.down("desktop"));
   const size = forceMobileSize ? "sm" : isSmall ? "xs" : isMobile ? "sm" : "md";
-  let sizeStyle = sizeMap[size];
+  const sizeStyle = sizeMap[size as "xs" | "sm" | "md"];
 
-  let category: keyof typeof categoryData | undefined = undefined;
+  // ✅ category를 배열로 설정
+  const categories: (keyof typeof categoryData)[] = [];
 
-  if (data.isTargeted) category = "TARGET";
-  if (data.status === "PENDING") category = "PENDING";
-  if (data.status === "CONFIRMED") category = "CONFIRMED";
+  if (data.isTargeted) categories.push("TARGET");
+  if (data.status === "PENDING") categories.push("PENDING");
+  if (data.status === "CONFIRMED") categories.push("CONFIRMED");
   if (
     data.chipType === "SMALL" ||
     data.chipType === "HOME" ||
     data.chipType === "OFFICE"
-  )
-    category = data.chipType;
-
-  if (!category) return null;
-
-  const cat = categoryData[category];
-
-  if (!data) return null;
-
-  if (size === "xs") {
-    return (
-      <Box
-        sx={{
-          width: "fit-content",
-          height: sizeStyle.height,
-          borderRadius: sizeStyle.borderRadius,
-          backgroundColor: cat.bg,
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "center",
-          boxShadow: "4px 4px 8px 0px #D9D9D91A",
-        }}
-      >
-        {cat.img && (
-          <Image
-            src={cat.img}
-            alt={cat.alt}
-            width={sizeStyle.img}
-            height={sizeStyle.img}
-          />
-        )}
-      </Box>
-    );
+  ) {
+    categories.push(data.chipType);
   }
 
-  sizeStyle = sizeMap[size as "sm" | "md"];
+  if (!data || categories.length === 0) return null;
+
   return (
-    <Box
-      sx={{
-        width: "fit-content",
-        height: sizeStyle.height,
-        borderRadius: sizeStyle.borderRadius,
-        backgroundColor: cat.bg,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        gap: sizeStyle.gap,
-        px: sizeStyle.px,
-        boxShadow: "4px 4px 8px 0px #D9D9D91A",
-      }}
-    >
-      {cat.img && (
-        <Image
-          src={cat.img}
-          alt={cat.alt}
-          width={sizeStyle.img}
-          height={sizeStyle.img}
-        />
-      )}
-      <Typography
-        sx={{
-          fontSize: sizeStyle.font,
-          lineHeight: `${sizeStyle.lineHeight}px`,
-          fontWeight: 600,
-          color: cat.text,
-        }}
-      >
-        {cat.label}
-      </Typography>
+    <Box display="flex" flexWrap="wrap" gap="8px">
+      {categories.map((key) => {
+        const cat = categoryData[key];
+
+        return (
+          <Box
+            key={key}
+            sx={{
+              width: "fit-content",
+              height: sizeStyle.height,
+              borderRadius: sizeStyle.borderRadius,
+              backgroundColor: cat.bg,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: size === "xs" ? 0 : "gap" in sizeStyle ? sizeStyle.gap : 0,
+              px: size === "xs" ? 0 : "px" in sizeStyle ? sizeStyle.px : 0,
+              boxShadow: "4px 4px 8px 0px #D9D9D91A",
+            }}
+          >
+            {cat.img && (
+              <Image
+                src={cat.img}
+                alt={cat.alt}
+                width={sizeStyle.img}
+                height={sizeStyle.img}
+              />
+            )}
+            {size !== "xs" && (
+              <Typography
+                sx={{
+                  fontSize: "font" in sizeStyle ? sizeStyle.font : "13px",
+                  lineHeight:
+                    "lineHeight" in sizeStyle ? sizeStyle.lineHeight : "18px",
+                  fontWeight: 600,
+                  color: cat.text,
+                }}
+              >
+                {cat.label}
+              </Typography>
+            )}
+          </Box>
+        );
+      })}
     </Box>
   );
 };
