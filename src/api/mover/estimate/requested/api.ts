@@ -1,7 +1,7 @@
 import apiClient from "@/src/api/axiosclient";
 import { MinimalAddress, ServiceType, ChipType } from "@/src/types/common";
 import { ReceivedEstimateRequest } from "@/src/types/estimate";
-
+import { MoverProfile } from "@/src/types/auth";
 export interface EstimateRequestItem {
   id: string;
   createdAt: string;
@@ -66,6 +66,7 @@ interface FetchEstimateRequestParams {
   isTargeted?: boolean;
 }
 
+// 받은 견적 요청 목록 불러오기
 export const fetchReceivedEstimateRequest = async ({
   cursor = null,
   take = 5,
@@ -86,5 +87,16 @@ export const fetchReceivedEstimateRequest = async ({
   } catch (error) {
     console.error("견적 요청 목록 조회 실패:", error);
     throw new Error("견적 요청 목록을 불러오지 못했습니다.");
+  }
+};
+
+// 기사님 프로필 정보 조회(서비스 가능 지역 필터링에 필요)
+export const fetchMoverMe = async (): Promise<MoverProfile> => {
+  try {
+    const response = await apiClient.get<MoverProfile>("/mover/me");
+    return response.data;
+  } catch (error) {
+    console.error("기사 프로필 조회 실패:", error);
+    throw new Error("기사 프로필을 불러오지 못했습니다.");
   }
 };

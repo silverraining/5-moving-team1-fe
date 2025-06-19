@@ -1,7 +1,7 @@
 "use client";
 
 import { useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../../shared/components/modal/SendEstimateModal";
 import RejectRequestModal from "../../../shared/components/modal/RejectRequestModal";
@@ -26,8 +26,20 @@ import {
 } from "./mockEstimateRequests";
 import useModalStates from "@/src/hooks/useModalStates";
 import { useReceivedEstimateRequests } from "@/src/hooks/useReceivedEstimateRequests";
-import { mapEstimateToCardData } from "@/src/api/mover/estimate/requested/api";
-import { EstimateRequestItem } from "@/src/api/mover/estimate/requested/api";
+import {
+  mapEstimateToCardData,
+  EstimateRequestItem,
+  fetchMoverMe,
+} from "@/src/api/mover/estimate/requested/api";
+import {
+  filterEstimateRequests,
+  areItemsEqual,
+  SIDO_TO_SERVICE_REGION,
+} from "@/src/utils/filterEstimateRequests";
+import { MoverProfile } from "@/src/types/auth";
+import { ServiceType } from "@/src/lib/constants";
+
+type ServiceTypeLabel = (typeof ServiceType)[number];
 
 export default function ReceivedRequestsFlow() {
   console.log("ReceivedRequestsFlow 렌더됨");
@@ -49,16 +61,18 @@ export default function ReceivedRequestsFlow() {
     closeFilterModal,
   } = useModalStates();
 
-  const [moveTypeItems, setMoveTypeItems] = useState([
-    // 이사유형 필터링
-    { label: "소형이사", count: 10, checked: false },
-    { label: "가정이사", count: 2, checked: false },
-    { label: "사무실이사", count: 8, checked: false },
+  const [moveTypeItems, setMoveTypeItems] = useState<
+    { label: ServiceTypeLabel; count: number; checked: boolean }[]
+  >([
+    { label: "소형이사", count: 0, checked: false },
+    { label: "가정이사", count: 0, checked: false },
+    { label: "사무실이사", count: 0, checked: false },
   ]);
+
   const [filterItems, setFilterItems] = useState([
     // 필터 필터링
-    { label: "서비스 가능 지역", count: 10, checked: false },
-    { label: "지정 견적 요청", count: 2, checked: false },
+    { label: "서비스 가능 지역", count: 0, checked: false },
+    { label: "지정 견적 요청", count: 0, checked: false },
   ]);
   const [keyword, setKeyword] = useState(""); // 검색어
   const [checked, setChecked] = useState({
@@ -73,6 +87,21 @@ export default function ReceivedRequestsFlow() {
     (typeof testDataList)[0] | null
   >(null);
 
+  // 기사 프로필 데이터 fetch
+  useEffect(() => {
+    const fetchProfile = async () => {
+      try {
+        const profile = await fetchMoverMe();
+        setMoverProfile(profile);
+      } catch (e) {
+        console.error("프로필 로딩 실패", e);
+      }
+    };
+    fetchProfile();
+  }, []);
+
+  const [moverProfile, setMoverProfile] = useState<MoverProfile | null>(null); // 기사 정보
+
   const EstimateRequestPageClient = () => {
     const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
       useReceivedEstimateRequests({
@@ -85,14 +114,83 @@ export default function ReceivedRequestsFlow() {
     });
     console.log("API에서 받아온 데이터 구조 확인:", data);
 
-    // 빈 상태 테스트면 빈 배열, 아니면 기존 데이터 변환
-    const transformedList: TransformedCardData[] = isEmptyTest
-      ? []
-      : testDataList.map(transformToCardData);
+    // // 빈 상태 테스트면 빈 배열, 아니면 기존 데이터 변환
+    // const transformedList: TransformedCardData[] = isEmptyTest
+    //   ? []
+    //   : testDataList.map(transformToCardData);
 
     // 실제 API로 받은 데이터 목록 정리
     const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
 
+    // 필터링된 데이터 적용
+    const filteredItems = filterEstimateRequests({
+      items: estimateItems,
+      moveTypeItems,
+      filterItems,
+      moverProfile,
+    });
+
+    // 📎 useEffect 추가: 필터 count를 estimateItems 기준으로 동기화
+    useEffect(() => {
+      if (!estimateItems.length) return;
+      if (!moverProfile) return;
+
+      // 📎 1. 이사 유형별 카운트 계산
+      const moveTypeCounts: Record<ServiceTypeLabel, number> = {
+        소형이사: 0,
+        가정이사: 0,
+        사무실이사: 0,
+      };
+      // 📎 2. 필터별 카운트 계산
+      let targetedCount = 0;
+      let regionCount = 0;
+
+      // 서비스 가능 지역이 true인 region들 배열로 추출
+      const activeRegions = Object.entries(moverProfile.serviceRegion)
+        .filter(([_, isActive]) => isActive)
+        .map(([region]) => region);
+
+      estimateItems.forEach((item) => {
+        // moveType count
+        if (item.moveType === "SMALL") moveTypeCounts["소형이사"]++;
+        if (item.moveType === "HOME") moveTypeCounts["가정이사"]++;
+        if (item.moveType === "OFFICE") moveTypeCounts["사무실이사"]++;
+
+        // 지정 견적 요청 필터 count
+        if (item.isTargeted) targetedCount++;
+
+        // 서비스 가능 지역 필터 count
+        const sido = item.fromAddressMinimal?.sido;
+        const regionEnum = sido ? SIDO_TO_SERVICE_REGION[sido] : undefined;
+
+        const matched = regionEnum ? activeRegions.includes(regionEnum) : false;
+        if (matched) regionCount++;
+      });
+
+      // 이전 상태와 비교할 새로운 상태 생성
+      const newMoveTypeItems = moveTypeItems.map((item) => ({
+        ...item,
+        count: moveTypeCounts[item.label as ServiceTypeLabel],
+      }));
+
+      const newFilterItems = filterItems.map((item) => {
+        if (item.label === "서비스 가능 지역") {
+          return { ...item, count: regionCount };
+        }
+        if (item.label === "지정 견적 요청") {
+          return { ...item, count: targetedCount };
+        }
+        return item;
+      });
+
+      // 이전 상태와 다를 때만 setState 호출
+      if (!areItemsEqual(moveTypeItems, newMoveTypeItems)) {
+        setMoveTypeItems(newMoveTypeItems);
+      }
+      if (!areItemsEqual(filterItems, newFilterItems)) {
+        setFilterItems(newFilterItems);
+      }
+    }, [estimateItems, moverProfile, moveTypeItems, filterItems]);
     console.log("estimateItems:", estimateItems);
 
     const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -219,15 +317,16 @@ export default function ReceivedRequestsFlow() {
                 items={moveTypeItems}
                 onItemChange={(index, checked) => {
                   // 개별 체크박스 선택
-                  const newItems = [...moveTypeItems];
-                  newItems[index].checked = checked;
+                  const newItems = moveTypeItems.map((item, i) =>
+                    i === index ? { ...item, checked } : item
+                  );
                   setMoveTypeItems(newItems);
                 }}
                 // 전체 선택
                 onSelectAll={(checked) => {
                   const newItems = moveTypeItems.map((item) => ({
                     ...item,
-                    checked: checked,
+                    checked,
                   }));
                   setMoveTypeItems(newItems);
                 }}
@@ -237,15 +336,16 @@ export default function ReceivedRequestsFlow() {
                 items={filterItems}
                 onItemChange={(index, checked) => {
                   // 개별 체크박스 선택
-                  const newItems = [...filterItems];
-                  newItems[index].checked = checked;
+                  const newItems = filterItems.map((item, i) =>
+                    i === index ? { ...item, checked } : item
+                  );
                   setFilterItems(newItems);
                 }}
                 // 전체 선택
                 onSelectAll={(checked) => {
                   const newItems = filterItems.map((item) => ({
                     ...item,
-                    checked: checked,
+                    checked,
                   }));
                   setFilterItems(newItems);
                 }}
@@ -285,7 +385,7 @@ export default function ReceivedRequestsFlow() {
                     전체{" "}
                   </Typography>
                   <Typography variant={isSmall ? "SB_13" : "SB_16"}>
-                    {transformedList.length}건
+                    {filteredItems.length}건
                   </Typography>
                 </Box>
                 <Box sx={{ display: "flex", gap: "4px" }}>
@@ -334,13 +434,13 @@ export default function ReceivedRequestsFlow() {
                   gap: ["24px", "32px", "48px"],
                 }}
               >
-                {estimateItems.length === 0 ? (
+                {filteredItems.length === 0 ? (
                   <EmptyRequest />
                 ) : (
                   <Box>
-                    {estimateItems.map((item) => (
+                    {filteredItems.map((item) => (
                       <CardListRequest
-                        key={item.id}
+                        key={item.requestId}
                         data={mapEstimateToCardData(item)}
                         onConfirmClick={() => handleSendClick(item)}
                         onDetailClick={() => handleRejectClick(item)}

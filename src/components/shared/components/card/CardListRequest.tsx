@@ -4,7 +4,7 @@ import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
 import {} from "@/src/types/estimate";
 import { ChipData } from "@/src/types/card";
-import { CardData } from "@/src/types/card";
+import { ReceivedEstimateRequest } from "@/src/types/estimate";
 
 interface CardProps {
   data: ReceivedEstimateRequest;
