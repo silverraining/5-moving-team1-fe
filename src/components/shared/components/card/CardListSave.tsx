@@ -2,10 +2,10 @@ import { Box, BoxProps, Skeleton, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import Image from "next/image";
 import { useResponsiveValue } from "@/src/hooks/useResponsiveValue";
-import { EstimateOffer } from "@/src/types/estimate";
-import { ChipData } from "@/src/types/card";
+// import { EstimateOffer } from "@/src/types/estimate";
+import { CardData, ChipData } from "@/src/types/card";
 interface CardProps extends BoxProps {
-  data: EstimateOffer;
+  data: CardData;
   onLikeClick?: () => void;
   forceMobileSize?: boolean;
 }
@@ -19,7 +19,7 @@ export const CardListSave = ({
   const responsive = useResponsiveValue(forceMobileSize);
 
   // 카드 데이터
-  const info = data.mover;
+  const info = data;
   // Chip 데이터
   const chips: ChipData[] = [
     {
@@ -170,7 +170,7 @@ export const CardListSave = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {/* {info.rating} */}
               </Typography>
               <Typography
                 sx={(theme) => ({
