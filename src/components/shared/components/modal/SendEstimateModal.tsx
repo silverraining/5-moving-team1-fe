@@ -16,15 +16,18 @@ import Image from "next/image";
 import { Textarea } from "../text-field/Textarea";
 import { useEstimateOfferForm } from "@/src/hooks/utill";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipProps } from "@/src/types/card";
+import { ServiceType } from "@/src/types/common";
 import { Outline } from "../text-field/Outline";
 import { InfoChip } from "./components/InfoChip";
+import { EstimateRequestStatus } from "@/src/types/common";
 
 interface SendEstimateModalProps {
   open: boolean;
   onClose: () => void;
   onSend: (formData: { price: number; comment: string }) => void;
-  moveType: ChipProps["type"][];
+  moveType: ServiceType[];
+  isTargeted: boolean;
+  requestStatus: string;
   customerName: string;
   moveDate: string;
   fromAddress: string;
@@ -38,6 +41,8 @@ export default function SendEstimateModal({
   moveType,
   customerName,
   moveDate,
+  isTargeted,
+  requestStatus,
   fromAddress,
   toAddress,
 }: SendEstimateModalProps) {
@@ -119,7 +124,14 @@ export default function SendEstimateModal({
             }}
           >
             {moveType.map((type) => (
-              <ChipCategory key={type} type={type as ChipProps["type"]} />
+              <ChipCategory
+                key={type}
+                data={{
+                  chipType: type,
+                  isTargeted,
+                  status: requestStatus as EstimateRequestStatus,
+                }}
+              />
             ))}
           </Box>
           <Box

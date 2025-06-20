@@ -1,6 +1,5 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../../shared/components/modal/SendEstimateModal";
@@ -20,7 +19,6 @@ import MoveSortDropdown from "./MoveSortDropdown";
 import { MoveSortOption } from "./MoveSortDropdown";
 import FilterModal from "../../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
-import { testDataList } from "./mockEstimateRequests";
 import useModalStates from "@/src/hooks/useModalStates";
 import { useReceivedEstimateRequests } from "@/src/hooks/useReceivedEstimateRequests";
 import {
@@ -35,6 +33,8 @@ import {
 import { MoverProfile } from "@/src/types/auth";
 import { ServiceType } from "@/src/lib/constants";
 import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
+import { useEstimateModalActions } from "@/src/hooks/useEstimateModalActions";
+import { useSnackbarStore } from "@/src/store/snackBarStore";
 
 type ServiceTypeLabel = (typeof ServiceType)[number];
 
@@ -52,6 +52,7 @@ export default function ReceivedRequestsFlow() {
     openFilterModal,
     closeFilterModal,
   } = useModalStates();
+  const { openSnackbar } = useSnackbarStore();
 
   const [moveTypeItems, setMoveTypeItems] = useState<MoveTypeFilterItem[]>([
     { label: "소형이사", count: 0, checked: false },
@@ -69,10 +70,9 @@ export default function ReceivedRequestsFlow() {
   const [selectedTab, setSelectedTab] = useState<"moveType" | "filter">(
     "moveType"
   ); // 필터모달 메뉴
-  const [selectedRequest, setSelectedRequest] = useState<
-    // 선택된 견적건
-    (typeof testDataList)[0] | null
-  >(null);
+
+  const [selectedRequest, setSelectedRequest] =
+    useState<EstimateRequestItem | null>(null); // 견적 보내기/반려 모달과 연결된 받은 견적 데이터
 
   const [sortOption, setSortOption] = useState<MoveSortOption>({
     label: "이사 빠른순",
@@ -86,6 +86,9 @@ export default function ReceivedRequestsFlow() {
       sort: sortOption.sort,
       isTargeted: false,
     });
+
+  const { sendEstimateMutation, rejectEstimateMutation } =
+    useEstimateModalActions();
 
   // 실제 API로 받은 데이터 목록 정리
   const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
@@ -206,21 +209,46 @@ export default function ReceivedRequestsFlow() {
   };
 
   // 견적 보내기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
-  const handleSendEstimate = (formData: { price: number; comment: string }) => {
-    console.log(
-      "보내는 견적 데이터:",
-      formData,
-      "선택된 데이터",
-      selectedRequest
-    );
-    closeEstimateModal();
+  const handleSendEstimate = async (formData: {
+    price: number;
+    comment: string;
+  }) => {
+    if (!selectedRequest) return;
+
+    try {
+      await sendEstimateMutation.mutateAsync({
+        requestId: selectedRequest.requestId,
+        price: formData.price,
+        comment: formData.comment,
+      });
+
+      openSnackbar("견적을 성공적으로 보냈습니다.", "success");
+      closeEstimateModal();
+    } catch (error) {
+      openSnackbar("견적 보내기에 실패했습니다.", "error");
+      console.error(error);
+    }
   };
 
   // 반려하기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
-  const handleSendReject = (reason: string) => {
-    console.log("보내는 반려 사유:", reason, "선택된 데이터", selectedRequest);
-    closeRejectModal();
+  const handleSendReject = async (comment: string) => {
+    if (!selectedRequest) return;
+
+    try {
+      await rejectEstimateMutation.mutateAsync({
+        requestId: selectedRequest.requestId,
+        comment,
+      });
+
+      openSnackbar("견적 요청 반려를 성공적으로 보냈습니다.", "success");
+      closeRejectModal();
+    } catch (error) {
+      openSnackbar("견적 요청 반려 보내기에 실패했습니다.", "error");
+      console.error(error);
+    }
   };
+
+  console.log("🧲selectedRequest 확인용", selectedRequest);
 
   return (
     <Box
@@ -395,28 +423,30 @@ export default function ReceivedRequestsFlow() {
                 </Box>
               )}
               {/* 모달들 */}
-              {isEstimateModalOpen && selectedRequest?.customer && (
+              {isEstimateModalOpen && selectedRequest && (
                 <SendEstimateModal
                   open={isEstimateModalOpen}
                   onClose={() => closeEstimateModal()}
                   onSend={handleSendEstimate}
-                  moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                  customerName={selectedRequest.customer.user.name}
+                  moveType={[selectedRequest.moveType]}
+                  isTargeted={selectedRequest.isTargeted}
+                  requestStatus={selectedRequest.requestStatus}
+                  customerName={selectedRequest.customerName}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddress.fullAddress}
-                  toAddress={selectedRequest.toAddress.fullAddress}
+                  fromAddress={selectedRequest.fromAddressMinimal?.sido}
+                  toAddress={selectedRequest.toAddressMinimal?.sido}
                 />
               )}
-              {isRejectModalOpen && selectedRequest?.customer && (
+              {isRejectModalOpen && selectedRequest && (
                 <RejectRequestModal
                   open={isRejectModalOpen}
                   onClose={() => closeRejectModal()}
                   onSubmit={handleSendReject}
                   moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                  customerName={selectedRequest.customer.user.name}
+                  customerName={selectedRequest.customerName}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddress.fullAddress}
-                  toAddress={selectedRequest.toAddress.fullAddress}
+                  fromAddress={selectedRequest.fromAddressMinimal?.sido}
+                  toAddress={selectedRequest.toAddressMinimal?.sido}
                 />
               )}
             </Box>
