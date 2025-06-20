@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Box, Typography, useTheme, Stack, Button } from "@mui/material";
+import { Box, Typography, useTheme, Button } from "@mui/material";
 import { CardListMover } from "../shared/components/card/CardListMover";
 import { ChipArea } from "../shared/components/chip/ChipArea";
 import { ReviewChart } from "../shared/components/review-chart/ReviewChart";
@@ -9,26 +9,18 @@ import { CardData } from "@/src/types/card";
 import { ReviewData, ReviewStatistics } from "@/src/types/common";
 import { ReviewList } from "../shared/components/review/ReviewList";
 import Image from "next/image";
+import { useMoverDetail } from "@/src/api/mover/hooks";
+import {
+  convertToServiceTypeArray,
+  convertToServiceRegionArray,
+} from "@/src/utils/util";
+import { convertEnglishToSido } from "@/src/utils/parseAddress";
 
 interface MoverDetailProps {
   moverId: string;
 }
 
-// 임시 데이터 - 실제로는 API에서 가져올 데이터
-export const mockMoverData: CardData = {
-  types: ["small", "home"],
-  message: "고객님의 물품을 안전하게 운송해드립니다.",
-  imgSrc: "/Images/profile/maleProfile.svg",
-  name: "김코드",
-  isLiked: false,
-  like: 136,
-  rating: 5.0,
-  count: 178,
-  career: 7,
-  confirm: 3341,
-  address: ["서울", "경기"],
-};
-
+// 임시 리뷰 데이터
 export const mockReviewData: ReviewStatistics = {
   average: 5.0,
   score: { 1: 0, 2: 0, 3: 0, 4: 8, 5: 170 },
@@ -124,21 +116,8 @@ export const mockReviews: ReviewData[] = [
 
 export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const theme = useTheme();
-  const [selectedAreas, setSelectedAreas] = useState<string[]>(["서울"]);
-  const [isLiked, setIsLiked] = useState(false);
-
-  const handleAreaClick = (area: string) => {
-    setSelectedAreas((prev) =>
-      prev.includes(area)
-        ? prev.filter((item) => item !== area)
-        : [...prev, area]
-    );
-  };
-
-  const handleServiceClick = (service: string) => {
-    // TODO : 서비스 선택 로직 구현
-    console.log(`${service} 서비스 선택`);
-  };
+  const { data: moverData, isLoading } = useMoverDetail(moverId);
+  const [isLiked, setIsLiked] = useState(moverData?.isLiked || false);
 
   const handleLikeClick = () => {
     // TODO : 찜하기 로직 구현
@@ -150,6 +129,26 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
     // TODO : 일반 견적 없을 경우 모달 띄우기
     console.log("견적 요청하기");
   };
+
+  if (isLoading || !moverData) {
+    return <div>Loading...</div>;
+  }
+
+  const cardData: CardData = {
+    types: convertToServiceTypeArray(moverData.serviceType),
+    message: moverData.intro,
+    imgSrc: moverData.imageUrl,
+    name: moverData.nickname,
+    isLiked: moverData.isLiked,
+    like: moverData.likeCount,
+    rating: moverData.averageRating,
+    count: moverData.reviewCount,
+    career: moverData.experience,
+    confirm: moverData.confirmedEstimateCount,
+    address: convertToServiceRegionArray(moverData.serviceRegion),
+  };
+
+  console.log(cardData);
 
   return (
     <Box sx={{ maxWidth: "1400px", margin: "0 auto", padding: "24px 16px" }}>
@@ -166,7 +165,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {/* 최상단 기사 카드 섹션 */}
           <Box sx={{ paddingBottom: "40px", marginBottom: "40px" }}>
-            <CardListMover data={mockMoverData} />
+            <CardListMover data={cardData} />
           </Box>
 
           {/* 상세설명 섹션 */}
@@ -196,10 +195,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                 padding: 0,
               }}
             >
-              안녕하세요. 이사업계 경력 7년으로 안전한 이사를 도와드리는
-              김코드입니다. 고객님의 물품을 소중하고 안전하게 운송하여 드립니다.
-              소형이사 및 가정이사 서비스를 제공하며 서비스 가능 지역은 서울과
-              경기권입니다.
+              {moverData.description}
             </Typography>
           </Box>
 
@@ -222,16 +218,20 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
               제공 서비스
             </Typography>
             <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <ChipArea
-                label="소형이사"
-                selected={true}
-                onClick={() => handleServiceClick("소형이사")}
-              />
-              <ChipArea
-                label="가정이사"
-                selected={true}
-                onClick={() => handleServiceClick("가정이사")}
-              />
+              {convertToServiceTypeArray(moverData.serviceType).map((type) => (
+                <ChipArea
+                  key={type}
+                  label={
+                    type === "SMALL"
+                      ? "소형이사"
+                      : type === "HOME"
+                        ? "가정이사"
+                        : "사무실이사"
+                  }
+                  selected={true}
+                  onClick={() => {}}
+                />
+              ))}
             </Box>
           </Box>
 
@@ -254,16 +254,16 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
               서비스 가능 지역
             </Typography>
             <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-              <ChipArea
-                label="서울"
-                selected={selectedAreas.includes("서울")}
-                onClick={() => handleAreaClick("서울")}
-              />
-              <ChipArea
-                label="경기"
-                selected={selectedAreas.includes("경기")}
-                onClick={() => handleAreaClick("경기")}
-              />
+              {convertToServiceRegionArray(moverData.serviceRegion).map(
+                (region) => (
+                  <ChipArea
+                    key={region}
+                    label={convertEnglishToSido(region)}
+                    selected={false}
+                    onClick={() => {}}
+                  />
+                )
+              )}
             </Box>
           </Box>
 
@@ -281,7 +281,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                 marginBottom: "32px",
               }}
             >
-              리뷰 (178)
+              리뷰 ({moverData.reviewCount})
             </Typography>
             <ReviewChart data={mockReviewData} />
           </Box>
@@ -315,7 +315,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                 lineHeight: "28px",
               }}
             >
-              김코드 기사님에게 지정 견적을 요청해보세요!
+              {moverData.nickname} 기사님에게 지정 견적을 요청해보세요!
             </Typography>
 
             {/* 찜하기 버튼 */}
