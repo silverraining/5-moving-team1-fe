@@ -58,7 +58,7 @@ export type MoverProfile = {
   createdAt: Date;
   updatedAt: Date;
   serviceType: ServiceType[];
-  serviceRegions: ServiceRegion[];
+  serviceRegion: ServiceRegion[];
   likeCount: number;
   isLiked: boolean;
   likedCustomers?: Like[];
