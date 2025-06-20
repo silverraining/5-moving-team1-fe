@@ -11,21 +11,19 @@ import {
 } from "@mui/material";
 import Image from "next/image";
 import { useState, useEffect } from "react";
-
-export interface FilterItem {
-  label: string;
-  checked: boolean;
-  count: number;
-}
+import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
 
 interface FilterProps {
   open: boolean;
   onClose: () => void;
-  moveTypeItems: FilterItem[];
+  moveTypeItems: MoveTypeFilterItem[];
   filterItems: FilterItem[];
   selectedTab: "moveType" | "filter";
   onTabChange: (tab: "moveType" | "filter") => void;
-  onSubmit: (moveTypeItems: FilterItem[], filterItems: FilterItem[]) => void;
+  onSubmit: (
+    moveTypeItems: MoveTypeFilterItem[],
+    filterItems: FilterItem[]
+  ) => void;
 }
 
 const FilterModal = ({
@@ -40,8 +38,10 @@ const FilterModal = ({
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
 
-  const [localMoveTypeItems, setLocalMoveTypeItems] = useState(moveTypeItems);
-  const [localFilterItems, setLocalFilterItems] = useState(filterItems);
+  const [localMoveTypeItems, setLocalMoveTypeItems] =
+    useState<MoveTypeFilterItem[]>(moveTypeItems);
+  const [localFilterItems, setLocalFilterItems] =
+    useState<FilterItem[]>(filterItems);
   // 조회하기 버튼 클릭 시, 필터링 적용되게 하기 위해 추가
   useEffect(() => {
     setLocalMoveTypeItems(moveTypeItems);

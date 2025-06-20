@@ -19,13 +19,11 @@ import { SearchInput } from "../../../shared/components/text-field/Search";
 import MoveSortDropdown from "./MoveSortDropdown";
 import { MoveSortOption } from "./MoveSortDropdown";
 import FilterModal from "../../../shared/components/modal/FilterModal";
-import { FilterItem } from "../../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
 import { testDataList } from "./mockEstimateRequests";
 import useModalStates from "@/src/hooks/useModalStates";
 import { useReceivedEstimateRequests } from "@/src/hooks/useReceivedEstimateRequests";
 import {
-  mapEstimateToCardData,
   EstimateRequestItem,
   fetchMoverMe,
 } from "@/src/api/mover/estimate/requested/api";
@@ -36,6 +34,7 @@ import {
 } from "@/src/utils/filterEstimateRequests";
 import { MoverProfile } from "@/src/types/auth";
 import { ServiceType } from "@/src/lib/constants";
+import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
 
 type ServiceTypeLabel = (typeof ServiceType)[number];
 
@@ -43,7 +42,6 @@ export default function ReceivedRequestsFlow() {
   console.log("ReceivedRequestsFlow 렌더됨");
   // url 뒤에 '?empty=true' 추가하면 빈 경우 확인 가능
   const searchParams = useSearchParams(); // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
-  const isEmptyTest = searchParams?.get("empty") === "true"; // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
 
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("desktop")); // 모바일+태블릿일 때 포함
@@ -59,15 +57,13 @@ export default function ReceivedRequestsFlow() {
     closeFilterModal,
   } = useModalStates();
 
-  const [moveTypeItems, setMoveTypeItems] = useState<
-    { label: ServiceTypeLabel; count: number; checked: boolean }[]
-  >([
+  const [moveTypeItems, setMoveTypeItems] = useState<MoveTypeFilterItem[]>([
     { label: "소형이사", count: 0, checked: false },
     { label: "가정이사", count: 0, checked: false },
     { label: "사무실이사", count: 0, checked: false },
   ]);
 
-  const [filterItems, setFilterItems] = useState([
+  const [filterItems, setFilterItems] = useState<FilterItem[]>([
     // 필터 필터링
     { label: "서비스 가능 지역", count: 0, checked: false },
     { label: "지정 견적 요청", count: 0, checked: false },
@@ -196,11 +192,11 @@ export default function ReceivedRequestsFlow() {
 
   // ✅ 새로 추가: 필터 모달 핸들러
   const handleFilterModalSubmit = (
-    nextMoveTypeItems: FilterItem[],
-    nextFilterItems: FilterItem[]
+    moveTypeItems: MoveTypeFilterItem[],
+    filterItems: FilterItem[]
   ) => {
-    setMoveTypeItems(nextMoveTypeItems);
-    setFilterItems(nextFilterItems);
+    setMoveTypeItems(moveTypeItems);
+    setFilterItems(filterItems);
     closeFilterModal();
   };
 
@@ -395,7 +391,7 @@ export default function ReceivedRequestsFlow() {
                   {filteredItems.map((item) => (
                     <CardListRequest
                       key={item.requestId}
-                      data={mapEstimateToCardData(item)}
+                      data={item}
                       onConfirmClick={() => handleSendClick(item)}
                       onDetailClick={() => handleRejectClick(item)}
                     />

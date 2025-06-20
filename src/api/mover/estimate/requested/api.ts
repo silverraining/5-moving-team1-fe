@@ -1,13 +1,18 @@
 import apiClient from "@/src/api/axiosclient";
-import { MinimalAddress, ServiceType, ChipType } from "@/src/types/common";
-import { ReceivedEstimateRequest } from "@/src/types/estimate";
+import {
+  MinimalAddress,
+  ServiceType,
+  ChipType,
+  EstimateRequestStatus,
+} from "@/src/types/common";
+import { EstimateRequest } from "@/src/types/estimate";
 import { MoverProfile } from "@/src/types/auth";
 export interface EstimateRequestItem {
-  id: string;
+  requestId: string;
   createdAt: string;
   moveType: ServiceType;
   moveDate: string;
-
+  requestStatus: EstimateRequestStatus;
   fromAddressMinimal?: MinimalAddress;
   toAddressMinimal?: MinimalAddress;
 
@@ -15,7 +20,7 @@ export interface EstimateRequestItem {
   customerName?: string;
 
   offerCount: number;
-  estimateOffers: ReceivedEstimateRequest[];
+  estimateOffers: EstimateRequest[];
 }
 
 // 무한스크롤 등 목록 응답용
@@ -36,24 +41,9 @@ export interface CardData {
   fromAddressMinimal?: MinimalAddress;
   toAddressMinimal?: MinimalAddress;
   offerCount: number;
-  estimateOffers: ReceivedEstimateRequest[];
+  estimateOffers: EstimateRequest[];
   isTargeted: boolean;
 }
-
-export const mapEstimateToCardData = (item: EstimateRequestItem): CardData => {
-  return {
-    id: item.id,
-    moveType: item.moveType,
-    customerName: item.customerName ?? "이름 없음",
-    createdAt: new Date(item.createdAt),
-    moveDate: new Date(item.moveDate),
-    fromAddressMinimal: item.fromAddressMinimal,
-    toAddressMinimal: item.toAddressMinimal,
-    offerCount: item.offerCount,
-    estimateOffers: item.estimateOffers ?? [], // 배열 없으면 빈 배열로 처리
-    isTargeted: item.isTargeted ?? false,
-  };
-};
 
 /**
  * 4. 기사 측에서 받은 이사 견적 요청 목록 조회 (with cursor)

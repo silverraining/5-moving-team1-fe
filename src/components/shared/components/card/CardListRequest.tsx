@@ -4,10 +4,10 @@ import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
 import {} from "@/src/types/estimate";
 import { ChipData } from "@/src/types/card";
-import { ReceivedEstimateRequest } from "@/src/types/estimate";
+import { EstimateRequestItem } from "@/src/api/mover/estimate/requested/api";
 
 interface CardProps {
-  data: ReceivedEstimateRequest;
+  data: EstimateRequestItem;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
 }
@@ -23,15 +23,14 @@ export const CardListRequest = ({
   const info = data;
   // Chip 데이터
   // moveType이 유효한 값이면 칩으로 추가
-  const chips: ChipData[] = [];
+  const chips: ChipData[] = [
+    {
+      chipType: data.moveType,
+      status: data.requestStatus,
+      isTargeted: data.isTargeted,
+    },
+  ];
 
-  if (data.moveType) {
-    chips.push({ chipType: data.moveType });
-  }
-
-  if (data.isTargeted) {
-    chips.push({ chipType: "TARGET", isTargeted: true });
-  }
   return (
     <Box
       display="flex"
