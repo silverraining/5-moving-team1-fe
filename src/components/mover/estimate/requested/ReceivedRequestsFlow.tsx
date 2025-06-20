@@ -17,6 +17,7 @@ import {
 import { CheckboxList } from "../../../shared/components/filter-check-box/CheckboxList";
 import { SearchInput } from "../../../shared/components/text-field/Search";
 import MoveSortDropdown from "./MoveSortDropdown";
+import { MoveSortOption } from "./MoveSortDropdown";
 import FilterModal from "../../../shared/components/modal/FilterModal";
 import { FilterItem } from "../../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
@@ -81,11 +82,16 @@ export default function ReceivedRequestsFlow() {
     (typeof testDataList)[0] | null
   >(null);
 
+  const [sortOption, setSortOption] = useState<MoveSortOption>({
+    label: "이사 빠른순",
+    sort: "move_date",
+  }); // 정렬
+
   const [moverProfile, setMoverProfile] = useState<MoverProfile | null>(null); // 기사 정보
 
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useReceivedEstimateRequests({
-      sort: "move_date", // 혹은 상태 값에 따라 "createdAt"
+      sort: sortOption.sort,
       isTargeted: false, // 혹은 true 또는 undefined (전체)
     });
   console.log("✅ useReceivedEstimateRequests 결과", {
@@ -337,7 +343,10 @@ export default function ReceivedRequestsFlow() {
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "4px" }}>
-                <MoveSortDropdown />
+                <MoveSortDropdown
+                  defaultOption={sortOption}
+                  onChange={(option) => setSortOption(option)}
+                />
                 {/* 모바일 환경: 필터 아이콘만 보이기 */}
                 {isSmall && (
                   <>
