@@ -15,109 +15,18 @@ import {
   convertToServiceRegionArray,
 } from "@/src/utils/util";
 import { convertEnglishToSido } from "@/src/utils/parseAddress";
+import { useMoverReviews } from "@/src/api/review/hooks";
 
 interface MoverDetailProps {
   moverId: string;
 }
 
-// 임시 리뷰 데이터
-export const mockReviewData: ReviewStatistics = {
-  average: 5.0,
-  score: { 1: 0, 2: 0, 3: 0, 4: 8, 5: 170 },
-  max: 170,
-};
-
-export const mockReviews: ReviewData[] = [
-  {
-    id: 1,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 5,
-    content: "너무 좋은 서비스 감사합니다!",
-  },
-  {
-    id: 2,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 5,
-    content: "기사님 너무 좋아요!",
-  },
-  {
-    id: 3,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 5,
-    content: "지인들에게 추천하고 싶은 기사님!",
-  },
-  {
-    id: 4,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 4,
-    content: "친절하시고 신속하게 도와주셔서 감사합니다!",
-  },
-  {
-    id: 5,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 3,
-    content: "무난합니다.",
-  },
-  {
-    id: 6,
-    author: "lhs****",
-    date: "2024-06-28",
-    rating: 5,
-    content: "정말 꼼꼼하고 친절하게 해주셨어요. 다음에도 부탁드리고 싶습니다!",
-  },
-  {
-    id: 7,
-    author: "park***",
-    date: "2024-06-25",
-    rating: 4,
-    content: "시간 약속도 잘 지키시고 물건도 안전하게 옮겨주셨습니다.",
-  },
-  {
-    id: 8,
-    author: "choi***",
-    date: "2024-06-20",
-    rating: 5,
-    content: "전문적이고 신뢰할 수 있는 기사님이세요. 적극 추천합니다!",
-  },
-  {
-    id: 9,
-    author: "kim****",
-    date: "2024-06-18",
-    rating: 4,
-    content: "깔끔하고 정확한 작업 감사합니다.",
-  },
-  {
-    id: 10,
-    author: "lee****",
-    date: "2024-06-15",
-    rating: 5,
-    content: "가격도 합리적이고 서비스도 만족스러워요!",
-  },
-  {
-    id: 11,
-    author: "song***",
-    date: "2024-06-12",
-    rating: 4,
-    content: "성실하게 작업해주셔서 감사합니다.",
-  },
-  {
-    id: 12,
-    author: "jung***",
-    date: "2024-06-10",
-    rating: 5,
-    content: "이사 첫 경험이었는데 너무 잘 도와주셨어요!",
-  },
-];
-
 export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const theme = useTheme();
   const { data: moverData, isLoading } = useMoverDetail(moverId);
   const [isLiked, setIsLiked] = useState(moverData?.isLiked || false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: reviewData } = useMoverReviews(moverId, currentPage, 5);
 
   const handleLikeClick = () => {
     // TODO : 찜하기 로직 구현
@@ -133,6 +42,25 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   if (isLoading || !moverData) {
     return <div>Loading...</div>;
   }
+
+  const reviewStatistics: ReviewStatistics = {
+    average: reviewData?.rating.average || 0,
+    score: reviewData?.rating.count || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    max: Math.max(
+      ...Object.values(
+        reviewData?.rating.count || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+      )
+    ),
+  };
+
+  const reviews: ReviewData[] =
+    reviewData?.reviews.map((review) => ({
+      id: Math.random(), // 임시 ID 생성
+      author: review.customerName,
+      date: review.createdAt,
+      rating: review.rating,
+      content: review.comment,
+    })) || [];
 
   const cardData: CardData = {
     types: convertToServiceTypeArray(moverData.serviceType),
@@ -281,13 +209,18 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                 marginBottom: "32px",
               }}
             >
-              리뷰 ({moverData.reviewCount})
+              리뷰 ({reviewData?.total || 0})
             </Typography>
-            <ReviewChart data={mockReviewData} />
+            <ReviewChart data={reviewStatistics} />
           </Box>
 
           {/* 댓글 섹션 */}
-          <ReviewList reviews={mockReviews} itemsPerPage={5} />
+          <ReviewList
+            reviews={reviews}
+            onPageChange={setCurrentPage}
+            totalPages={Math.ceil((reviewData?.total || 0) / 5)}
+            currentPage={currentPage}
+          />
         </Box>
 
         {/* 오른쪽 사이드바 */}
