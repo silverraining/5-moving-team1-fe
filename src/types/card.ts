@@ -11,23 +11,19 @@ export interface ChipData {
   isTargeted?: boolean;
 }
 
-export type CardData = {
-  types: ServiceType;
-  status: EstimateOfferStatus;
-  price?: number;
-  nickname: string;
-  experience: number;
-  moveDate: Date;
-  imageUrl?: string;
-  intro: string;
-  rating: number;
-  reviewCount: number;
-  likeCount: number;
+export interface CardData {
+  types: ServiceType[];
+  message: string;
+  imgSrc: string;
+  name: string;
   isLiked: boolean;
-  confirmedCount: number;
-  fromAddress: Address;
-  toAddress: Address;
-};
+  like: number;
+  rating: number;
+  count: number;
+  career: number;
+  confirm: number;
+  address: string[];
+}
 
 export type likeMoverListResItem = {
   id: string;

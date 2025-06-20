@@ -6,6 +6,7 @@ import {
   registerMoverProfile,
   updateMoverProfile,
   updateGeneralMoverProfile,
+  getMoverDetail,
 } from "./api";
 
 interface UseEstimateRequestQueryParams {
@@ -47,5 +48,13 @@ export const useUpdateMoverProfile = () => {
 export const useUpdateGeneralMoverProfile = () => {
   return useMutation({
     mutationFn: updateGeneralMoverProfile,
+  });
+};
+
+/** 기사님 상세 정보 조회 hook */
+export const useMoverDetail = (moverId: string) => {
+  return useQuery({
+    queryKey: ["mover", moverId],
+    queryFn: () => getMoverDetail(moverId),
   });
 };
