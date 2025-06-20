@@ -228,10 +228,6 @@ export default function ReceivedRequestsFlow() {
     closeRejectModal();
   };
 
-  if (isLoading || !data || !estimateItems) {
-    return <CircularProgress />;
-  }
-
   return (
     <Box
       sx={{
@@ -374,8 +370,17 @@ export default function ReceivedRequestsFlow() {
               </Box>
             </Box>
             {/* 우측 카드 리스트 또는 EmptyRequest 조건부 렌더링 */}
-            <Box>
-              {filteredItems.length === 0 ? (
+            <Box
+              sx={{
+                position: "relative",
+                display: isLoading ? "flex" : "block",
+                justifyContent: isLoading ? "center" : undefined,
+                alignItems: isLoading ? "center" : undefined,
+              }}
+            >
+              {isLoading ? (
+                <CircularProgress />
+              ) : filteredItems.length === 0 ? (
                 <EmptyRequest />
               ) : (
                 <Box
