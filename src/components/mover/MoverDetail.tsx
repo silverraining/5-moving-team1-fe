@@ -16,6 +16,9 @@ import {
 } from "@/src/utils/util";
 import { convertEnglishToSido } from "@/src/utils/parseAddress";
 import { useMoverReviews } from "@/src/api/review/hooks";
+import { useRequestTargetedEstimate } from "@/src/api/mover/hooks";
+import { NoEstimateModal } from "./NoEstimateModal";
+import { useSnackbarStore } from "@/src/store/snackBarStore";
 
 interface MoverDetailProps {
   moverId: string;
@@ -27,16 +30,46 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const [isLiked, setIsLiked] = useState(moverData?.isLiked || false);
   const [currentPage, setCurrentPage] = useState(1);
   const { data: reviewData } = useMoverReviews(moverId, currentPage, 5);
+  const [isNoEstimateModalOpen, setIsNoEstimateModalOpen] = useState(false);
+  const requestTargetedEstimate = useRequestTargetedEstimate();
+  const { openSnackbar } = useSnackbarStore();
 
   const handleLikeClick = () => {
     // TODO : 찜하기 로직 구현
     setIsLiked(!isLiked);
   };
 
-  const handleQuoteRequest = () => {
-    // TODO : 지정 견적 요청 로직 구현
-    // TODO : 일반 견적 없을 경우 모달 띄우기
-    console.log("견적 요청하기");
+  const handleEstimateRequest = () => {
+    const authStorage = localStorage.getItem("auth-storage");
+    const state = authStorage ? JSON.parse(authStorage).state : null;
+    const pendingEstimateRequestId = state?.user?.pendingEstimateRequestId;
+
+    if (!pendingEstimateRequestId) {
+      setIsNoEstimateModalOpen(true);
+      return;
+    }
+
+    requestTargetedEstimate.mutate(
+      {
+        requestId: pendingEstimateRequestId,
+        moverProfileId: moverId,
+      },
+      {
+        onSuccess: (response) => {
+          openSnackbar(
+            response.message || "지정 견적 요청이 완료되었습니다.",
+            "success"
+          );
+        },
+        onError: (error: any) => {
+          openSnackbar(
+            error.response?.data?.message || "지정 견적 요청에 실패했습니다.",
+            "error"
+          );
+          console.error("Failed to request targeted estimate:", error);
+        },
+      }
+    );
   };
 
   if (isLoading || !moverData) {
@@ -75,8 +108,6 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
     confirm: moverData.confirmedEstimateCount,
     address: convertToServiceRegionArray(moverData.serviceRegion),
   };
-
-  console.log(cardData);
 
   return (
     <Box sx={{ maxWidth: "1400px", margin: "0 auto", padding: "24px 16px" }}>
@@ -286,7 +317,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
             <Button
               variant="contained"
               fullWidth
-              onClick={handleQuoteRequest}
+              onClick={handleEstimateRequest}
               sx={{
                 height: "56px",
                 fontSize: 16,
@@ -305,6 +336,10 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           <SnsShare title="나만 알기엔 아까운 기사님인가요?" />
         </Box>
       </Box>
+      <NoEstimateModal
+        open={isNoEstimateModalOpen}
+        onClose={() => setIsNoEstimateModalOpen(false)}
+      />
     </Box>
   );
 };

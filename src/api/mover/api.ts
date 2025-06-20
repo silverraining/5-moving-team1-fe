@@ -99,3 +99,18 @@ export const getMoverDetail = async (moverId: string): Promise<MoverDetail> => {
   const { data } = await apiClient.get<MoverDetail>(`/mover/${moverId}`);
   return data;
 };
+
+/** 지정 견적 요청 api */
+export const requestTargetedEstimate = async (
+  requestId: string,
+  moverProfileId: string
+) => {
+  const response = await apiClient.patch<{ message: string }>(
+    `/estimate-request/${requestId}/targeted`,
+    {
+      moverProfileId,
+    }
+  );
+
+  return response.data;
+};

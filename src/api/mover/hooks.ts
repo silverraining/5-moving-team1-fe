@@ -7,6 +7,7 @@ import {
   updateMoverProfile,
   updateGeneralMoverProfile,
   getMoverDetail,
+  requestTargetedEstimate,
 } from "./api";
 
 interface UseEstimateRequestQueryParams {
@@ -56,5 +57,18 @@ export const useMoverDetail = (moverId: string) => {
   return useQuery({
     queryKey: ["mover", moverId],
     queryFn: () => getMoverDetail(moverId),
+  });
+};
+
+/** 지정 견적 요청 hook */
+export const useRequestTargetedEstimate = () => {
+  return useMutation({
+    mutationFn: ({
+      requestId,
+      moverProfileId,
+    }: {
+      requestId: string;
+      moverProfileId: string;
+    }) => requestTargetedEstimate(requestId, moverProfileId),
   });
 };
