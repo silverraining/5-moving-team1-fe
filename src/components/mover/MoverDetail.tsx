@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme, Button } from "@mui/material";
 import { CardListMover } from "../shared/components/card/CardListMover";
 import { ChipArea } from "../shared/components/chip/ChipArea";
@@ -19,6 +19,7 @@ import { useMoverReviews } from "@/src/api/review/hooks";
 import { useRequestTargetedEstimate } from "@/src/api/mover/hooks";
 import { NoEstimateModal } from "./NoEstimateModal";
 import { useSnackbarStore } from "@/src/store/snackBarStore";
+import { useCreateLike, useDeleteLike } from "../../api/like/hooks";
 
 interface MoverDetailProps {
   moverId: string;
@@ -27,16 +28,39 @@ interface MoverDetailProps {
 export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const theme = useTheme();
   const { data: moverData, isLoading } = useMoverDetail(moverId);
-  const [isLiked, setIsLiked] = useState(moverData?.isLiked || false);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+
+  useEffect(() => {
+    if (moverData) {
+      setIsLiked(moverData.isLiked);
+      setLikeCount(moverData.likeCount);
+    }
+  }, [moverData]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const { data: reviewData } = useMoverReviews(moverId, currentPage, 5);
   const [isNoEstimateModalOpen, setIsNoEstimateModalOpen] = useState(false);
   const requestTargetedEstimate = useRequestTargetedEstimate();
   const { openSnackbar } = useSnackbarStore();
+  const createLikeMutation = useCreateLike();
+  const deleteLikeMutation = useDeleteLike();
 
-  const handleLikeClick = () => {
-    // TODO : 찜하기 로직 구현
-    setIsLiked(!isLiked);
+  const handleLikeClick = async () => {
+    if (!moverData) return;
+
+    try {
+      if (isLiked) {
+        await deleteLikeMutation.mutate({ moverId: moverData.id });
+        setLikeCount((prev) => prev - 1);
+      } else {
+        await createLikeMutation.mutate({ moverId: moverData.id });
+        setLikeCount((prev) => prev + 1);
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error("찜하기 처리 중 오류가 발생했습니다:", error);
+    }
   };
 
   const handleEstimateRequest = () => {
@@ -101,7 +125,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
     imgSrc: moverData.imageUrl,
     name: moverData.nickname,
     isLiked: moverData.isLiked,
-    like: moverData.likeCount,
+    like: likeCount,
     rating: moverData.averageRating,
     count: moverData.reviewCount,
     career: moverData.experience,
@@ -124,7 +148,13 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
         <Box sx={{ flex: 1, minWidth: 0 }}>
           {/* 최상단 기사 카드 섹션 */}
           <Box sx={{ paddingBottom: "40px", marginBottom: "40px" }}>
-            <CardListMover data={cardData} />
+            <CardListMover
+              data={{
+                ...cardData,
+                isLiked: isLiked,
+              }}
+              onLikeClick={handleLikeClick}
+            />
           </Box>
 
           {/* 상세설명 섹션 */}
