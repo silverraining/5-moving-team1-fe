@@ -12,27 +12,38 @@ export interface ChipData {
   isTargeted?: boolean;
 }
 
-export type CardData = {
-  isTargeted: boolean | undefined;
-  requestStatus: EstimateRequestStatus | undefined;
-  moveType: ServiceType | undefined;
+export interface CardData {
   types: ServiceType[];
+  message: string; //intro
+  imgSrc: string; //imageUrl
+  name: string; //nickname
+  isLiked: boolean;
+  like: number; //likeCount
+  rating: number; //averageRating
+  count: number; //reviewCount
+  career: number; //experience
+  confirm: number; //confirmedCount
+  address: string[]; //fromAddress, toAddress
+}
+
+// CardData를 확장
+export interface ExtendedCardData extends CardData {
+  isTargeted?: boolean;
+  requestStatus?: EstimateRequestStatus;
+  moveType?: ServiceType;
   status?: EstimateOfferStatus;
   price?: number;
-  nickname: string;
-  experience: number;
   moveDate?: Date;
-  imageUrl?: string;
-  intro: string;
-  averageRating: number;
-  reviewCount: number;
-  likeCount: number;
-  isLiked: boolean;
-  confirmedCount: number;
+  //imageUrl?: string;
+  //intro?: string;
+  //averageRating?: number;
+  // reviewCount?: number;
+  // likeCount?: number;
+  // confirmedCount?: number;
   fromAddress?: Address;
   toAddress?: Address;
   chips?: ChipData[];
-};
+}
 
 export type likeMoverListResItem = {
   id: string;
@@ -62,7 +73,7 @@ export type MoverProfileCardData = Pick<
   | "reviewCount"
   | "confirmedCount"
   | "serviceType"
-  | "serviceRegions"
+  | "serviceRegion"
 >;
 
 //기사님 목록 데이터 타입

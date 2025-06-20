@@ -39,7 +39,6 @@ export interface MoverProfileRequest {
   serviceRegion: Record<ServiceRegion, boolean>;
 }
 
-
 /** 기사 프로필 등록 api */
 export const registerMoverProfile = async (data: MoverProfileRequest) => {
   try {
@@ -84,7 +83,15 @@ export const updateGeneralMoverProfile = async (
  * @param params { order: string, take: number, cursor?: string } 정렬 기준, 가져올 개수, 다음 커서
  * @returns Promise<MoverListResponse> 기사님 목록 응답
  */
-export const fetchPaginatedMovers = async ({ order, take, cursor }: { order: string; take: number; cursor?: string }) => {
+export const fetchPaginatedMovers = async ({
+  order,
+  take,
+  cursor,
+}: {
+  order: string;
+  take: number;
+  cursor?: string;
+}) => {
   try {
     const response = await apiClient.get<MoverListResponse>("/mover", {
       params: { order, take, cursor },
@@ -93,4 +100,27 @@ export const fetchPaginatedMovers = async ({ order, take, cursor }: { order: str
   } catch (error) {
     throw error;
   }
+};
+
+export interface MoverDetail {
+  id: string;
+  nickname: string;
+  imageUrl: string;
+  experience: number;
+  intro: string;
+  description: string;
+  serviceType: Record<ServiceType, boolean>;
+  serviceRegion: Record<ServiceRegion, boolean>;
+  reviewCount: number;
+  averageRating: number;
+  confirmedEstimateCount: number;
+  likeCount: number;
+  isTargeted: boolean;
+  isLiked: boolean;
+}
+
+/** 기사님 상세 정보 조회 api */
+export const getMoverDetail = async (moverId: string): Promise<MoverDetail> => {
+  const { data } = await apiClient.get<MoverDetail>(`/mover/${moverId}`);
+  return data;
 };

@@ -6,7 +6,7 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 
 export interface MoveSortOption {
   label: string;
-  value: "moveDate-asc" | "requestDate-asc";
+  sort: "move_date" | "created_at";
 }
 
 interface MoveSortDropdownProps {
@@ -15,8 +15,8 @@ interface MoveSortDropdownProps {
 }
 
 const MOVE_SORT_OPTIONS: MoveSortOption[] = [
-  { label: "이사 빠른순", value: "moveDate-asc" },
-  { label: "요청일 빠른순", value: "requestDate-asc" },
+  { label: "이사 빠른순", sort: "move_date" },
+  { label: "요청일 빠른순", sort: "created_at" },
 ];
 
 export default function MoveSortDropdown({
@@ -88,13 +88,13 @@ export default function MoveSortDropdown({
         >
           {MOVE_SORT_OPTIONS.map((option) => (
             <Box
-              key={option.value}
+              key={option.sort}
               onClick={() => handleSelect(option)}
               sx={(theme) => ({
                 padding: "12px 16px",
                 cursor: "pointer",
                 backgroundColor:
-                  selectedOption.value === option.value
+                  selectedOption.sort === option.sort
                     ? theme.palette.PrimaryBlue[100]
                     : theme.palette.White[100],
                 "&:hover": {
@@ -107,7 +107,7 @@ export default function MoveSortDropdown({
                 sx={(theme) => ({
                   fontSize: ["12px", "14px"],
                   color:
-                    selectedOption.value === option.value
+                    selectedOption.sort === option.sort
                       ? theme.palette.PrimaryBlue[300]
                       : theme.palette.Black[400],
                   fontWeight: 400,

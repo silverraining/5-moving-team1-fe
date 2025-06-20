@@ -1,47 +1,81 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipData } from "@/src/types/card";
+import { ChipData, CardData } from "@/src/types/card";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
 import { EstimateOffer } from "@/src/types/estimate";
-import { CardData } from "@/src/types/card";
 
 interface CardProps {
-  data: CardData | EstimateOffer;
+  data: EstimateOffer | CardData;
   onLikeClick?: () => void;
 }
 
 export const CardListMover = ({ data, onLikeClick }: CardProps) => {
-  // CardData 타입 판별 함수
+  //CardData 타입 판별 함수
   function isCardData(obj: unknown): obj is CardData {
     return (
       typeof obj === "object" &&
       obj !== null &&
-      Array.isArray((obj as CardData).chips)
+      Array.isArray((obj as CardData).types)
     );
   }
 
-  const chips: ChipData[] =
-    isCardData(data) && data.chips && data.chips.length > 0
-      ? data.chips
-      : [
-          {
-            chipType: isCardData(data) ? data.moveType : undefined,
-            status: isCardData(data) ? data.requestStatus : undefined,
-            isTargeted: isCardData(data) ? data.isTargeted : undefined,
-          },
-        ];
+  // Define isEstimateOffer type guard
+  const isEstimateOffer = (
+    data: EstimateOffer | CardData
+  ): data is EstimateOffer => {
+    return "mover" in data;
+  };
 
-  // CardData와 EstimateOffer 공통 필드 안전 접근
-  const intro = isCardData(data) ? data.intro : "";
-  const imageUrl = isCardData(data) ? data.imageUrl : undefined;
-  const nickname = isCardData(data) ? data.nickname : "";
-  const isLiked = isCardData(data) ? data.isLiked : false;
-  const likeCount = isCardData(data) ? data.likeCount : 0;
-  const rating = isCardData(data) ? data.averageRating : 0;
-  const reviewCount = isCardData(data) ? data.reviewCount : 0;
-  const experience = isCardData(data) ? data.experience : 0;
-  const confirmedCount = isCardData(data) ? data.confirmedCount : 0;
+  // EstimateOffer인 경우 mover 객체에서 정보 추출, CardData인 경우 직접 접근
+  const info = isEstimateOffer(data)
+    ? {
+        nickname: data.mover.nickname,
+        intro: data.mover.intro,
+        imageUrl: data.mover.imageUrl,
+        isLiked: data.mover.isLiked,
+        likeCount: data.mover.likeCount,
+        rating: data.mover.averageRating,
+        reviewCount: data.mover.reviewCount,
+        experience: data.mover.experience,
+        confirmedCount: data.mover.confirmedCount,
+      }
+    : {
+        nickname: data.name,
+        intro: data.message,
+        imageUrl: data.imgSrc,
+        isLiked: data.isLiked,
+        likeCount: data.like,
+        rating: data.rating,
+        reviewCount: data.count,
+        experience: data.career,
+        confirmedCount: data.confirm,
+      };
+
+  const chips: ChipData[] = isEstimateOffer(data)
+    ? [
+        {
+          chipType: data.moveType,
+          status: data.requestStatus,
+          isTargeted: data.isTargeted,
+        },
+      ]
+    : data.types.map((type) => ({
+        chipType: type,
+      }));
+
+  // 공통으로 사용할 변수들
+  const {
+    nickname,
+    intro,
+    imageUrl,
+    isLiked,
+    likeCount,
+    rating,
+    reviewCount,
+    experience,
+    confirmedCount,
+  } = info;
 
   return (
     <Box
@@ -52,7 +86,6 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       borderColor={COLORS.Line[100]}
       maxWidth={1200}
       minWidth={[400, 580, 680]}
-      // height={[188, 188, 230]}
       height="auto"
       bgcolor="#FFFFFF"
       borderRadius="16px"

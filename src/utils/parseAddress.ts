@@ -51,3 +51,26 @@ export const convertSidoToEnglish = (sido: string): string => {
   };
   return map[sido] ?? "";
 };
+
+export const convertEnglishToSido = (region: string): string => {
+  const map: Record<string, string> = {
+    Seoul: "서울",
+    "Gyeonggi-do": "경기",
+    Incheon: "인천",
+    "Gangwon-do": "강원",
+    "Chungcheongbuk-do": "충북",
+    "Chungcheongnam-do": "충남",
+    "Sejong-si": "세종",
+    Daejeon: "대전",
+    "Jeonbuk-do": "전북",
+    "Jeollanam-do": "전남",
+    Gwangju: "광주",
+    "Gyeongsangbuk-do": "경북",
+    "Gyeongsangnam-do": "경남",
+    Daegu: "대구",
+    Ulsan: "울산",
+    Busan: "부산",
+    "Jeju-do": "제주",
+  };
+  return map[region] ?? region;
+};
