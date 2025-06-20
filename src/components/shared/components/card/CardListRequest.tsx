@@ -17,8 +17,6 @@ export const CardListRequest = ({
   onConfirmClick,
   onDetailClick,
 }: CardProps) => {
-  console.log("⚽ CardListRequest data:", data);
-
   // 카드 데이터
   const info = data;
   // Chip 데이터

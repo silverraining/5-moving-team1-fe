@@ -2,7 +2,6 @@ import apiClient from "@/src/api/axiosclient";
 import {
   MinimalAddress,
   ServiceType,
-  ChipType,
   EstimateRequestStatus,
 } from "@/src/types/common";
 import { EstimateRequest } from "@/src/types/estimate";
@@ -29,20 +28,6 @@ export interface EstimateRequestResponse {
   nextCursor: string | null;
   hasNext: boolean;
   totalCount: number;
-}
-
-// 변환 함수
-export interface CardData {
-  id: string;
-  moveType: ChipType;
-  customerName: string;
-  createdAt: Date;
-  moveDate: Date;
-  fromAddressMinimal?: MinimalAddress;
-  toAddressMinimal?: MinimalAddress;
-  offerCount: number;
-  estimateOffers: EstimateRequest[];
-  isTargeted: boolean;
 }
 
 /**

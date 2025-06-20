@@ -84,13 +84,8 @@ export default function ReceivedRequestsFlow() {
   const { data, fetchNextPage, hasNextPage, isFetchingNextPage, isLoading } =
     useReceivedEstimateRequests({
       sort: sortOption.sort,
-      isTargeted: false, // 혹은 true 또는 undefined (전체)
+      isTargeted: false,
     });
-  console.log("✅ useReceivedEstimateRequests 결과", {
-    isLoading,
-    data,
-  });
-  console.log("API에서 받아온 데이터 구조 확인:", data);
 
   // 실제 API로 받은 데이터 목록 정리
   const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
@@ -177,7 +172,6 @@ export default function ReceivedRequestsFlow() {
       setFilterItems(newFilterItems);
     }
   }, [estimateItems, moverProfile, moveTypeItems, filterItems]);
-  console.log("estimateItems:", estimateItems);
 
   const handleKeywordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setKeyword(e.target.value);

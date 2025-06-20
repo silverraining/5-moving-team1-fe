@@ -9,7 +9,6 @@ export const useReceivedEstimateRequests = ({
   sort?: "move_date" | "created_at";
   isTargeted?: boolean;
 }) => {
-  console.log("useReceivedEstimateRequests 호출됨");
   return useInfiniteQuery<
     EstimateRequestResponse,
     Error,
