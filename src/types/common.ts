@@ -1,7 +1,5 @@
 export type ServiceType = "SMALL" | "HOME" | "OFFICE";
 
-export type ChipType = ServiceType | "TARGET" | "PENDING" | "CONFIRMED";
-
 export interface Address {
   fullAddress: string;
   roadAddress: string;

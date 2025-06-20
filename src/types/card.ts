@@ -3,11 +3,10 @@ import {
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
-  ChipType,
 } from "./common";
 
 export interface ChipData {
-  chipType?: ChipType;
+  chipType?: ServiceType;
   status?: EstimateRequestStatus;
   isTargeted?: boolean;
 }
