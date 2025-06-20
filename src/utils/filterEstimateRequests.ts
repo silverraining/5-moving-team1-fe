@@ -8,11 +8,13 @@ export const filterEstimateRequests = ({
   moveTypeItems,
   filterItems,
   moverProfile,
+  keyword,
 }: {
   items: EstimateRequestItem[];
   moveTypeItems: { label: string; checked: boolean }[];
   filterItems: { label: string; checked: boolean }[];
   moverProfile: MoverProfile | null;
+  keyword?: string;
 }) => {
   const selectedMoveTypes = moveTypeItems
     .filter((item) => item.checked)
@@ -70,8 +72,18 @@ export const filterEstimateRequests = ({
           ? false
           : matchedFilters.some(Boolean);
 
-    // ✅ 필터 필터링이 하나도 없으면 → 이사 유형만 적용
-    return isMoveTypeMatched && isFilterMatched;
+    // 검색어 필터링
+    const isKeywordMatched =
+      !keyword || keyword.trim() === ""
+        ? true
+        : item.customerName
+          ? item.customerName
+              .toLowerCase()
+              .includes(keyword.trim().toLowerCase())
+          : false;
+
+    // 최종 필터 조건 - 모두 만족해야 함
+    return isMoveTypeMatched && isFilterMatched && isKeywordMatched;
   });
 };
 

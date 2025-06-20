@@ -39,12 +39,8 @@ import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
 type ServiceTypeLabel = (typeof ServiceType)[number];
 
 export default function ReceivedRequestsFlow() {
-  console.log("ReceivedRequestsFlow 렌더됨");
-  // url 뒤에 '?empty=true' 추가하면 빈 경우 확인 가능
-  const searchParams = useSearchParams(); // 쿼리 파라미터로 빈 상태 체크 위해 추가, 배포 시 삭제해야 함
-
   const theme = useTheme();
-  const isSmall = useMediaQuery(theme.breakpoints.down("desktop")); // 모바일+태블릿일 때 포함
+  const isSmall = useMediaQuery(theme.breakpoints.down("desktop"));
   const {
     isEstimateModalOpen,
     isRejectModalOpen,
@@ -105,6 +101,7 @@ export default function ReceivedRequestsFlow() {
     moveTypeItems,
     filterItems,
     moverProfile,
+    keyword,
   });
 
   // 기사 프로필 데이터 fetch
@@ -377,17 +374,17 @@ export default function ReceivedRequestsFlow() {
               </Box>
             </Box>
             {/* 우측 카드 리스트 또는 EmptyRequest 조건부 렌더링 */}
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: ["24px", "32px", "48px"],
-              }}
-            >
+            <Box>
               {filteredItems.length === 0 ? (
                 <EmptyRequest />
               ) : (
-                <Box>
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: ["24px", "32px", "48px"],
+                  }}
+                >
                   {filteredItems.map((item) => (
                     <CardListRequest
                       key={item.requestId}

@@ -36,7 +36,7 @@ const FilterModal = ({
   onSubmit,
 }: FilterProps) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
 
   const [localMoveTypeItems, setLocalMoveTypeItems] =
     useState<MoveTypeFilterItem[]>(moveTypeItems);
@@ -107,8 +107,9 @@ const FilterModal = ({
                 borderTopLeftRadius: "32px",
                 borderTopRightRadius: "32px",
                 width: "375px",
-                height: ["376px", "376px", "444px"],
+                height: "auto",
                 mx: "auto",
+                marginBottom: 0,
               }
             : {
                 borderRadius: "16px",
@@ -116,7 +117,7 @@ const FilterModal = ({
                 pt: 2,
                 pb: 4,
                 width: "375px",
-                height: ["376px", "376px", "444px"],
+                height: "auto",
               },
         },
       }}
@@ -128,7 +129,10 @@ const FilterModal = ({
             <Typography
               onClick={() => onTabChange("moveType")}
               sx={(theme) => ({
-                color: theme.palette.Black[400],
+                color:
+                  selectedTab === "moveType"
+                    ? theme.palette.Black[400]
+                    : theme.palette.Grayscale[300],
                 cursor: "pointer",
               })}
               variant="B_18"
@@ -138,7 +142,10 @@ const FilterModal = ({
             <Typography
               onClick={() => onTabChange("filter")}
               sx={(theme) => ({
-                color: theme.palette.Grayscale[300],
+                color:
+                  selectedTab === "filter"
+                    ? theme.palette.Black[400]
+                    : theme.palette.Grayscale[300],
                 cursor: "pointer",
               })}
               variant="SB_18"
