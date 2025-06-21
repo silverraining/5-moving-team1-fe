@@ -6,9 +6,9 @@ import {
   registerMoverProfile,
   updateMoverProfile,
   updateGeneralMoverProfile,
+  fetchMoverProfileCard,
   getMoverDetail,
   requestTargetedEstimate,
-  fetchMoverProfileCard,
 } from "./api";
 
 interface UseEstimateRequestQueryParams {
@@ -27,15 +27,6 @@ export const useEstimateRequest = ({
     queryFn: () => estimateRequest({ serviceType, filter }),
     enabled,
     staleTime: 1000 * 60 * 5, // 5분 캐시 (옵션)
-  });
-};
-
-/** 기사님 마이페이지 조회 hook */ //기사님 프로필 카드 조회 hook으로 해야할지
-export const useMoverMypage = () => {
-  return useQuery({
-    queryKey: ["moverMypage"],
-    queryFn: fetchMoverProfileCard,
-    staleTime: 1000 * 60 * 5,
   });
 };
 
@@ -80,5 +71,13 @@ export const useRequestTargetedEstimate = () => {
       requestId: string;
       moverProfileId: string;
     }) => requestTargetedEstimate(requestId, moverProfileId),
+  });
+};
+
+/** 기사님 마이페이지 프로필 카드 조회 hook */
+export const useMoverMypage = () => {
+  return useQuery({
+    queryKey: ["moverMypage"],
+    queryFn: fetchMoverProfileCard,
   });
 };

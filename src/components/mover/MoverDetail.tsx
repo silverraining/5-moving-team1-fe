@@ -352,8 +352,8 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                         type === "SMALL"
                           ? "소형이사"
                           : type === "HOME"
-                            ? "가정이사"
-                            : "사무실이사"
+                          ? "가정이사"
+                          : "사무실이사"
                       }
                       selected={true}
                       onClick={() => {}}

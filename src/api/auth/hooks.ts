@@ -13,6 +13,13 @@ export const useLogin = (): UseMutationResult<
   return useMutation({
     mutationFn: (data: Login) => login(data),
     onSuccess: (data) => {
+      // 로그인 응답 로그
+      console.log("=== Login API Response ===");
+      console.log("Full login response:", data);
+      console.log("user object:", data.user);
+      console.log("user.id:", data.user?.id);
+      console.log("user.role:", data.user?.role);
+
       setAuth(data.accessToken, data.refreshToken, data.user);
     },
   });

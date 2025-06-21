@@ -1,38 +1,33 @@
 "use client";
-import { Box, Divider, Typography } from "@mui/material";
-import { ReviewList } from "@/src/components/shared/components/review/ReviewList";
-
-import { useTheme } from "@mui/material/styles";
+import { Box } from "@mui/material";
 import { MyPageProfileSection } from "@/src/components/mover/mypage/MyPageProfileSection";
+import { ReviewSection } from "@/src/components/mover/mypage/ReviewSection";
 import { useMoverMypage } from "@/src/api/mover/hooks";
+
 export default function MyPage() {
-  const theme = useTheme();
-  const { data: moverData, isPending } = useMoverMypage();
-  if (isPending || !moverData) return <div>로딩중입니다...</div>; //TODO: 스켈레톤 추가
+  const { data: moverProfileCardData, isPending } = useMoverMypage();
+
+  if (isPending || !moverProfileCardData) return <div>로딩중입니다...</div>; //TODO: 스켈레톤 추가
+
   return (
-    <Box display="flex" flexDirection="column" alignItems="center" pt="32px">
+    <Box
+      sx={{
+        maxWidth: "1600px",
+        margin: "0 auto",
+        padding: "24px 16px",
+        minWidth: 0,
+        overflow: "hidden",
+      }}
+    >
       {/* 프로필 섹션 */}
-      <MyPageProfileSection data={moverData} />
+      <Box sx={{ paddingBottom: "40px", marginBottom: "40px" }}>
+        <MyPageProfileSection data={moverProfileCardData} />
+      </Box>
 
       {/* 리뷰 섹션 */}
-      <Box mb="40px" width="100%" maxWidth="1400px" px="24px">
-        <Typography
-          sx={{
-            fontSize: [18, 20, 24],
-            fontWeight: 700,
-            color: theme.palette.Black[300],
-            marginBottom: "32px",
-          }}
-        >
-          리뷰 (178)
-        </Typography>
-        {/* <ReviewChart data={mockReviewData} /> */}
-      </Box>
-
-      {/* 댓글 섹션 */}
-      <Box width="100%" maxWidth="1400px" px="24px">
-        {/* <ReviewList reviews={} itemsPerPage={5} /> */}
-      </Box>
+      {moverProfileCardData.id && (
+        <ReviewSection moverId={moverProfileCardData.id} />
+      )}
     </Box>
   );
 }
