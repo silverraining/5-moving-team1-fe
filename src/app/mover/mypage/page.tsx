@@ -1,12 +1,7 @@
 "use client";
 import { Box, Divider, Typography } from "@mui/material";
-import { ReviewChart } from "@/src/components/shared/components/review/review-chart/ReviewChart";
 import { ReviewList } from "@/src/components/shared/components/review/ReviewList";
-import {
-  mockReviewData,
-  mockReviews,
-  mockMoverData,
-} from "@/src/components/mover/MoverDetail";
+
 import { useTheme } from "@mui/material/styles";
 import { MyPageProfileSection } from "@/src/components/mover/mypage/MyPageProfileSection";
 import { useMoverMypage } from "@/src/api/mover/hooks";
