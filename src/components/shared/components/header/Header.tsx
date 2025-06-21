@@ -102,7 +102,6 @@ export const Header = () => {
         const notification = JSON.parse(event.data);
         setMarkAsRead(false);
         setNotifications(notification);
-        console.log(markAsRead);
       } catch {
         console.log("SSE message (non-JSON):", event.data);
       }
