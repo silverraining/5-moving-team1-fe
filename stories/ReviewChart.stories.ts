@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react";
-import { ReviewChart } from "@/src/components/shared/components/review-chart/ReviewChart";
+import { ReviewChart } from "@/src/components/shared/components/review/review-chart/ReviewChart";
 
 const meta: Meta<typeof ReviewChart> = {
   title: "ReviewChart",

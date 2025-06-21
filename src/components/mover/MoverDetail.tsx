@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme, Button } from "@mui/material";
 import { CardListMover } from "../shared/components/card/CardListMover";
 import { ChipArea } from "../shared/components/chip/ChipArea";
-import { ReviewChart } from "../shared/components/review-chart/ReviewChart";
+import { ReviewChart } from "../shared/components/review/review-chart/ReviewChart";
 import { SnsShare } from "../shared/components/sns-share/SnsShare";
 import { CardData } from "@/src/types/card";
 import { ReviewData, ReviewStatistics } from "@/src/types/common";
@@ -30,14 +30,6 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const { data: moverData, isLoading } = useMoverDetail(moverId);
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-
-  useEffect(() => {
-    if (moverData) {
-      setIsLiked(moverData.isLiked);
-      setLikeCount(moverData.likeCount);
-    }
-  }, [moverData]);
-
   const [currentPage, setCurrentPage] = useState(1);
   const { data: reviewData } = useMoverReviews(moverId, currentPage, 5);
   const [isNoEstimateModalOpen, setIsNoEstimateModalOpen] = useState(false);
@@ -46,23 +38,33 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const createLikeMutation = useCreateLike();
   const deleteLikeMutation = useDeleteLike();
 
+  // 찜하기 버튼 클릭 핸들러
   const handleLikeClick = async () => {
     if (!moverData) return;
 
     try {
       if (isLiked) {
         await deleteLikeMutation.mutate({ moverId: moverData.id });
-        setLikeCount((prev) => prev - 1);
+        setLikeCount((prev) => prev - 1); // 찜하기 취소 시 좋아요 수 감소
       } else {
         await createLikeMutation.mutate({ moverId: moverData.id });
-        setLikeCount((prev) => prev + 1);
+        setLikeCount((prev) => prev + 1); // 찜하기 시 좋아요 수 증가
       }
-      setIsLiked(!isLiked);
+      setIsLiked(!isLiked); // 찜하기 상태 업데이트
     } catch (error) {
       console.error("찜하기 처리 중 오류가 발생했습니다:", error);
     }
   };
 
+  // 찜하기 상태 업데이트 훅
+  useEffect(() => {
+    if (moverData) {
+      setIsLiked(moverData.isLiked);
+      setLikeCount(moverData.likeCount);
+    }
+  }, [moverData]);
+
+  // 지정 견적 요청 버튼 클릭 핸들러
   const handleEstimateRequest = () => {
     const authStorage = localStorage.getItem("auth-storage");
     const state = authStorage ? JSON.parse(authStorage).state : null;
@@ -257,30 +259,13 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           </Box>
 
           {/* 리뷰 섹션 */}
-          <Box
-            sx={{
-              marginBottom: "40px",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: [18, 20, 24],
-                fontWeight: 700,
-                color: theme.palette.Black[300],
-                marginBottom: "32px",
-              }}
-            >
-              리뷰 ({reviewData?.total || 0})
-            </Typography>
-            <ReviewChart data={reviewStatistics} />
-          </Box>
-
-          {/* 댓글 섹션 */}
           <ReviewList
             reviews={reviews}
             onPageChange={setCurrentPage}
             totalPages={Math.ceil((reviewData?.total || 0) / 5)}
             currentPage={currentPage}
+            total={reviewData?.total || 0}
+            reviewStatistics={reviewStatistics}
           />
         </Box>
 
