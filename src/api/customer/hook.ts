@@ -1,4 +1,9 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import {
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseMutationResult,
+} from "@tanstack/react-query";
 import {
   moverList,
   MoverListRequest,
@@ -11,6 +16,8 @@ import {
   EstimateOfferPending,
   EstimateRequestHistory,
   EstimateOfferDetail,
+  EstimateOfferConfirmed,
+  ConfirmRes,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
@@ -93,5 +100,17 @@ export const useEstimateOfferDetail = (requestId: string, moverId: string) => {
     queryKey: ["EstimateOfferDetail", requestId, moverId],
     queryFn: () => EstimateOfferDetail(requestId, moverId),
     enabled: !!requestId && !!moverId,
+  });
+};
+
+/** 견적 요청 확정 hook */
+export const useEstimateOfferConfirmed = (): UseMutationResult<
+  ConfirmRes,
+  Error,
+  { offerId: string }
+> => {
+  return useMutation({
+    mutationFn: ({ offerId }: { offerId: string }) =>
+      EstimateOfferConfirmed(offerId),
   });
 };
