@@ -2,10 +2,12 @@
 import { Grid, Typography } from "@mui/material";
 import { CardListWait } from "@/src/components/shared/components/card/CardListWait";
 import {
-  useEstimateOfferList,
+  useEstimateOfferPending,
   useEstimateRequestActive,
 } from "@/src/api/customer/hook";
 import { EstimateOffer } from "@/src/types/estimate";
+import { useRouter } from "next/navigation";
+import { PATH } from "@/src/lib/constants";
 
 export default function PendingEstimate() {
   // 1. ID 배열 받아오기
@@ -15,11 +17,13 @@ export default function PendingEstimate() {
     error: errorIds,
   } = useEstimateRequestActive();
 
+  const router = useRouter();
+
   // 2. 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
   const requestId = requestIds?.[0]?.estimateRequestId;
 
   // 3. 해당 ID로 견적서 리스트 받아오기
-  const { data, isLoading, error } = useEstimateOfferList(requestId);
+  const { data, isLoading, error } = useEstimateOfferPending(requestId);
 
   if (isLoadingIds) return <Typography>견적서 데이터 로딩중...</Typography>;
   if (errorIds) return <Typography>견적서 데이터 에러 발생!</Typography>;
@@ -40,7 +44,11 @@ export default function PendingEstimate() {
         >
           <CardListWait
             data={card}
-            onDetailClick={() => alert(`상세보기 버튼 누름`)}
+            onDetailClick={() =>
+              router.push(
+                `${PATH.userEstimateDetail(card.estimateRequestId)}?moverId=${card.moverId}`
+              )
+            }
             onLikeClick={() => alert(`좋아요 버튼 누름`)}
             onConfirmClick={() => alert(`견적을 선택 완료했습니다!`)}
           />

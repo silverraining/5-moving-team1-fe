@@ -1,16 +1,18 @@
+"use client";
+
 import React from "react";
 import { MoverDetail } from "@/src/components/mover/MoverDetail";
 
 interface MoverDetailPageProps {
   params: {
-    id: string;
+    moverId: string;
   };
 }
 
 const MoverDetailPage = ({ params }: MoverDetailPageProps) => {
-  const { id } = params;
+  const { moverId } = params;
 
-  return <MoverDetail moverId={id} />;
+  return <MoverDetail moverId={moverId} />;
 };
 
 export default MoverDetailPage;

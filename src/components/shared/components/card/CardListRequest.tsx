@@ -2,11 +2,12 @@ import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
-import { EstimateOffer } from "@/src/types/estimate";
+import Image from "next/image";
 import { ChipData } from "@/src/types/card";
+import { EstimateRequestItem } from "@/src/api/mover/estimate/requested/api";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: EstimateRequestItem;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
 }
@@ -17,8 +18,9 @@ export const CardListRequest = ({
   onDetailClick,
 }: CardProps) => {
   // 카드 데이터
-  const info = data.mover;
+  const info = data;
   // Chip 데이터
+  // moveType이 유효한 값이면 칩으로 추가
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
@@ -26,6 +28,7 @@ export const CardListRequest = ({
       isTargeted: data.isTargeted,
     },
   ];
+
   return (
     <Box
       display="flex"
@@ -91,7 +94,7 @@ export const CardListRequest = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 고객님
+              {info.customerName} 고객님
             </Typography>
             <Typography
               display={["inline-block", "none"]}
@@ -143,6 +146,8 @@ export const CardListRequest = ({
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 500,
                 color: theme.palette.Black[300],
+                display: "flex",
+                alignItems: "center",
               })}
             >
               {formatKoreanDate(data.moveDate ?? "")}
@@ -175,9 +180,12 @@ export const CardListRequest = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  display: "flex",
+                  alignItems: "center",
                 })}
               >
-                {data.fromAddress.fullAddress}
+                {data.fromAddressMinimal?.sido}{" "}
+                {data.fromAddressMinimal?.sigungu}
               </Typography>
             </Box>
             <Box
@@ -210,9 +218,11 @@ export const CardListRequest = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  display: "flex",
+                  alignItems: "center",
                 })}
               >
-                {data.toAddress.fullAddress}
+                {data.toAddressMinimal?.sido} {data.toAddressMinimal?.sigungu}
               </Typography>
             </Box>
           </Box>
@@ -230,6 +240,7 @@ export const CardListRequest = ({
               bgcolor: theme.palette.PrimaryBlue[300],
               borderRadius: ["8px", "8px", "16px"],
               flex: 1,
+              gap: ["8px", "4px", "10px"],
             })}
           >
             <Typography
@@ -242,6 +253,12 @@ export const CardListRequest = ({
             >
               견적 보내기
             </Typography>
+            <Image
+              src="/Images/icon-btn/writing.svg"
+              width={24}
+              height={24}
+              alt="견적 작성"
+            />
           </Button>
           <Button
             onClick={onDetailClick}

@@ -1,6 +1,7 @@
 import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { EstimateOffer } from "@/src/types/estimate";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
+import { typeMapper } from "@/src/lib/typeMapper";
 
 interface EstimateInfoProps {
   info: EstimateOffer;
@@ -58,7 +59,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               color: theme.palette.Black[400],
             })}
           >
-            {info.moveType}
+            {typeMapper([info.moveType]).join(", ")}
           </Typography>
         </Stack>
         <Stack flexDirection={"row"} gap={["68px", "68px", "72px"]}>

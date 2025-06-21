@@ -1,7 +1,6 @@
 import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import {
-  Box,
   Button,
   Checkbox,
   Divider,
@@ -11,38 +10,84 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
+import { useState, useEffect } from "react";
+import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
 
 interface FilterProps {
   open: boolean;
   onClose: () => void;
-  count: { all: number; small: number; home: number; office: number };
-  checked: {
-    all: boolean;
-    small: boolean;
-    home: boolean;
-    office: boolean;
-  };
-  indeterminate: boolean;
-  onAllChange: (value: boolean) => void;
-  onIndividualChange: (
-    key: "small" | "home" | "office",
-    value: boolean
+  moveTypeItems: MoveTypeFilterItem[];
+  filterItems: FilterItem[];
+  selectedTab: "moveType" | "filter";
+  onTabChange: (tab: "moveType" | "filter") => void;
+  onSubmit: (
+    moveTypeItems: MoveTypeFilterItem[],
+    filterItems: FilterItem[]
   ) => void;
-  onSubmit: (checked: FilterProps["checked"]) => void;
 }
 
 const FilterModal = ({
   open,
   onClose,
-  count,
-  checked,
-  indeterminate,
-  onAllChange,
-  onIndividualChange,
+  moveTypeItems,
+  filterItems,
+  selectedTab,
+  onTabChange,
   onSubmit,
 }: FilterProps) => {
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("mobile"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("tablet"));
+
+  const [localMoveTypeItems, setLocalMoveTypeItems] =
+    useState<MoveTypeFilterItem[]>(moveTypeItems);
+  const [localFilterItems, setLocalFilterItems] =
+    useState<FilterItem[]>(filterItems);
+  // 조회하기 버튼 클릭 시, 필터링 적용되게 하기 위해 추가
+  useEffect(() => {
+    setLocalMoveTypeItems(moveTypeItems);
+    setLocalFilterItems(filterItems);
+  }, [moveTypeItems, filterItems]);
+
+  const totalMoveCount = moveTypeItems.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+  const allMoveChecked = localMoveTypeItems.every((item) => item.checked);
+  const someMoveChecked =
+    localMoveTypeItems.some((item) => item.checked) && !allMoveChecked;
+
+  const totalFilterCount = filterItems.reduce(
+    (sum, item) => sum + item.count,
+    0
+  );
+  const allFilterChecked = localFilterItems.every((item) => item.checked);
+  const someFilterChecked =
+    localFilterItems.some((item) => item.checked) && !allFilterChecked;
+
+  // 조회하기 버튼 클릭 시, 필터링 적용되게 하기 위해 추가
+  const handleMoveTypeChange = (label: string, checked: boolean) => {
+    setLocalMoveTypeItems((prev) =>
+      prev.map((item) => (item.label === label ? { ...item, checked } : item))
+    );
+  };
+
+  const handleFilterChange = (label: string, checked: boolean) => {
+    setLocalFilterItems((prev) =>
+      prev.map((item) => (item.label === label ? { ...item, checked } : item))
+    );
+  };
+
+  const handleAllMoveTypeChange = (checked: boolean) => {
+    setLocalMoveTypeItems((prev) => prev.map((item) => ({ ...item, checked })));
+  };
+
+  const handleAllFilterChange = (checked: boolean) => {
+    setLocalFilterItems((prev) => prev.map((item) => ({ ...item, checked })));
+  };
+
+  const handleSubmit = () => {
+    onSubmit(localMoveTypeItems, localFilterItems);
+  };
 
   return (
     <Dialog
@@ -62,8 +107,9 @@ const FilterModal = ({
                 borderTopLeftRadius: "32px",
                 borderTopRightRadius: "32px",
                 width: "375px",
-                height: ["376px", "376px", "444px"],
+                height: "auto",
                 mx: "auto",
+                marginBottom: 0,
               }
             : {
                 borderRadius: "16px",
@@ -71,7 +117,7 @@ const FilterModal = ({
                 pt: 2,
                 pb: 4,
                 width: "375px",
-                height: ["376px", "376px", "444px"],
+                height: "auto",
               },
         },
       }}
@@ -81,13 +127,27 @@ const FilterModal = ({
         <Stack direction="row" p={1} justifyContent="space-between" pt={"12px"}>
           <Stack direction="row" spacing={3}>
             <Typography
-              sx={(theme) => ({ color: theme.palette.Black[400] })}
+              onClick={() => onTabChange("moveType")}
+              sx={(theme) => ({
+                color:
+                  selectedTab === "moveType"
+                    ? theme.palette.Black[400]
+                    : theme.palette.Grayscale[300],
+                cursor: "pointer",
+              })}
               variant="B_18"
             >
               이사 유형
             </Typography>
             <Typography
-              sx={(theme) => ({ color: theme.palette.Grayscale[300] })}
+              onClick={() => onTabChange("filter")}
+              sx={(theme) => ({
+                color:
+                  selectedTab === "filter"
+                    ? theme.palette.Black[400]
+                    : theme.palette.Grayscale[300],
+                cursor: "pointer",
+              })}
               variant="SB_18"
             >
               필터
@@ -104,40 +164,63 @@ const FilterModal = ({
         </Stack>
 
         {/* 체크박스 */}
-        <Stack spacing={0} flexGrow={1}>
-          <CheckboxRow
-            label={`전체선택${count.all}`}
-            checked={checked.all}
-            indeterminate={indeterminate}
-            onChange={(e) => onAllChange(e.target.checked)}
-            isAllRow
-          />
-          <Divider sx={{ mb: 1 }} />
-          <CheckboxRow
-            label={`소형이사${count.small}`}
-            checked={checked.small}
-            onChange={(e) => onIndividualChange("small", e.target.checked)}
-          />
-          <Divider />
-          <CheckboxRow
-            label={`가정이사${count.home}`}
-            checked={checked.home}
-            onChange={(e) => onIndividualChange("home", e.target.checked)}
-          />
-          <Divider />
-          <CheckboxRow
-            label={`사무실이사${count.office}`}
-            checked={checked.office}
-            onChange={(e) => onIndividualChange("office", e.target.checked)}
-          />
-        </Stack>
+        {selectedTab === "moveType" && (
+          <Stack spacing={0} flexGrow={1}>
+            <CheckboxRow
+              label={`전체선택${totalMoveCount}`}
+              checked={allMoveChecked}
+              indeterminate={someMoveChecked}
+              onChange={(e) => handleAllMoveTypeChange(e.target.checked)}
+              isAllRow
+            />
+            <Divider sx={{ mb: 1 }} />
+            {localMoveTypeItems.map((item) => (
+              <React.Fragment key={item.label}>
+                <CheckboxRow
+                  label={`${item.label} (${item.count})`}
+                  checked={item.checked}
+                  onChange={(e) =>
+                    handleMoveTypeChange(item.label, e.target.checked)
+                  }
+                />
+                <Divider />
+              </React.Fragment>
+            ))}
+          </Stack>
+        )}
+        <Divider sx={{ my: 2 }} />
+        {/* 필터 체크박스 */}
+        {selectedTab === "filter" && (
+          <Stack spacing={0} flexGrow={1}>
+            <CheckboxRow
+              label={`전체선택 (${totalFilterCount})`}
+              checked={allFilterChecked}
+              indeterminate={someFilterChecked}
+              onChange={(e) => handleAllFilterChange(e.target.checked)}
+              isAllRow
+            />
+            <Divider sx={{ mb: 1 }} />
 
+            {localFilterItems.map((item) => (
+              <React.Fragment key={item.label}>
+                <CheckboxRow
+                  label={`${item.label} (${item.count})`}
+                  checked={item.checked}
+                  onChange={(e) =>
+                    handleFilterChange(item.label, e.target.checked)
+                  }
+                />
+                <Divider />
+              </React.Fragment>
+            ))}
+          </Stack>
+        )}
         {/* 하단 버튼 */}
         <Button
           variant="contained"
           sx={{ mt: "auto", borderRadius: "16px", height: "54px" }}
           fullWidth
-          onClick={() => onSubmit(checked)}
+          onClick={handleSubmit}
         >
           조회하기
         </Button>

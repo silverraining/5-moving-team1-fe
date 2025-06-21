@@ -33,23 +33,24 @@ export type EstimateOffer = {
 };
 
 export type EstimateRequest = {
-  id: string;
-  customerId: string;
-  estimateOfferId: string;
-  moveType: ServiceType;
+  estimateRequestId: string;
+  moverId: string;
+  customerName: string;
   price: number;
   status: EstimateOfferStatus;
-  requestStatus: EstimateRequestStatus;
-  moveDate: Date; // 연월일시 + 시간
-  targetMoverIds?: string[]; // 3개 제한
-  fromAddress: Address;
-  toAddress: Address;
+  isTargeted: boolean;
+  isConfirmed: boolean;
+  confirmedAt: Date;
+  moveDate: Date;
+  moveType: ServiceType;
   createdAt: Date;
-  updatedAt: Date;
-  estimateOffers: EstimateOffer[] | []; // 1:N 관계
-  confirmedOfferId?: string; //확정된 견적에 대한 id 1:1
-  confirmedOffer?: EstimateOffer;
-  customerProfile: CustomerProfile;
+
+  fromAddress?: Address;
+  toAddress?: Address;
+  fromAddressMinimal?: MinimalAddress;
+  toAddressMinimal?: MinimalAddress;
+
+  mover: MoverProfile;
 };
 
 export type Review = {

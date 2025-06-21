@@ -129,3 +129,41 @@ export const updateGeneralMoverProfile = async (
     throw error;
   }
 };
+
+export interface MoverDetail {
+  id: string;
+  nickname: string;
+  imageUrl: string;
+  experience: number;
+  intro: string;
+  description: string;
+  serviceType: Record<ServiceType, boolean>;
+  serviceRegion: Record<ServiceRegion, boolean>;
+  reviewCount: number;
+  averageRating: number;
+  confirmedEstimateCount: number;
+  likeCount: number;
+  isTargeted: boolean;
+  isLiked: boolean;
+}
+
+/** 기사님 상세 정보 조회 api */
+export const getMoverDetail = async (moverId: string): Promise<MoverDetail> => {
+  const { data } = await apiClient.get<MoverDetail>(`/mover/${moverId}`);
+  return data;
+};
+
+/** 지정 견적 요청 api */
+export const requestTargetedEstimate = async (
+  requestId: string,
+  moverProfileId: string
+) => {
+  const response = await apiClient.patch<{ message: string }>(
+    `/estimate-request/${requestId}/targeted`,
+    {
+      moverProfileId,
+    }
+  );
+
+  return response.data;
+};

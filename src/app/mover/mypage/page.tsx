@@ -1,10 +1,11 @@
 "use client";
-import { Box, Typography } from "@mui/material";
-import { ReviewChart } from "@/src/components/shared/components/review-chart/ReviewChart";
+import { Box, Divider, Typography } from "@mui/material";
+import { ReviewChart } from "@/src/components/shared/components/review/review-chart/ReviewChart";
 import { ReviewList } from "@/src/components/shared/components/review/ReviewList";
 import {
   mockReviewData,
   mockReviews,
+  mockMoverData,
 } from "@/src/components/mover/MoverDetail";
 import { useTheme } from "@mui/material/styles";
 import { MyPageProfileSection } from "@/src/components/mover/mypage/MyPageProfileSection";
@@ -30,12 +31,12 @@ export default function MyPage() {
         >
           리뷰 (178)
         </Typography>
-        <ReviewChart data={mockReviewData} />
+        {/* <ReviewChart data={mockReviewData} /> */}
       </Box>
 
       {/* 댓글 섹션 */}
       <Box width="100%" maxWidth="1400px" px="24px">
-        <ReviewList reviews={mockReviews} itemsPerPage={5} />
+        {/* <ReviewList reviews={} itemsPerPage={5} /> */}
       </Box>
     </Box>
   );

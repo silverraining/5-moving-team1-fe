@@ -1,33 +1,93 @@
-import React, { useState } from "react";
+import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { ReviewData } from "@/src/types/common";
 import { StarRating } from "./StarRating";
 import Pagination from "../../pagination/Pagination";
+import Image from "next/image";
+import { ReviewChart } from "./review-chart/ReviewChart";
 
 interface ReviewListProps {
   reviews: ReviewData[];
-  itemsPerPage?: number; // 페이지당 표시할 리뷰 수
+  currentPage: number;
+  totalPages: number;
+  onPageChange: (page: number) => void;
+  total?: number;
+  reviewStatistics?: any;
 }
 
-export const ReviewList = ({ reviews, itemsPerPage = 5 }: ReviewListProps) => {
+export const ReviewList = ({
+  reviews,
+  currentPage,
+  totalPages,
+  onPageChange,
+  total = 0,
+  reviewStatistics,
+}: ReviewListProps) => {
   const theme = useTheme();
-  const [currentPage, setCurrentPage] = useState(1);
 
-  // 전체 페이지 수 계산
-  const totalPages = Math.ceil(reviews.length / itemsPerPage);
-
-  // 현재 페이지에 표시할 리뷰 계산
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = startIndex + itemsPerPage;
-  const currentReviews = reviews.slice(startIndex, endIndex);
-
-  const handlePageChange = (page: number) => {
-    setCurrentPage(page);
-  };
+  if (reviews.length === 0) {
+    return (
+      <Box>
+        <Typography
+          sx={{
+            fontSize: [18, 20, 24],
+            fontWeight: 700,
+            color: theme.palette.Black[300],
+            marginBottom: "32px",
+          }}
+        >
+          리뷰 ({total})
+        </Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "64px 0",
+          }}
+        >
+          <Image
+            src="/Images/empty/no_data.svg"
+            alt="데이터 없음"
+            width={110}
+            height={82}
+          />
+          <Typography
+            sx={{
+              fontSize: [14, 16],
+              color: theme.palette.Grayscale[300],
+              marginTop: "24px",
+            }}
+          >
+            아직 등록된 리뷰가 없어요 !
+          </Typography>
+        </Box>
+      </Box>
+    );
+  }
 
   return (
     <Box>
-      {currentReviews.map((review) => (
+      <Box
+        sx={{
+          marginBottom: "40px",
+        }}
+      >
+        <Typography
+          sx={{
+            fontSize: [18, 20, 24],
+            fontWeight: 700,
+            color: theme.palette.Black[300],
+            marginBottom: "32px",
+          }}
+        >
+          리뷰 ({total})
+        </Typography>
+        {reviewStatistics && <ReviewChart data={reviewStatistics} />}
+      </Box>
+
+      {reviews.map((review) => (
         <Box
           key={review.id}
           sx={{
@@ -84,7 +144,7 @@ export const ReviewList = ({ reviews, itemsPerPage = 5 }: ReviewListProps) => {
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
-            onPageChange={handlePageChange}
+            onPageChange={onPageChange}
           />
         </Box>
       )}
