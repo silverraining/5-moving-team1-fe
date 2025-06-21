@@ -141,3 +141,33 @@ export const fetchMoverProfileCard =
       throw new Error("기사님 프로필 정보를 불러오지 못했습니다.");
     }
   };
+
+/** 기사가 보낸 견적 목록 api */
+export const EstimateOffer = async () => {
+  try {
+    const response = await apiClient.get("/estimate-offer/offers");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 기사가 보낸 견적 상세 api */
+export const EstimateOfferId = async (offerId: string) => {
+  try {
+    const response = await apiClient.get(`/estimate-offer/${offerId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 기사가 반려한 견적 목록 api */
+export const EstimateOfferReject = async () => {
+  try {
+    const response = await apiClient.get("/estimate-offer/rejected-offers");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
