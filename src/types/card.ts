@@ -12,6 +12,7 @@ export interface ChipData {
 }
 
 export interface CardData {
+  id?: string;
   types: ServiceType[];
   message: string;
   imgSrc: string;
@@ -23,6 +24,7 @@ export interface CardData {
   career: number;
   confirm: number;
   address: string[];
+  chips?: ChipData[];
 }
 
 export type likeMoverListResItem = {
