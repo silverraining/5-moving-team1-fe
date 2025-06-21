@@ -1,10 +1,9 @@
 "use client";
-
 import { Box, useTheme, useMediaQuery } from "@mui/material";
 import NotificationHeader from "./NotificationHeader";
 import NotificationItem from "./NotificationItem";
 import CustomScrollY from "@/src/lib/customScrollY";
-import { mockNotifications } from "./notifications.mock";
+import { useNotificationStore } from "@/src/store/notification";
 
 interface NotificationDropDownProps {
   onHighlightClick?: (highlight: string) => void;
@@ -12,23 +11,11 @@ interface NotificationDropDownProps {
 }
 
 export default function NotificationDropDown({
-  onHighlightClick,
   onClose,
 }: NotificationDropDownProps) {
+  const { notifications } = useNotificationStore();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
-
-  //TODO: 하이라이트 클릭 시 라우팅 처리, 콘솔로그 제거
-  const handleHighlightClick = (highlight: string) => {
-    if (onHighlightClick) {
-      onHighlightClick(highlight);
-      // router.push(`/notifications/${id}`)
-      // <Link href={`/notifications/${id}`}>...</Link>
-      // 이런 식으로 확장
-    } else {
-      //console.log(`"${highlight}" 클릭됨 (라우팅 예정)`);
-    }
-  };
 
   return (
     <Box
@@ -64,13 +51,13 @@ export default function NotificationDropDown({
         <NotificationHeader onClose={onClose} />
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-          {mockNotifications.map((item) => (
+          {notifications?.map((item) => (
             <NotificationItem
               key={item.id}
+              targetId={item.targetId}
+              type={item.type}
               message={item.message}
-              highlight={item.highlight}
               createdAt={item.createdAt}
-              onHighlightClick={() => handleHighlightClick(item.highlight)}
             />
           ))}
         </Box>
