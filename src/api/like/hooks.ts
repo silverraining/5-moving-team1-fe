@@ -5,8 +5,8 @@ import {
   useMutation,
 } from "@tanstack/react-query";
 import {
-  createlikeMover,
-  deletelikeMover,
+  createLikeMover,
+  deleteLikeMover,
   getLikeList,
   likeMoverListRes,
   likeRes,
@@ -21,7 +21,7 @@ import {
 export const useLikeList = (
   enabled = true
 ): UseQueryResult<likeMoverListRes, Error> => {
-  return useQuery({ queryKey: ["likelist"], queryFn: getLikeList, enabled });
+  return useQuery({ queryKey: ["likeList"], queryFn: getLikeList, enabled });
 };
 /**
  * 무버를 찜(좋아요)하는 API를 호출하는 React Query Mutation 훅입니다.
@@ -35,7 +35,7 @@ export const useCreateLike = (): UseMutationResult<
   { moverId: string }
 > => {
   return useMutation({
-    mutationFn: ({ moverId }: { moverId: string }) => createlikeMover(moverId),
+    mutationFn: ({ moverId }: { moverId: string }) => createLikeMover(moverId),
   });
 };
 
@@ -51,6 +51,6 @@ export const useDeleteLike = (): UseMutationResult<
   { moverId: string }
 > => {
   return useMutation({
-    mutationFn: ({ moverId }: { moverId: string }) => deletelikeMover(moverId),
+    mutationFn: ({ moverId }: { moverId: string }) => deleteLikeMover(moverId),
   });
 };

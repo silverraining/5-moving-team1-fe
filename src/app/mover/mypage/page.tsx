@@ -1,6 +1,6 @@
 "use client";
 import { Box, Divider, Typography } from "@mui/material";
-import { ReviewChart } from "@/src/components/shared/components/review-chart/ReviewChart";
+import { ReviewChart } from "@/src/components/shared/components/review/review-chart/ReviewChart";
 import { ReviewList } from "@/src/components/shared/components/review/ReviewList";
 //TODO: moverDetail 파일에서 더미데이터 import -> API연결 후 제거
 import {
