@@ -141,8 +141,60 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
     address: convertToServiceRegionArray(moverData.serviceRegion),
   };
 
-  // 버튼 컴포넌트
-  const ResponsiveActionButtons = () => (
+  // 데스크톱 버튼 컴포넌트
+  const DesktopActionButtons = () => (
+    <>
+      {/* 찜하기 버튼 */}
+      <Button
+        variant="outlined"
+        fullWidth
+        onClick={handleLikeClick}
+        sx={{
+          height: "48px",
+          fontSize: 16,
+          fontWeight: 600,
+          backgroundColor: theme.palette.White[100],
+          border: `1px solid ${theme.palette.Line[200]}`,
+          color: theme.palette.Black[300],
+          marginBottom: "24px",
+          gap: "8px",
+          "&:hover": {
+            backgroundColor: theme.palette.PrimaryBlue[100],
+            border: `1px solid ${theme.palette.Line[200]}`,
+          },
+        }}
+      >
+        <Image
+          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
+          alt="찜하기"
+          width={20}
+          height={20}
+        />
+        기사님 찜하기
+      </Button>
+
+      {/* 견적 요청 버튼 */}
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleEstimateRequest}
+        sx={{
+          height: "56px",
+          fontSize: 16,
+          fontWeight: 600,
+          backgroundColor: theme.palette.PrimaryBlue[300],
+          "&:hover": {
+            backgroundColor: theme.palette.PrimaryBlue[500],
+          },
+        }}
+      >
+        지정 견적 요청하기
+      </Button>
+    </>
+  );
+
+  // 모바일 버튼 컴포넌트
+  const MobileActionButtons = () => (
     <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
       {/* 찜하기 버튼 - 하트만 */}
       <Button
@@ -385,7 +437,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                   {moverData.nickname} 기사님에게 지정 견적을 요청해보세요!
                 </Typography>
 
-                <ResponsiveActionButtons />
+                <DesktopActionButtons />
               </Box>
 
               {/* SNS 공유 섹션 */}
@@ -415,7 +467,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           }}
         >
           <Box sx={{ maxWidth: "1400px", margin: "0 24px" }}>
-            <ResponsiveActionButtons />
+            <MobileActionButtons />
           </Box>
         </Box>
       )}
