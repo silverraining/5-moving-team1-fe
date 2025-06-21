@@ -19,12 +19,11 @@ export const MyPageProfileSection = ({ data }: MyPageProfileSectionProps) => {
         width="100%"
         px="16px"
         sx={{
-          maxWidth: "clamp(375px, 100%, 1400px)",
           mx: "auto",
         }}
       >
         <Typography variant="SB_24">마이페이지</Typography>
-        <Box mt="32px">
+        <Box mt="32px" mx="0">
           <CardListProfileWrapper data={data} />
         </Box>
         <Divider

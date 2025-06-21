@@ -12,9 +12,10 @@ export default function MyPage() {
   return (
     <Box
       sx={{
-        maxWidth: "1600px",
+        maxWidth: "1400px",
         margin: "0 auto",
         padding: "24px 16px",
+        paddingX: [3, 9, 3],
         minWidth: 0,
         overflow: "hidden",
       }}
