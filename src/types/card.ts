@@ -1,5 +1,4 @@
 import {
-  Address,
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
@@ -7,7 +6,7 @@ import {
 
 export interface ChipData {
   chipType?: ServiceType;
-  status?: EstimateRequestStatus;
+  status?: EstimateRequestStatus | EstimateOfferStatus;
   isTargeted?: boolean;
 }
 
