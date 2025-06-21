@@ -7,7 +7,7 @@ interface RegionSelectorProps {
   onRegionToggle: (region: ServiceRegion) => void;
 }
 
-const regionLabels: Record<ServiceRegion, string> = {
+export const regionLabels: Record<ServiceRegion, string> = {
   [ServiceRegion.SEOUL]: "서울",
   [ServiceRegion.GYEONGGI]: "경기",
   [ServiceRegion.INCHEON]: "인천",
