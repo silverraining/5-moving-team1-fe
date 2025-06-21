@@ -1,7 +1,8 @@
 "use client";
 import {
-  Box,
   Button,
+  SxProps,
+  Theme,
   Typography,
   useMediaQuery,
   useTheme,
@@ -12,12 +13,9 @@ export interface DropDownButtonProps {
   label: string;
   isSelected: boolean;
   onClick?: () => void;
-  width?: string | { mobile?: string; tablet?: string; desktop?: string };
-  height?: string | { mobile?: string; tablet?: string; desktop?: string };
-  padding?: string | { mobile?: string; tablet?: string; desktop?: string };
   typographyVariant?: "M_14" | "M_18" | "SB_16" | "B_16";
-  radius?: string | { mobile?: string; tablet?: string; desktop?: string };
   iconSize?: boolean;
+  sx?: SxProps<Theme>;
 }
 export default function DropDownButton({
   label,
@@ -25,7 +23,7 @@ export default function DropDownButton({
   onClick,
   typographyVariant,
   iconSize,
-  ...props
+  sx = {},
 }: DropDownButtonProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -40,7 +38,7 @@ export default function DropDownButton({
       : 15;
   const resolvedTypography = typographyVariant ?? (isTablet ? "M_14" : "M_18");
 
-  const buttonStyle = {
+  const buttonStyle: SxProps<Theme> = {
     justifyContent: "space-between",
     alignItems: "center",
     textTransform: "none",
@@ -68,7 +66,7 @@ export default function DropDownButton({
     : "/images/drop-down/chevron-down-lg.svg";
 
   return (
-    <Button onClick={onClick} sx={buttonStyle} {...props}>
+    <Button onClick={onClick} sx={{ ...buttonStyle, ...sx }}>
       <Typography
         variant={resolvedTypography}
         sx={{
