@@ -8,6 +8,7 @@ import {
   updateGeneralMoverProfile,
   getMoverDetail,
   requestTargetedEstimate,
+  fetchMoverProfileCard,
 } from "./api";
 
 interface UseEstimateRequestQueryParams {
@@ -70,5 +71,12 @@ export const useRequestTargetedEstimate = () => {
       requestId: string;
       moverProfileId: string;
     }) => requestTargetedEstimate(requestId, moverProfileId),
+  });
+};
+/** 기사님 마이페이지 프로필 카드 조회 hook */
+export const useMoverMypage = () => {
+  return useQuery({
+    queryKey: ["moverMypage"],
+    queryFn: fetchMoverProfileCard,
   });
 };
