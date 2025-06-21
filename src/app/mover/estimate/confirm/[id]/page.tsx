@@ -1,11 +1,13 @@
-import React from "react";
 import ConfirmDetail from "@/src/components/mover/estimate/ConfirmDetail";
 
-export default function ConfirmDetailPage({
+export const dynamic = "force-dynamic";
+
+export default async function ConfirmDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
-  return <ConfirmDetail moverId={id} />;
+  const { id } = await params;
+
+  return <ConfirmDetail offerId={id} />;
 }
