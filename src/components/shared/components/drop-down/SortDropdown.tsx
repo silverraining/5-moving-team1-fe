@@ -1,28 +1,5 @@
 "use client";
 
-/**
- * SortDropdown 컴포넌트 사용 방법
- *
- * 1. 정렬 옵션 정의
- * const sortOptions: SortOption[] = [
- *   { label: "리뷰 많은순", value: "review-desc" },
- *   { label: "평점 높은순", value: "rating-desc" },
- *   { label: "평점 낮은순", value: "rating-asc" },
- *   { label: "경력 높은순", value: "career-desc" },
- *   { label: "확정 많은순", value: "confirmed-desc" },
- * ];
- *
- * 2. 컴포넌트 사용
- * <SortDropdown
- *   options={sortOptions}
- *   defaultOption={sortOptions[0]}
- *   onChange={(option) => {
- *     console.log("선택된 옵션:", option);
- *     // 여기에서 정렬 로직 구현
- *   }}
- * />
- */
-
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -33,7 +10,7 @@ export interface SortOption {
 }
 
 interface SortDropdownProps {
-  options: SortOption[];
+  options: readonly SortOption[] | SortOption[];
   defaultOption?: SortOption;
   onChange?: (option: SortOption) => void;
 }
