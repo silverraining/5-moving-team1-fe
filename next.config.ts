@@ -17,6 +17,8 @@ const nextConfig: NextConfig = {
       "cdn.jsdelivr.net",
       "avatars.githubusercontent.com",
       "cphoto.asiae.co.kr",
+      "i.pinimg.com",
+      "encrypted-tbn0.gstatic.com",
     ],
   },
 };
