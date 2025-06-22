@@ -1,10 +1,19 @@
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   sendEstimateOffer,
   rejectEstimateRequest,
 } from "@/src/api/mover/estimate/requested/api";
+import { receivedEstimateRequestsQueryKey } from "./useReceivedEstimateRequests";
 
-export const useEstimateModalActions = () => {
+export const useEstimateModalActions = ({
+  sort = "move_date",
+  isTargeted = false,
+}: {
+  sort?: "move_date" | "created_at";
+  isTargeted?: boolean;
+}) => {
+  const queryClient = useQueryClient();
+
   const sendEstimateMutation = useMutation({
     mutationFn: ({
       requestId,
@@ -15,6 +24,13 @@ export const useEstimateModalActions = () => {
       price: number;
       comment: string;
     }) => sendEstimateOffer(requestId, { price, comment }),
+
+    // 성공 시 서버 데이터 다시 가져오도록 캐시 무효화
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: receivedEstimateRequestsQueryKey(sort, isTargeted),
+      });
+    },
   });
 
   const rejectEstimateMutation = useMutation({
@@ -25,6 +41,13 @@ export const useEstimateModalActions = () => {
       requestId: string;
       comment: string;
     }) => rejectEstimateRequest(requestId, { comment }),
+
+    // 성공 시 서버 데이터 다시 가져오도록 캐시 무효화
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: receivedEstimateRequestsQueryKey(sort, isTargeted),
+      });
+    },
   });
 
   return { sendEstimateMutation, rejectEstimateMutation };

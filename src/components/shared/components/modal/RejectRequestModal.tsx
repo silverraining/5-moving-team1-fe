@@ -14,15 +14,18 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useRejectRequestForm } from "@/src/hooks/utill";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipProps } from "@/src/types/card";
+import { ServiceType } from "@/src/types/common";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
+import { EstimateRequestStatus } from "@/src/types/common";
 
 interface RejectRequestModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (reason: string) => void;
-  moveType: ChipProps["type"][];
+  moveType: ServiceType[];
+  isTargeted: boolean;
+  requestStatus: string;
   customerName: string;
   moveDate: string;
   fromAddress: string;
@@ -34,6 +37,8 @@ export default function RejectRequestModal({
   onClose,
   onSubmit,
   moveType,
+  isTargeted,
+  requestStatus,
   customerName,
   moveDate,
   fromAddress,
@@ -117,7 +122,14 @@ export default function RejectRequestModal({
             }}
           >
             {moveType.map((type) => (
-              <ChipCategory key={type} type={type as ChipProps["type"]} />
+              <ChipCategory
+                key={type}
+                data={{
+                  chipType: type,
+                  isTargeted,
+                  status: requestStatus as EstimateRequestStatus,
+                }}
+              />
             ))}
           </Box>
           <Box

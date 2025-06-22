@@ -88,7 +88,10 @@ export default function ReceivedRequestsFlow() {
     });
 
   const { sendEstimateMutation, rejectEstimateMutation } =
-    useEstimateModalActions();
+    useEstimateModalActions({
+      sort: sortOption.sort,
+      isTargeted: false,
+    });
 
   // 실제 API로 받은 데이터 목록 정리
   const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
