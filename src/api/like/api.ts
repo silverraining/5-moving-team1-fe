@@ -18,12 +18,13 @@ export type likeMoverListRes = {
   confirmed_estimate_count: number;
   likeCount: number;
 }[];
+
 /**
  * 찜하기 APi
  * @param moverId 기사 프로필 ID
  * @returns
  */
-export const createlikeMover = async (moverId: string): Promise<likeRes> => {
+export const createLikeMover = async (moverId: string): Promise<likeRes> => {
   try {
     const response = await apiClient.post(`/like/${moverId}`, {});
     return response.data;
@@ -34,12 +35,13 @@ export const createlikeMover = async (moverId: string): Promise<likeRes> => {
     throw new Error("찜하기 실패");
   }
 };
+
 /**
  * 찜하기 취소 API
  * @param moverId
  * @returns
  */
-export const deletelikeMover = async (moverId: string): Promise<likeRes> => {
+export const deleteLikeMover = async (moverId: string): Promise<likeRes> => {
   try {
     const response = await apiClient.delete(`/like/${moverId}`, {});
     return response.data;
@@ -57,7 +59,7 @@ export const deletelikeMover = async (moverId: string): Promise<likeRes> => {
  */
 export const getLikeList = async (): Promise<likeMoverListRes> => {
   try {
-    const response = await apiClient.get(`like`);
+    const response = await apiClient.get(`/like`);
     return response.data;
   } catch (error) {
     if (axios.isAxiosError(error) && error.response) {

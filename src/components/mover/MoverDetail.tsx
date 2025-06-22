@@ -1,377 +1,476 @@
 "use client";
-import React, { useState } from "react";
-import { Box, Typography, useTheme, Stack, Button } from "@mui/material";
+import React, { useState, useEffect } from "react";
+import {
+  Box,
+  Typography,
+  useTheme,
+  Button,
+  useMediaQuery,
+} from "@mui/material";
 import { CardListMover } from "../shared/components/card/CardListMover";
 import { ChipArea } from "../shared/components/chip/ChipArea";
-import { ReviewChart } from "../shared/components/review-chart/ReviewChart";
 import { SnsShare } from "../shared/components/sns-share/SnsShare";
 import { CardData } from "@/src/types/card";
 import { ReviewData, ReviewStatistics } from "@/src/types/common";
 import { ReviewList } from "../shared/components/review/ReviewList";
 import Image from "next/image";
+import { useMoverDetail } from "@/src/api/mover/hooks";
+import {
+  convertToServiceTypeArray,
+  convertToServiceRegionArray,
+} from "@/src/utils/util";
+import { convertEnglishToSido } from "@/src/utils/parseAddress";
+import { useMoverReviews } from "@/src/api/review/hooks";
+import { useRequestTargetedEstimate } from "@/src/api/mover/hooks";
+import { NoEstimateModal } from "./NoEstimateModal";
+import { useSnackbarStore } from "@/src/store/snackBarStore";
+import { useCreateLike, useDeleteLike } from "../../api/like/hooks";
 
 interface MoverDetailProps {
   moverId: string;
 }
 
-// 임시 데이터 - 실제로는 API에서 가져올 데이터
-export const mockMoverData: CardData = {
-  types: ["small", "home"],
-  message: "고객님의 물품을 안전하게 운송해드립니다.",
-  imgSrc: "/Images/profile/maleProfile.svg",
-  name: "김코드",
-  isLiked: false,
-  like: 136,
-  rating: 5.0,
-  count: 178,
-  career: 7,
-  confirm: 3341,
-  address: ["서울", "경기"],
-};
-
-export const mockReviewData: ReviewStatistics = {
-  average: 5.0,
-  score: { 1: 0, 2: 0, 3: 0, 4: 8, 5: 170 },
-  max: 170,
-};
-
-export const mockReviews: ReviewData[] = [
-  {
-    id: 1,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 5,
-    content: "너무 좋은 서비스 감사합니다!",
-  },
-  {
-    id: 2,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 5,
-    content: "기사님 너무 좋아요!",
-  },
-  {
-    id: 3,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 5,
-    content: "지인들에게 추천하고 싶은 기사님!",
-  },
-  {
-    id: 4,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 4,
-    content: "친절하시고 신속하게 도와주셔서 감사합니다!",
-  },
-  {
-    id: 5,
-    author: "kjm****",
-    date: "2024-07-01",
-    rating: 3,
-    content: "무난합니다.",
-  },
-  {
-    id: 6,
-    author: "lhs****",
-    date: "2024-06-28",
-    rating: 5,
-    content: "정말 꼼꼼하고 친절하게 해주셨어요. 다음에도 부탁드리고 싶습니다!",
-  },
-  {
-    id: 7,
-    author: "park***",
-    date: "2024-06-25",
-    rating: 4,
-    content: "시간 약속도 잘 지키시고 물건도 안전하게 옮겨주셨습니다.",
-  },
-  {
-    id: 8,
-    author: "choi***",
-    date: "2024-06-20",
-    rating: 5,
-    content: "전문적이고 신뢰할 수 있는 기사님이세요. 적극 추천합니다!",
-  },
-  {
-    id: 9,
-    author: "kim****",
-    date: "2024-06-18",
-    rating: 4,
-    content: "깔끔하고 정확한 작업 감사합니다.",
-  },
-  {
-    id: 10,
-    author: "lee****",
-    date: "2024-06-15",
-    rating: 5,
-    content: "가격도 합리적이고 서비스도 만족스러워요!",
-  },
-  {
-    id: 11,
-    author: "song***",
-    date: "2024-06-12",
-    rating: 4,
-    content: "성실하게 작업해주셔서 감사합니다.",
-  },
-  {
-    id: 12,
-    author: "jung***",
-    date: "2024-06-10",
-    rating: 5,
-    content: "이사 첫 경험이었는데 너무 잘 도와주셨어요!",
-  },
-];
-
 export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const theme = useTheme();
-  const [selectedAreas, setSelectedAreas] = useState<string[]>(["서울"]);
+  const isTablet = useMediaQuery("(max-width: 1400px)");
+  const { data: moverData, isLoading } = useMoverDetail(moverId);
   const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const { data: reviewData } = useMoverReviews(moverId, currentPage, 5);
+  const [isNoEstimateModalOpen, setIsNoEstimateModalOpen] = useState(false);
+  const requestTargetedEstimate = useRequestTargetedEstimate();
+  const { openSnackbar } = useSnackbarStore();
+  const createLikeMutation = useCreateLike();
+  const deleteLikeMutation = useDeleteLike();
 
-  const handleAreaClick = (area: string) => {
-    setSelectedAreas((prev) =>
-      prev.includes(area)
-        ? prev.filter((item) => item !== area)
-        : [...prev, area]
+  // 찜하기 버튼 클릭 핸들러
+  const handleLikeClick = async () => {
+    if (!moverData) return;
+
+    try {
+      if (isLiked) {
+        await deleteLikeMutation.mutate({ moverId: moverData.id });
+        setLikeCount((prev) => prev - 1); // 찜하기 취소 시 좋아요 수 감소
+      } else {
+        await createLikeMutation.mutate({ moverId: moverData.id });
+        setLikeCount((prev) => prev + 1); // 찜하기 시 좋아요 수 증가
+      }
+      setIsLiked(!isLiked); // 찜하기 상태 업데이트
+    } catch (error) {
+      console.error("찜하기 처리 중 오류가 발생했습니다:", error);
+    }
+  };
+
+  // 찜하기 상태 업데이트 훅
+  useEffect(() => {
+    if (moverData) {
+      setIsLiked(moverData.isLiked);
+      setLikeCount(moverData.likeCount);
+    }
+  }, [moverData]);
+
+  // 지정 견적 요청 버튼 클릭 핸들러
+  const handleEstimateRequest = () => {
+    const authStorage = localStorage.getItem("auth-storage");
+    const state = authStorage ? JSON.parse(authStorage).state : null;
+    const pendingEstimateRequestId = state?.user?.pendingEstimateRequestId;
+
+    if (!pendingEstimateRequestId) {
+      setIsNoEstimateModalOpen(true);
+      return;
+    }
+
+    requestTargetedEstimate.mutate(
+      {
+        requestId: pendingEstimateRequestId,
+        moverProfileId: moverId,
+      },
+      {
+        onSuccess: (response) => {
+          openSnackbar(
+            response.message || "지정 견적 요청이 완료되었습니다.",
+            "success"
+          );
+        },
+        onError: (error: any) => {
+          openSnackbar(
+            error.response?.data?.message || "지정 견적 요청에 실패했습니다.",
+            "error"
+          );
+          console.error("Failed to request targeted estimate:", error);
+        },
+      }
     );
   };
 
-  const handleServiceClick = (service: string) => {
-    // TODO : 서비스 선택 로직 구현
-    console.log(`${service} 서비스 선택`);
+  if (isLoading || !moverData) {
+    return <div>Loading...</div>;
+  }
+
+  const reviewStatistics: ReviewStatistics = {
+    average: reviewData?.rating.average || 0,
+    score: reviewData?.rating.count || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 },
+    max: Math.max(
+      ...Object.values(
+        reviewData?.rating.count || { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0 }
+      )
+    ),
   };
 
-  const handleLikeClick = () => {
-    // TODO : 찜하기 로직 구현
-    setIsLiked(!isLiked);
+  const reviews: ReviewData[] =
+    reviewData?.reviews.map((review) => ({
+      id: Math.random(), // 임시 ID 생성
+      author: review.customerName,
+      date: review.createdAt,
+      rating: review.rating,
+      content: review.comment,
+    })) || [];
+
+  const cardData: CardData = {
+    types: convertToServiceTypeArray(moverData.serviceType),
+    message: moverData.intro,
+    imgSrc: moverData.imageUrl,
+    name: moverData.nickname,
+    isLiked: moverData.isLiked,
+    like: likeCount,
+    rating: moverData.averageRating,
+    count: moverData.reviewCount,
+    career: moverData.experience,
+    confirm: moverData.confirmedEstimateCount,
+    address: convertToServiceRegionArray(moverData.serviceRegion),
   };
 
-  const handleQuoteRequest = () => {
-    // TODO : 지정 견적 요청 로직 구현
-    // TODO : 일반 견적 없을 경우 모달 띄우기
-    console.log("견적 요청하기");
-  };
-
-  return (
-    <Box sx={{ maxWidth: "1400px", margin: "0 auto", padding: "24px 16px" }}>
-      {/* 메인 컨텐츠 영역 */}
-      <Box
+  // 데스크톱 버튼 컴포넌트
+  const DesktopActionButtons = () => (
+    <>
+      {/* 찜하기 버튼 */}
+      <Button
+        variant="outlined"
+        fullWidth
+        onClick={handleLikeClick}
         sx={{
-          display: "flex",
-          gap: "96px",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
+          height: "48px",
+          fontSize: 16,
+          fontWeight: 600,
+          backgroundColor: theme.palette.White[100],
+          border: `1px solid ${theme.palette.Line[200]}`,
+          color: theme.palette.Black[300],
+          marginBottom: "24px",
+          gap: "8px",
+          "&:hover": {
+            backgroundColor: theme.palette.PrimaryBlue[100],
+            border: `1px solid ${theme.palette.Line[200]}`,
+          },
         }}
       >
-        {/* 왼쪽 메인 컨텐츠 */}
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          {/* 최상단 기사 카드 섹션 */}
-          <Box sx={{ paddingBottom: "40px", marginBottom: "40px" }}>
-            <CardListMover data={mockMoverData} />
-          </Box>
+        <Image
+          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
+          alt="찜하기"
+          width={20}
+          height={20}
+        />
+        기사님 찜하기
+      </Button>
 
-          {/* 상세설명 섹션 */}
-          <Box
-            sx={{
-              paddingBottom: "40px",
-              marginBottom: "40px",
-              borderBottom: `1px solid ${theme.palette.Line[100]}`,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: [18, 20, 24],
-                fontWeight: 700,
-                color: theme.palette.Black[300],
-                marginBottom: "16px",
-              }}
-            >
-              상세설명
-            </Typography>
-            <Typography
-              sx={{
-                fontSize: [14, 16, 18],
-                lineHeight: ["22px", "24px", "26px"],
-                color: theme.palette.Black[300],
-                backgroundColor: "transparent",
-                padding: 0,
-              }}
-            >
-              안녕하세요. 이사업계 경력 7년으로 안전한 이사를 도와드리는
-              김코드입니다. 고객님의 물품을 소중하고 안전하게 운송하여 드립니다.
-              소형이사 및 가정이사 서비스를 제공하며 서비스 가능 지역은 서울과
-              경기권입니다.
-            </Typography>
-          </Box>
+      {/* 견적 요청 버튼 */}
+      <Button
+        variant="contained"
+        fullWidth
+        onClick={handleEstimateRequest}
+        sx={{
+          height: "56px",
+          fontSize: 16,
+          fontWeight: 600,
+          backgroundColor: theme.palette.PrimaryBlue[300],
+          "&:hover": {
+            backgroundColor: theme.palette.PrimaryBlue[500],
+          },
+        }}
+      >
+        지정 견적 요청하기
+      </Button>
+    </>
+  );
 
-          {/* 제공 서비스 섹션 */}
-          <Box
-            sx={{
-              paddingBottom: "40px",
-              marginBottom: "40px",
-              borderBottom: `1px solid ${theme.palette.Line[100]}`,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: [18, 20, 24],
-                fontWeight: 700,
-                color: theme.palette.Black[300],
-                marginBottom: "16px",
-              }}
-            >
-              제공 서비스
-            </Typography>
-            <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
-              <ChipArea
-                label="소형이사"
-                selected={true}
-                onClick={() => handleServiceClick("소형이사")}
-              />
-              <ChipArea
-                label="가정이사"
-                selected={true}
-                onClick={() => handleServiceClick("가정이사")}
-              />
-            </Box>
-          </Box>
+  // 모바일 버튼 컴포넌트
+  const MobileActionButtons = () => (
+    <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
+      {/* 찜하기 버튼 - 하트만 */}
+      <Button
+        variant="outlined"
+        onClick={handleLikeClick}
+        sx={{
+          width: "56px",
+          height: "56px",
+          minWidth: "56px",
+          backgroundColor: theme.palette.White[100],
+          border: `1px solid ${theme.palette.Line[200]}`,
+          borderRadius: "12px",
+          padding: 0,
+          "&:hover": {
+            backgroundColor: theme.palette.PrimaryBlue[100],
+            border: `1px solid ${theme.palette.Line[200]}`,
+          },
+        }}
+      >
+        <Image
+          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
+          alt="찜하기"
+          width={24}
+          height={24}
+        />
+      </Button>
 
-          {/* 서비스 가능 지역 섹션 */}
-          <Box
-            sx={{
-              paddingBottom: "40px",
-              marginBottom: "40px",
-              borderBottom: `1px solid ${theme.palette.Line[100]}`,
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: [18, 20, 24],
-                fontWeight: 700,
-                color: theme.palette.Black[300],
-                marginBottom: "16px",
-              }}
-            >
-              서비스 가능 지역
-            </Typography>
-            <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
-              <ChipArea
-                label="서울"
-                selected={selectedAreas.includes("서울")}
-                onClick={() => handleAreaClick("서울")}
-              />
-              <ChipArea
-                label="경기"
-                selected={selectedAreas.includes("경기")}
-                onClick={() => handleAreaClick("경기")}
-              />
-            </Box>
-          </Box>
+      {/* 견적 요청 버튼 */}
+      <Button
+        variant="contained"
+        onClick={handleEstimateRequest}
+        sx={{
+          flex: 1,
+          height: "56px",
+          fontSize: 16,
+          fontWeight: 600,
+          backgroundColor: theme.palette.PrimaryBlue[300],
+          borderRadius: "12px",
+          "&:hover": {
+            backgroundColor: theme.palette.PrimaryBlue[500],
+          },
+        }}
+      >
+        지정 견적 요청하기
+      </Button>
+    </Box>
+  );
 
-          {/* 리뷰 섹션 */}
-          <Box
-            sx={{
-              marginBottom: "40px",
-            }}
-          >
-            <Typography
-              sx={{
-                fontSize: [18, 20, 24],
-                fontWeight: 700,
-                color: theme.palette.Black[300],
-                marginBottom: "32px",
-              }}
-            >
-              리뷰 (178)
-            </Typography>
-            <ReviewChart data={mockReviewData} />
-          </Box>
-
-          {/* 댓글 섹션 */}
-          <ReviewList reviews={mockReviews} itemsPerPage={5} />
-        </Box>
-
-        {/* 오른쪽 사이드바 */}
+  return (
+    <>
+      <Box
+        sx={{
+          maxWidth: "1600px",
+          margin: "0 auto",
+          padding: "24px 16px",
+          paddingBottom: isTablet ? "120px" : "24px", // 모바일에서 하단 버튼 공간 확보
+          minWidth: 0,
+          overflow: "hidden",
+        }}
+      >
+        {/* 메인 컨텐츠 영역 */}
         <Box
           sx={{
-            width: "320px",
-            position: "sticky",
-            top: "24px",
+            display: isTablet ? "flex" : "grid",
+            gridTemplateColumns: isTablet ? "none" : "1fr 320px",
+            gap: isTablet ? "0px" : "48px",
+            alignItems: "flex-start",
+            justifyContent: isTablet ? "space-between" : "initial",
+            flexDirection: isTablet ? "column" : "row",
+            minWidth: 0,
+            width: "100%",
           }}
         >
-          {/* 견적 요청 섹션 */}
+          {/* 왼쪽 메인 컨텐츠 */}
           <Box
             sx={{
-              paddingBottom: "32px",
-              marginBottom: "32px",
-              borderBottom: `1px solid ${theme.palette.Line[100]}`,
+              minWidth: 0,
+              width: "100%",
+              overflow: "hidden",
             }}
           >
-            <Typography
-              sx={{
-                fontSize: 18,
-                fontWeight: 600,
-                color: theme.palette.Black[300],
-                marginBottom: "20px",
-                lineHeight: "28px",
-              }}
-            >
-              김코드 기사님에게 지정 견적을 요청해보세요!
-            </Typography>
-
-            {/* 찜하기 버튼 */}
-            <Button
-              variant="outlined"
-              fullWidth
-              onClick={handleLikeClick}
-              sx={{
-                height: "48px",
-                fontSize: 16,
-                fontWeight: 600,
-                backgroundColor: theme.palette.White[100],
-                border: `1px solid ${theme.palette.Line[200]}`,
-                color: theme.palette.Black[300],
-                marginBottom: "24px",
-                gap: "8px",
-                "&:hover": {
-                  backgroundColor: theme.palette.PrimaryBlue[100],
-                  border: `1px solid ${theme.palette.Line[200]}`,
-                },
-              }}
-            >
-              <Image
-                src={
-                  isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"
-                }
-                alt="찜하기"
-                width={20}
-                height={20}
+            {/* 최상단 기사 카드 섹션 */}
+            <Box sx={{ paddingBottom: "40px", marginBottom: "40px" }}>
+              <CardListMover
+                data={{
+                  ...cardData,
+                  isLiked: isLiked,
+                }}
+                onLikeClick={handleLikeClick}
               />
-              기사님 찜하기
-            </Button>
+            </Box>
 
-            {/* 견적 요청 버튼 */}
-            <Button
-              variant="contained"
-              fullWidth
-              onClick={handleQuoteRequest}
+            {/* 모바일에서 SNS 공유 섹션을 상세설명 위로 이동 */}
+            {isTablet && (
+              <Box sx={{ marginBottom: "80px" }}>
+                <SnsShare title="나만 알기엔 아까운 기사님인가요?" />
+              </Box>
+            )}
+
+            {/* 상세설명 섹션 */}
+            <Box
               sx={{
-                height: "56px",
-                fontSize: 16,
-                fontWeight: 600,
-                backgroundColor: theme.palette.PrimaryBlue[300],
-                "&:hover": {
-                  backgroundColor: theme.palette.PrimaryBlue[500],
-                },
+                paddingBottom: "40px",
+                marginBottom: "40px",
+                borderBottom: `1px solid ${theme.palette.Line[100]}`,
               }}
             >
-              지정 견적 요청하기
-            </Button>
+              <Typography
+                sx={{
+                  fontSize: [18, 20, 24],
+                  fontWeight: 700,
+                  color: theme.palette.Black[300],
+                  marginBottom: "16px",
+                }}
+              >
+                상세설명
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: [14, 16, 18],
+                  lineHeight: ["22px", "24px", "26px"],
+                  color: theme.palette.Black[300],
+                  backgroundColor: "transparent",
+                  padding: 0,
+                }}
+              >
+                {moverData.description}
+              </Typography>
+            </Box>
+
+            {/* 제공 서비스 섹션 */}
+            <Box
+              sx={{
+                paddingBottom: "40px",
+                marginBottom: "40px",
+                borderBottom: `1px solid ${theme.palette.Line[100]}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: [18, 20, 24],
+                  fontWeight: 700,
+                  color: theme.palette.Black[300],
+                  marginBottom: "16px",
+                }}
+              >
+                제공 서비스
+              </Typography>
+              <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
+                {convertToServiceTypeArray(moverData.serviceType).map(
+                  (type) => (
+                    <ChipArea
+                      key={type}
+                      label={
+                        type === "SMALL"
+                          ? "소형이사"
+                          : type === "HOME"
+                            ? "가정이사"
+                            : "사무실이사"
+                      }
+                      selected={true}
+                      onClick={() => {}}
+                    />
+                  )
+                )}
+              </Box>
+            </Box>
+
+            {/* 서비스 가능 지역 섹션 */}
+            <Box
+              sx={{
+                paddingBottom: "40px",
+                marginBottom: "40px",
+                borderBottom: `1px solid ${theme.palette.Line[100]}`,
+              }}
+            >
+              <Typography
+                sx={{
+                  fontSize: [18, 20, 24],
+                  fontWeight: 700,
+                  color: theme.palette.Black[300],
+                  marginBottom: "16px",
+                }}
+              >
+                서비스 가능 지역
+              </Typography>
+              <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
+                {convertToServiceRegionArray(moverData.serviceRegion).map(
+                  (region) => (
+                    <ChipArea
+                      key={region}
+                      label={convertEnglishToSido(region)}
+                      selected={false}
+                      onClick={() => {}}
+                    />
+                  )
+                )}
+              </Box>
+            </Box>
+
+            {/* 리뷰 섹션 */}
+            <ReviewList
+              reviews={reviews}
+              onPageChange={setCurrentPage}
+              totalPages={Math.ceil((reviewData?.total || 0) / 5)}
+              currentPage={currentPage}
+              total={reviewData?.total || 0}
+              reviewStatistics={reviewStatistics}
+            />
           </Box>
 
-          {/* SNS 공유 섹션 */}
-          <SnsShare title="나만 알기엔 아까운 기사님인가요?" />
+          {/* 데스크톱에서만 오른쪽 사이드바 표시 */}
+          {!isTablet && (
+            <Box
+              sx={{
+                width: "320px",
+                minWidth: "320px",
+                position: "sticky",
+                top: "24px",
+                height: "fit-content",
+              }}
+            >
+              {/* 견적 요청 섹션 */}
+              <Box
+                sx={{
+                  paddingBottom: "32px",
+                  marginBottom: "32px",
+                  borderBottom: `1px solid ${theme.palette.Line[100]}`,
+                }}
+              >
+                <Typography
+                  sx={{
+                    fontSize: 18,
+                    fontWeight: 600,
+                    color: theme.palette.Black[300],
+                    marginBottom: "20px",
+                    lineHeight: "28px",
+                  }}
+                >
+                  {moverData.nickname} 기사님에게 지정 견적을 요청해보세요!
+                </Typography>
+
+                <DesktopActionButtons />
+              </Box>
+
+              {/* SNS 공유 섹션 */}
+              <SnsShare title="나만 알기엔 아까운 기사님인가요?" />
+            </Box>
+          )}
         </Box>
+        <NoEstimateModal
+          open={isNoEstimateModalOpen}
+          onClose={() => setIsNoEstimateModalOpen(false)}
+        />
       </Box>
-    </Box>
+
+      {/* 모바일에서 하단 고정 버튼 */}
+      {isTablet && (
+        <Box
+          sx={{
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            backgroundColor: theme.palette.White[100],
+            padding: "16px",
+            borderTop: `1px solid ${theme.palette.Line[100]}`,
+            zIndex: 1000,
+            boxShadow: "0px -2px 8px rgba(0, 0, 0, 0.1)",
+          }}
+        >
+          <Box sx={{ maxWidth: "1400px", margin: "0 24px" }}>
+            <MobileActionButtons />
+          </Box>
+        </Box>
+      )}
+    </>
   );
 };

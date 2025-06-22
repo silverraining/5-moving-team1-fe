@@ -25,7 +25,8 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     PATH.moverEstimateConfirm,
     PATH.moverEstimateReject,
   ];
-  const noPaddingPages = [PATH.userEstimateHistory];
+  // padding 적용이 필요 없는 페이지
+  const noPaddingPages = [PATH.userEstimateHistory, PATH.moverMypage];
   const subHeaderPages = [
     PATH.userRequest,
     PATH.userEstimate,

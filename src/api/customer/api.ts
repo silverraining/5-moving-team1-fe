@@ -23,15 +23,6 @@ export const moverList = async ({
   }
 };
 
-export const moverDetail = async (moverId: string) => {
-  try {
-    const response = await apiClient.get(`/user/mover/detail/${moverId}`, {});
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
-};
-
 /** 일반 유저 프로필 등록 요청 타입 */
 export interface CustomerProfileRequest {
   imageUrl?: string | null;
