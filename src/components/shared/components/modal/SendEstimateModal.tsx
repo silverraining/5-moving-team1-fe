@@ -21,6 +21,7 @@ import { ServiceType } from "@/src/types/common";
 import { Outline } from "../text-field/Outline";
 import { InfoChip } from "./components/InfoChip";
 import { EstimateRequestStatus } from "@/src/types/common";
+import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
 
 interface SendEstimateModalProps {
   open: boolean;
@@ -174,7 +175,7 @@ export default function SendEstimateModal({
               >
                 <InfoChip label="이사일" />
                 <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
-                  {moveDate}
+                  {formatDateWithDay(moveDate)}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center">
@@ -277,6 +278,7 @@ export default function SendEstimateModal({
             sx={{
               padding: "16px",
               width: "100%",
+              gap: "10px",
             }}
           >
             <Typography

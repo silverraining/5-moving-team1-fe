@@ -19,6 +19,7 @@ import { ServiceType } from "@/src/types/common";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { EstimateRequestStatus } from "@/src/types/common";
+import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
 
 interface RejectRequestModalProps {
   open: boolean;
@@ -165,7 +166,7 @@ export default function RejectRequestModal({
               >
                 <InfoChip label="이사일" />
                 <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
-                  {moveDate}
+                  {formatDateWithDay(moveDate)}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center">
