@@ -202,14 +202,12 @@ export default function ReceivedRequestsFlow() {
 
   // 견적 보내기 모달 핸들러
   const handleSendClick = (request: EstimateRequestItem) => {
-    console.log("견적 보내기 버튼 눌리나 테스트");
     setSelectedRequest(request);
     openEstimateModal();
   };
 
   // 견적 반려하기 모달 핸들러
   const handleRejectClick = (request: EstimateRequestItem) => {
-    console.log("반려 버튼 눌리나 테스트");
     setSelectedRequest(request);
     openRejectModal();
   };
