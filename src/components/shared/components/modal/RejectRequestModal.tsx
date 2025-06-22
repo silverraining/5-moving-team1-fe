@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import Image from "next/image";
 import useMediaQuery from "@mui/material/useMediaQuery";
@@ -30,6 +31,7 @@ interface RejectRequestModalProps {
   moveDate: string;
   fromAddress: string;
   toAddress: string;
+  isLoading?: boolean;
 }
 
 export default function RejectRequestModal({
@@ -43,6 +45,7 @@ export default function RejectRequestModal({
   moveDate,
   fromAddress,
   toAddress,
+  isLoading,
 }: RejectRequestModalProps) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -51,12 +54,8 @@ export default function RejectRequestModal({
     useRejectRequestForm();
 
   // 실제 처리 함수
-  const onValid = ({ reason }: { reason: string }) => {
-    onSubmit(reason);
-    handleClose();
-  };
-
-  const handleClose = () => {
+  const onValid = async ({ reason }: { reason: string }) => {
+    await onSubmit(reason);
     reset();
     onClose();
   };
@@ -64,7 +63,7 @@ export default function RejectRequestModal({
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       fullWidth
       slotProps={{
         paper: {
@@ -96,7 +95,7 @@ export default function RejectRequestModal({
       >
         반려요청
         <Image
-          onClick={handleClose}
+          onClick={onClose}
           width={isSmall ? 24 : 36}
           height={isSmall ? 24 : 36}
           src="/Images/header/X.svg"
@@ -233,10 +232,11 @@ export default function RejectRequestModal({
           <Button
             type="submit"
             variant="contained"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             sx={{
               padding: "16px",
               width: "100%",
+              gap: "10px",
             }}
           >
             <Typography
@@ -245,6 +245,14 @@ export default function RejectRequestModal({
             >
               반려하기
             </Typography>
+            {isLoading && (
+              <CircularProgress
+                size={20}
+                sx={{
+                  color: theme.palette.White[100],
+                }}
+              />
+            )}
           </Button>
         </DialogActions>
       </form>

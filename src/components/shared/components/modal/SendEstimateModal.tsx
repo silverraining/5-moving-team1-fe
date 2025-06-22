@@ -11,6 +11,7 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import Image from "next/image";
 import { Textarea } from "../text-field/Textarea";
@@ -32,6 +33,7 @@ interface SendEstimateModalProps {
   moveDate: string;
   fromAddress: string;
   toAddress: string;
+  isLoading?: boolean;
 }
 
 export default function SendEstimateModal({
@@ -45,6 +47,7 @@ export default function SendEstimateModal({
   requestStatus,
   fromAddress,
   toAddress,
+  isLoading,
 }: SendEstimateModalProps) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -52,8 +55,8 @@ export default function SendEstimateModal({
   const { register, handleSubmit, errors, isValid, reset } =
     useEstimateOfferForm();
 
-  const onSubmit = (data: { price: string; comment: string }) => {
-    onSend({
+  const onSubmit = async (data: { price: string; comment: string }) => {
+    await onSend({
       price: Number(data.price),
       comment: data.comment.trim(),
     });
@@ -270,7 +273,7 @@ export default function SendEstimateModal({
           <Button
             type="submit"
             variant="contained"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             sx={{
               padding: "16px",
               width: "100%",
@@ -282,6 +285,14 @@ export default function SendEstimateModal({
             >
               견적 보내기
             </Typography>
+            {isLoading && (
+              <CircularProgress
+                size={20}
+                sx={{
+                  color: theme.palette.White[100],
+                }}
+              />
+            )}
           </Button>
         </DialogActions>
       </form>

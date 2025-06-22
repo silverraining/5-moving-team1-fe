@@ -14,7 +14,7 @@ export const useEstimateModalActions = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const sendEstimateMutation = useMutation({
+  const { mutateAsync: sendEstimate, isPending: isSending } = useMutation({
     mutationFn: ({
       requestId,
       price,
@@ -33,7 +33,7 @@ export const useEstimateModalActions = ({
     },
   });
 
-  const rejectEstimateMutation = useMutation({
+  const { mutateAsync: rejectEstimate, isPending: isRejecting } = useMutation({
     mutationFn: ({
       requestId,
       comment,
@@ -50,5 +50,5 @@ export const useEstimateModalActions = ({
     },
   });
 
-  return { sendEstimateMutation, rejectEstimateMutation };
+  return { sendEstimate, isSending, rejectEstimate, isRejecting };
 };

@@ -87,7 +87,7 @@ export default function ReceivedRequestsFlow() {
       isTargeted: false,
     });
 
-  const { sendEstimateMutation, rejectEstimateMutation } =
+  const { sendEstimate, isSending, rejectEstimate, isRejecting } =
     useEstimateModalActions({
       sort: sortOption.sort,
       isTargeted: false,
@@ -222,17 +222,17 @@ export default function ReceivedRequestsFlow() {
     if (!selectedRequest) return;
 
     try {
-      await sendEstimateMutation.mutateAsync({
+      await sendEstimate({
         requestId: selectedRequest.requestId,
         price: formData.price,
         comment: formData.comment,
       });
 
       openSnackbar("견적을 성공적으로 보냈습니다.", "success");
-      closeEstimateModal();
     } catch (error) {
       openSnackbar("견적 보내기에 실패했습니다.", "error");
       console.error(error);
+      throw error;
     }
   };
 
@@ -241,7 +241,7 @@ export default function ReceivedRequestsFlow() {
     if (!selectedRequest) return;
 
     try {
-      await rejectEstimateMutation.mutateAsync({
+      await rejectEstimate({
         requestId: selectedRequest.requestId,
         comment,
       });
@@ -253,8 +253,6 @@ export default function ReceivedRequestsFlow() {
       console.error(error);
     }
   };
-
-  console.log("🧲selectedRequest 확인용", selectedRequest);
 
   return (
     <Box
@@ -441,6 +439,7 @@ export default function ReceivedRequestsFlow() {
                   moveDate={selectedRequest.moveDate}
                   fromAddress={selectedRequest.fromAddressMinimal?.sido ?? ""}
                   toAddress={selectedRequest.toAddressMinimal?.sido ?? ""}
+                  isLoading={isSending}
                 />
               )}
               {isRejectModalOpen && selectedRequest && (
@@ -455,6 +454,7 @@ export default function ReceivedRequestsFlow() {
                   moveDate={selectedRequest.moveDate}
                   fromAddress={selectedRequest.fromAddressMinimal?.sido ?? ""}
                   toAddress={selectedRequest.toAddressMinimal?.sido ?? ""}
+                  isLoading={isRejecting}
                 />
               )}
             </Box>
