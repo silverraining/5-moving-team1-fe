@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../../shared/components/modal/SendEstimateModal";
 import RejectRequestModal from "../../../shared/components/modal/RejectRequestModal";
@@ -94,7 +94,10 @@ export default function ReceivedRequestsFlow() {
     });
 
   // 실제 API로 받은 데이터 목록 정리
-  const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
+  const estimateItems = useMemo(() => {
+    if (!data?.pages) return [];
+    return data.pages.flatMap((page) => page.items);
+  }, [data?.pages]);
 
   // 필터링된 데이터 적용
   const filteredItems = filterEstimateRequests({
@@ -432,12 +435,12 @@ export default function ReceivedRequestsFlow() {
                   onClose={() => closeEstimateModal()}
                   onSend={handleSendEstimate}
                   moveType={[selectedRequest.moveType]}
-                  isTargeted={selectedRequest.isTargeted}
+                  isTargeted={selectedRequest.isTargeted ?? false}
                   requestStatus={selectedRequest.requestStatus}
-                  customerName={selectedRequest.customerName}
+                  customerName={selectedRequest.customerName ?? ""}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddressMinimal?.sido}
-                  toAddress={selectedRequest.toAddressMinimal?.sido}
+                  fromAddress={selectedRequest.fromAddressMinimal?.sido ?? ""}
+                  toAddress={selectedRequest.toAddressMinimal?.sido ?? ""}
                 />
               )}
               {isRejectModalOpen && selectedRequest && (
@@ -446,10 +449,12 @@ export default function ReceivedRequestsFlow() {
                   onClose={() => closeRejectModal()}
                   onSubmit={handleSendReject}
                   moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                  customerName={selectedRequest.customerName}
+                  isTargeted={selectedRequest.isTargeted ?? false}
+                  requestStatus={selectedRequest.requestStatus}
+                  customerName={selectedRequest.customerName ?? ""}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddressMinimal?.sido}
-                  toAddress={selectedRequest.toAddressMinimal?.sido}
+                  fromAddress={selectedRequest.fromAddressMinimal?.sido ?? ""}
+                  toAddress={selectedRequest.toAddressMinimal?.sido ?? ""}
                 />
               )}
             </Box>

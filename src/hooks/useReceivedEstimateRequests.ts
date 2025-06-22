@@ -1,4 +1,8 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  useInfiniteQuery,
+  UseInfiniteQueryResult,
+} from "@tanstack/react-query";
 import { fetchReceivedEstimateRequest } from "../api/mover/estimate/requested/api";
 import { EstimateRequestResponse } from "../api/mover/estimate/requested/api";
 
@@ -13,11 +17,11 @@ export const useReceivedEstimateRequests = ({
 }: {
   sort?: "move_date" | "created_at";
   isTargeted?: boolean;
-}) => {
+}): UseInfiniteQueryResult<InfiniteData<EstimateRequestResponse>, Error> => {
   return useInfiniteQuery<
     EstimateRequestResponse,
     Error,
-    EstimateRequestResponse,
+    InfiniteData<EstimateRequestResponse>,
     ReturnType<typeof receivedEstimateRequestsQueryKey>,
     string | null
   >({
