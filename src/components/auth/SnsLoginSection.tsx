@@ -19,7 +19,9 @@ export const SnsLoginSection = ({ isSmall, title }: SnsLoginSectionProps) => {
     window.location.href = `${API_BASE_URL}/auth/login/google/role/${role}`;
   };
   const handleKakaoLogin = () => {
-    // TODO: 카카오 로그인 구현
+    const role = pathname.includes("/mover/") ? "mover" : "customer";
+    // 카카오 OAuth로 리디렉션
+    window.location.href = `${API_BASE_URL}/auth/login/kakao/role/${role}`;
   };
 
   const handleNaverLogin = () => {
