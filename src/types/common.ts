@@ -61,6 +61,7 @@ enum EstimateRequestStatus {
 }
 
 enum NotificationType {
+  NEW_OFFER,
   NEW_ESTIMATE_REQUEST,
   ESTIMATE_CONFIRMED,
   MOVE_DAY_REMINDER,

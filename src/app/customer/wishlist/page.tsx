@@ -5,6 +5,7 @@ import {
   CardListSave,
   CardListSaveSkeleton,
 } from "@/src/components/shared/components/card/CardListSave";
+import { PATH } from "@/src/lib/constants";
 import { likeMoverListResItem } from "@/src/types/card";
 import {
   EstimateOfferStatus,
@@ -13,9 +14,11 @@ import {
 } from "@/src/types/common";
 import { EstimateOffer } from "@/src/types/estimate";
 import { Stack } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 const Wishlist = () => {
   const { data, isLoading } = useLikeList();
+  const router = useRouter();
 
   const transformLikeMoverToEstimateOffer = (
     item: likeMoverListResItem
@@ -46,16 +49,16 @@ const Wishlist = () => {
           (key) => item.serviceType[key as keyof typeof item.serviceType]
         ) as ServiceType[],
         reviewCount: item.review_count,
-        averageRating: item.average_rating,
+        averageRating: item.average_rating || 0,
         likeCount: item.likeCount,
         userId: "",
         intro: "",
         rating: 0,
         description: "",
+        serviceRegion: [],
         createdAt: new Date(),
         updatedAt: new Date(),
         confirmedCount: 0,
-        serviceRegions: [],
         isLiked: true,
       },
       review: undefined as any,
@@ -86,11 +89,11 @@ const Wishlist = () => {
               <CardListSaveSkeleton />
             </Stack>
           ))
-        : transformedData?.map((mover, idx: number) => (
+        : transformedData?.map((d, idx: number) => (
             <Stack key={idx}>
               <CardListSave
-                data={mover}
-                onClick={() => console.log(mover.moverId)}
+                data={d}
+                onClick={() => router.push(PATH.moverDetail(d.mover.id))}
               />
             </Stack>
           ))}
