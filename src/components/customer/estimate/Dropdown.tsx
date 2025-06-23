@@ -54,12 +54,14 @@ export default function Dropdown({ options, onChange }: SortDropdownProps) {
           label={selectedOption.label}
           isSelected={isOpen}
           onClick={handleToggle}
-          width={"100%"}
-          height="100%"
-          padding={{ mobile: "10px", tablet: "10px", desktop: "15px" }}
-          typographyVariant={isMobile ? "M_14" : isTablet ? "M_14" : "M_18"}
-          radius={{ mobile: "8px", tablet: "8px", desktop: "16px" }}
           iconSize={true}
+          typographyVariant={isMobile ? "M_14" : isTablet ? "M_14" : "M_18"}
+          sx={{
+            width: "100%",
+            height: "100%",
+            padding: { mobile: "10px", tablet: "10px", desktop: "15px" },
+            radius: { mobile: "8px", tablet: "8px", desktop: "16px" },
+          }}
         />
       </Box>
 

@@ -6,6 +6,9 @@ import {
   registerMoverProfile,
   updateMoverProfile,
   updateGeneralMoverProfile,
+  EstimateOffer,
+  EstimateOfferId,
+  EstimateOfferReject,
   getMoverDetail,
   requestTargetedEstimate,
   fetchMoverProfileCard,
@@ -100,5 +103,28 @@ export const usePaginatedMovers = ({
     queryFn: () => fetchPaginatedMovers({ order, take, cursor }),
     enabled,
     staleTime: 1000 * 60 * 5, // 5분 캐시 , 불필요시 삭제
+
+/** 기사가 보낸 견적 목록 hook */
+export const useEstimateOffer = () => {
+  return useQuery({
+    queryKey: ["EstimateOffer"],
+    queryFn: EstimateOffer,
+  });
+};
+
+/** 기사가 보낸 견적 상세 hook */
+export const useEstimateOfferId = (offerId: string) => {
+  return useQuery({
+    queryKey: ["EstimateOfferId", offerId],
+    queryFn: () => EstimateOfferId(offerId),
+    enabled: !!offerId,
+  });
+};
+
+/** 기사가 반려한 견적 목록 hook */
+export const useEstimateOfferReject = () => {
+  return useQuery({
+    queryKey: ["EstimateOfferReject"],
+    queryFn: EstimateOfferReject,
   });
 };

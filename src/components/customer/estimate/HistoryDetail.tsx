@@ -6,6 +6,8 @@ import { SnsShare } from "../../shared/components/sns-share/SnsShare";
 import { EstimateInfo } from "./EstimateInfo";
 import Label from "./Label";
 import { useEstimateOfferDetail } from "@/src/api/customer/hook";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 
 export default function HistoryDetail({
   requestId,
@@ -14,14 +16,15 @@ export default function HistoryDetail({
   requestId: string;
   moverId: string;
 }) {
-  const handleLikeClick = () => {
-    alert(`좋아요 버튼 누름`);
-  };
-
   const { data, isLoading, isError } = useEstimateOfferDetail(
     requestId,
     moverId
   );
+
+  const queryClient = useQueryClient();
+
+  const { mutate: createLikeMutate } = useCreateLike();
+  const { mutate: deleteLikeMutate } = useDeleteLike();
 
   if (isLoading) return <Typography>로딩 중입니다...</Typography>;
   if (isError || !data)
@@ -41,7 +44,35 @@ export default function HistoryDetail({
         {/* 견적 상세 */}
         <Stack gap={"24px"}>
           <EstimateSection title="견적 상세">
-            <CardListMover data={data} onLikeClick={handleLikeClick} />
+            <CardListMover
+              data={data}
+              onLikeClick={() => {
+                const moverId = data.moverId;
+                if (data.mover.isLiked) {
+                  deleteLikeMutate(
+                    { moverId },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries({
+                          queryKey: ["EstimateOfferDetail"],
+                        });
+                      },
+                    }
+                  );
+                } else {
+                  createLikeMutate(
+                    { moverId },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries({
+                          queryKey: ["EstimateOfferDetail"],
+                        });
+                      },
+                    }
+                  );
+                }
+              }}
+            />
           </EstimateSection>
           <Divider />
 

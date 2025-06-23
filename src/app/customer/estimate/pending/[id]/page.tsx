@@ -1,16 +1,13 @@
-import PendingDetail from "@/src/components/customer/estimate/PendingDetail";
+import PendingDetailWrapper from "@/src/components/customer/estimate/PendingDetailWrapper";
+
+export const dynamic = "force-dynamic";
 
 export default async function PendingDetailPage({
   params,
-  searchParams,
 }: {
-  params: { id: string };
-  searchParams: { moverId?: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
-  const { moverId } = searchParams;
+  const { id } = await params;
 
-  if (!moverId) return <div>잘못된 접근입니다. moverId가 없습니다.</div>;
-
-  return <PendingDetail requestId={id} moverId={moverId} />;
+  return <PendingDetailWrapper requestId={id} />;
 }

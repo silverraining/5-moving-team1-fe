@@ -1,50 +1,17 @@
 "use client";
 import { Box, Stack, Typography, Divider } from "@mui/material";
-import { CardData, EstimateRequest } from "@/src/types/card";
+import { CardListReject } from "../../shared/components/card/CardListReject";
 import { EstimateSection } from "../../customer/estimate/EstimateSection";
 import { SnsShare } from "../../shared/components/sns-share/SnsShare";
 import { EstimateInfo } from "../../customer/estimate/EstimateInfo";
-import { EstimateOfferStatus } from "@/src/types/common";
-import { CardListReject } from "../../shared/components/card/CardListReject";
+import { useEstimateOfferId } from "@/src/api/mover/hooks";
 
-export default function ConfirmDetail({ moverId }: { moverId: string }) {
-  // 확인용으로 넣은 임시 데이터
-  const EstimateRequest: EstimateRequest[] = [
-    {
-      types: ["small", "home"],
-      id: "req-1",
-      date: "2024-06-01",
-      movingDay: "2024-07-05",
-      from: "서울특별시 강남구 삼성동 123-45",
-      to: "경기도 성남시 분당구 정자동 101-5",
-    },
-  ];
-  const mockCardList: CardData[] = [
-    {
-      types: ["small", "complete"],
-      message: "1톤 트럭 + 기사님 1명, 포장 포함",
-      imgSrc: "/Images/profile/maleProfile.svg",
-      name: "이사천국",
-      like: 10,
-      rating: 4.8,
-      count: 128,
-      career: 5,
-      confirm: 98,
-      isLiked: false,
-      cost: 240000,
-      date: "2024-06-01",
-      from: "서울특별시 강남구 삼성동 123-45",
-      to: "경기도 성남시 분당구 정자동 101-5",
-      ReviewCheck: true,
-      review: 2,
-      writeReview: "친절하게 잘 해주셨어요.",
-      nickname: "홍길동",
-      movingDay: "2024-07-05",
-      reject: false,
-      address: ["서울특별시 강남구 삼성동", "경기도 성남시 분당구 정자동"],
-    },
-  ];
-  const mockStatus: EstimateOfferStatus = EstimateOfferStatus.CONFIRMED;
+export default function ConfirmDetail({ offerId }: { offerId: string }) {
+  const { data, isLoading, isError } = useEstimateOfferId(offerId);
+
+  if (isLoading) return <Typography>로딩 중입니다...</Typography>;
+  if (isError || !data)
+    return <Typography>데이터를 불러오지 못했습니다.</Typography>;
 
   return (
     <Stack
@@ -60,7 +27,7 @@ export default function ConfirmDetail({ moverId }: { moverId: string }) {
         {/* 견적 상세 */}
         <Stack gap={"24px"}>
           <EstimateSection title="견적 상세">
-            <CardListReject data={mockCardList[0]} />
+            <CardListReject data={data} />
           </EstimateSection>
           <Divider />
 
@@ -74,19 +41,22 @@ export default function ConfirmDetail({ moverId }: { moverId: string }) {
         {/* 견적가 */}
         <EstimateSection title="견적가">
           <Typography variant="B_32">
-            {(mockCardList[0].cost ?? 0).toLocaleString()}원
+            {(data.price ?? 0).toLocaleString()}원
           </Typography>
         </EstimateSection>
         <Divider />
 
         {/* 견적 정보 */}
         <EstimateSection title="견적 정보">
-          <EstimateInfo info={EstimateRequest[0]}></EstimateInfo>
+          <EstimateInfo info={data} />
         </EstimateSection>
       </Stack>
 
       {/* 데스크탑 SNS */}
-      <Box display={["none", "none", "block"]} marginTop={"72px"}>
+      <Box
+        display={["none", "none", "block"]}
+        marginTop={["0px", "0px", "71px"]}
+      >
         <SnsShare title="견적서 공유하기" />
       </Box>
     </Stack>

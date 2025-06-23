@@ -177,7 +177,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {Number(info.rating).toFixed(1)}
               </Typography>
               <Typography
                 sx={(theme) => ({

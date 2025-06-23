@@ -150,6 +150,7 @@ export interface MoverListResponse {
   nextCursor?: string;
   hasNext: boolean;
 }
+
 /**
  * 커서 기반 페이지네이션 기사님 찾기 (목록 조회) API
  * @param params { order: string, take: number, cursor?: string, region?: string, serviceType?: string, search?: string } 정렬 기준, 가져올 개수, 다음 커서, 지역 필터, 서비스 타입 필터, 검색어
@@ -194,6 +195,31 @@ export const fetchPaginatedMovers = async ({
     const response = await apiClient.get<MoverListResponse>("/mover", {
       params,
     });
+
+/** 기사가 보낸 견적 목록 api */
+export const EstimateOffer = async () => {
+  try {
+    const response = await apiClient.get("/estimate-offer/offers");
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 기사가 보낸 견적 상세 api */
+export const EstimateOfferId = async (offerId: string) => {
+  try {
+    const response = await apiClient.get(`/estimate-offer/${offerId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+/** 기사가 반려한 견적 목록 api */
+export const EstimateOfferReject = async () => {
+  try {
+    const response = await apiClient.get("/estimate-offer/rejected-offers");
     return response.data;
   } catch (error) {
     throw error;
