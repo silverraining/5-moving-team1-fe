@@ -3,9 +3,10 @@ import { ChipCategory } from "../chip/ChipCategory";
 import Image from "next/image";
 import { useResponsiveValue } from "@/src/hooks/useResponsiveValue";
 import { EstimateOffer } from "@/src/types/estimate";
-import { ChipData } from "@/src/types/card";
+import { ChipData, CardData } from "@/src/types/card";
+
 interface CardProps extends BoxProps {
-  data: EstimateOffer;
+  data: EstimateOffer | CardData;
   onLikeClick?: () => void;
   forceMobileSize?: boolean;
 }
@@ -18,16 +19,41 @@ export const CardListSave = ({
 }: CardProps) => {
   const responsive = useResponsiveValue(forceMobileSize);
 
+  // EstimateOffer인지 CardData인지 확인
+  const isEstimateOffer = (
+    data: EstimateOffer | CardData
+  ): data is EstimateOffer => {
+    return "mover" in data;
+  };
+
   // 카드 데이터
-  const info = data.mover;
+  const info = isEstimateOffer(data)
+    ? data.mover
+    : {
+        nickname: data.name,
+        intro: data.message,
+        imageUrl: data.imgSrc,
+        isLiked: data.isLiked,
+        likeCount: data.like,
+        rating: data.rating,
+        reviewCount: data.count,
+        experience: data.career,
+        confirmedCount: data.confirm,
+      };
+
   // Chip 데이터
-  const chips: ChipData[] = [
-    {
-      chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
-    },
-  ];
+  const chips: ChipData[] = isEstimateOffer(data)
+    ? [
+        {
+          chipType: data.moveType,
+          status: data.requestStatus,
+          isTargeted: data.isTargeted,
+        },
+      ]
+    : data.chips ||
+      data.types.map((type) => ({
+        chipType: type,
+      }));
 
   return (
     <Box

@@ -23,6 +23,21 @@ export const RegionType = [
 ] as const;
 export type Region = (typeof RegionType)[number];
 
+// 정렬 옵션 매핑 (백엔드의 OrderString 형태로)
+export const SORT_OPTIONS = [
+  { value: "review_count DESC", label: "리뷰 많은순" },
+  { value: "average_rating DESC", label: "평점 높은순" },
+  { value: "experience DESC", label: "경력 높은순" },
+  { value: "confirmed_estimate_count DESC", label: "확정 많은순" },
+] as const;
+
+// 서비스 타입 매핑 (프론트엔드 -> 백엔드)
+export const SERVICE_TYPE_MAP: Record<string, string> = {
+  소형이사: "SMALL",
+  가정이사: "HOME",
+  사무실이사: "OFFICE",
+};
+
 export const PATH = {
   /** 메인 페이지 (/) */
   main: "/",
@@ -50,6 +65,10 @@ export const PATH = {
 
   /**기사 마이페이지 (/mover/mypage) */
   moverMypage: "/mover/mypage",
+
+  /** 기사 상세 페이지 (/customer/moverlist/:id) */
+  moverDetail: (id: string) => `/customer/moverlist/${id}`,
+
   /** 기사가 받은 견적 리스트 페이지 (/mover/estimate/requested) */
   moverRequest: "/mover/estimate/requested",
 
@@ -63,7 +82,7 @@ export const PATH = {
   moverEstimateReject: "/mover/estimate/reject",
 
   /** 기사 상세 페이지 (/customer/moverList/:id) */
-  moverDetail: (id: string) => `/customer/moverlist/${id}`,
+  moverDetailPage: (id: string) => `/customer/moverlist/${id}`,
 
   /** 기사 리스트 페이지 (/customer/moverList) */
   moverList: "/customer/moverlist",

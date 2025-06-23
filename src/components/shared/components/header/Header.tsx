@@ -42,17 +42,20 @@ export const Header = () => {
   const { setNotifications, setMarkAsRead, markAsRead } =
     useNotificationStore();
 
-  const TabMenu = isCustomer
+   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
       ? MOVER_MENU
       : GUEST_MENU;
 
+   
+
+
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+    ? MOVER_MENU
+    : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
@@ -207,6 +210,7 @@ export const Header = () => {
             height={24}
             alt="menu"
             onClick={toggleDrawer(true)}
+            style={{ cursor: "pointer" }}
           />
         </Stack>
       )}

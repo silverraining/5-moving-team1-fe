@@ -2,15 +2,11 @@
 
 import React from "react";
 import { MoverDetail } from "@/src/components/mover/MoverDetail";
+import { useParams } from "next/navigation";
 
-interface MoverDetailPageProps {
-  params: {
-    moverId: string;
-  };
-}
-
-const MoverDetailPage = ({ params }: MoverDetailPageProps) => {
-  const { moverId } = params;
+const MoverDetailPage = () => {
+  const params = useParams();
+  const moverId = params.moverId as string;
 
   return <MoverDetail moverId={moverId} />;
 };

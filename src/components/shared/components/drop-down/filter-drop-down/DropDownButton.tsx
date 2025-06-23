@@ -15,6 +15,7 @@ export interface DropDownButtonProps {
   onClick?: () => void;
   typographyVariant?: "M_14" | "M_18" | "SB_16" | "B_16";
   iconSize?: boolean;
+  forceMobileSize?: boolean;
   sx?: SxProps<Theme>;
 }
 export default function DropDownButton({
@@ -23,38 +24,42 @@ export default function DropDownButton({
   onClick,
   typographyVariant,
   iconSize,
+  forceMobileSize = false,
+  ...props
   sx = {},
 }: DropDownButtonProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
   const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
+  const isMobileMode = forceMobileSize || isTablet;
 
   const resolvedIconSize = iconSize
-    ? isDesktop
+    ? isDesktop && !forceMobileSize
       ? 15
       : 10
-    : isTablet
-      ? 10
-      : 15;
-  const resolvedTypography = typographyVariant ?? (isTablet ? "M_14" : "M_18");
+    : isMobileMode
+    ? 10
+    : 15;
+  const resolvedTypography =
+    typographyVariant ?? (isMobileMode ? "M_14" : "M_18");
 
   const buttonStyle: SxProps<Theme> = {
     justifyContent: "space-between",
     alignItems: "center",
     textTransform: "none",
     display: "flex",
-    width: isTablet ? "fit-content" : "328px",
-    height: isTablet ? "36px" : "64px",
-    padding: isTablet ? "6px 10px 6px 14px" : "16px 24px",
-    gap: isTablet ? "6px" : "12px",
+    width: isMobileMode ? "fit-content" : "328px",
+    height: isMobileMode ? "36px" : "64px",
+    padding: isMobileMode ? "6px 10px 6px 14px" : "16px 24px",
+    gap: isMobileMode ? "6px" : "12px",
     border: `1px solid ${
       isSelected
         ? theme.palette.PrimaryBlue[300]
-        : isTablet
-          ? theme.palette.Line[200]
-          : theme.palette.Grayscale[100]
+        : isMobileMode
+        ? theme.palette.Line[200]
+        : theme.palette.Grayscale[100]
     }`,
-    borderRadius: isTablet ? "8px" : "16px",
+    borderRadius: isMobileMode ? "8px" : "16px",
     backgroundColor: isSelected
       ? theme.palette.PrimaryBlue[50]
       : theme.palette.White[100],
@@ -74,7 +79,7 @@ export default function DropDownButton({
             ? theme.palette.PrimaryBlue[300]
             : theme.palette.Grayscale[50],
         }}
-        paddingRight={isTablet ? "5px" : "0px"}
+        paddingRight={isMobileMode ? "5px" : "0px"}
       >
         {label}
       </Typography>
