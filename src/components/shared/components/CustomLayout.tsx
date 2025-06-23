@@ -4,22 +4,18 @@ import { Box, Stack } from "@mui/material";
 import { ReactNode, useEffect, useState } from "react";
 import { Header } from "./header/Header";
 import { DarkModeToggle } from "./ColorModeToggle";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import { PATH } from "@/src/lib/constants";
 import { SubHeader } from "./header/SubHeader";
-import { AuthStore } from "@/src/store/authStore";
 
 type CustomLayoutProps = {
   children: ReactNode;
 };
 
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
-  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
-  const { SnackbarComponent } = useSnackbar();
-  const { user } = AuthStore();
   // 페이지 중 bgColor 가 들어가는 페이지
   const colorPages = [
     PATH.main,
@@ -45,14 +41,11 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const isPadding = noPaddingPages.includes(pathname);
   const isSubHeader = subHeaderPages.includes(pathname);
 
+  const { SnackbarComponent } = useSnackbar();
+
   useEffect(() => {
     setMounted(true);
-    if (user?.role === "CUSTOMER") return;
-
-    if (!user?.phone) {
-      router.push(PATH.moverProfileRegister);
-    }
-  }, [user]);
+  }, []);
 
   if (!mounted) {
     return <></>;
