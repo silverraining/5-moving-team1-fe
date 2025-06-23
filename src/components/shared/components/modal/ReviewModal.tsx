@@ -32,6 +32,7 @@ interface ReviewModalProps {
     comment: string,
     moveType: string[]
   ) => void;
+  moverImage: string;
   moverName: string;
   moveDate: string;
   price: number;
@@ -42,6 +43,7 @@ export default function ReviewModal({
   isOpen,
   onClose,
   onSubmit,
+  moverImage,
   moverName,
   moveDate,
   price,
@@ -153,7 +155,7 @@ export default function ReviewModal({
                   borderRadius: "50%",
                   objectFit: "cover", // 이미지를 꽉 채우기 위해 추천
                 }}
-                src={"/Images/profile/binProfile.svg"}
+                src={moverImage || "/Images/profile/binProfile.svg"}
                 alt="기사님 프로필 이미지"
               />
             </Box>

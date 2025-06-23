@@ -22,6 +22,7 @@ export type User = {
   phone: string;
   email: string;
   role: Role;
+  imageUrl: string;
   refreshToken?: string;
   createdAt: Date;
   updatedAt: Date;

@@ -1,9 +1,4 @@
-import {
-  Address,
-  EstimateOfferStatus,
-  EstimateRequestStatus,
-  ServiceType,
-} from "./common";
+import { EstimateRequestStatus, ServiceType } from "./common";
 
 export interface ChipData {
   chipType?: ServiceType;

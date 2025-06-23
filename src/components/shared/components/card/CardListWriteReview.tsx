@@ -2,29 +2,31 @@ import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData } from "@/src/types/card";
 import Image from "next/image";
-
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
-import { EstimateOffer } from "@/src/types/estimate";
+import { reviewableOffers } from "@/src/api/review/api";
+import { ServiceType } from "@/src/types/common";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: reviewableOffers;
+  isReviewed?: boolean;
   onReviewClick?: () => void;
 }
 
-export const CardListWriteReview = ({ data, onReviewClick }: CardProps) => {
+export const CardListWriteReview = ({
+  data,
+  isReviewed = false,
+  onReviewClick,
+}: CardProps) => {
   // 카드 데이터
   const info = data.mover;
   // Chip 데이터
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
+      isTargeted: data?.isTargeted,
     },
   ];
-
   // 리뷰가 있는지 확인
-  const isReviewed = (info.reviews?.length ?? 0) > 0;
 
   return (
     <Box
