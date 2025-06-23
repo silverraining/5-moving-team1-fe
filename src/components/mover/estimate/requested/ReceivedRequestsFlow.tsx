@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../../shared/components/modal/SendEstimateModal";
 import RejectRequestModal from "../../../shared/components/modal/RejectRequestModal";
@@ -86,6 +86,24 @@ export default function ReceivedRequestsFlow() {
       sort: sortOption.sort,
       isTargeted: false,
     });
+
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  // 마지막 아이템에 감지용 ref 연결
+  const lastItemRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetchingNextPage) return;
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
 
   const { sendEstimate, isSending, rejectEstimate, isRejecting } =
     useEstimateModalActions({
@@ -414,15 +432,28 @@ export default function ReceivedRequestsFlow() {
                     gap: ["24px", "32px", "48px"],
                   }}
                 >
-                  {filteredItems.map((item) => (
-                    <CardListRequest
-                      key={item.requestId}
-                      data={item}
-                      onConfirmClick={() => handleSendClick(item)}
-                      onDetailClick={() => handleRejectClick(item)}
-                      isRejectDisabled={!item.isTargeted}
-                    />
-                  ))}
+                  {filteredItems.map((item, index) => {
+                    const isLast = index === filteredItems.length - 1;
+                    return (
+                      <div
+                        key={item.requestId}
+                        ref={isLast ? lastItemRef : undefined} // 마지막 카드에 ref 연결
+                      >
+                        <CardListRequest
+                          data={item}
+                          onConfirmClick={() => handleSendClick(item)}
+                          onDetailClick={() => handleRejectClick(item)}
+                          isRejectDisabled={!item.isTargeted}
+                        />
+                      </div>
+                    );
+                  })}
+                </Box>
+              )}
+              {/* fetch 중이면 하단에 CircularProgress */}
+              {isFetchingNextPage && (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                  <CircularProgress />
                 </Box>
               )}
               {/* 모달들 */}
