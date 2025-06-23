@@ -4,7 +4,12 @@ import { CardListMover } from "../../shared/components/card/CardListMover";
 import { EstimateSection } from "./EstimateSection";
 import { SnsShare } from "../../shared/components/sns-share/SnsShare";
 import { EstimateInfo } from "./EstimateInfo";
-import { useEstimateOfferDetail } from "@/src/api/customer/hook";
+import {
+  useEstimateOfferConfirmed,
+  useEstimateOfferDetail,
+} from "@/src/api/customer/hook";
+import { useQueryClient } from "@tanstack/react-query";
+import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 
 export default function PendingDetail({
   requestId,
@@ -15,19 +20,18 @@ export default function PendingDetail({
 }) {
   const theme = useTheme();
 
-  const handleLikeClick = () => {
-    alert(`좋아요 버튼 누름`);
-  };
-
-  const handleConfirmEstimate = () => {
-    alert(`확정하기 버튼`);
-  };
-
   // 👉 실제 데이터 패칭
   const { data, isLoading, isError } = useEstimateOfferDetail(
     requestId,
     moverId
   );
+
+  const queryClient = useQueryClient();
+
+  const { mutate: createLikeMutate } = useCreateLike();
+  const { mutate: deleteLikeMutate } = useDeleteLike();
+
+  const { mutate: EstimateOfferConfirmedMutate } = useEstimateOfferConfirmed();
 
   if (isLoading) return <Typography>견적 데이터 로딩중...</Typography>;
   if (isError || !data)
@@ -47,7 +51,35 @@ export default function PendingDetail({
         {/* 견적 상세 */}
         <Stack gap={"24px"}>
           <EstimateSection title="견적 상세">
-            <CardListMover data={data} onLikeClick={handleLikeClick} />
+            <CardListMover
+              data={data}
+              onLikeClick={() => {
+                const moverId = data.moverId;
+                if (data.mover.isLiked) {
+                  deleteLikeMutate(
+                    { moverId },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries({
+                          queryKey: ["EstimateOfferDetail"],
+                        });
+                      },
+                    }
+                  );
+                } else {
+                  createLikeMutate(
+                    { moverId },
+                    {
+                      onSuccess: () => {
+                        queryClient.invalidateQueries({
+                          queryKey: ["EstimateOfferDetail"],
+                        });
+                      },
+                    }
+                  );
+                }
+              }}
+            />
           </EstimateSection>
           <Divider sx={{ borderColor: theme.palette.Line[100] }} />
 
@@ -83,7 +115,19 @@ export default function PendingDetail({
         <Button
           variant="contained"
           fullWidth
-          onClick={handleConfirmEstimate}
+          onClick={() => {
+            const offerId = data.offerId;
+            EstimateOfferConfirmedMutate(
+              { offerId },
+              {
+                onSuccess: () => {
+                  queryClient.invalidateQueries({
+                    queryKey: ["EstimateOfferDetail"],
+                  });
+                },
+              }
+            );
+          }}
           sx={{
             height: "56px",
             fontSize: 16,
@@ -94,7 +138,7 @@ export default function PendingDetail({
             },
           }}
         >
-          지정 견적 요청하기
+          견적 확정하기
         </Button>
 
         <Divider />

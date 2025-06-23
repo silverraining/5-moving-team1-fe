@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
@@ -72,12 +72,8 @@ export const CardListRequest = ({
 
       <Box
         display="flex"
-        border={["1px solid", "0px solid", "0px solid"]}
-        bgcolor="#FFFFFF"
-        padding={["16px", "10px", "16px 10px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
-        gap={["12px", "12px", "24px"]}
-        borderRadius={"6px"}
+        gap={["10px", "12px", "24px"]}
         sx={(theme) => ({ borderColor: theme.palette.Line[100] })}
       >
         <Box display="flex" flexDirection="column" flexGrow={1}>
@@ -110,10 +106,16 @@ export const CardListRequest = ({
           </Box>
         </Box>
       </Box>
+      <Divider
+        sx={(theme) => ({
+          display: ["none", "block", "block"],
+          borderColor: theme.palette.Line[100],
+        })}
+      />
       <Box
         display={"flex"}
         flexDirection={"column"}
-        gap={["8px", "16px", "24px"]}
+        gap={["20px", "16px", "24px"]}
       >
         <Box
           display={"flex"}
@@ -153,6 +155,13 @@ export const CardListRequest = ({
               {formatKoreanDate(data.moveDate ?? "")}
             </Typography>
           </Box>
+          <Divider
+            sx={(theme) => ({
+              display: ["block", "none", "none"],
+              margin: ["10px 0px", "0px", "0px"],
+              borderColor: theme.palette.Line[100],
+            })}
+          />
           <Box display={"flex"} gap={["4px"]}>
             <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
@@ -235,12 +244,19 @@ export const CardListRequest = ({
           <Button
             onClick={onConfirmClick}
             variant="contained"
+            endIcon={
+              <Image
+                src="/Images/button/writing.svg"
+                alt="작성 아이콘"
+                width={24}
+                height={24}
+              />
+            }
             sx={(theme) => ({
               height: [48, 48, 64],
               bgcolor: theme.palette.PrimaryBlue[300],
               borderRadius: ["8px", "8px", "16px"],
               flex: 1,
-              gap: ["8px", "4px", "10px"],
             })}
           >
             <Typography
@@ -253,12 +269,6 @@ export const CardListRequest = ({
             >
               견적 보내기
             </Typography>
-            <Image
-              src="/Images/icon-btn/writing.svg"
-              width={24}
-              height={24}
-              alt="견적 작성"
-            />
           </Button>
           <Button
             onClick={onDetailClick}

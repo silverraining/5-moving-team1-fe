@@ -1,11 +1,11 @@
 import { Box } from "@mui/material";
-import RequestEstimate from "@/src/components/mover/estimate/RequestEstimate";
+import RejectEstimate from "@/src/components/mover/estimate/RejectEstimate";
 import React from "react";
 
-export default function QuoteTabs() {
+export default function RejectPage() {
   return (
     <Box>
-      <RequestEstimate requestType="reject" />
+      <RejectEstimate />
     </Box>
   );
 }

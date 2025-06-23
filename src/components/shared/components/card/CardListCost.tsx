@@ -4,9 +4,32 @@ import { EstimateOffer } from "@/src/types/estimate";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
 import { ChipData } from "@/src/types/card";
+import {
+  EstimateOfferStatus,
+  EstimateRequestStatus,
+  MinimalAddress,
+  ServiceType,
+} from "@/src/types/common";
+import { MoverProfile } from "@/src/types/auth";
+
+// HistoryEstimate.tsx에서 쓰는 card 데이터 타입
+export interface HistoryEstimateCardData {
+  estimateRequestId: string;
+  fromAddressMinimal: MinimalAddress;
+  isConfirmed: boolean;
+  isTargeted: boolean;
+  moveDate: Date;
+  moveType: ServiceType;
+  offerId: string;
+  price: number;
+  offerStatus: EstimateOfferStatus;
+  requestStatus: EstimateRequestStatus;
+  toAddressMinimal: MinimalAddress;
+  mover: MoverProfile;
+}
 
 interface CardProps {
-  data: EstimateOffer;
+  data: EstimateOffer | HistoryEstimateCardData;
   onLikeClick?: () => void;
 }
 
@@ -152,7 +175,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {Number(info.rating).toFixed(1)}
               </Typography>
               <Typography
                 sx={(theme) => ({
