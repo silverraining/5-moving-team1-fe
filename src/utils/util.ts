@@ -107,3 +107,14 @@ export const convertRegionToKoreanLabels = (
     (region) => regionLabels[region as ServiceRegion] ?? region
   );
 };
+
+/**한글 지역명을 ServiceRegion enum 값으로 변환 */
+export const convertKoreanToServiceRegion = (
+  koreanRegion: string
+): ServiceRegion | undefined => {
+  const regionKey = Object.keys(regionLabels).find(
+    (key) => regionLabels[key as ServiceRegion] === koreanRegion
+  ) as ServiceRegion | undefined;
+
+  return regionKey;
+};

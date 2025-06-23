@@ -7,7 +7,7 @@ import { useMoverMypage } from "@/src/api/mover/hooks";
 export default function MyPage() {
   const { data: moverProfileCardData, isPending } = useMoverMypage();
 
-  if (isPending || !moverProfileCardData) return <div>로딩중입니다...</div>; //TODO: 스켈레톤 추가
+  if (isPending || !moverProfileCardData) return <div></div>; //TODO: 스켈레톤 추가
 
   return (
     <Box

@@ -1,6 +1,13 @@
-import { ServiceRegion, ServiceType } from "@/src/types/common";
+import {
+  EstimateOfferStatus,
+  EstimateRequestStatus,
+  MinimalAddress,
+  ServiceRegion,
+  ServiceType,
+} from "@/src/types/common";
 import apiClient from "../axiosclient";
-import { EstimateOffer, EstimateRequest } from "@/src/types/estimate";
+import { EstimateOffer } from "@/src/types/estimate";
+import { MoverProfile } from "@/src/types/auth";
 
 export type MoverListRequest = {
   location?: ServiceRegion;
@@ -95,9 +102,28 @@ export const EstimateRequestActive = async () => {
   }
 };
 
+/** estimateOffers 타입 추가 */
+interface EstimateOfferWithMeta extends EstimateOffer {
+  offerId: string;
+  offerStatus: EstimateOfferStatus;
+}
+
+/** 받았던 견적 Item 타입 */
+export type EstimateRequestHistoryItem = {
+  requestId: string;
+  customerName: string;
+  moveDate: string;
+  createdAt: string;
+  moveType: ServiceType;
+  offerCount: number;
+  requestStatus: EstimateOfferStatus;
+  isTargeted: boolean;
+  estimateOffers: EstimateOfferWithMeta[];
+};
+
 /** 받았던 견적 타입 */
 export type EstimateRequestHistoryResponse = {
-  items: EstimateRequest[];
+  items: EstimateRequestHistoryItem;
   hasNext: boolean;
   nextCursor: string | null;
   totalCount: number;
@@ -114,9 +140,28 @@ export const EstimateRequestHistory =
     }
   };
 
+/** 대기 중인 견적 Item 타입 */
+export type EstimateOfferPendingResponseItems = {
+  confirmedAt: string | null;
+  createdAt: Date;
+  estimateRequestId: string;
+  fromAddressMinimal: MinimalAddress;
+  isConfirmed: boolean;
+  isTargeted: boolean;
+  moveDate: Date;
+  moveType: ServiceType;
+  mover: MoverProfile;
+  moverId: string;
+  offerId: string;
+  offerStatus: EstimateOfferStatus;
+  price: number;
+  requestStatus: EstimateRequestStatus;
+  toAddressMinimal: MinimalAddress;
+};
+
 /** 대기 중인 견적 타입 */
 export type EstimateOfferPendingResponse = {
-  items: EstimateOffer[];
+  items: EstimateOfferPendingResponseItems[];
   hasNext: boolean;
   nextCursor: string | null;
   totalCount: number;
@@ -145,6 +190,23 @@ export const EstimateOfferDetail = async (
   try {
     const response = await apiClient.get(
       `/estimate-offer/${requestId}/${moverId}/pending`,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+export type ConfirmRes = { message: string };
+
+/** 견적 요청 확정 api */
+export const EstimateOfferConfirmed = async (
+  offerId: string
+): Promise<ConfirmRes> => {
+  try {
+    const response = await apiClient.patch(
+      `/estimate-offer/${offerId}/confirmed`,
       {}
     );
     return response.data;

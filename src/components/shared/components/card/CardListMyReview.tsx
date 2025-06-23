@@ -4,20 +4,32 @@ import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
-import { EstimateOffer } from "@/src/types/estimate";
+
+import { ServiceType } from "@/src/types/common";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: {
+    moveType: ServiceType;
+    isTargeted: boolean;
+    createdAt: string;
+    moveDate: string;
+    price: number;
+    rating: number;
+    comment: string;
+    mover: {
+      nickname: string;
+      imageUrl: string;
+    };
+  };
+  isReviewed?: boolean;
 }
 
-export const CardListMyReview = ({ data }: CardProps) => {
+export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
   const info = data.mover;
-
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
+      isTargeted: data?.isTargeted,
     },
   ];
   return (
@@ -106,7 +118,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
               {info.nickname} 기사님
             </Typography>
             <Box display={["flex", "flex", "none"]} gap="4px">
-              {Array.from({ length: info.rating ?? 0 }).map((_, i) => (
+              {Array.from({ length: data?.rating ?? 0 }).map((_, i) => (
                 <Box
                   key={i}
                   position="relative"
@@ -178,7 +190,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
             </Box>
           </Box>
           <Box display={["none", "none", "flex"]} gap="4px">
-            {Array.from({ length: info.rating ?? 0 }).map((_, i) => (
+            {Array.from({ length: data?.rating ?? 0 }).map((_, i) => (
               <Box
                 key={i}
                 position="relative"
@@ -205,9 +217,7 @@ export const CardListMyReview = ({ data }: CardProps) => {
             color: theme.palette.Grayscale[500],
           })}
         >
-          {typeof info.reviews === "string"
-            ? info.reviews
-            : "아직 작성된 리뷰가 없습니다."}
+          {isReviewed ? data.comment : "아직 작성된 리뷰가 없습니다."}
         </Typography>
         <Typography
           display={["flex", "flex", "none"]}

@@ -1,5 +1,4 @@
 import {
-  Address,
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
@@ -7,11 +6,12 @@ import {
 
 export interface ChipData {
   chipType?: ServiceType;
-  status?: EstimateRequestStatus;
+  status?: EstimateRequestStatus | EstimateOfferStatus;
   isTargeted?: boolean;
 }
 
 export interface CardData {
+  id?: string;
   types: ServiceType[];
   message: string;
   imgSrc: string;
@@ -23,6 +23,7 @@ export interface CardData {
   career: number;
   confirm: number;
   address: string[];
+  chips?: ChipData[];
 }
 
 export type likeMoverListResItem = {

@@ -39,7 +39,8 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
           isTargeted: data.isTargeted,
         },
       ]
-    : data.types.map((type) => ({
+    : data.chips ||
+      data.types.map((type) => ({
         chipType: type,
       }));
 
@@ -176,7 +177,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {Number(info.rating).toFixed(1)}
               </Typography>
               <Typography
                 sx={(theme) => ({

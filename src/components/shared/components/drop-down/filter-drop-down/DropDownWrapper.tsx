@@ -9,19 +9,31 @@ import { Box } from "@mui/material";
 interface DropDownWrapperProps {
   type: "region" | "service";
   label: string;
+  forceMobileSize?: boolean;
+  selectedValue?: string;
+  onSelect?: (value: string) => void;
 }
 
-export default function DropDownWrapper({ type }: DropDownWrapperProps) {
+export default function DropDownWrapper({
+  type,
+  forceMobileSize,
+  selectedValue,
+  onSelect,
+}: DropDownWrapperProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<string>(
-    type === "region" ? "지역" : "서비스"
+    selectedValue || (type === "region" ? "지역" : "서비스")
   );
 
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setSelectedItem(type === "region" ? "지역" : "서비스");
-  }, [type]);
+    if (selectedValue) {
+      setSelectedItem(selectedValue);
+    } else {
+      setSelectedItem(type === "region" ? "지역" : "서비스");
+    }
+  }, [type, selectedValue]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -47,6 +59,7 @@ export default function DropDownWrapper({ type }: DropDownWrapperProps) {
   const handleSelect = (value: string) => {
     setSelectedItem(value);
     setIsOpen(false);
+    onSelect?.(value);
   };
 
   return (
@@ -55,6 +68,7 @@ export default function DropDownWrapper({ type }: DropDownWrapperProps) {
         label={selectedItem}
         isSelected={isOpen}
         onClick={toggleDropdown}
+        forceMobileSize={forceMobileSize}
       />
       {isOpen && (
         <DropDownList

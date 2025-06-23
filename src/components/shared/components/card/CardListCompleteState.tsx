@@ -1,25 +1,42 @@
 import { Box, Button, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData } from "@/src/types/card";
-
 import dayjs from "@/src/lib/dayjsConfig";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
+import {
+  EstimateRequestStatus,
+  MinimalAddress,
+  ServiceType,
+} from "@/src/types/common";
 import { EstimateRequest } from "@/src/types/estimate";
 
+// OfferEstimate.tsx에서 쓰는 card 데이터 타입
+export interface OfferEstimateCardData {
+  createdAt: string;
+  customerName: string;
+  estimateRequestId: string;
+  fromAddressMinimal: MinimalAddress;
+  isConfirmed: boolean;
+  isTargeted: boolean;
+  moveDate: string;
+  moveType: ServiceType;
+  offerId: string;
+  price: number;
+  status: EstimateRequestStatus;
+  toAddressMinimal: MinimalAddress;
+}
 interface CardProps {
-  data: EstimateRequest;
+  data: EstimateRequest | OfferEstimateCardData;
   onclickDetails?: () => void;
 }
 
 export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
-  // card 데이터
-  const info = data.customerProfile;
   // chip 데이터
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
-      // isTargeted: data.isTargeted,
+      status: data.status,
+      isTargeted: data.isTargeted,
     },
   ];
 
@@ -29,8 +46,9 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      width={[328, 600, 688]}
-      height={[244, 206, 272]}
+      maxWidth={"688px"}
+      width={"100%"}
+      minWidth={"327px"}
       borderRadius="16px"
       padding={[
         "16px 14px 13px 14px",
@@ -39,8 +57,11 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
       ]}
       boxShadow="2px 2px 10px 0px rgba(220, 220, 220, 0.14), -2px -2px 10px 0px rgba(220, 220, 220, 0.14)"
       boxSizing={"border-box"}
+      sx={(theme) => ({
+        backgroundColor: theme.palette.White[100],
+      })}
     >
-      {data.status == "CONFIRMED" && (
+      {data.status == "COMPLETED" && (
         <Box
           display={"flex"}
           alignItems={"center"}
@@ -55,7 +76,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
           gap={"16px"}
           sx={(theme) => ({
             background: "rgba(4, 4, 4, 0.64)",
-            zIndex: 0,
+            zIndex: 10,
             borderRadius: "16px",
             borderColor: theme.palette.Line[100],
           })}
@@ -109,7 +130,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             color: theme.palette.Grayscale[500],
           })}
         >
-          {dayjs(info.createdAt).fromNow()}
+          {dayjs(data.createdAt).fromNow()}
         </Typography>
       </Box>
 
@@ -148,7 +169,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.nickname} 고객님
+                {data.customerName} 고객님
               </Typography>
               <Typography
                 display={["inline-block", "none", "none"]}
@@ -159,7 +180,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                   color: theme.palette.Grayscale[500],
                 })}
               >
-                {dayjs(info.createdAt).fromNow()}
+                {dayjs(data.createdAt).fromNow()}
               </Typography>
             </Box>
             <Box display={["flex", "none", "none"]}>
@@ -234,6 +255,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  wordBreak: "break-all",
                 })}
               >
                 {formatKoreanDate(data.moveDate ?? "")}
@@ -272,7 +294,8 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.fromAddress.fullAddress}
+                {data.fromAddressMinimal?.sido}{" "}
+                {data.fromAddressMinimal?.sigungu}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -304,7 +327,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.toAddress.fullAddress}
+                {data.toAddressMinimal?.sido} {data.toAddressMinimal?.sigungu}
               </Typography>
             </Box>
           </Box>
@@ -313,7 +336,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
       <Box
         display="flex"
         justifyContent="flex-end"
-        alignItems="flex-end"
+        alignItems="center"
         gap={["8px", "16px"]}
       >
         <Typography

@@ -32,12 +32,35 @@ const accessControl = [
 
 export const middleware = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
-  const accessToken = request.cookies.get("accessToken")?.value;
 
-  const user = accessToken
-    ? await getUserFromToken(accessToken, process.env.ACCESS_TOKEN_SECRET!)
-    : null;
-  const userRole = user?.role;
+  const accessToken = request.cookies.get("accessToken")?.value;
+  const refreshToken = request.cookies.get("refreshToken")?.value;
+  let accessUser = null;
+  let refreshUser = null;
+
+  if (!accessUser && !refreshUser) {
+    request.cookies.delete("accessToken");
+    request.cookies.delete("refreshToken");
+  }
+
+  if (accessToken) {
+    accessUser = await getUserFromToken(
+      accessToken,
+      process.env.ACCESS_TOKEN_SECRET!
+    );
+  }
+  if (refreshToken) {
+    refreshUser = await getUserFromToken(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    );
+  }
+
+  const userRole = accessUser?.role;
+  if (accessToken && pathname.startsWith("/auth")) {
+    const mainUrl = new URL(PATH.main, request.url);
+    return NextResponse.redirect(mainUrl);
+  }
 
   for (const rule of accessControl) {
     if (pathname.startsWith(rule.prefix)) {

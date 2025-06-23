@@ -1,7 +1,7 @@
 "use client";
 
 import { Typography, useTheme, useMediaQuery } from "@mui/material";
-import { styled } from "@mui/system";
+import { styled } from "@mui/material/styles";
 
 interface InfoBadgeProps {
   label: string; // 표시할 텍스트
