@@ -4,7 +4,7 @@ import { Box, useMediaQuery, useTheme } from "@mui/material";
 import TextField from "@/src/components/shared/components/text-field";
 import SortDropdown from "@/src/components/shared/components/drop-down/SortDropdown";
 import DropDownWrapper from "@/src/components/shared/components/drop-down/filter-drop-down/DropDownWrapper";
-import { OrderString, SORT_OPTIONS } from "@/src/lib/constants";
+import { SORT_OPTIONS } from "@/src/lib/constants";
 
 interface Props {
   searchKeyword: string;
@@ -12,10 +12,10 @@ interface Props {
   onSearchClear: () => void;
   selectedRegion?: string;
   selectedServiceType?: string;
-  selectedSort?: OrderString;
+  selectedSort?: string;
   onRegionChange?: (region: string) => void;
   onServiceTypeChange?: (serviceType: string) => void;
-  onSortChange?: (sort: OrderString) => void;
+  onSortChange?: (sort: string) => void;
 }
 
 export const MoverCardList = ({
@@ -33,7 +33,7 @@ export const MoverCardList = ({
   const isTablet = useMediaQuery(theme.breakpoints.down("desktop"));
 
   const handleSortChange = (option: { value: string; label: string }) => {
-    onSortChange?.(option.value as OrderString);
+    onSortChange?.(option.value);
   };
 
   const currentSortOption =
