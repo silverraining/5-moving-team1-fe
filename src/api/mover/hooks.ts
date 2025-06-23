@@ -103,6 +103,8 @@ export const usePaginatedMovers = ({
     queryFn: () => fetchPaginatedMovers({ order, take, cursor }),
     enabled,
     staleTime: 1000 * 60 * 5, // 5분 캐시 , 불필요시 삭제
+  });
+};
 
 /** 기사가 보낸 견적 목록 hook */
 export const useEstimateOffer = () => {

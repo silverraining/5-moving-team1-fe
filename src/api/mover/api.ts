@@ -195,6 +195,11 @@ export const fetchPaginatedMovers = async ({
     const response = await apiClient.get<MoverListResponse>("/mover", {
       params,
     });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
     return response.data;
   } catch (error) {
