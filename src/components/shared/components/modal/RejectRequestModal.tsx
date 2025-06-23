@@ -79,7 +79,7 @@ export default function RejectRequestModal({
             left: isSmall ? 0 : "auto",
             right: isSmall ? 0 : "auto",
             maxHeight: isSmall ? "90vh" : "auto",
-            width: ["auto", "375px", "608px"],
+            width: ["auto", "608px", "608px"],
             gap: isSmall ? "26px" : "40px",
           },
         },

@@ -436,8 +436,16 @@ export default function ReceivedRequestsFlow() {
                   requestStatus={selectedRequest.requestStatus}
                   customerName={selectedRequest.customerName ?? ""}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddressMinimal?.sido ?? ""}
-                  toAddress={selectedRequest.toAddressMinimal?.sido ?? ""}
+                  fromAddress={
+                    selectedRequest.fromAddressMinimal
+                      ? `${selectedRequest.fromAddressMinimal.sido} ${selectedRequest.fromAddressMinimal.sigungu}`
+                      : ""
+                  }
+                  toAddress={
+                    selectedRequest.toAddressMinimal
+                      ? `${selectedRequest.toAddressMinimal.sido} ${selectedRequest.toAddressMinimal.sigungu}`
+                      : ""
+                  }
                   isLoading={isSending}
                 />
               )}
@@ -451,8 +459,16 @@ export default function ReceivedRequestsFlow() {
                   requestStatus={selectedRequest.requestStatus}
                   customerName={selectedRequest.customerName ?? ""}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddressMinimal?.sido ?? ""}
-                  toAddress={selectedRequest.toAddressMinimal?.sido ?? ""}
+                  fromAddress={
+                    selectedRequest.fromAddressMinimal
+                      ? `${selectedRequest.fromAddressMinimal.sido} ${selectedRequest.fromAddressMinimal.sigungu}`
+                      : ""
+                  }
+                  toAddress={
+                    selectedRequest.toAddressMinimal
+                      ? `${selectedRequest.toAddressMinimal.sido} ${selectedRequest.toAddressMinimal.sigungu}`
+                      : ""
+                  }
                   isLoading={isRejecting}
                 />
               )}
