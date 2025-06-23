@@ -14,7 +14,7 @@ import { useDrawer } from "@/src/hooks/utill";
 import { UserTabs } from "./UserTabs";
 import { MenuTabs } from "./MenuTabs";
 import { AuthStore } from "@/src/store/authStore";
-import { PATH } from "@/src/lib/constants";
+import { API_BASE_URL, PATH } from "@/src/lib/constants";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import {
@@ -23,27 +23,34 @@ import {
   MOVER_MENU,
 } from "@/src/lib/headerConstants";
 import Link from "next/link";
-import { useLogout } from "@/src/api/auth/hooks";
 import Cookies from "js-cookie";
 import { EventSourcePolyfill } from "event-source-polyfill";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
+import { useNotificationAll } from "@/src/api/notification/hooks";
+import { useNotificationStore } from "@/src/store/notification";
 
 export const Header = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbar();
   const { open, toggleDrawer } = useDrawer();
   const { user, isLogin, logout } = AuthStore();
-  const { mutate } = useLogout();
   const isCustomer = user?.role === "CUSTOMER";
   const isMover = user?.role === "MOVER";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+  const { refetch } = useNotificationAll();
+  const { setNotifications, setMarkAsRead, markAsRead } =
+    useNotificationStore();
 
-  const TabMenu = isCustomer
+   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-    ? MOVER_MENU
-    : GUEST_MENU;
+      ? MOVER_MENU
+      : GUEST_MENU;
+
+   
+
+
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
@@ -51,60 +58,127 @@ export const Header = () => {
     : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
-    mutate(undefined, {
-      onSuccess: () => {
-        openSnackbar("로그아웃 되었습니다", "success", 1000, "standard");
-        logout();
-        router.replace(PATH.main);
-      },
-      onError: (error) => {
-        openSnackbar(
-          error instanceof Error ? error.message : "로그아웃 실패",
-          "error",
-          1000,
-          "standard"
-        );
-      },
-    });
+    try {
+      openSnackbar("로그아웃 되었습니다", "success", 1000, "standard");
+      logout();
+      router.replace(PATH.main);
+    } catch (error) {
+      openSnackbar(
+        error instanceof Error ? error.message : "로그아웃 실패",
+        "error",
+        1000,
+        "standard"
+      );
+    }
   };
 
-  useEffect(() => {
-    const token = Cookies.get("accessToken");
-    if (!token) return;
+  // SSE 연결 관리용 ref와 타이머
+  const eventSourceRef = useRef<EventSourcePolyfill | null>(null);
+  const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const reconnectIntervalRef = useRef<number>(1000); // 초기 1초
 
+  const connectSSE = () => {
+    const token = Cookies.get("accessToken");
+    if (!token) {
+      console.warn("No token, SSE 연결 스킵");
+      return;
+    }
     const eventSource = new EventSourcePolyfill(
-      "http://localhost:5000/api/notifications/stream",
+      `${API_BASE_URL}/notifications/stream`,
       {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+        headers: { Authorization: `Bearer ${token}` },
         withCredentials: true,
       }
     );
+
+    eventSourceRef.current = eventSource;
+
+    eventSource.onopen = () => {
+      reconnectIntervalRef.current = 1000; // 성공시 간격 초기화
+    };
+
     eventSource.onmessage = (event) => {
       if (event.data === "dummy") {
-        console.log("Heartbeat received");
         return;
       }
       try {
         const notification = JSON.parse(event.data);
-        console.log("새 알림:", notification);
+        setMarkAsRead(false);
+        setNotifications(notification);
       } catch {
         console.log("SSE message (non-JSON):", event.data);
       }
     };
-  }, []);
+
+    eventSource.onerror = (err) => {
+      console.error("❌ SSE 에러 발생", err);
+      refetch();
+      eventSource.close();
+      scheduleReconnect();
+    };
+  };
+
+  const scheduleReconnect = () => {
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
+
+    reconnectTimeoutRef.current = setTimeout(() => {
+      console.log(
+        `🔄 재연결 시도 (${reconnectIntervalRef.current / 1000}s 후)`
+      );
+      connectSSE();
+      reconnectIntervalRef.current = Math.min(
+        reconnectIntervalRef.current * 2,
+        10000
+      ); // 최대 10초까지 증가
+    }, reconnectIntervalRef.current);
+  };
+
+  // 로그인 상태 또는 토큰 변경 시 SSE 재연결 처리
+  const token = Cookies.get("accessToken");
+  useEffect(() => {
+    if (!token) {
+      // 토큰 없으면 기존 연결 종료 및 타이머 정리
+      console.log("토큰 없음. SSE 연결 종료");
+      eventSourceRef.current?.close();
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+      return;
+    }
+
+    // 기존 연결 있으면 종료
+    if (eventSourceRef.current) {
+      eventSourceRef.current.close();
+    }
+    if (reconnectTimeoutRef.current) {
+      clearTimeout(reconnectTimeoutRef.current);
+    }
+
+    // 새 연결 생성
+    connectSSE();
+
+    // 컴포넌트 언마운트 시 연결 종료 및 타이머 정리
+    return () => {
+      console.log("🛑 SSE 연결 종료");
+      eventSourceRef.current?.close();
+      if (reconnectTimeoutRef.current) {
+        clearTimeout(reconnectTimeoutRef.current);
+      }
+    };
+  }, [token, isLogin]);
 
   return (
     <Box
-      display={"flex"}
+      display="flex"
       px={["24px", "72px", "260px"]}
       height={["54px", "54px", "88px"]}
-      alignItems={"center"}
-      justifyContent={"space-between"}
+      alignItems="center"
+      justifyContent="space-between"
       bgcolor={theme.palette.White[100]}
     >
-      <Stack direction={"row"} alignItems="center" spacing={2}>
+      <Stack direction="row" alignItems="center" spacing={2}>
         <Link href={PATH.main} passHref>
           <Image
             src={"/Images/logo/logo.svg"}
@@ -126,7 +200,7 @@ export const Header = () => {
           </Link>
         )
       ) : (
-        <Stack direction={"row"} alignItems={"center"} gap={"24px"}>
+        <Stack direction="row" alignItems="center" gap="24px">
           {isLogin && (
             <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
           )}

@@ -8,19 +8,32 @@ import dayjs from "@/src/lib/dayjsConfig";
  */
 interface NotificationItemProps {
   message: string;
-  highlight: string;
+  targetId: string;
+  type: string;
   createdAt: string; // ISO 형식 예: 2025-05-22T10:30:00
-  onHighlightClick?: () => void;
 }
 
 export default function NotificationItem({
   message,
-  highlight,
+  targetId,
+  type,
   createdAt,
-  onHighlightClick,
 }: NotificationItemProps) {
   const timeAgo = dayjs(createdAt).fromNow();
+  const highlight =
+    type === "ESTIMATE_CONFIRMED"
+      ? "확정"
+      : type === "MOVE_DAY_REMINDER"
+        ? "일정"
+        : type === "NEW_ESTIMATE_REQUEST"
+          ? "견적 요청"
+          : type === "NEW_OFFER"
+            ? "이사 견적"
+            : "defualt";
 
+  const onHighlightClick = () => {
+    console.log(targetId);
+  };
   // message에서 highlight가 존재하는지
   const parts = message.includes(highlight)
     ? message.split(highlight)
@@ -49,15 +62,15 @@ export default function NotificationItem({
         })}
       >
         {parts[0]}
-        {highlight && message.includes(highlight) && (
+        {highlight && (
           <Box
             component="span"
             onClick={onHighlightClick}
             sx={(theme) => ({
               color: theme.palette.PrimaryBlue[300],
-              cursor: onHighlightClick ? "pointer" : "default",
-              fontWeight: onHighlightClick ? "500" : "normal",
-              "&:hover": onHighlightClick
+              cursor: "pointer",
+              fontWeight: highlight ? "500" : "normal",
+              "&:hover": highlight
                 ? { textDecoration: "underline" }
                 : undefined,
             })}
