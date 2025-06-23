@@ -196,6 +196,12 @@ export const fetchPaginatedMovers = async ({
       params,
     });
 
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
 /** 기사가 보낸 견적 목록 api */
 export const EstimateOffer = async () => {
   try {

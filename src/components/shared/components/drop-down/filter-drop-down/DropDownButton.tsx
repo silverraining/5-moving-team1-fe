@@ -25,8 +25,8 @@ export default function DropDownButton({
   typographyVariant,
   iconSize,
   forceMobileSize = false,
-  ...props
   sx = {},
+  ...props
 }: DropDownButtonProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -38,8 +38,8 @@ export default function DropDownButton({
       ? 15
       : 10
     : isMobileMode
-    ? 10
-    : 15;
+      ? 10
+      : 15;
   const resolvedTypography =
     typographyVariant ?? (isMobileMode ? "M_14" : "M_18");
 
@@ -56,8 +56,8 @@ export default function DropDownButton({
       isSelected
         ? theme.palette.PrimaryBlue[300]
         : isMobileMode
-        ? theme.palette.Line[200]
-        : theme.palette.Grayscale[100]
+          ? theme.palette.Line[200]
+          : theme.palette.Grayscale[100]
     }`,
     borderRadius: isMobileMode ? "8px" : "16px",
     backgroundColor: isSelected
