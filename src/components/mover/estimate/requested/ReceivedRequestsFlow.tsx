@@ -420,6 +420,7 @@ export default function ReceivedRequestsFlow() {
                       data={item}
                       onConfirmClick={() => handleSendClick(item)}
                       onDetailClick={() => handleRejectClick(item)}
+                      isRejectDisabled={!item.isTargeted}
                     />
                   ))}
                 </Box>
