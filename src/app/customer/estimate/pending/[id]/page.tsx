@@ -1,11 +1,13 @@
-import React from "react";
-import PendingDetail from "@/src/components/customer/estimate/PendingDetail";
+import PendingDetailWrapper from "@/src/components/customer/estimate/PendingDetailWrapper";
 
-export default function PendingDetailPage({
+export const dynamic = "force-dynamic";
+
+export default async function PendingDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
-  return <PendingDetail customerId={id} />;
+  const { id } = await params;
+
+  return <PendingDetailWrapper requestId={id} />;
 }

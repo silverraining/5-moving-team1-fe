@@ -1,24 +1,42 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData } from "@/src/types/card";
-
 import dayjs from "@/src/lib/dayjsConfig";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
+import {
+  EstimateOfferStatus,
+  MinimalAddress,
+  ServiceType,
+} from "@/src/types/common";
 import { EstimateRequest } from "@/src/types/estimate";
 
+// RejectEstimate.tsx에서 쓰는 card 데이터 타입
+export interface RejectEstimateCardData {
+  createdAt: string;
+  customerName: string;
+  estimateRequestId: string;
+  fromAddressMinimal: MinimalAddress;
+  isConfirmed: boolean;
+  isTargeted: boolean;
+  moveDate: string;
+  moveType: ServiceType;
+  offerId: string;
+  status: EstimateOfferStatus;
+  toAddressMinimal: MinimalAddress;
+}
+
 interface CardProps {
-  data: EstimateRequest;
+  data: EstimateRequest | RejectEstimateCardData;
 }
 
 export const CardListReject = ({ data }: CardProps) => {
-  const info = data.customerProfile;
   // chip 데이터
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
-      // isTargeted: data.isTargeted,
+      status: data.status,
+      isTargeted: data.isTargeted,
     },
   ];
   return (
@@ -30,15 +48,14 @@ export const CardListReject = ({ data }: CardProps) => {
       maxWidth={1200}
       minWidth={[400, 580, 680]}
       width={"100%"}
-      height={[194, 194, 216]}
+      height={[192, 164, 216]}
       borderRadius="16px"
-      padding={[
-        "16px 14px 13px 14px",
-        "16px 14px 16px 14px",
-        "20px 24px 12px 24px",
-      ]}
+      padding={["16px 14px", "16px 14px", "20px 24px 12px 24px"]}
       boxShadow="2px 2px 10px 0px rgba(220, 220, 220, 0.14), -2px -2px 10px 0px rgba(220, 220, 220, 0.14)"
       boxSizing={"border-box"}
+      sx={(theme) => ({
+        backgroundColor: theme.palette.White[100],
+      })}
     >
       {data.status == "REJECTED" && (
         <Box
@@ -95,7 +112,7 @@ export const CardListReject = ({ data }: CardProps) => {
       <Box
         display="flex"
         bgcolor={COLORS.White[100]}
-        padding={["16px", "10px", "16px 10px"]}
+        padding={["0px", "8px 0px", "16px 0px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
       >
@@ -119,13 +136,13 @@ export const CardListReject = ({ data }: CardProps) => {
             >
               <Typography
                 sx={(theme) => ({
-                  fontSize: [14, 14, 18],
-                  lineHeight: ["24px", "24px", "26px"],
+                  fontSize: [16, 16, 20],
+                  lineHeight: ["26px", "26px", "32px"],
                   fontWeight: 600,
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.nickname} 고객님
+                {data.customerName} 고객님
               </Typography>
               <Typography
                 display={["inline-block", "none", "none"]}
@@ -173,7 +190,7 @@ export const CardListReject = ({ data }: CardProps) => {
           <Box
             sx={(theme) => ({
               border: "1px solid",
-              borderColor: theme.palette.Line[200],
+              borderColor: theme.palette.Line[100],
             })}
           ></Box>
           <Box
@@ -181,8 +198,7 @@ export const CardListReject = ({ data }: CardProps) => {
             flexDirection="row"
             gap={"9.5px"}
             alignItems="center"
-            flexGrow={1}
-            justifyContent={["space-between", "flex-start"]}
+            justifyContent={"flex-start"}
           >
             <Box display={["none", "flex"]} gap={"12px"} alignItems="center">
               <Box
@@ -249,7 +265,8 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.fromAddress.fullAddress}
+                {data.fromAddressMinimal?.sido}
+                {data.fromAddressMinimal?.sigungu}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -281,7 +298,8 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.toAddress.fullAddress}
+                {data.toAddressMinimal?.sido}
+                {data.toAddressMinimal?.sigungu}
               </Typography>
             </Box>
           </Box>

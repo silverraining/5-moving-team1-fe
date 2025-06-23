@@ -22,6 +22,7 @@ export type User = {
   phone: string;
   email: string;
   role: Role;
+  imageUrl: string;
   refreshToken?: string;
   createdAt: Date;
   updatedAt: Date;
@@ -58,7 +59,7 @@ export type MoverProfile = {
   createdAt: Date;
   updatedAt: Date;
   serviceType: ServiceType[];
-  serviceRegions: ServiceRegion[];
+  serviceRegion: ServiceRegion[];
   likeCount: number;
   isLiked: boolean;
   likedCustomers?: Like[];

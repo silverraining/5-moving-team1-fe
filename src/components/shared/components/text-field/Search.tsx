@@ -6,10 +6,17 @@ interface SearchProps extends Omit<InputProps, "fullWidth"> {
   bgColor?: string;
   onClick?: () => void;
   onDeleteClick?: () => void;
+  onKeyDown?: (e: React.KeyboardEvent<HTMLInputElement>) => void;
 }
 
 export const SearchInput: React.FC<SearchProps> = (props) => {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    // onKeyDown이 있으면 먼저 실행
+    if (props.onKeyDown) {
+      props.onKeyDown(e);
+    }
+
+    // Enter 키 동작 (onClick이 있을 때만)
     if (e.key === "Enter" && props.onClick) {
       props.onClick();
     }
@@ -18,7 +25,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
     <OutlinedInput
       placeholder={props.placeholder}
       onChange={props.onChange}
-      onKeyDown={handleKeyDown} // Enter 키 동작 추가
+      onKeyDown={handleKeyDown}
       value={props.value}
       startAdornment={
         props.variation === "left" && (
@@ -71,12 +78,11 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
         textAlign: "center",
         ":focus": { color: theme.palette.Black[400] },
         "& .MuiOutlinedInput-notchedOutline": {
-          border: "none", //  border 제거
+          border: "none",
         },
         "&.Mui-focused .MuiOutlinedInput-input": {
-          color: theme.palette.Black[400], // focus 시 글자색
+          color: theme.palette.Black[400],
         },
-        //자동 완성시 배경색 변경 방지
         "& input:-webkit-autofill": {
           WebkitBoxShadow: `0 0 0px 1000px white inset !important`,
           boxShadow: `0 0 0px 1000px white inset !important`,

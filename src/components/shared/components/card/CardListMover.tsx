@@ -1,25 +1,49 @@
 import { Box, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipData } from "@/src/types/card";
+import { ChipData, CardData } from "@/src/types/card";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
 import { EstimateOffer } from "@/src/types/estimate";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: EstimateOffer | CardData;
   onLikeClick?: () => void;
 }
 
 export const CardListMover = ({ data, onLikeClick }: CardProps) => {
-  const info = data.mover;
+  const isEstimateOffer = (
+    data: EstimateOffer | CardData
+  ): data is EstimateOffer => {
+    return "mover" in data;
+  };
 
-  const chips: ChipData[] = [
-    {
-      chipType: data.moveType,
-      status: data.requestStatus,
-      isTargeted: data.isTargeted,
-    },
-  ];
+  const info = isEstimateOffer(data)
+    ? data.mover
+    : {
+        nickname: data.name,
+        intro: data.message,
+        imageUrl: data.imgSrc,
+        isLiked: data.isLiked,
+        likeCount: data.like,
+        rating: data.rating,
+        reviewCount: data.count,
+        experience: data.career,
+        confirmedCount: data.confirm,
+      };
+
+  const chips: ChipData[] = isEstimateOffer(data)
+    ? [
+        {
+          chipType: data.moveType,
+          status: data.requestStatus,
+          isTargeted: data.isTargeted,
+        },
+      ]
+    : data.chips ||
+      data.types.map((type) => ({
+        chipType: type,
+      }));
+
   return (
     <Box
       display="flex"
@@ -29,7 +53,6 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       borderColor={COLORS.Line[100]}
       maxWidth={1200}
       minWidth={[400, 580, 680]}
-      // height={[188, 188, 230]}
       height="auto"
       bgcolor="#FFFFFF"
       borderRadius="16px"
@@ -154,7 +177,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {Number(info.rating).toFixed(1)}
               </Typography>
               <Typography
                 sx={(theme) => ({

@@ -1,16 +1,14 @@
+"use client";
+
 import React from "react";
 import { MoverDetail } from "@/src/components/mover/MoverDetail";
+import { useParams } from "next/navigation";
 
-interface MoverDetailPageProps {
-  params: {
-    id: string;
-  };
-}
+const MoverDetailPage = () => {
+  const params = useParams();
+  const moverId = params.moverId as string;
 
-const MoverDetailPage = ({ params }: MoverDetailPageProps) => {
-  const { id } = params;
-
-  return <MoverDetail moverId={id} />;
+  return <MoverDetail moverId={moverId} />;
 };
 
 export default MoverDetailPage;

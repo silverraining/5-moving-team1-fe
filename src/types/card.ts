@@ -1,5 +1,4 @@
 import {
-  Address,
   EstimateOfferStatus,
   EstimateRequestStatus,
   ServiceType,
@@ -7,27 +6,25 @@ import {
 
 export interface ChipData {
   chipType?: ServiceType;
-  status?: EstimateRequestStatus;
+  status?: EstimateRequestStatus | EstimateOfferStatus;
   isTargeted?: boolean;
 }
 
-export type CardData = {
-  types: ServiceType;
-  status: EstimateOfferStatus;
-  price?: number;
-  nickname: string;
-  experience: number;
-  moveDate: Date;
-  imageUrl?: string;
-  intro: string;
-  rating: number;
-  reviewCount: number;
-  likeCount: number;
+export interface CardData {
+  id?: string;
+  types: ServiceType[];
+  message: string;
+  imgSrc: string;
+  name: string;
   isLiked: boolean;
-  confirmedCount: number;
-  fromAddress: Address;
-  toAddress: Address;
-};
+  like: number;
+  rating: number;
+  count: number;
+  career: number;
+  confirm: number;
+  address: string[];
+  chips?: ChipData[];
+}
 
 export type likeMoverListResItem = {
   id: string;

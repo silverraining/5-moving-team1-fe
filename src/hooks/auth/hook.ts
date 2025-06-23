@@ -12,12 +12,15 @@ import {
   signUpSchema,
   SignUpSchemaType,
 } from "@/src/schemas/auth/signup.schema";
+import { useNotificationAll } from "@/src/api/notification/hooks";
+import { useNotificationStore } from "@/src/store/notification";
 
 export const useLoginForm = (role: Role) => {
   const { mutate } = useLogin();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
-
+  const { data: notificationData } = useNotificationAll();
+  const { setNotifications } = useNotificationStore();
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -28,7 +31,8 @@ export const useLoginForm = (role: Role) => {
       {
         onSuccess: () => {
           openSnackbar("로그인 성공", "success", 500, "standard");
-          router.push("/");
+          router.replace("/");
+          setNotifications(notificationData ?? []);
         },
         onError: (error) => {
           openSnackbar(

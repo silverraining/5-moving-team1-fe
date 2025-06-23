@@ -9,12 +9,16 @@ const nextConfig: NextConfig = {
     ignoreBuildErrors: true,
   },
   images: {
+    unoptimized: true,
     domains: [
       "moving-app-uploads.s3.ap-northeast-2.amazonaws.com",
       "example.com",
       "i.namu.wiki",
       "cdn.jsdelivr.net",
       "avatars.githubusercontent.com",
+      "cphoto.asiae.co.kr",
+      "i.pinimg.com",
+      "encrypted-tbn0.gstatic.com",
     ],
   },
 };

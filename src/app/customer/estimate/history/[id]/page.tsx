@@ -1,11 +1,13 @@
-import React from "react";
-import ReceiveDetail from "@/src/components/customer/estimate/HistoryDetail";
+import HistoryDetailWrapper from "@/src/components/customer/estimate/HistoryDetailWrapper";
 
-export default function HistoryDetailPage({
+export const dynamic = "force-dynamic";
+
+export default async function HistoryDetailPage({
   params,
 }: {
-  params: { id: string };
+  params: Promise<{ id: string }>;
 }) {
-  const { id } = params;
-  return <ReceiveDetail customerId={id} />;
+  const { id } = await params;
+
+  return <HistoryDetailWrapper requestId={id} />;
 }

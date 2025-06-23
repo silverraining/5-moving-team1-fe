@@ -1,12 +1,13 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
-import { EstimateOffer } from "@/src/types/estimate";
+import Image from "next/image";
 import { ChipData } from "@/src/types/card";
+import { EstimateRequestItem } from "@/src/api/mover/estimate/requested/api";
 
 interface CardProps {
-  data: EstimateOffer;
+  data: EstimateRequestItem;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
 }
@@ -17,8 +18,9 @@ export const CardListRequest = ({
   onDetailClick,
 }: CardProps) => {
   // 카드 데이터
-  const info = data.mover;
+  const info = data;
   // Chip 데이터
+  // moveType이 유효한 값이면 칩으로 추가
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
@@ -26,6 +28,7 @@ export const CardListRequest = ({
       isTargeted: data.isTargeted,
     },
   ];
+
   return (
     <Box
       display="flex"
@@ -69,12 +72,8 @@ export const CardListRequest = ({
 
       <Box
         display="flex"
-        border={["1px solid", "0px solid", "0px solid"]}
-        bgcolor="#FFFFFF"
-        padding={["16px", "10px", "16px 10px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
-        gap={["12px", "12px", "24px"]}
-        borderRadius={"6px"}
+        gap={["10px", "12px", "24px"]}
         sx={(theme) => ({ borderColor: theme.palette.Line[100] })}
       >
         <Box display="flex" flexDirection="column" flexGrow={1}>
@@ -91,7 +90,7 @@ export const CardListRequest = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 고객님
+              {info.customerName} 고객님
             </Typography>
             <Typography
               display={["inline-block", "none"]}
@@ -107,10 +106,16 @@ export const CardListRequest = ({
           </Box>
         </Box>
       </Box>
+      <Divider
+        sx={(theme) => ({
+          display: ["none", "block", "block"],
+          borderColor: theme.palette.Line[100],
+        })}
+      />
       <Box
         display={"flex"}
         flexDirection={"column"}
-        gap={["8px", "16px", "24px"]}
+        gap={["20px", "16px", "24px"]}
       >
         <Box
           display={"flex"}
@@ -143,11 +148,20 @@ export const CardListRequest = ({
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 500,
                 color: theme.palette.Black[300],
+                display: "flex",
+                alignItems: "center",
               })}
             >
               {formatKoreanDate(data.moveDate ?? "")}
             </Typography>
           </Box>
+          <Divider
+            sx={(theme) => ({
+              display: ["block", "none", "none"],
+              margin: ["10px 0px", "0px", "0px"],
+              borderColor: theme.palette.Line[100],
+            })}
+          />
           <Box display={"flex"} gap={["4px"]}>
             <Box display={"flex"} gap={["8px", "8px", "12px"]}>
               <Box
@@ -175,9 +189,12 @@ export const CardListRequest = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  display: "flex",
+                  alignItems: "center",
                 })}
               >
-                {data.fromAddress.fullAddress}
+                {data.fromAddressMinimal?.sido}{" "}
+                {data.fromAddressMinimal?.sigungu}
               </Typography>
             </Box>
             <Box
@@ -210,9 +227,11 @@ export const CardListRequest = ({
                   lineHeight: ["24px", "24px", "26px"],
                   fontWeight: 500,
                   color: theme.palette.Black[300],
+                  display: "flex",
+                  alignItems: "center",
                 })}
               >
-                {data.toAddress.fullAddress}
+                {data.toAddressMinimal?.sido} {data.toAddressMinimal?.sigungu}
               </Typography>
             </Box>
           </Box>
@@ -225,6 +244,14 @@ export const CardListRequest = ({
           <Button
             onClick={onConfirmClick}
             variant="contained"
+            endIcon={
+              <Image
+                src="/Images/button/writing.svg"
+                alt="작성 아이콘"
+                width={24}
+                height={24}
+              />
+            }
             sx={(theme) => ({
               height: [48, 48, 64],
               bgcolor: theme.palette.PrimaryBlue[300],

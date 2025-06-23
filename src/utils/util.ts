@@ -1,3 +1,4 @@
+import { regionLabels } from "../components/profile/RegionSelector";
 import { MOVER_LIST } from "../lib/mockData";
 import { ServiceType, ServiceRegion } from "@/src/types/common";
 
@@ -94,4 +95,26 @@ export const convertToServiceRegionObject = (
     }),
     {} as Record<ServiceRegion, boolean>
   );
+};
+
+/**서비스 지역을 한글 라벨로 변환  */
+export const convertRegionToKoreanLabels = (
+  regions: ServiceRegion[] | string[] | undefined
+): string[] => {
+  if (!regions || !Array.isArray(regions)) return [];
+
+  return regions.map(
+    (region) => regionLabels[region as ServiceRegion] ?? region
+  );
+};
+
+/**한글 지역명을 ServiceRegion enum 값으로 변환 */
+export const convertKoreanToServiceRegion = (
+  koreanRegion: string
+): ServiceRegion | undefined => {
+  const regionKey = Object.keys(regionLabels).find(
+    (key) => regionLabels[key as ServiceRegion] === koreanRegion
+  ) as ServiceRegion | undefined;
+
+  return regionKey;
 };

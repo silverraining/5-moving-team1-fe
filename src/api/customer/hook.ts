@@ -1,6 +1,10 @@
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
-  moverDetail,
+  useQuery,
+  useMutation,
+  useQueryClient,
+  UseMutationResult,
+} from "@tanstack/react-query";
+import {
   moverList,
   MoverListRequest,
   CustomerProfileRequest,
@@ -11,6 +15,9 @@ import {
   EstimateRequestActive,
   EstimateOfferPending,
   EstimateRequestHistory,
+  EstimateOfferDetail,
+  EstimateOfferConfirmed,
+  ConfirmRes,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
@@ -28,15 +35,6 @@ export const useMoverList = (params: MoverListRequest, enabled = true) => {
     queryFn: () => moverList({ location, serviceType, sortBy }),
     enabled, // 쿼리 활성화 여부
     staleTime: 1000 * 60 * 5, // 5분 간 캐시 유지
-  });
-};
-
-export const useMoverDetail = (moverId: string, enabled = true) => {
-  return useQuery({
-    queryKey: ["moverDetail", moverId],
-    queryFn: () => moverDetail(moverId),
-    enabled: !!moverId && enabled, // moverId 없으면 요청 비활성화
-    staleTime: 1000 * 60 * 5, // 5분 캐시 유지
   });
 };
 
@@ -93,5 +91,26 @@ export const useEstimateOfferPending = (requestId: string) => {
     queryKey: ["EstimateOfferPending", requestId],
     queryFn: () => EstimateOfferPending(requestId),
     enabled: !!requestId,
+  });
+};
+
+/** 대기 중인, 받았던 견적 상세보기 hook */
+export const useEstimateOfferDetail = (requestId: string, moverId: string) => {
+  return useQuery({
+    queryKey: ["EstimateOfferDetail", requestId, moverId],
+    queryFn: () => EstimateOfferDetail(requestId, moverId),
+    enabled: !!requestId && !!moverId,
+  });
+};
+
+/** 견적 요청 확정 hook */
+export const useEstimateOfferConfirmed = (): UseMutationResult<
+  ConfirmRes,
+  Error,
+  { offerId: string }
+> => {
+  return useMutation({
+    mutationFn: ({ offerId }: { offerId: string }) =>
+      EstimateOfferConfirmed(offerId),
   });
 };

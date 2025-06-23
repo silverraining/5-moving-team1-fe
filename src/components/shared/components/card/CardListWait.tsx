@@ -4,9 +4,31 @@ import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { EstimateOffer } from "@/src/types/estimate";
 import { ChipData } from "@/src/types/card";
+import {
+  EstimateOfferStatus,
+  EstimateRequestStatus,
+  MinimalAddress,
+  ServiceType,
+} from "@/src/types/common";
+import { MoverProfile } from "@/src/types/auth";
+
+// PendingEstimate.tsx에서 쓰는 card 데이터 타입
+export interface PendingEstimateCardData {
+  estimateRequestId: string;
+  fromAddressMinimal: MinimalAddress;
+  isConfirmed: boolean;
+  isTargeted: boolean;
+  moveDate: Date;
+  moveType: ServiceType;
+  price: number;
+  offerStatus: EstimateOfferStatus;
+  requestStatus: EstimateRequestStatus;
+  toAddressMinimal: MinimalAddress;
+  mover: MoverProfile;
+}
 
 interface CardProps {
-  data: EstimateOffer;
+  data: EstimateOffer | PendingEstimateCardData;
   onLikeClick?: () => void;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
@@ -40,7 +62,7 @@ export const CardListWait = ({
       minWidth={"327px"}
       width={"100%"}
       gap={["0px", "0px", "14px"]}
-      maxHeight={"440px"}
+      maxHeight={"480px"}
       minHeight={"362px"}
       height={"100%"}
       bgcolor="#FFFFFF"
@@ -150,7 +172,7 @@ export const CardListWait = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.rating}
+                {Number(info.rating).toFixed(1)}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -255,7 +277,7 @@ export const CardListWait = ({
                 lineHeight: ["24px", "24px", "26px"],
                 fontWeight: 500,
                 color: theme.palette.Black[300],
-                wordBreak: "keep-all",
+                wordBreak: "break-all",
               })}
             >
               {formatKoreanDate(data.moveDate ?? "")}
