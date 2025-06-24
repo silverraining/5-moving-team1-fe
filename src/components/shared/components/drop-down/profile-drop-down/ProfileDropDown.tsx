@@ -5,6 +5,7 @@ import ProfileMenuItem from "./ProfileMenuItem";
 import { User } from "@/src/types/auth";
 import Link from "next/link";
 import { PATH } from "@/src/lib/constants";
+import { AuthStore } from "@/src/store/authStore";
 
 interface ProfileDropDownProps {
   user: User | null;
@@ -19,13 +20,16 @@ export default function ProfileDropDown({
 }: ProfileDropDownProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
-  const profileHref =
+
+  const profileEditHref =
+    user?.role === "MOVER" ? PATH.moverProfileEdit : PATH.userProfileEdit;
+  const profileRegisterHref =
     user?.role === "MOVER"
       ? PATH.moverProfileRegister
       : PATH.userProfileRegister;
   const rievewHref =
     user?.role === "MOVER" ? PATH.moverReview : PATH.userReviewPending;
-
+  const isProfile = !!user?.imageUrl;
   return (
     <Box
       sx={(theme) => ({
@@ -46,11 +50,14 @@ export default function ProfileDropDown({
     >
       <ProfileMenuItem nickname={user?.name} bold type="nickname" />
       <Link
-        href={profileHref}
+        href={!isProfile ? profileRegisterHref : profileEditHref}
         style={{ width: "100%", textDecoration: "none" }}
         onClick={close}
       >
-        <ProfileMenuItem label="프로필 수정" type="menu" />
+        <ProfileMenuItem
+          label={!isProfile ? "프로필 등록" : "프로필 수정"}
+          type="menu"
+        />
       </Link>
       {user?.role !== "MOVER" && (
         <Link

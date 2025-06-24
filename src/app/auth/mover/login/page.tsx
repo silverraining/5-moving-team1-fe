@@ -17,6 +17,7 @@ import {
   LOGIN_FIELD,
 } from "@/src/lib/authConstants";
 import { useLoginForm } from "@/src/hooks/auth/hook";
+import { LoginSchemaType } from "@/src/schemas/auth/login.schema";
 
 const Login = () => {
   const theme = useTheme();
@@ -26,9 +27,16 @@ const Login = () => {
     register,
     handleSubmit,
     onSubmit,
-    formState: { errors, isValid },
+    watch,
+    formState: { errors },
   } = useLoginForm("MOVER");
 
+  const requiredFields: (keyof LoginSchemaType)[] = ["email", "password"];
+
+  const values = watch();
+  const isAllFilled = requiredFields.every(
+    (field) => values[field]?.trim() !== ""
+  );
   return (
     <Stack
       justifySelf={"center"}
@@ -50,7 +58,7 @@ const Login = () => {
         <Button
           fullWidth
           variant="contained"
-          disabled={!isValid}
+          disabled={!isAllFilled}
           sx={{
             maxHeight: "64px",
             minHeight: "54px",
