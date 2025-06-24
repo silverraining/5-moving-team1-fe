@@ -10,7 +10,7 @@ export type Login = {
 export type Signup = {
   name: string;
   email: string;
-  phone: string;
+  phone?: string;
   password: string;
   role: string;
 };

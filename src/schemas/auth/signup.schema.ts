@@ -10,9 +10,13 @@ export const signUpSchema = z
         message: "한글, 영문, 숫자만 사용할 수 있습니다",
       }),
     email: z.string().email({ message: "이메일 형식이 아닙니다" }),
-    phone: z.string().regex(/^010\d{8}$/, {
-      message: "유효한 휴대폰 번호를 입력해주세요",
-    }),
+    phone: z
+      .string()
+      .optional()
+      .transform((val) => (val ? val.replace(/-/g, "") : val))
+      .refine((val) => !val || /^010\d{8}$/.test(val), {
+        message: "유효한 휴대폰 번호를 입력해주세요",
+      }),
     password: z
       .string()
       .min(8, { message: "비밀번호는 최소 8자리입니다" })
