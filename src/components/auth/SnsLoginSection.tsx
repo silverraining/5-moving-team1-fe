@@ -19,11 +19,15 @@ export const SnsLoginSection = ({ isSmall, title }: SnsLoginSectionProps) => {
     window.location.href = `${API_BASE_URL}/auth/login/google/role/${role}`;
   };
   const handleKakaoLogin = () => {
-    // TODO: 카카오 로그인 구현
+    const role = pathname.includes("/mover/") ? "mover" : "customer";
+    // 카카오 OAuth로 리디렉션
+    window.location.href = `${API_BASE_URL}/auth/login/kakao/role/${role}`;
   };
 
   const handleNaverLogin = () => {
-    // TODO: 네이버 로그인 구현
+    const role = pathname.includes("/mover/") ? "mover" : "customer";
+    // 네이버 OAuth로 리디렉션
+    window.location.href = `${API_BASE_URL}/auth/login/naver/role/${role}`;
   };
 
   //버튼 호버 스타일
