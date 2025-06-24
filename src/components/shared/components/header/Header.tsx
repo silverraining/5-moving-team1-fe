@@ -28,7 +28,6 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useRef } from "react";
 import { useNotificationAll } from "@/src/api/notification/hooks";
 import { useNotificationStore } from "@/src/store/notification";
-import { BorderBottom } from "@mui/icons-material";
 
 export const Header = () => {
   const router = useRouter();
