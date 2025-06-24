@@ -9,7 +9,6 @@ import {
   USER_REVIEW,
 } from "@/src/lib/headerConstants";
 import { PATH } from "@/src/lib/constants";
-import { useEffect } from "react";
 
 export const SubHeader = () => {
   const pathname = usePathname();
@@ -40,17 +39,7 @@ export const SubHeader = () => {
   }
 
   if (isProgress) {
-    progressElement =
-      step !== null ? (
-        <Progress value={step} />
-      ) : (
-        <Typography
-          variant="SB_24"
-          sx={(theme) => ({ fontSize: ["18px", "18px", "24px"] })}
-        >
-          {label}
-        </Typography>
-      );
+    progressElement = <Progress value={step} />;
   }
 
   if (isLabel || step === null) {
@@ -67,6 +56,7 @@ export const SubHeader = () => {
   return (
     <Stack
       justifyContent={isProgress || isLabel ? "center" : "end"}
+      alignContent={"end"}
       maxHeight={"128px"}
       minHeight={
         isProgress && step === null
@@ -78,7 +68,9 @@ export const SubHeader = () => {
       sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
     >
       {tabMenuElement}
-      <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>{progressElement}</Box>
+      {isProgress && (
+        <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>{progressElement}</Box>
+      )}
       {labelElement}
     </Stack>
   );
