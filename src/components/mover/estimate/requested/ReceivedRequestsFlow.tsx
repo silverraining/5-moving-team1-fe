@@ -114,7 +114,15 @@ export default function ReceivedRequestsFlow() {
   // 실제 API로 받은 데이터 목록 정리
   const estimateItems = useMemo(() => {
     if (!data?.pages) return [];
-    return data.pages.flatMap((page) => page.items);
+    const allItems = data.pages.flatMap((page) => page.items);
+    const seen = new Set<string>();
+    const uniqueItems = allItems.filter((item) => {
+      if (seen.has(item.requestId)) return false;
+      seen.add(item.requestId);
+      return true;
+    });
+
+    return uniqueItems;
   }, [data?.pages]);
 
   // 필터링된 데이터 적용
