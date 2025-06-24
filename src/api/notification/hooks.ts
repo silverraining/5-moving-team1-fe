@@ -6,10 +6,11 @@ import {
   notificationReadReq,
 } from "./api";
 
-export const useNotificationAll = () => {
+export const useNotificationAll = (enabled: boolean) => {
   return useQuery<notificationAllRes[], Error>({
     queryKey: ["notifications"],
     queryFn: notificationAll,
+    enabled,
   });
 };
 

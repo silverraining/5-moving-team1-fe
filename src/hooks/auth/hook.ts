@@ -14,13 +14,17 @@ import {
 } from "@/src/schemas/auth/signup.schema";
 import { useNotificationAll } from "@/src/api/notification/hooks";
 import { useNotificationStore } from "@/src/store/notification";
+import { useEffect, useState } from "react";
+import { formatPhoneNumber } from "@/src/utils/formatPhonNumber";
 
 export const useLoginForm = (role: Role) => {
   const { mutate } = useLogin();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
-  const { data: notificationData } = useNotificationAll();
   const { setNotifications } = useNotificationStore();
+  const [fetchNotifications, setFetchNotifications] = useState(false);
+  const { data: notificationData } = useNotificationAll(fetchNotifications);
+
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -31,6 +35,7 @@ export const useLoginForm = (role: Role) => {
       {
         onSuccess: () => {
           openSnackbar("로그인 성공", "success", 500, "standard");
+          setFetchNotifications(true);
           router.replace("/");
           setNotifications(notificationData ?? []);
         },
@@ -59,11 +64,28 @@ export const useSignupForm = (role: Role) => {
   const form = useForm<SignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
   });
+  const { watch, setValue } = form;
+  const phoneValue = watch("phone");
+
+  useEffect(() => {
+    if (phoneValue) {
+      const formatted = formatPhoneNumber(phoneValue);
+      if (formatted !== phoneValue) {
+        setValue("phone", formatted, {
+          shouldValidate: true,
+          shouldDirty: true,
+        });
+      }
+    }
+  }, [phoneValue, setValue]);
 
   const onSubmit = (data: SignUpSchemaType) => {
+    const phoneRaw = data.phone ? data.phone.replace(/-/g, "") : undefined;
+    const submitData = { ...data, phone: phoneRaw, role };
     const path = role === "CUSTOMER" ? PATH.userLogin : PATH.moverLogin;
+
     mutate(
-      { ...data, role }, // 외부에서 받은 고정값 삽입
+      { ...submitData }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: () => {
           openSnackbar("회원가입 성공", "success", 1000, "standard");
