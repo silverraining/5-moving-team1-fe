@@ -1,10 +1,11 @@
+import { PATH } from "@/src/lib/constants";
 import { Box, Tab, Tabs, useTheme } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
 
 interface MenuTabs {
-  menu: { label: string; href: string }[];
+  menu: { label: string; href: string; baseUrl?: string }[];
   showIndicator?: boolean;
 }
 
@@ -28,24 +29,34 @@ export const MenuTabs = ({ menu, showIndicator = true }: MenuTabs) => {
           },
         }}
       >
-        {menu.map((d, index) => (
-          <Tab
-            key={index}
-            label={d.label}
-            value={d.href}
-            href={d.href}
-            component={Link}
-            sx={{
-              color:
-                pathname === d.href
-                  ? theme.palette.Black[500] // 선택된 탭
-                  : theme.palette.Grayscale[400], // 비활성 탭
-              fontSize: "18px",
-              fontWeight: 700,
-              textTransform: "none",
-            }}
-          />
-        ))}
+        {menu.map((d, index) => {
+          let isSelect = pathname === d.href;
+          if (d.baseUrl) {
+            isSelect = pathname.startsWith(d.baseUrl);
+          }
+          if (d.label === "내 견적 관리") {
+            isSelect =
+              pathname === PATH.moverEstimateConfirm ||
+              pathname === PATH.moverEstimateReject;
+          }
+          return (
+            <Tab
+              key={index}
+              label={d.label}
+              value={d.href}
+              href={d.href}
+              component={Link}
+              sx={{
+                color: isSelect
+                  ? theme.palette.Black[500]
+                  : theme.palette.Grayscale[400],
+                fontSize: "18px",
+                fontWeight: 700,
+                textTransform: "none",
+              }}
+            />
+          );
+        })}
       </Tabs>
     </Box>
   );
