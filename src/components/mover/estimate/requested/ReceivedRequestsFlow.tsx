@@ -430,6 +430,7 @@ export default function ReceivedRequestsFlow() {
                     display: "flex",
                     flexDirection: "column",
                     gap: ["24px", "32px", "48px"],
+                    marginBottom: ["24px", "32px", "48px"],
                   }}
                 >
                   {filteredItems.map((item, index) => {
