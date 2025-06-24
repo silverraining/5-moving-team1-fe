@@ -23,8 +23,6 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
     <Box
       sx={{
         width: isSmall ? "327px" : "640px",
-        minHeight: isSmall ? "410px" : "612px",
-        height: isSmall ? "410px" : "612px",
         overflow: "visible", // 잘림 방지
 
         // 캘린더 레이아웃
@@ -75,7 +73,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
 
         // 요일 헤더
         ".MuiDayCalendar-weekDayLabel": {
-          width: isSmall ? 42 : 64,
+          width: isSmall ? 40 : 64,
           height: isSmall ? 42 : 64,
           ...(isSmall ? theme.typography.M_13 : theme.typography.M_20),
         },
@@ -88,7 +86,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           color: "black",
           border: "none",
           "&.Mui-selected": {
-            backgroundColor: theme.palette.PrimaryBlue[500],
+            backgroundColor: theme.palette.PrimaryBlue[300],
             color: "white",
           },
         },
