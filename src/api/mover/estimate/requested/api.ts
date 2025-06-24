@@ -65,7 +65,7 @@ export const fetchReceivedEstimateRequest = async ({
   }
 };
 
-// 기사님 프로필 정보 조회(서비스 가능 지역 필터링에 필요)
+/* 기사님 프로필 정보 조회(서비스 가능 지역 필터링에 필요) */
 export const fetchMoverMe = async (): Promise<MoverProfile> => {
   try {
     const response = await apiClient.get<MoverProfile>("/mover/me");
@@ -73,5 +73,38 @@ export const fetchMoverMe = async (): Promise<MoverProfile> => {
   } catch (error) {
     console.error("기사 프로필 조회 실패:", error);
     throw new Error("기사 프로필을 불러오지 못했습니다.");
+  }
+};
+
+interface SendEstimateOfferPayload {
+  price: number;
+  comment: string;
+}
+
+export const sendEstimateOffer = async (
+  requestId: string,
+  payload: SendEstimateOfferPayload
+): Promise<void> => {
+  try {
+    await apiClient.post(`/estimate-offer/${requestId}`, payload);
+  } catch (error) {
+    console.error("견적 보내기 실패:", error);
+    throw new Error("견적을 보내는 데 실패했습니다.");
+  }
+};
+
+interface RejectEstimateRequestPayload {
+  comment: string;
+}
+
+export const rejectEstimateRequest = async (
+  requestId: string,
+  payload: RejectEstimateRequestPayload
+): Promise<void> => {
+  try {
+    await apiClient.post(`/estimate-offer/${requestId}/rejected`, payload);
+  } catch (error) {
+    console.error("견적 요청 반려 실패:", error);
+    throw new Error("견적 요청 반려에 실패했습니다.");
   }
 };

@@ -8,25 +8,31 @@ import {
   Typography,
   Button,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import Image from "next/image";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import { useTheme } from "@mui/material/styles";
 import { useRejectRequestForm } from "@/src/hooks/utill";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipProps } from "@/src/types/card";
+import { ServiceType } from "@/src/types/common";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
+import { EstimateRequestStatus } from "@/src/types/common";
+import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
 
 interface RejectRequestModalProps {
   open: boolean;
   onClose: () => void;
   onSubmit: (reason: string) => void;
-  moveType: ChipProps["type"][];
+  moveType: ServiceType[];
+  isTargeted: boolean;
+  requestStatus: string;
   customerName: string;
   moveDate: string;
   fromAddress: string;
   toAddress: string;
+  isLoading?: boolean;
 }
 
 export default function RejectRequestModal({
@@ -34,10 +40,13 @@ export default function RejectRequestModal({
   onClose,
   onSubmit,
   moveType,
+  isTargeted,
+  requestStatus,
   customerName,
   moveDate,
   fromAddress,
   toAddress,
+  isLoading,
 }: RejectRequestModalProps) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -46,12 +55,8 @@ export default function RejectRequestModal({
     useRejectRequestForm();
 
   // 실제 처리 함수
-  const onValid = ({ reason }: { reason: string }) => {
-    onSubmit(reason);
-    handleClose();
-  };
-
-  const handleClose = () => {
+  const onValid = async ({ reason }: { reason: string }) => {
+    await onSubmit(reason);
     reset();
     onClose();
   };
@@ -59,7 +64,7 @@ export default function RejectRequestModal({
   return (
     <Dialog
       open={open}
-      onClose={handleClose}
+      onClose={onClose}
       fullWidth
       slotProps={{
         paper: {
@@ -74,7 +79,7 @@ export default function RejectRequestModal({
             left: isSmall ? 0 : "auto",
             right: isSmall ? 0 : "auto",
             maxHeight: isSmall ? "90vh" : "auto",
-            width: isSmall ? "100%" : "auto",
+            width: ["auto", "608px", "608px"],
             gap: isSmall ? "26px" : "40px",
           },
         },
@@ -91,7 +96,7 @@ export default function RejectRequestModal({
       >
         반려요청
         <Image
-          onClick={handleClose}
+          onClick={onClose}
           width={isSmall ? 24 : 36}
           height={isSmall ? 24 : 36}
           src="/Images/header/X.svg"
@@ -117,7 +122,14 @@ export default function RejectRequestModal({
             }}
           >
             {moveType.map((type) => (
-              <ChipCategory key={type} type={type as ChipProps["type"]} />
+              <ChipCategory
+                key={type}
+                data={{
+                  chipType: type,
+                  isTargeted,
+                  status: requestStatus as EstimateRequestStatus,
+                }}
+              />
             ))}
           </Box>
           <Box
@@ -154,7 +166,7 @@ export default function RejectRequestModal({
               >
                 <InfoChip label="이사일" />
                 <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
-                  {moveDate}
+                  {formatDateWithDay(moveDate)}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center">
@@ -221,10 +233,11 @@ export default function RejectRequestModal({
           <Button
             type="submit"
             variant="contained"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             sx={{
               padding: "16px",
               width: "100%",
+              gap: "10px",
             }}
           >
             <Typography
@@ -233,6 +246,14 @@ export default function RejectRequestModal({
             >
               반려하기
             </Typography>
+            {isLoading && (
+              <CircularProgress
+                size={20}
+                sx={{
+                  color: theme.palette.White[100],
+                }}
+              />
+            )}
           </Button>
         </DialogActions>
       </form>

@@ -11,24 +11,30 @@ import {
   useTheme,
   useMediaQuery,
   Divider,
+  CircularProgress,
 } from "@mui/material";
 import Image from "next/image";
 import { Textarea } from "../text-field/Textarea";
 import { useEstimateOfferForm } from "@/src/hooks/utill";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipProps } from "@/src/types/card";
+import { ServiceType } from "@/src/types/common";
 import { Outline } from "../text-field/Outline";
 import { InfoChip } from "./components/InfoChip";
+import { EstimateRequestStatus } from "@/src/types/common";
+import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
 
 interface SendEstimateModalProps {
   open: boolean;
   onClose: () => void;
   onSend: (formData: { price: number; comment: string }) => void;
-  moveType: ChipProps["type"][];
+  moveType: ServiceType[];
+  isTargeted: boolean;
+  requestStatus: string;
   customerName: string;
   moveDate: string;
   fromAddress: string;
   toAddress: string;
+  isLoading?: boolean;
 }
 
 export default function SendEstimateModal({
@@ -38,8 +44,11 @@ export default function SendEstimateModal({
   moveType,
   customerName,
   moveDate,
+  isTargeted,
+  requestStatus,
   fromAddress,
   toAddress,
+  isLoading,
 }: SendEstimateModalProps) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -47,8 +56,8 @@ export default function SendEstimateModal({
   const { register, handleSubmit, errors, isValid, reset } =
     useEstimateOfferForm();
 
-  const onSubmit = (data: { price: string; comment: string }) => {
-    onSend({
+  const onSubmit = async (data: { price: string; comment: string }) => {
+    await onSend({
       price: Number(data.price),
       comment: data.comment.trim(),
     });
@@ -75,7 +84,7 @@ export default function SendEstimateModal({
             left: isSmall ? 0 : "auto",
             right: isSmall ? 0 : "auto",
             maxHeight: isSmall ? "90vh" : "auto",
-            width: isSmall ? "100%" : "auto",
+            width: ["auto", "608px", "608px"],
             gap: isSmall ? "26px" : "40px",
           },
         },
@@ -119,7 +128,14 @@ export default function SendEstimateModal({
             }}
           >
             {moveType.map((type) => (
-              <ChipCategory key={type} type={type as ChipProps["type"]} />
+              <ChipCategory
+                key={type}
+                data={{
+                  chipType: type,
+                  isTargeted,
+                  status: requestStatus as EstimateRequestStatus,
+                }}
+              />
             ))}
           </Box>
           <Box
@@ -159,7 +175,7 @@ export default function SendEstimateModal({
               >
                 <InfoChip label="이사일" />
                 <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
-                  {moveDate}
+                  {formatDateWithDay(moveDate)}
                 </Typography>
               </Box>
               <Box display="flex" alignItems="center">
@@ -258,10 +274,11 @@ export default function SendEstimateModal({
           <Button
             type="submit"
             variant="contained"
-            disabled={!isValid}
+            disabled={!isValid || isLoading}
             sx={{
               padding: "16px",
               width: "100%",
+              gap: "10px",
             }}
           >
             <Typography
@@ -270,6 +287,14 @@ export default function SendEstimateModal({
             >
               견적 보내기
             </Typography>
+            {isLoading && (
+              <CircularProgress
+                size={20}
+                sx={{
+                  color: theme.palette.White[100],
+                }}
+              />
+            )}
           </Button>
         </DialogActions>
       </form>
