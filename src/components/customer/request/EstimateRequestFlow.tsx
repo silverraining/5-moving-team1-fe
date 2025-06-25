@@ -2,10 +2,18 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Box, useTheme, useMediaQuery, CircularProgress } from "@mui/material";
+import {
+  Box,
+  useTheme,
+  useMediaQuery,
+  CircularProgress,
+  Stack,
+  Fade,
+} from "@mui/material";
 import Step1_MoveType from "./steps/Step1_MoveType";
 import Step2_MoveDate from "./steps/Step2_MoveDate";
 import Step3_AddressSelect from "./steps/Step3_AddressSelect";
+import ChatFlow from "./ChatFlow";
 import { useEstimateStore } from "@/src/store/requestStore";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
@@ -181,22 +189,62 @@ export default function EstimateRequestFlow() {
   // 7. 실제 화면 렌더링
   return (
     <>
-      <Box sx={{ paddingTop: isSmall ? "24px" : "40px" }}>
-        {step === 1 && <Step1_MoveType onSelect={handleSelectStep1} />}
-        {step === 2 && (
-          <Step2_MoveDate
-            onSelect={handleSelectStep2}
-            onBack={() => setStep(1)}
-          />
-        )}
-        {(step === 3 || step === 4) && (
-          <Step3_AddressSelect
-            onSelectFrom={handleSelectFromAddress}
-            onSelectTo={handleSelectToAddress}
+      <Box
+        sx={{ paddingTop: isSmall ? "24px" : "40px", paddingBottom: "100px" }}
+      >
+        <Stack spacing={isSmall ? "8px" : "24px"}>
+          {/* 채팅 플로우 */}
+          <ChatFlow
+            step={step || 1}
+            moveType={moveType}
+            moveDate={moveDate}
             onBackStep1={() => setStep(1)}
             onBackStep2={() => setStep(2)}
           />
-        )}
+
+          {/* 각 스텝별 입력 컴포넌트 */}
+          {step === 1 && (
+            <Fade in={true} timeout={800} style={{ transitionDelay: "1800ms" }}>
+              <Box>
+                <Step1_MoveType onSelect={handleSelectStep1} />
+              </Box>
+            </Fade>
+          )}
+
+          {step === 2 && (
+            <Fade in={true} timeout={800} style={{ transitionDelay: "1800ms" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Step2_MoveDate
+                  onSelect={handleSelectStep2}
+                  onBack={() => setStep(1)}
+                />
+              </Box>
+            </Fade>
+          )}
+
+          {(step === 3 || step === 4) && (
+            <Fade in={true} timeout={800} style={{ transitionDelay: "1800ms" }}>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Step3_AddressSelect
+                  onSelectFrom={handleSelectFromAddress}
+                  onSelectTo={handleSelectToAddress}
+                  onBackStep1={() => setStep(1)}
+                  onBackStep2={() => setStep(2)}
+                />
+              </Box>
+            </Fade>
+          )}
+        </Stack>
       </Box>
     </>
   );
