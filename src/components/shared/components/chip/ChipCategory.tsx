@@ -101,7 +101,6 @@ export const ChipCategory = ({
 
   // ✅ category를 배열로 설정
   const categories: (keyof typeof categoryData)[] = [];
-  console.log("chip이 받은 데이터", categories);
 
   // 상태 값 하나만 나오게 설정
   if (data.status === "PENDING") categories.push("PENDING");
