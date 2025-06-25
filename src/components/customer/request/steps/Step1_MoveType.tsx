@@ -23,27 +23,20 @@ export default function Step1_MoveType({ onSelect }: Step1Props) {
   };
 
   return (
-    <Stack spacing={isSmall ? "8px" : "24px"}>
-      <Chat
-        variant="sent"
-        content={`몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)`}
-      />
-      <Chat variant="sent" content={`이사 종류를 선택해 주세요.`} />
-      <Box
-        sx={{
-          display: "flex",
-          justifyContent: "flex-end",
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "flex-end",
+      }}
+    >
+      <CheckBoxList
+        selected={convertToLabel(moveType)}
+        onChange={(label) => {
+          const enumValue = convertToEnum(label); // ❗️라벨 → ENUM
+          setMoveType(enumValue);
         }}
-      >
-        <CheckBoxList
-          selected={convertToLabel(moveType)}
-          onChange={(label) => {
-            const enumValue = convertToEnum(label); // ❗️라벨 → ENUM
-            setMoveType(enumValue);
-          }}
-          onConfirm={handleConfirm}
-        />
-      </Box>
-    </Stack>
+        onConfirm={handleConfirm}
+      />
+    </Box>
   );
 }

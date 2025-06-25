@@ -31,44 +31,55 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          gap: isSmall ? "16px" : "24px",
+          justifyContent: "flex-start",
+          gap: isSmall ? "8px" : "16px",
           backgroundColor: theme.palette.White[100],
           py: isSmall ? "14px" : "24px",
           borderRadius: isSmall ? "16px" : "32px",
           boxShadow: "2px 2px 10px rgba(224, 224, 224, 0.2)",
+          overflow: "hidden",
         },
 
         ".MuiDateCalendar-root": {
           width: "100%",
           height: "auto",
-          flexGrow: 1,
+          flexGrow: 0,
           minHeight: "unset",
-          overflow: "visible", //
+          overflow: "hidden",
           maxHeight: "none",
+          mb: isSmall ? "16px" : "24px", // 달력과 버튼 사이 간격 조정
         },
 
         ".MuiPickersLayout-contentWrapper": {
           width: "100%",
-          flexGrow: 1,
+          flexGrow: 0, // 자동 확장 방지
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
         },
 
         ".MuiDayCalendar-root": {
           width: "100%",
-          overflow: "visible",
+          overflow: "hidden",
+          height: "auto",
         },
 
         ".MuiDayCalendar-monthContainer": {
           width: "100%",
-          height: "100%",
+          minHeight: isSmall ? "280px" : "420px",
+          display: "grid",
+          gridTemplateRows: "repeat(6, 1fr)",
           justifyItems: "center",
           alignItems: "center",
+          overflow: "hidden",
         },
+
         ".MuiDayCalendar-weekContainer": {
           width: isSmall ? 309 : 640,
           height: isSmall ? 42 : 68,
           justifyItems: "center",
           alignItems: "center",
+          overflow: "hidden",
         },
 
         // 요일 헤더
@@ -99,6 +110,13 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           border: "none !important",
           boxShadow: "none !important",
         },
+
+        // 액션바 스타일링
+        ".MuiPickersLayout-actionBar": {
+          flexShrink: 0,
+          overflow: "hidden",
+          marginTop: 0, // 상단 마진 제거
+        },
       }}
     >
       <StaticDatePicker
@@ -113,7 +131,8 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
               height: "100%",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
+              overflow: "hidden",
             },
           },
           actionBar: {

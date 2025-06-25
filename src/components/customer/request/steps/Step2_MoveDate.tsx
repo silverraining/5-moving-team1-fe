@@ -31,58 +31,10 @@ export default function Step2_MoveDate({ onSelect, onBack }: Step2Props) {
   };
 
   return (
-    <Stack spacing={isSmall ? "8px" : "24px"}>
-      <Chat
-        variant="sent"
-        content={`몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)`}
-      />
-      <Chat variant="sent" content={`이사 종류를 선택해주세요.`} />
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-end",
-        }}
-      >
-        <Stack
-          spacing={isSmall ? "8px" : "24px"}
-          width="100%"
-          sx={{ alignItems: "flex-end" }}
-        >
-          {moveType && (
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "flex-end",
-                gap: isSmall ? "4px" : "6px",
-              }}
-            >
-              <Chat variant="received" content={convertToLabel(moveType)} />
-              <Typography
-                onClick={onBack}
-                variant={isSmall ? "M_12" : "R_16"}
-                sx={{
-                  cursor: "pointer",
-                  color: theme.palette.Grayscale[500],
-                  fontWeight: 600,
-                  textDecoration: "underline",
-                }}
-              >
-                수정하기
-              </Typography>
-            </Box>
-          )}
-
-          <Chat variant="sent" content={`이사 예정일을 선택해주세요.`} />
-
-          <Calendar
-            value={selectedDate}
-            onChange={setSelectedDate}
-            onAccept={handleAccept}
-          />
-        </Stack>
-      </Box>
-    </Stack>
+    <Calendar
+      value={selectedDate}
+      onChange={setSelectedDate}
+      onAccept={handleAccept}
+    />
   );
 }
