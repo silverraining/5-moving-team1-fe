@@ -24,8 +24,8 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
       sx={{
         width: isSmall ? "327px" : "640px",
         minHeight: isSmall ? "410px" : "612px",
-        height: isSmall ? "410px" : "612px",
-        overflow: "visible", // 잘림 방지
+        height: "fit-content", // 내용에 맞게 높이 조정
+        overflow: "hidden", // 드래그 방지
 
         // 캘린더 레이아웃
         ".MuiPickersLayout-root": {
@@ -33,49 +33,60 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          gap: isSmall ? "16px" : "24px",
+          justifyContent: "flex-start",
+          gap: isSmall ? "8px" : "16px",
           backgroundColor: theme.palette.White[100],
           py: isSmall ? "14px" : "24px",
           borderRadius: isSmall ? "16px" : "32px",
           boxShadow: "2px 2px 10px rgba(224, 224, 224, 0.2)",
+          overflow: "hidden",
         },
 
         ".MuiDateCalendar-root": {
           width: "100%",
           height: "auto",
-          flexGrow: 1,
+          flexGrow: 0,
           minHeight: "unset",
-          overflow: "visible", //
+          overflow: "hidden",
           maxHeight: "none",
+          mb: isSmall ? "16px" : "24px", // 달력과 버튼 사이 간격 조정
         },
 
         ".MuiPickersLayout-contentWrapper": {
           width: "100%",
-          flexGrow: 1,
+          flexGrow: 0, // 자동 확장 방지
+          display: "flex",
+          flexDirection: "column",
+          overflow: "hidden",
         },
 
         ".MuiDayCalendar-root": {
           width: "100%",
-          overflow: "visible",
+          overflow: "hidden",
+          height: "auto",
         },
 
         ".MuiDayCalendar-monthContainer": {
           width: "100%",
-          height: "100%",
+          minHeight: isSmall ? "280px" : "420px",
+          display: "grid",
+          gridTemplateRows: "repeat(6, 1fr)",
           justifyItems: "center",
           alignItems: "center",
+          overflow: "hidden",
         },
+
         ".MuiDayCalendar-weekContainer": {
           width: isSmall ? 309 : 640,
           height: isSmall ? 42 : 68,
           justifyItems: "center",
           alignItems: "center",
+          overflow: "hidden",
         },
 
         // 요일 헤더
         ".MuiDayCalendar-weekDayLabel": {
-          width: isSmall ? 42 : 64,
+          width: isSmall ? 40 : 64,
           height: isSmall ? 42 : 64,
           ...(isSmall ? theme.typography.M_13 : theme.typography.M_20),
         },
@@ -88,7 +99,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
           color: "black",
           border: "none",
           "&.Mui-selected": {
-            backgroundColor: theme.palette.PrimaryBlue[500],
+            backgroundColor: theme.palette.PrimaryBlue[300],
             color: "white",
           },
         },
@@ -100,6 +111,13 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
         ".MuiPickersDay-today.Mui-selected": {
           border: "none !important",
           boxShadow: "none !important",
+        },
+
+        // 액션바 스타일링
+        ".MuiPickersLayout-actionBar": {
+          flexShrink: 0,
+          overflow: "hidden",
+          marginTop: 0, // 상단 마진 제거
         },
       }}
     >
@@ -115,7 +133,8 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
               height: "100%",
               display: "flex",
               flexDirection: "column",
-              justifyContent: "space-between",
+              justifyContent: "flex-start",
+              overflow: "hidden",
             },
           },
           actionBar: {

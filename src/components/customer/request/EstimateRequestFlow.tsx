@@ -190,7 +190,10 @@ export default function EstimateRequestFlow() {
   return (
     <>
       <Box
-        sx={{ paddingTop: isSmall ? "24px" : "40px", paddingBottom: "100px" }}
+        sx={{
+          paddingTop: isSmall ? "24px" : "40px",
+          paddingBottom: isSmall ? 0 : "170px",
+        }}
       >
         <Stack spacing={isSmall ? "8px" : "24px"}>
           {/* 채팅 플로우 */}
