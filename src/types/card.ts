@@ -5,8 +5,8 @@ import {
 } from "./common";
 
 export interface ChipData {
-  chipType?: ServiceType;
-  status?: EstimateRequestStatus | EstimateOfferStatus;
+  chipType?: ServiceType | ServiceType[];
+  status?: EstimateOfferStatus | EstimateRequestStatus;
   isTargeted?: boolean;
 }
 

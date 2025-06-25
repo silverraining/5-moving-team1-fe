@@ -56,6 +56,13 @@ export const ChipCategory = ({
       img: null,
       alt: "견적 확정",
     },
+    COMPLETED: {
+      label: "견적 확정",
+      bg: theme.palette.Background[100],
+      text: theme.palette.PrimaryBlue[400],
+      img: null,
+      alt: "견적 확정",
+    },
   } as const;
 
   const sizeMap = {
@@ -86,19 +93,28 @@ export const ChipCategory = ({
   const size = forceMobileSize ? "sm" : isSmall ? "xs" : isMobile ? "sm" : "md";
   const sizeStyle = sizeMap[size as "xs" | "sm" | "md"];
 
+  const chipTypes = Array.isArray(data.chipType)
+    ? data.chipType
+    : data.chipType
+      ? [data.chipType]
+      : [];
+
   // ✅ category를 배열로 설정
   const categories: (keyof typeof categoryData)[] = [];
+  console.log("chip이 받은 데이터", categories);
 
-  if (data.isTargeted) categories.push("TARGET");
+  // 상태 값 하나만 나오게 설정
   if (data.status === "PENDING") categories.push("PENDING");
-  if (data.status === "CONFIRMED") categories.push("CONFIRMED");
-  if (
-    data.chipType === "SMALL" ||
-    data.chipType === "HOME" ||
-    data.chipType === "OFFICE"
-  ) {
-    categories.push(data.chipType);
-  }
+  else if (data.status === "COMPLETED") categories.push("COMPLETED");
+  else if (data.status === "CONFIRMED") categories.push("CONFIRMED");
+
+  // 서비스 타입 배열도 가능하게 설정
+  chipTypes.forEach((type) => {
+    if (type === "SMALL" || type === "HOME" || type === "OFFICE") {
+      categories.push(type);
+    }
+  });
+  if (data.isTargeted) categories.push("TARGET");
 
   if (!data || categories.length === 0) return null;
 
