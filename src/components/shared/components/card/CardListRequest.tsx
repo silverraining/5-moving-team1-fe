@@ -26,7 +26,6 @@ export const CardListRequest = ({
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
       isTargeted: data.isTargeted,
     },
   ];

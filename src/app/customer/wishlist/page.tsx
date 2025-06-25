@@ -28,7 +28,7 @@ const Wishlist = () => {
       moverId: item.id,
       price: 0,
       comment: "",
-      status: EstimateOfferStatus.REQUESTED,
+      status: EstimateOfferStatus.PENDING,
       requestStatus: EstimateRequestStatus.PENDING,
       confirmedCount: item.confirmed_estimate_count,
       isTargeted: false,

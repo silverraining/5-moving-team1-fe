@@ -4,7 +4,7 @@ import { ChipData } from "@/src/types/card";
 import dayjs from "@/src/lib/dayjsConfig";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import {
-  EstimateRequestStatus,
+  EstimateOfferStatus,
   MinimalAddress,
   ServiceType,
 } from "@/src/types/common";
@@ -22,7 +22,7 @@ export interface OfferEstimateCardData {
   moveType: ServiceType;
   offerId: string;
   price: number;
-  status: EstimateRequestStatus;
+  status: EstimateOfferStatus;
   toAddressMinimal: MinimalAddress;
 }
 interface CardProps {

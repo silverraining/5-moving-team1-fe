@@ -6,7 +6,6 @@ import { EstimateOffer } from "@/src/types/estimate";
 import { ChipData } from "@/src/types/card";
 import {
   EstimateOfferStatus,
-  EstimateRequestStatus,
   MinimalAddress,
   ServiceType,
 } from "@/src/types/common";
@@ -15,6 +14,7 @@ import { MoverProfile } from "@/src/types/auth";
 // PendingEstimate.tsx에서 쓰는 card 데이터 타입
 export interface PendingEstimateCardData {
   estimateRequestId: string;
+  toAddressMinimal: MinimalAddress;
   fromAddressMinimal: MinimalAddress;
   isConfirmed: boolean;
   isTargeted: boolean;
@@ -22,8 +22,6 @@ export interface PendingEstimateCardData {
   moveType: ServiceType;
   price: number;
   offerStatus: EstimateOfferStatus;
-  requestStatus: EstimateRequestStatus;
-  toAddressMinimal: MinimalAddress;
   mover: MoverProfile;
 }
 
@@ -40,6 +38,12 @@ export const CardListWait = ({
   onConfirmClick,
   onDetailClick,
 }: CardProps) => {
+  const status =
+    "offerStatus" in data
+      ? data.offerStatus
+      : "status" in data
+        ? data.status
+        : undefined;
   // 카드 데이터
   const info = data.mover;
 
@@ -47,7 +51,7 @@ export const CardListWait = ({
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
+      status,
       isTargeted: data.isTargeted,
     },
   ];
