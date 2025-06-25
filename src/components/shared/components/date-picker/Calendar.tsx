@@ -23,9 +23,7 @@ export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
     <Box
       sx={{
         width: isSmall ? "327px" : "640px",
-        minHeight: isSmall ? "410px" : "612px",
-        height: "fit-content", // 내용에 맞게 높이 조정
-        overflow: "hidden", // 드래그 방지
+        overflow: "visible", // 잘림 방지
 
         // 캘린더 레이아웃
         ".MuiPickersLayout-root": {
