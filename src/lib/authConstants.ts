@@ -76,7 +76,7 @@ export const SIGNUP_FIELD = [
   {
     name: "phone",
     label: "전화번호",
-    type: "number",
+    type: "tel",
     placeholder: "숫자만 입력해 주세요",
   },
   {
