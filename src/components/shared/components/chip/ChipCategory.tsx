@@ -89,7 +89,6 @@ export const ChipCategory = ({
   // ✅ category를 배열로 설정
   const categories: (keyof typeof categoryData)[] = [];
 
-  if (data.isTargeted) categories.push("TARGET");
   if (data.status === "PENDING") categories.push("PENDING");
   if (data.status === "CONFIRMED") categories.push("CONFIRMED");
   if (
@@ -99,6 +98,7 @@ export const ChipCategory = ({
   ) {
     categories.push(data.chipType);
   }
+  if (data.isTargeted) categories.push("TARGET");
 
   if (!data || categories.length === 0) return null;
 
