@@ -46,7 +46,6 @@ export const CardListSave = ({
     ? [
         {
           chipType: data.moveType,
-          status: data.requestStatus,
           isTargeted: data.isTargeted,
         },
       ]

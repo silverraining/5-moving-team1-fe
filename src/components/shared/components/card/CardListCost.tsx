@@ -6,7 +6,6 @@ import { COLORS } from "@/public/theme/colors";
 import { ChipData } from "@/src/types/card";
 import {
   EstimateOfferStatus,
-  EstimateRequestStatus,
   MinimalAddress,
   ServiceType,
 } from "@/src/types/common";
@@ -23,7 +22,6 @@ export interface HistoryEstimateCardData {
   offerId: string;
   price: number;
   offerStatus: EstimateOfferStatus;
-  requestStatus: EstimateRequestStatus;
   toAddressMinimal: MinimalAddress;
   mover: MoverProfile;
 }
@@ -34,13 +32,19 @@ interface CardProps {
 }
 
 export const CardListCost = ({ data, onLikeClick }: CardProps) => {
+  const status =
+    "offerStatus" in data
+      ? data.offerStatus
+      : "status" in data
+        ? data.status
+        : undefined;
   // 카드 데이터
   const info = data.mover;
   // Chip 데이터
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
+      status,
       isTargeted: data.isTargeted,
     },
   ];

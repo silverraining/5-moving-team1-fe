@@ -35,7 +35,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
     ? [
         {
           chipType: data.moveType,
-          status: data.requestStatus,
+          status: data.status,
           isTargeted: data.isTargeted,
         },
       ]

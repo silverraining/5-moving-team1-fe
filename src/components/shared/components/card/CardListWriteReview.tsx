@@ -4,7 +4,6 @@ import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { reviewableOffers } from "@/src/api/review/api";
-import { ServiceType } from "@/src/types/common";
 
 interface CardProps {
   data: reviewableOffers;
