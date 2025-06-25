@@ -136,9 +136,13 @@ export const Header = () => {
   // 로그인 상태 또는 토큰 변경 시 SSE 재연결 처리
   const accessToken = Cookies.get("accessToken");
   useEffect(() => {
+    if (!accessToken && user) {
+      logout();
+    }
     if (!accessToken) {
       // 토큰 없으면 기존 연결 종료 및 타이머 정리
       console.log("토큰 없음. SSE 연결 종료");
+
       eventSourceRef.current?.close();
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);

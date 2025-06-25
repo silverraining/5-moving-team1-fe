@@ -38,11 +38,6 @@ export const middleware = async (request: NextRequest) => {
   let accessUser = null;
   let refreshUser = null;
 
-  if (!accessUser && !refreshUser) {
-    request.cookies.delete("accessToken");
-    request.cookies.delete("refreshToken");
-  }
-
   if (accessToken) {
     accessUser = await getUserFromToken(
       accessToken,
@@ -56,6 +51,10 @@ export const middleware = async (request: NextRequest) => {
     );
   }
 
+  if (!accessUser && !refreshUser) {
+    request.cookies.delete("accessToken");
+    request.cookies.delete("refreshToken");
+  }
   const userRole = accessUser?.role;
   if (accessToken && pathname.startsWith("/auth")) {
     const mainUrl = new URL(PATH.main, request.url);

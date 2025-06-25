@@ -42,7 +42,7 @@ export const SubHeader = () => {
     progressElement = <Progress value={step} />;
   }
 
-  if (isLabel || step === null) {
+  if (isLabel) {
     labelElement = (
       <Typography
         variant="SB_24"
