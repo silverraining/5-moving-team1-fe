@@ -181,7 +181,12 @@ export default function EstimateRequestFlow() {
   // 7. 실제 화면 렌더링
   return (
     <>
-      <Box sx={{ paddingTop: isSmall ? "24px" : "40px" }}>
+      <Box
+        sx={{
+          paddingTop: isSmall ? "24px" : "40px",
+          paddingBottom: isSmall ? 0 : "170px",
+        }}
+      >
         {step === 1 && <Step1_MoveType onSelect={handleSelectStep1} />}
         {step === 2 && (
           <Step2_MoveDate
