@@ -111,6 +111,12 @@ export default function ReceivedRequestsFlow() {
       isTargeted: false,
     });
 
+  // 전체 건수 계산
+  const totalCount = useMemo(() => {
+    if (!data?.pages?.length) return 0;
+    return data.pages[0].totalCount; // 전체 건수
+  }, [data?.pages]);
+
   // 실제 API로 받은 데이터 목록 정리
   const estimateItems = useMemo(() => {
     if (!data?.pages) return [];
@@ -378,7 +384,7 @@ export default function ReceivedRequestsFlow() {
                   전체{" "}
                 </Typography>
                 <Typography variant={isSmall ? "SB_13" : "SB_16"}>
-                  {filteredItems.length}건
+                  {totalCount}건
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "4px" }}>
