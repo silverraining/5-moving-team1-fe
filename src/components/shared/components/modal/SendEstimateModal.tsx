@@ -20,7 +20,6 @@ import { ChipCategory } from "../chip/ChipCategory";
 import { ServiceType } from "@/src/types/common";
 import { Outline } from "../text-field/Outline";
 import { InfoChip } from "./components/InfoChip";
-import { EstimateRequestStatus } from "@/src/types/common";
 import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
 
 interface SendEstimateModalProps {
@@ -45,7 +44,6 @@ export default function SendEstimateModal({
   customerName,
   moveDate,
   isTargeted,
-  requestStatus,
   fromAddress,
   toAddress,
   isLoading,
@@ -133,7 +131,6 @@ export default function SendEstimateModal({
                 data={{
                   chipType: type,
                   isTargeted,
-                  status: requestStatus as EstimateRequestStatus,
                 }}
               />
             ))}
