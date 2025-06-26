@@ -113,6 +113,13 @@ export const ChipCategory = ({
       categories.push(type);
     }
   });
+  if (
+    data.chipType === "SMALL" ||
+    data.chipType === "HOME" ||
+    data.chipType === "OFFICE"
+  ) {
+    categories.push(data.chipType);
+  }
   if (data.isTargeted) categories.push("TARGET");
 
   if (!data || categories.length === 0) return null;
