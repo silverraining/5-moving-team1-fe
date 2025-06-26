@@ -15,6 +15,7 @@ import { PATH } from "@/src/lib/constants";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EstimateRequestHistoryItem } from "@/src/api/customer/api";
+import { EmprtyReview } from "../../review/EmptyReview";
 
 interface HistoryEstimateCardDataWithId extends HistoryEstimateCardData {
   moverId: string;
@@ -44,9 +45,9 @@ export default function HistoryEstimate() {
   };
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (isError) return <Typography>에러가 발생했습니다.</Typography>;
+  if (isError) return <EmprtyReview text="대기중인 견적이 없습니다" />;
   if (!Array.isArray(data?.items) || data.items.length === 0)
-    return <Typography>견적 요청이 없습니다.</Typography>;
+    return <EmprtyReview text="대기중인 견적이 없습니다" />;
 
   return (
     <Stack
