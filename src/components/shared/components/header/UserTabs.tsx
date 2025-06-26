@@ -95,8 +95,13 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
           ref={profile.anchorRef}
           width={size}
           height={size}
-          src={user ? user.imageUrl : "/Images/header/profile.svg"}
-          alt="alram"
+          src={
+            // user.imageUrl이 빈 문자열일 경우 기본이미지 적용하도록
+            user && user.imageUrl && user.imageUrl.trim() !== ""
+              ? user.imageUrl
+              : "/Images/header/Profile.svg"
+          }
+          alt="profile"
           style={{ cursor: "pointer", borderRadius: "50%" }}
           onClick={profile.toggle}
         />

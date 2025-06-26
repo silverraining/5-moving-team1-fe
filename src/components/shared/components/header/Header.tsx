@@ -38,24 +38,21 @@ export const Header = () => {
   const isMover = user?.role === "MOVER";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-  const { refetch } = useNotificationAll();
-  const { setNotifications, setMarkAsRead, markAsRead } =
-    useNotificationStore();
+  const token = Cookies.get("accessToken");
+  const { refetch } = useNotificationAll(!!token);
+  const { setNotifications, setMarkAsRead } = useNotificationStore();
 
-   const TabMenu = isCustomer
+  const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
       ? MOVER_MENU
       : GUEST_MENU;
 
-   
-
-
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-    ? MOVER_MENU
-    : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+      ? MOVER_MENU
+      : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
@@ -78,15 +75,16 @@ export const Header = () => {
   const reconnectIntervalRef = useRef<number>(1000); // 초기 1초
 
   const connectSSE = () => {
-    const token = Cookies.get("accessToken");
-    if (!token) {
-      console.warn("No token, SSE 연결 스킵");
+    const accessToken = Cookies.get("accessToken");
+
+    if (!accessToken) {
+      console.warn("No accessToken, SSE 연결 스킵");
       return;
     }
     const eventSource = new EventSourcePolyfill(
       `${API_BASE_URL}/notifications/stream`,
       {
-        headers: { Authorization: `Bearer ${token}` },
+        headers: { Authorization: `Bearer ${accessToken}` },
         withCredentials: true,
       }
     );
@@ -136,11 +134,15 @@ export const Header = () => {
   };
 
   // 로그인 상태 또는 토큰 변경 시 SSE 재연결 처리
-  const token = Cookies.get("accessToken");
+  const accessToken = Cookies.get("accessToken");
   useEffect(() => {
-    if (!token) {
+    if (!accessToken && user) {
+      logout();
+    }
+    if (!accessToken) {
       // 토큰 없으면 기존 연결 종료 및 타이머 정리
       console.log("토큰 없음. SSE 연결 종료");
+
       eventSourceRef.current?.close();
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
@@ -167,7 +169,7 @@ export const Header = () => {
         clearTimeout(reconnectTimeoutRef.current);
       }
     };
-  }, [token, isLogin]);
+  }, [accessToken, isLogin]);
 
   return (
     <Box
@@ -177,6 +179,9 @@ export const Header = () => {
       alignItems="center"
       justifyContent="space-between"
       bgcolor={theme.palette.White[100]}
+      sx={(theme) => ({
+        borderBottom: `1px solid ${theme.palette.Line[100]}`,
+      })}
     >
       <Stack direction="row" alignItems="center" spacing={2}>
         <Link href={PATH.main} passHref>

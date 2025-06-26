@@ -1,15 +1,33 @@
 "use client";
 
-import { Box, BoxProps, Stack, Typography, useTheme } from "@mui/material";
+import {
+  Box,
+  BoxProps,
+  Stack,
+  Typography,
+  useTheme,
+  Slide,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 
 interface ChatProps {
   content: string;
   variant: "received" | "sent" | "system";
+  delay?: number; // 애니메이션 지연 시간 (ms)
 }
 
-export const Chat = ({ content, variant }: ChatProps) => {
+export const Chat = ({ content, variant, delay = 0 }: ChatProps) => {
   const theme = useTheme();
   const isSmall = theme.breakpoints.down("tablet");
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsVisible(true);
+    }, delay);
+
+    return () => clearTimeout(timer);
+  }, [delay]);
 
   const bubbleStyles: Record<"sent" | "received" | "system", BoxProps> = {
     sent: {
@@ -47,31 +65,43 @@ export const Chat = ({ content, variant }: ChatProps) => {
     },
   };
   return (
-    <Stack
-      width="100%"
-      direction="row"
-      justifyContent={variant === "sent" ? "flex-start" : "flex-end"}
-      alignItems="center"
+    <Slide
+      direction={variant === "sent" ? "right" : "left"}
+      in={isVisible}
+      timeout={800}
+      style={{ transitionDelay: isVisible ? "0ms" : "200ms" }}
     >
-      <Box
-        maxWidth={["248px", "248px", "100%"]}
-        px={["20px", "20px", "40px"]}
-        py={["12px", "12px", "20px"]}
-        {...bubbleStyles[variant]}
+      <Stack
+        width="100%"
+        direction="row"
+        justifyContent={variant === "sent" ? "flex-start" : "flex-end"}
+        alignItems="center"
       >
-        <Typography
-          variant={isSmall ? "M_14" : "M_18"}
-          color={
-            variant === "sent"
-              ? "black"
-              : variant === "system"
-                ? theme.palette.PrimaryBlue[300]
-                : "white"
-          }
+        <Box
+          maxWidth={["248px", "248px", "100%"]}
+          px={["20px", "20px", "40px"]}
+          py={["12px", "12px", "20px"]}
+          {...bubbleStyles[variant]}
+          sx={{
+            ...bubbleStyles[variant].sx,
+            transform: isVisible ? "scale(1)" : "scale(0.8)",
+            transition: "transform 0.3s ease-out",
+          }}
         >
-          {content}
-        </Typography>
-      </Box>
-    </Stack>
+          <Typography
+            variant={isSmall ? "M_14" : "M_18"}
+            color={
+              variant === "sent"
+                ? "black"
+                : variant === "system"
+                  ? theme.palette.PrimaryBlue[300]
+                  : "white"
+            }
+          >
+            {content}
+          </Typography>
+        </Box>
+      </Stack>
+    </Slide>
   );
 };

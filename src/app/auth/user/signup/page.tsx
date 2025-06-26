@@ -18,6 +18,7 @@ import {
   USER_LOGIN_LINK,
 } from "@/src/lib/authConstants";
 import { useSignupForm } from "@/src/hooks/auth/hook";
+import { SignUpSchemaType } from "@/src/schemas/auth/signup.schema";
 
 const SignUp = () => {
   const theme = useTheme();
@@ -27,8 +28,20 @@ const SignUp = () => {
     register,
     onSubmit,
     handleSubmit,
-    formState: { errors, isValid },
+    watch,
+    formState: { errors },
   } = useSignupForm("CUSTOMER");
+  const requiredFields: (keyof SignUpSchemaType)[] = [
+    "name",
+    "email",
+    "password",
+    "passwordConfirm",
+  ];
+
+  const values = watch();
+  const isAllFilled = requiredFields.every(
+    (field) => values[field]?.trim() !== ""
+  );
 
   return (
     <Stack
@@ -57,7 +70,7 @@ const SignUp = () => {
         <Button
           fullWidth
           variant="contained"
-          disabled={!isValid}
+          disabled={!isAllFilled}
           sx={{
             maxHeight: "64px",
             minHeight: "54px",
@@ -66,7 +79,9 @@ const SignUp = () => {
           }}
           type="submit"
         >
-          <Typography variant={isSmall ? "SB_16" : "SB_20"}>로그인</Typography>
+          <Typography variant={isSmall ? "SB_16" : "SB_20"}>
+            시작하기
+          </Typography>
         </Button>
         <TextLink
           description={USER_LOGIN_LINK.description}

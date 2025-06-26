@@ -1,7 +1,6 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../../shared/components/modal/SendEstimateModal";
 import RejectRequestModal from "../../../shared/components/modal/RejectRequestModal";
@@ -20,7 +19,6 @@ import MoveSortDropdown from "./MoveSortDropdown";
 import { MoveSortOption } from "./MoveSortDropdown";
 import FilterModal from "../../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
-import { testDataList } from "./mockEstimateRequests";
 import useModalStates from "@/src/hooks/useModalStates";
 import { useReceivedEstimateRequests } from "@/src/hooks/useReceivedEstimateRequests";
 import {
@@ -35,6 +33,8 @@ import {
 import { MoverProfile } from "@/src/types/auth";
 import { ServiceType } from "@/src/lib/constants";
 import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
+import { useEstimateModalActions } from "@/src/hooks/useEstimateModalActions";
+import { useSnackbarStore } from "@/src/store/snackBarStore";
 
 type ServiceTypeLabel = (typeof ServiceType)[number];
 
@@ -52,6 +52,7 @@ export default function ReceivedRequestsFlow() {
     openFilterModal,
     closeFilterModal,
   } = useModalStates();
+  const { openSnackbar } = useSnackbarStore();
 
   const [moveTypeItems, setMoveTypeItems] = useState<MoveTypeFilterItem[]>([
     { label: "소형이사", count: 0, checked: false },
@@ -69,10 +70,9 @@ export default function ReceivedRequestsFlow() {
   const [selectedTab, setSelectedTab] = useState<"moveType" | "filter">(
     "moveType"
   ); // 필터모달 메뉴
-  const [selectedRequest, setSelectedRequest] = useState<
-    // 선택된 견적건
-    (typeof testDataList)[0] | null
-  >(null);
+
+  const [selectedRequest, setSelectedRequest] =
+    useState<EstimateRequestItem | null>(null); // 견적 보내기/반려 모달과 연결된 받은 견적 데이터
 
   const [sortOption, setSortOption] = useState<MoveSortOption>({
     label: "이사 빠른순",
@@ -87,8 +87,43 @@ export default function ReceivedRequestsFlow() {
       isTargeted: false,
     });
 
+  const observerRef = useRef<IntersectionObserver | null>(null);
+  // 마지막 아이템에 감지용 ref 연결
+  const lastItemRef = useCallback(
+    (node: HTMLDivElement | null) => {
+      if (isFetchingNextPage) return;
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && hasNextPage) {
+          fetchNextPage();
+        }
+      });
+
+      if (node) observerRef.current.observe(node);
+    },
+    [isFetchingNextPage, hasNextPage, fetchNextPage]
+  );
+
+  const { sendEstimate, isSending, rejectEstimate, isRejecting } =
+    useEstimateModalActions({
+      sort: sortOption.sort,
+      isTargeted: false,
+    });
+
   // 실제 API로 받은 데이터 목록 정리
-  const estimateItems = data?.pages?.flatMap((page) => page.items) ?? [];
+  const estimateItems = useMemo(() => {
+    if (!data?.pages) return [];
+    const allItems = data.pages.flatMap((page) => page.items);
+    const seen = new Set<string>();
+    const uniqueItems = allItems.filter((item) => {
+      if (seen.has(item.requestId)) return false;
+      seen.add(item.requestId);
+      return true;
+    });
+
+    return uniqueItems;
+  }, [data?.pages]);
 
   // 필터링된 데이터 적용
   const filteredItems = filterEstimateRequests({
@@ -193,33 +228,54 @@ export default function ReceivedRequestsFlow() {
 
   // 견적 보내기 모달 핸들러
   const handleSendClick = (request: EstimateRequestItem) => {
-    console.log("견적 보내기 버튼 눌리나 테스트");
     setSelectedRequest(request);
     openEstimateModal();
   };
 
   // 견적 반려하기 모달 핸들러
   const handleRejectClick = (request: EstimateRequestItem) => {
-    console.log("반려 버튼 눌리나 테스트");
     setSelectedRequest(request);
     openRejectModal();
   };
 
   // 견적 보내기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
-  const handleSendEstimate = (formData: { price: number; comment: string }) => {
-    console.log(
-      "보내는 견적 데이터:",
-      formData,
-      "선택된 데이터",
-      selectedRequest
-    );
-    closeEstimateModal();
+  const handleSendEstimate = async (formData: {
+    price: number;
+    comment: string;
+  }) => {
+    if (!selectedRequest) return;
+
+    try {
+      await sendEstimate({
+        requestId: selectedRequest.requestId,
+        price: formData.price,
+        comment: formData.comment,
+      });
+
+      openSnackbar("견적을 성공적으로 보냈습니다.", "success");
+    } catch (error) {
+      openSnackbar("견적 보내기에 실패했습니다.", "error");
+      console.error(error);
+      throw error;
+    }
   };
 
   // 반려하기 모달 - 콘솔로 데이터 확인(백엔드 연결 후 수정 필요)
-  const handleSendReject = (reason: string) => {
-    console.log("보내는 반려 사유:", reason, "선택된 데이터", selectedRequest);
-    closeRejectModal();
+  const handleSendReject = async (comment: string) => {
+    if (!selectedRequest) return;
+
+    try {
+      await rejectEstimate({
+        requestId: selectedRequest.requestId,
+        comment,
+      });
+
+      openSnackbar("견적 요청 반려를 성공적으로 보냈습니다.", "success");
+      closeRejectModal();
+    } catch (error) {
+      openSnackbar("견적 요청 반려 보내기에 실패했습니다.", "error");
+      console.error(error);
+    }
   };
 
   return (
@@ -382,41 +438,78 @@ export default function ReceivedRequestsFlow() {
                     display: "flex",
                     flexDirection: "column",
                     gap: ["24px", "32px", "48px"],
+                    marginBottom: ["24px", "32px", "48px"],
                   }}
                 >
-                  {filteredItems.map((item) => (
-                    <CardListRequest
-                      key={item.requestId}
-                      data={item}
-                      onConfirmClick={() => handleSendClick(item)}
-                      onDetailClick={() => handleRejectClick(item)}
-                    />
-                  ))}
+                  {filteredItems.map((item, index) => {
+                    const isLast = index === filteredItems.length - 1;
+                    return (
+                      <div
+                        key={item.requestId}
+                        ref={isLast ? lastItemRef : undefined} // 마지막 카드에 ref 연결
+                      >
+                        <CardListRequest
+                          data={item}
+                          onConfirmClick={() => handleSendClick(item)}
+                          onDetailClick={() => handleRejectClick(item)}
+                          isRejectDisabled={!item.isTargeted}
+                        />
+                      </div>
+                    );
+                  })}
+                </Box>
+              )}
+              {/* fetch 중이면 하단에 CircularProgress */}
+              {isFetchingNextPage && (
+                <Box sx={{ display: "flex", justifyContent: "center", mt: 2 }}>
+                  <CircularProgress />
                 </Box>
               )}
               {/* 모달들 */}
-              {isEstimateModalOpen && selectedRequest?.customer && (
+              {isEstimateModalOpen && selectedRequest && (
                 <SendEstimateModal
                   open={isEstimateModalOpen}
                   onClose={() => closeEstimateModal()}
                   onSend={handleSendEstimate}
-                  moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                  customerName={selectedRequest.customer.user.name}
+                  moveType={[selectedRequest.moveType]}
+                  isTargeted={selectedRequest.isTargeted ?? false}
+                  requestStatus={selectedRequest.requestStatus}
+                  customerName={selectedRequest.customerName ?? ""}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddress.fullAddress}
-                  toAddress={selectedRequest.toAddress.fullAddress}
+                  fromAddress={
+                    selectedRequest.fromAddressMinimal
+                      ? `${selectedRequest.fromAddressMinimal.sido} ${selectedRequest.fromAddressMinimal.sigungu}`
+                      : ""
+                  }
+                  toAddress={
+                    selectedRequest.toAddressMinimal
+                      ? `${selectedRequest.toAddressMinimal.sido} ${selectedRequest.toAddressMinimal.sigungu}`
+                      : ""
+                  }
+                  isLoading={isSending}
                 />
               )}
-              {isRejectModalOpen && selectedRequest?.customer && (
+              {isRejectModalOpen && selectedRequest && (
                 <RejectRequestModal
                   open={isRejectModalOpen}
                   onClose={() => closeRejectModal()}
                   onSubmit={handleSendReject}
                   moveType={[selectedRequest.moveType]} // 배열로 감싸기
-                  customerName={selectedRequest.customer.user.name}
+                  isTargeted={selectedRequest.isTargeted ?? false}
+                  requestStatus={selectedRequest.requestStatus}
+                  customerName={selectedRequest.customerName ?? ""}
                   moveDate={selectedRequest.moveDate}
-                  fromAddress={selectedRequest.fromAddress.fullAddress}
-                  toAddress={selectedRequest.toAddress.fullAddress}
+                  fromAddress={
+                    selectedRequest.fromAddressMinimal
+                      ? `${selectedRequest.fromAddressMinimal.sido} ${selectedRequest.fromAddressMinimal.sigungu}`
+                      : ""
+                  }
+                  toAddress={
+                    selectedRequest.toAddressMinimal
+                      ? `${selectedRequest.toAddressMinimal.sido} ${selectedRequest.toAddressMinimal.sigungu}`
+                      : ""
+                  }
+                  isLoading={isRejecting}
                 />
               )}
             </Box>

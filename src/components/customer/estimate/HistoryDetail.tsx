@@ -45,7 +45,7 @@ export default function HistoryDetail({
         <Stack gap={"24px"}>
           <EstimateSection title="견적 상세">
             <CardListMover
-              data={data}
+              data={{ ...data, status: data.offerStatus }}
               onLikeClick={() => {
                 const moverId = data.moverId;
                 if (data.mover.isLiked) {
@@ -96,7 +96,7 @@ export default function HistoryDetail({
           <EstimateInfo info={data} />
         </EstimateSection>
 
-        <Label status={data.status} />
+        <Label status={data.offerStatus} />
       </Stack>
 
       {/* 데스크탑 SNS */}

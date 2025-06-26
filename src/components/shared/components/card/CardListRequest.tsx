@@ -1,4 +1,4 @@
-import { Box, Button, Divider, Typography } from "@mui/material";
+import { Box, Button, Divider, Typography, Tooltip } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
@@ -10,12 +10,14 @@ interface CardProps {
   data: EstimateRequestItem;
   onConfirmClick?: () => void;
   onDetailClick?: () => void;
+  isRejectDisabled?: boolean; // 지정견적요청이 아닌 건에 대한 반려하기 버튼 비활성화를 위해 추가
 }
 
 export const CardListRequest = ({
   data,
   onConfirmClick,
   onDetailClick,
+  isRejectDisabled,
 }: CardProps) => {
   // 카드 데이터
   const info = data;
@@ -24,7 +26,6 @@ export const CardListRequest = ({
   const chips: ChipData[] = [
     {
       chipType: data.moveType,
-      status: data.requestStatus,
       isTargeted: data.isTargeted,
     },
   ];
@@ -35,7 +36,7 @@ export const CardListRequest = ({
       flexDirection="column"
       justifyContent="space-between"
       border="0.5px solid #F2F2F2"
-      width={[328, 600, 955]}
+      width="100%"
       height={[316, 228, 296]}
       bgcolor="#FFFFFF"
       borderRadius="16px"
@@ -270,27 +271,48 @@ export const CardListRequest = ({
               견적 보내기
             </Typography>
           </Button>
-          <Button
-            onClick={onDetailClick}
-            variant="outlined"
-            sx={(theme) => ({
-              height: [48, 48, 64],
-              borderRadius: ["8px", "8px", "16px"],
-              border: `1px solid ${theme.palette.PrimaryBlue[300]}`,
-              flex: 1,
-            })}
+          <Tooltip
+            title={
+              isRejectDisabled
+                ? "지정 견적 요청 건에 대해서만 반려가 가능합니다."
+                : ""
+            }
+            arrow
+            placement="top"
+            disableHoverListener={!isRejectDisabled}
           >
-            <Typography
-              sx={(theme) => ({
-                fontSize: [16, 16, 20],
-                lineHeight: ["26px", "26px", "32px"],
-                fontWeight: 600,
-                color: theme.palette.PrimaryBlue[300],
-              })}
-            >
-              반려
-            </Typography>
-          </Button>
+            {/* 버튼은 span으로 감싸야 Tooltip이 disabled 상태에서도 동작함 */}
+            <span style={{ flex: 1, width: "100%", display: "flex" }}>
+              <Button
+                onClick={onDetailClick}
+                disabled={isRejectDisabled}
+                variant="outlined"
+                sx={(theme) => ({
+                  height: [48, 48, 64],
+                  borderRadius: ["8px", "8px", "16px"],
+                  border: `1px solid ${
+                    isRejectDisabled
+                      ? theme.palette.Grayscale[200]
+                      : theme.palette.PrimaryBlue[300]
+                  }`,
+                  flex: 1,
+                })}
+              >
+                <Typography
+                  sx={(theme) => ({
+                    fontSize: [16, 16, 20],
+                    lineHeight: ["26px", "26px", "32px"],
+                    fontWeight: 600,
+                    color: isRejectDisabled
+                      ? theme.palette.Grayscale[500]
+                      : theme.palette.PrimaryBlue[300],
+                  })}
+                >
+                  반려
+                </Typography>
+              </Button>
+            </span>
+          </Tooltip>
         </Box>
       </Box>
     </Box>
