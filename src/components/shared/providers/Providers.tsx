@@ -39,37 +39,44 @@ export const useThemeMode = () => useContext(ThemeModeContext);
 export const Providers = ({ children }: { children: ReactNode }) => {
   const prefersDark = usePrefersDarkMode();
 
-  // 초기값은 light로 설정 (서버 사이드 렌더링 대응)
-  const [mode, setMode] = useState<"light" | "dark">("light");
+  const [mode, setMode] = useState<"light" | "dark" | null>(null); // 초기 null
 
-  // 마운트 시 로컬스토리지 값 읽어서 mode 설정
   useEffect(() => {
-    const savedMode = localStorage.getItem("theme-mode");
+    const savedMode = localStorage.getItem("theme-mode") as
+      | "light"
+      | "dark"
+      | null;
 
     if (savedMode === "light" || savedMode === "dark") {
       setMode(savedMode);
     } else {
-      // 저장된 값 없으면 OS 선호도 사용
-      setMode(prefersDark ? "dark" : "light");
+      const preferred = prefersDark ? "dark" : "light";
+      setMode(preferred);
+      localStorage.setItem("theme-mode", preferred);
     }
   }, [prefersDark]);
 
-  // mode가 바뀔 때마다 로컬스토리지에 저장
   useEffect(() => {
-    localStorage.setItem("theme-mode", mode);
+    if (mode) localStorage.setItem("theme-mode", mode);
   }, [mode]);
 
   const toggleMode = () =>
     setMode((prev) => (prev === "light" ? "dark" : "light"));
 
-  const theme = useMemo(() => createAppTheme(mode), [mode]);
+  const theme = useMemo(
+    () => (mode ? createAppTheme(mode) : undefined),
+    [mode]
+  );
   const queryClient = new QueryClient();
+
+  if (!mode) return null; // hydration mismatch 방지: mode 초기 설정까지 렌더 안함
+
   return (
     <ThemeModeContext.Provider value={{ mode, toggleMode }}>
       <I18nextProvider i18n={i18n}>
         <QueryClientProvider client={queryClient}>
           <CacheProvider value={clientSideEmotionCache}>
-            <ThemeProvider theme={theme}>
+            <ThemeProvider theme={theme!}>
               <CssBaseline />
               <LocalizationProvider
                 dateAdapter={AdapterDayjs}
