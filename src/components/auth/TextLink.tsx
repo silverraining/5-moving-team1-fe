@@ -8,6 +8,7 @@ interface TextLinkProps {
 export const TextLink = ({ description, link }: TextLinkProps) => {
   return (
     <Stack
+      width={"100%"}
       direction={"row"}
       spacing={"8px"}
       justifyContent={"center"}

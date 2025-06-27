@@ -55,7 +55,7 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   return (
     <Stack
       minHeight={"100vh"}
-      width={"100%"}
+      width={"100vw"}
       sx={(theme) => ({
         bgcolor: isColorPage ? theme.palette.NeutralGray[50] : "transparent",
         alignContent: "center",
@@ -63,7 +63,12 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     >
       <Header />
       {isSubHeader && <SubHeader />}
-      <Box px={isPadding ? 0 : ["26px", "72px", "260px"]}>
+      <Box
+        maxWidth={"1400px"}
+        mx={"auto"}
+        width={"100%"}
+        px={isPadding ? 0 : ["26px", "72px", "72px"]}
+      >
         {children}
         {SnackbarComponent}
       </Box>

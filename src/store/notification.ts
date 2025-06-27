@@ -7,21 +7,28 @@ interface NotificationStore {
   markAsRead: boolean;
   setMarkAsRead: (state: boolean) => void;
   setNotifications: (newNotifications: notificationAllRes[]) => void;
+  reset: () => void; // reset 추가
 }
+
+const initialState = {
+  notifications: [],
+  markAsRead: true,
+};
 
 export const useNotificationStore = create<NotificationStore>()(
   persist(
     (set) => ({
-      notifications: [],
-      markAsRead: false,
+      ...initialState,
       setMarkAsRead: (state) => set({ markAsRead: state }),
       setNotifications: (newNotifications) =>
         set(() => ({
           notifications: newNotifications,
+          markAsRead: false,
         })),
+      reset: () => set(initialState), // reset 구현
     }),
     {
-      name: "notification-store-session", // 세션 스토리지 key 이름
+      name: "notification-store-session",
       storage: createJSONStorage(() => sessionStorage),
     }
   )

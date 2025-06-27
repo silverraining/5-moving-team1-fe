@@ -32,7 +32,6 @@ const accessControl = [
 
 export const middleware = async (request: NextRequest) => {
   const { pathname } = request.nextUrl;
-
   const accessToken = request.cookies.get("accessToken")?.value;
   const refreshToken = request.cookies.get("refreshToken")?.value;
   let accessUser = null;
@@ -64,7 +63,12 @@ export const middleware = async (request: NextRequest) => {
   for (const rule of accessControl) {
     if (pathname.startsWith(rule.prefix)) {
       // public 예외 페이지면 통과
-      if (rule.publicPaths.includes(pathname)) {
+      if (
+        rule.publicPaths
+          .map((p) => (typeof p === "string" ? p : null))
+          .filter((p): p is string => !!p)
+          .some((p) => pathname.startsWith(p))
+      ) {
         return NextResponse.next();
       }
 

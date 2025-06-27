@@ -40,6 +40,7 @@ const Login = () => {
     <Stack
       justifySelf={"center"}
       sx={{
+        py: 7,
         maxWidth: "640px",
         minWidth: "327px",
         width: "100%",
@@ -57,7 +58,7 @@ const Login = () => {
         <Button
           fullWidth
           variant="contained"
-          disabled={!isAllFilled}
+          disabled={isAllFilled ? !isAllFilled : false}
           sx={{
             maxHeight: "64px",
             minHeight: "54px",

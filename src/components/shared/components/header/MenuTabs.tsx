@@ -37,7 +37,9 @@ export const MenuTabs = ({ menu, showIndicator = true }: MenuTabs) => {
           if (d.label === "내 견적 관리") {
             isSelect =
               pathname === PATH.moverEstimateConfirm ||
-              pathname === PATH.moverEstimateReject;
+              pathname === PATH.moverEstimateReject ||
+              pathname === PATH.userEstimate ||
+              pathname === PATH.userEstimateHistory;
           }
           return (
             <Tab
