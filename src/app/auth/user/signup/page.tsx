@@ -19,11 +19,12 @@ import {
 } from "@/src/lib/authConstants";
 import { useSignupForm } from "@/src/hooks/auth/hook";
 import { SignUpSchemaType } from "@/src/schemas/auth/signup.schema";
+import { useTranslation } from "react-i18next";
 
 const SignUp = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   const {
     register,
     onSubmit,
@@ -80,7 +81,7 @@ const SignUp = () => {
           type="submit"
         >
           <Typography variant={isSmall ? "SB_16" : "SB_20"}>
-            시작하기
+            {t("시작하기")}
           </Typography>
         </Button>
         <TextLink
@@ -88,7 +89,7 @@ const SignUp = () => {
           link={USER_LOGIN_LINK.link}
         />
       </form>
-      <SnsLoginSection title="SNS 간편 로그인" isSmall={isSmall} />
+      <SnsLoginSection title={t("SNS 간편 로그인")} isSmall={isSmall} />
     </Stack>
   );
 };
