@@ -71,7 +71,7 @@ const SignUp = () => {
         <Button
           fullWidth
           variant="contained"
-          disabled={!isAllFilled}
+          disabled={isAllFilled ? !isAllFilled : false}
           sx={{
             maxHeight: "64px",
             minHeight: "54px",

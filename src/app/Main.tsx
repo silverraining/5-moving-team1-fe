@@ -1,6 +1,5 @@
 "use client";
 import {
-  Box,
   Button,
   Stack,
   Typography,
@@ -10,13 +9,20 @@ import {
 import Link from "next/link";
 import { CardList } from "../components/shared/components/card/CardList";
 import { PATH } from "../lib/constants";
+import { AuthStore } from "../store/authStore";
 
 export const Main = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { isLogin } = AuthStore();
   return (
-    <Stack alignItems={"center"} justifyItems={"center"} pt={10} gap={6}>
+    <Stack
+      width={"100%"}
+      alignItems={"center"}
+      justifyItems={"center"}
+      pt={10}
+      gap={6}
+    >
       <Stack alignItems={"center"}>
         <Typography variant="B_36">원하는 이사 서비스를 요청하고</Typography>
         <Typography variant="B_36">견적을 받아보세요 </Typography>
@@ -42,42 +48,45 @@ export const Main = () => {
           <CardList variant="office" />
         </Stack>
       </Stack>
-      <Stack
-        direction={isSmall ? "column" : "row"}
-        gap={["8px", "8px", "16px"]}
-        justifyContent={"center"}
-      >
-        <Button
-          component={Link}
-          href={PATH.userLogin}
-          fullWidth
-          variant="contained"
-          sx={{
-            maxWidth: "340px",
-            minWidth: "327px",
-            height: ["54px", "54px", "64px"],
-            borderRadius: 50,
-          }}
+      {!isLogin && (
+        <Stack
+          width={"100%"}
+          direction={isSmall ? "column" : "row"}
+          gap={["8px", "8px", "16px"]}
+          justifyContent={"center"}
         >
-          로그인
-        </Button>
+          <Button
+            component={Link}
+            href={PATH.userLogin}
+            fullWidth
+            variant="contained"
+            sx={{
+              maxWidth: "340px",
+              minWidth: "327px",
+              height: ["54px", "54px", "64px"],
+              borderRadius: 50,
+            }}
+          >
+            로그인
+          </Button>
 
-        <Button
-          component={Link}
-          href={PATH.userSignup}
-          fullWidth
-          variant="outlined"
-          sx={{
-            maxWidth: "340px",
-            minWidth: "327px",
-            height: ["54px", "54px", "64px"],
-            borderRadius: 50,
-            bgcolor: "white",
-          }}
-        >
-          회원가입
-        </Button>
-      </Stack>
+          <Button
+            component={Link}
+            href={PATH.userSignup}
+            fullWidth
+            variant="outlined"
+            sx={{
+              maxWidth: "340px",
+              minWidth: "327px",
+              height: ["54px", "54px", "64px"],
+              borderRadius: 50,
+              bgcolor: "white",
+            }}
+          >
+            회원가입
+          </Button>
+        </Stack>
+      )}
     </Stack>
   );
 };

@@ -228,7 +228,6 @@ export default function MoverSearchPage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        bgcolor: (theme) => theme.palette.White[100],
         display: "flex",
         justifyContent: "center",
         alignItems: "flex-start",
@@ -241,7 +240,7 @@ export default function MoverSearchPage() {
           flex: 1,
           py: 3,
           margin: "auto",
-          px: { xs: 2, md: 4, lg: 0 },
+          px: { xs: 2, md: 4, lg: 4 },
         }}
       >
         <Box>
