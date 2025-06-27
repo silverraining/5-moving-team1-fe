@@ -12,9 +12,17 @@ interface MenuTabs {
 export const MenuTabs = ({ menu, showIndicator = true }: MenuTabs) => {
   const theme = useTheme();
   const pathname = usePathname();
-
+  const pathWithoutLocale = (() => {
+    const parts = pathname.split("/");
+    if (["ko", "en", "zh"].includes(parts[1])) {
+      return "/" + parts.slice(2).join("/");
+    }
+    return pathname; // locale 없는 경우 그대로 반환
+  })();
   const validValues = menu.map((item) => item.href);
-  const currentValue = validValues.includes(pathname) ? pathname : false;
+  const currentValue = validValues.includes(pathWithoutLocale)
+    ? pathWithoutLocale
+    : false;
 
   return (
     <Box>
@@ -30,16 +38,16 @@ export const MenuTabs = ({ menu, showIndicator = true }: MenuTabs) => {
         }}
       >
         {menu.map((d, index) => {
-          let isSelect = pathname === d.href;
+          let isSelect = pathWithoutLocale === d.href;
           if (d.baseUrl) {
-            isSelect = pathname.startsWith(d.baseUrl);
+            isSelect = pathWithoutLocale.startsWith(d.baseUrl);
           }
           if (d.label === "내 견적 관리") {
             isSelect =
-              pathname === PATH.moverEstimateConfirm ||
-              pathname === PATH.moverEstimateReject ||
-              pathname === PATH.userEstimate ||
-              pathname === PATH.userEstimateHistory;
+              pathWithoutLocale === PATH.moverEstimateConfirm ||
+              pathWithoutLocale === PATH.moverEstimateReject ||
+              pathWithoutLocale === PATH.userEstimate ||
+              pathWithoutLocale === PATH.userEstimateHistory;
           }
           return (
             <Tab

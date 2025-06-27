@@ -39,7 +39,7 @@ export const middleware = async (request: NextRequest) => {
   const accessToken = request.cookies.get("accessToken")?.value;
   const refreshToken = request.cookies.get("refreshToken")?.value;
 
-  // ✅ 1. 정적 파일, API 예외 처리
+  // 1. 정적 파일, API 예외 처리
   if (
     PUBLIC_FILE.test(pathname) ||
     pathname.startsWith("/api") ||
@@ -48,7 +48,7 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.next();
   }
 
-  // ✅ 2. locale prefix가 없는 경우 → 쿠키 또는 기본값 기준으로 리다이렉트
+  // 2. locale prefix가 없는 경우 → 쿠키 또는 기본값 기준으로 리다이렉트
   const pathnameHasLocale = SUPPORTED_LOCALES.some((locale) =>
     pathname.startsWith(`/${locale}`)
   );
@@ -62,7 +62,16 @@ export const middleware = async (request: NextRequest) => {
     return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
   }
 
-  // ✅ 3. 인증 토큰 검증
+  // 3. locale prefix 제거한 실제 경로
+  let pathnameWithoutLocale = pathname;
+  for (const locale of SUPPORTED_LOCALES) {
+    if (pathname.startsWith(`/${locale}`)) {
+      pathnameWithoutLocale = pathname.slice(locale.length + 1) || "/";
+      break;
+    }
+  }
+
+  // 4. 인증 토큰 검증
   let accessUser = null;
   let refreshUser = null;
 
@@ -86,23 +95,24 @@ export const middleware = async (request: NextRequest) => {
 
   const userRole = accessUser?.role;
 
-  // ✅ 4. 로그인된 상태에서 /auth 페이지 접근 → 홈으로 리디렉트
-  if (accessToken && pathname.includes("/auth")) {
+  // 5. 로그인된 상태에서 /auth 페이지 접근 → 홈으로 리다이렉트
+  if (accessToken && pathnameWithoutLocale.startsWith("/auth")) {
     const mainUrl = new URL(`/${DEFAULT_LOCALE}${PATH.main}`, request.url);
     return NextResponse.redirect(mainUrl);
   }
 
-  // ✅ 5. 권한 검사
+  // 6. 권한 검사
   for (const rule of accessControl) {
-    if (pathname.includes(rule.prefix)) {
+    if (pathnameWithoutLocale.startsWith(rule.prefix)) {
       // public 경로는 허용
-      const isPublic = rule.publicPaths
-        .filter((p): p is string => typeof p === "string")
-        .some((p) => pathname.startsWith(p));
+      const isPublic = rule.publicPaths.some((p) => {
+        const path = typeof p === "function" ? p("") : p;
+        pathnameWithoutLocale.startsWith(path);
+      });
 
       if (isPublic) return NextResponse.next();
 
-      // 토큰 없음
+      // 토큰 없음 → 로그인 페이지로 리다이렉트
       if (!userRole) {
         const loginUrl = new URL(
           `/${DEFAULT_LOCALE}${PATH.userLogin}`,
@@ -111,7 +121,7 @@ export const middleware = async (request: NextRequest) => {
         return NextResponse.redirect(loginUrl);
       }
 
-      // 권한 불일치
+      // 권한 불일치 → unauthorized 페이지로 리다이렉트
       if (userRole !== rule.role) {
         return NextResponse.redirect(
           new URL(`/${DEFAULT_LOCALE}/unauthorized`, request.url)
@@ -120,6 +130,7 @@ export const middleware = async (request: NextRequest) => {
     }
   }
 
+  // 7. 나머지 요청은 그대로 통과
   return NextResponse.next();
 };
 
