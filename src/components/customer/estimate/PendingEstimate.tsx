@@ -13,6 +13,7 @@ import { useRouter } from "next/navigation";
 import { PATH } from "@/src/lib/constants";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
+import { EmprtyReview } from "../../review/EmptyReview";
 
 // 견적서 카드 데이터에 ID 추가
 interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
@@ -49,7 +50,7 @@ export default function PendingEstimate() {
   if (isLoading) return <Typography>견적서 데이터 로딩중...</Typography>;
   if (error) return <Typography>견적서 데이터 에러 발생!</Typography>;
   if (!data?.items || !Array.isArray(data?.items) || data?.items.length === 0)
-    return <Typography>견적 데이터 없음</Typography>;
+    return <EmprtyReview text="대기중인 견적이 없습니다" />;
 
   // 실제 데이터 렌더링
   return (

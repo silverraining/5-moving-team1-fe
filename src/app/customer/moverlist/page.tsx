@@ -14,6 +14,7 @@ import { useRouter } from "next/navigation";
 import { PATH } from "@/src/lib/constants";
 import { MoverList } from "@/src/components/customer/mover-list/MoverList";
 import { useSearch } from "@/src/hooks/utill";
+import { EmprtyReview } from "@/src/components/review/EmptyReview";
 
 /**TODO:컴포넌트 분리 , 상세페이지 라우팅시 로딩 처리*/
 
@@ -161,7 +162,7 @@ export default function MoverSearchPage() {
       setNextCursor(data.nextCursor || null);
     } catch (err) {
       console.error("API 에러:", err);
-      setError("기사님 목록을 불러오지 못했습니다.");
+      <EmprtyReview text="프로필을 등록해주세요." />;
     } finally {
       setLoading(false);
     }

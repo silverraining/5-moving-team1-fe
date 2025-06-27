@@ -1,6 +1,7 @@
 "use client";
 
 import { useLikeList } from "@/src/api/like/hooks";
+import { EmprtyReview } from "@/src/components/review/EmptyReview";
 import {
   CardListSave,
   CardListSaveSkeleton,
@@ -68,6 +69,10 @@ const Wishlist = () => {
       toAddressMinimal: undefined as any,
     };
   };
+
+  if (!data || data.length === 0) {
+    return <EmprtyReview text="찜한 기사님이 없습니다" />;
+  }
 
   const transformedData = data
     ? data.map((item) => transformLikeMoverToEstimateOffer(item))

@@ -1,6 +1,6 @@
 "use client";
 
-import { Typography, Stack } from "@mui/material";
+import { Typography, Stack, Box } from "@mui/material";
 import { EstimateInfo } from "./EstimateInfo";
 import {
   HistoryEstimateCardData,
@@ -15,6 +15,8 @@ import { PATH } from "@/src/lib/constants";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EstimateRequestHistoryItem } from "@/src/api/customer/api";
+import { EmprtyReview } from "../../review/EmptyReview";
+import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 
 interface HistoryEstimateCardDataWithId extends HistoryEstimateCardData {
   moverId: string;
@@ -26,11 +28,34 @@ export default function HistoryEstimate() {
   const queryClient = useQueryClient();
   const { mutate: createLikeMutate } = useCreateLike();
   const { mutate: deleteLikeMutate } = useDeleteLike();
-  const { data, isLoading, isError } = useEstimateRequestHistory();
 
+  // 무한스크롤 Query 사용
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useEstimateRequestHistory();
+
+  // 무한스크롤: 데이터 펼치기
+  const items =
+    data?.pages.flatMap((page) =>
+      Array.isArray(page.items) ? page.items : []
+    ) ?? [];
+
+  // 무한스크롤: 마지막 카드 ref 연결
+  const { loadMoreRef } = useInfiniteScroll({
+    onLoadMore: fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
+
+  // 정렬 옵션
   const sortOptions: SortOption[] = [
     { label: "전체", value: "all" },
-    { label: "확정한 견적서", value: "COMPLETED" },
+    { label: "확정한 견적서", value: "CONFIRMED" },
   ];
 
   // 각 requestId별로 필터 상태를 관리
@@ -44,9 +69,16 @@ export default function HistoryEstimate() {
   };
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (isError) return <Typography>에러가 발생했습니다.</Typography>;
-  if (!Array.isArray(data?.items) || data.items.length === 0)
-    return <Typography>견적 요청이 없습니다.</Typography>;
+  if (isError) return <EmprtyReview text="대기중인 견적이 없습니다" />;
+  if (!items || items.length === 0)
+    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+
+  console.log(
+    "hasNextPage",
+    hasNextPage,
+    "isFetchingNextPage",
+    isFetchingNextPage
+  );
 
   return (
     <Stack
@@ -57,13 +89,12 @@ export default function HistoryEstimate() {
       })}
     >
       <Stack marginTop={["0px", "32px", "64px"]}>
-        {data.items.map((info: EstimateRequestHistoryItem, index) => {
+        {items.map((info: EstimateRequestHistoryItem) => {
           const selectedSort = filterMap[info.requestId]?.value || "all";
-
           const filteredOffers =
-            selectedSort === "COMPLETED"
+            selectedSort === "CONFIRMED"
               ? info.estimateOffers?.filter(
-                  (offer) => offer.offerStatus === "COMPLETED"
+                  (offer) => offer.offerStatus === "CONFIRMED"
                 )
               : info.estimateOffers;
 
@@ -72,7 +103,7 @@ export default function HistoryEstimate() {
 
           return (
             <Stack
-              key={index}
+              key={info.requestId}
               padding={["48px 40px"]}
               margin={"0px 0px 32px 0px"}
               borderRadius={["0px", "24px", "48px"]}
@@ -83,12 +114,10 @@ export default function HistoryEstimate() {
                 borderColor: theme.palette.Line[100],
               })}
             >
-              {/* 견적 정보 */}
               <EstimateSection title="견적 정보">
                 <EstimateInfo info={info.estimateOffers[0]} />
               </EstimateSection>
 
-              {/* 견적서 목록 */}
               <EstimateSection title="견적서 목록">
                 <Dropdown
                   options={sortOptions}
@@ -96,13 +125,12 @@ export default function HistoryEstimate() {
                     handleFilterChange(info.requestId, option)
                   }
                 />
-
                 {filteredOffers && filteredOffers.length > 0 ? (
                   <Stack gap={"56px"}>
                     {filteredOffers.map(
-                      (card: HistoryEstimateCardDataWithId, idx) => (
+                      (card: HistoryEstimateCardDataWithId) => (
                         <Stack
-                          key={idx}
+                          key={card.offerId}
                           onClick={() => {
                             router.push(
                               `${PATH.userEstimateHistoryDetail(
@@ -178,6 +206,14 @@ export default function HistoryEstimate() {
             </Stack>
           );
         })}
+
+        <Box ref={loadMoreRef} style={{ height: 1 }} />
+
+        {isFetchingNextPage && (
+          <Typography align="center" sx={{ py: 4 }}>
+            더 불러오는 중...
+          </Typography>
+        )}
       </Stack>
     </Stack>
   );

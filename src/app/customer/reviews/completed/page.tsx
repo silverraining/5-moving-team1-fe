@@ -2,7 +2,6 @@
 
 import Pagination from "@/src/components/shared/pagination/Pagination";
 import { EmprtyReview } from "@/src/components/review/EmptyReview";
-import { CardData } from "@/src/types/card";
 import { Stack } from "@mui/material";
 import { useState } from "react";
 import { CardListMyReview } from "@/src/components/shared/components/card/CardListMyReview";
@@ -12,6 +11,12 @@ const ReviewsCompleted = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { data } = useCompletedReviews(currentPage, 6);
   //목업 데이터 array를 사용 해서 반복 시킴
+
+  if (!data || data?.reviews.length === 0) {
+    return (
+      <EmprtyReview text="아직 등록된 리뷰가 없어요!" variation="complete" />
+    );
+  }
 
   return (
     <Stack pt={["16px", "24px", "24px"]} pb={5} gap={[6, 6, 5]}>
@@ -24,12 +29,6 @@ const ReviewsCompleted = () => {
         }}
         justifyContent="center"
       >
-        {data?.reviews.length === 0 && (
-          <EmprtyReview
-            text="아직 등록된 리뷰가 없어요!"
-            variation="complete"
-          />
-        )}
         {data?.reviews.map((mover, idx: number) => (
           <Stack key={idx}>
             <CardListMyReview data={mover} />

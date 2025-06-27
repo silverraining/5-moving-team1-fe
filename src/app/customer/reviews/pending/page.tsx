@@ -19,6 +19,10 @@ const ReviewsPending = () => {
   const handleClose = () => {
     setIsOpen(false);
   };
+
+  if (!data || data.reviewableOffers.length === 0)
+    return <EmprtyReview text="작성 가능한 리뷰가 없습니다" />;
+
   return (
     <Stack pt={["16px", "24px", "24px"]} pb={5} gap={[6, 6, 5]}>
       <Stack
@@ -30,9 +34,6 @@ const ReviewsPending = () => {
         }}
         justifyContent="center"
       >
-        {data?.reviewableOffers.length === 0 && (
-          <EmprtyReview text="작성 가능한 리뷰가 없어요" />
-        )}
         {data?.reviewableOffers.map((d, idx: number) => (
           <Stack key={idx}>
             <CardListWriteReview data={d} onReviewClick={handleReviewClick} />
