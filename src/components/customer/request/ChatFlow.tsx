@@ -12,6 +12,7 @@ import { useState, useEffect } from "react";
 import { Chat } from "@/src/components/shared/components/text-field/Chat";
 import { convertToLabel } from "@/src/utils/convertToLabel";
 import dayjs from "dayjs";
+import { useTranslation } from "react-i18next";
 
 interface ChatHistoryProps {
   step: number;
@@ -34,7 +35,7 @@ export default function ChatHistory({
   // 수정하기 버튼들의 애니메이션 상태
   const [isEditStep1Visible, setIsEditStep1Visible] = useState(false);
   const [isEditStep2Visible, setIsEditStep2Visible] = useState(false);
-
+  const { t } = useTranslation();
   // step 2일 때 첫 번째 수정하기 버튼 애니메이션
   useEffect(() => {
     if (step >= 2) {
@@ -72,14 +73,16 @@ export default function ChatHistory({
       {/* 첫 번째 인사 메시지 - 모든 스텝에서 표시 */}
       <Chat
         variant="sent"
-        content={`몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)`}
+        content={t(
+          "몇 가지 정보만 알려주시면 최대 5개의 견적을 받을 수 있어요 :)"
+        )}
         delay={step === 1 ? 500 : 0}
       />
 
       {/* 이사 종류 질문 - 모든 스텝에서 표시 */}
       <Chat
         variant="sent"
-        content={`이사 종류를 선택해 주세요.`}
+        content={t("이사 종류를 선택해 주세요.")}
         delay={step === 1 ? 1200 : 0}
       />
 
@@ -126,7 +129,7 @@ export default function ChatHistory({
       {step >= 2 && (
         <Chat
           variant="sent"
-          content={`이사 예정일을 선택해주세요.`}
+          content={t("이사 예정일을 선택해주세요.")}
           delay={step === 2 ? 1200 : 0}
         />
       )}
@@ -174,7 +177,7 @@ export default function ChatHistory({
       {step >= 3 && (
         <Chat
           variant="sent"
-          content={`이사 지역을 선택해주세요.`}
+          content={t("이사 지역을 선택해주세요.")}
           delay={step === 3 ? 1200 : 0}
         />
       )}
