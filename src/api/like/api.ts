@@ -13,9 +13,9 @@ export type likeMoverListRes = {
     HOME: boolean;
     OFFICE: boolean;
   };
-  review_count: number;
-  average_rating: number;
-  confirmed_estimate_count: number;
+  reviewCount: number;
+  averageRating: number;
+  confirmedEstimateCount: number;
   likeCount: number;
 }[];
 
