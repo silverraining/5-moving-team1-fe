@@ -1,6 +1,7 @@
 "use client";
 import { Box, Typography } from "@mui/material";
 import DropDownWrapper from "@/src/components/shared/components/drop-down/filter-drop-down/DropDownWrapper";
+import { useTranslation } from "react-i18next";
 
 interface MoverFilterSidebarProps {
   selectedRegion?: string;
@@ -23,7 +24,7 @@ export const MoverFilterSidebar = ({
     selectedRegion !== "전체" ||
     selectedServiceType !== "전체" ||
     (searchKeyword && searchKeyword.trim() !== "");
-
+  const { t } = useTranslation();
   return (
     <Box>
       <Box
@@ -38,7 +39,7 @@ export const MoverFilterSidebar = ({
           mb: "32px",
         })}
       >
-        <Typography variant="M_20">필터</Typography>
+        <Typography variant="M_20">{t("필터")}</Typography>
         <Typography
           variant="M_16"
           sx={(theme) => ({
@@ -47,26 +48,28 @@ export const MoverFilterSidebar = ({
           })}
           onClick={isFilterActive ? onReset : undefined}
         >
-          초기화
+          {t("초기화")}
         </Typography>
       </Box>
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: "32px" }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <Typography variant="SB_18">지역을 선택해주세요</Typography>
+          <Typography variant="SB_18">{t("지역을 선택해주세요")}</Typography>
           <DropDownWrapper
             type="region"
-            label="지역"
+            label={t("지역")}
             selectedValue={selectedRegion}
             onSelect={onRegionChange}
           />
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          <Typography variant="SB_18">어떤 서비스가 필요하세요?</Typography>
+          <Typography variant="SB_18">
+            {t("어떤 서비스가 필요하세요?")}
+          </Typography>
           <DropDownWrapper
             type="service"
-            label="서비스"
+            label={t("서비스")}
             selectedValue={selectedServiceType}
             onSelect={onServiceTypeChange}
           />
