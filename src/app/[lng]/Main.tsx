@@ -7,14 +7,17 @@ import {
   useTheme,
 } from "@mui/material";
 import Link from "next/link";
-import { CardList } from "../components/shared/components/card/CardList";
-import { PATH } from "../lib/constants";
-import { AuthStore } from "../store/authStore";
+import { CardList } from "../../components/shared/components/card/CardList";
+import { PATH } from "../../lib/constants";
+import { AuthStore } from "../../store/authStore";
+import { useTranslation } from "react-i18next";
 
 export const Main = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const { isLogin } = AuthStore();
+  const { t } = useTranslation("common");
+
   return (
     <Stack
       width={"100%"}
@@ -24,8 +27,10 @@ export const Main = () => {
       gap={6}
     >
       <Stack alignItems={"center"}>
-        <Typography variant="B_36">원하는 이사 서비스를 요청하고</Typography>
-        <Typography variant="B_36">견적을 받아보세요 </Typography>
+        <Typography variant="B_36">
+          {t("원하는 이사 서비스를 요청하고")}
+        </Typography>
+        <Typography variant="B_36">{t("견적을 받아보세요")} </Typography>
       </Stack>
       <Stack
         width={"100%"}

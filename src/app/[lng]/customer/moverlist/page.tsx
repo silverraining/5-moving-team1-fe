@@ -1,6 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import { CardData, ChipData } from "@/src/types/card";
 import { MoverFilterSidebar } from "@/src/components/customer/mover-list/MoverFilterSidebar";
 import { LikedMoverList } from "@/src/components/customer/mover-list/LikedMoverList";
