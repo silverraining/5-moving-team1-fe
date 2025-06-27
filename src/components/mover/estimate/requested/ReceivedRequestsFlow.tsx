@@ -28,7 +28,7 @@ import {
 import {
   filterEstimateRequests,
   areItemsEqual,
-  SIDO_TO_SERVICE_REGION,
+  SIDO_ALIASES,
 } from "@/src/utils/filterEstimateRequests";
 import { MoverProfile } from "@/src/types/auth";
 import { ServiceType } from "@/src/lib/constants";
@@ -182,11 +182,22 @@ export default function ReceivedRequestsFlow() {
       if (item.isTargeted) targetedCount++;
 
       // 서비스 가능 지역 필터 count
-      const sido = item.fromAddressMinimal?.sido;
-      const regionEnum = sido ? SIDO_TO_SERVICE_REGION[sido] : undefined;
+      const fromSido = item.fromAddressMinimal?.sido;
+      const toSido = item.toAddressMinimal?.sido;
 
-      const matched = regionEnum ? activeRegions.includes(regionEnum) : false;
-      if (matched) regionCount++;
+      const isRegionMatched = (sido: string): boolean => {
+        for (const [region, aliases] of Object.entries(SIDO_ALIASES)) {
+          if (aliases.includes(sido)) {
+            return activeRegions.includes(region);
+          }
+        }
+        return false;
+      };
+
+      const fromMatched = fromSido ? isRegionMatched(fromSido) : false;
+      const toMatched = toSido ? isRegionMatched(toSido) : false;
+
+      if (fromMatched || toMatched) regionCount++;
     });
 
     // 이전 상태와 비교할 새로운 상태 생성
