@@ -5,6 +5,7 @@ import { useThemeMode } from "../providers/Providers";
 import { Brightness7, Brightness4, Language } from "@mui/icons-material";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
+import i18n from "@/src/lib/i18n";
 
 const locales = [
   { code: "ko", label: "한국어" },
@@ -33,14 +34,17 @@ export const DarkModeToggle = () => {
   };
 
   const handleLocaleChange = (locale: string) => {
-    // URL에서 현재 locale 부분을 새 locale로 교체
+    // URL 변경
     const segments = pathname.split("/");
-    segments[1] = locale; // 두번째 슬래시 뒤가 locale
+    segments[1] = locale;
     const newPath = segments.join("/") || "/";
     router.push(newPath);
+
+    // i18next 내부 언어 변경
+    i18n.changeLanguage(locale);
+
     handleClose();
   };
-
   useEffect(() => {
     setMounted(true);
   }, []);

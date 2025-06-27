@@ -16,6 +16,16 @@ type CustomLayoutProps = {
 export const CustomLayout = ({ children }: CustomLayoutProps) => {
   const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
+
+  // locale을 제외한 실제 경로를 얻기
+  const pathWithoutLocale = (() => {
+    const parts = pathname.split("/");
+    if (["ko", "en", "zh"].includes(parts[1])) {
+      return "/" + parts.slice(2).join("/");
+    }
+    return pathname; // locale 없는 경우 그대로 반환
+  })();
+
   // 페이지 중 bgColor 가 들어가는 페이지
   const colorPages = [
     PATH.main,
@@ -38,9 +48,9 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
     PATH.userReviewCompleted,
   ];
 
-  const isColorPage = colorPages.includes(pathname);
-  const isPadding = noPaddingPages.includes(pathname);
-  const isSubHeader = subHeaderPages.includes(pathname);
+  const isColorPage = colorPages.includes(pathWithoutLocale);
+  const isPadding = noPaddingPages.includes(pathWithoutLocale);
+  const isSubHeader = subHeaderPages.includes(pathWithoutLocale);
 
   const { SnackbarComponent } = useSnackbar();
 
