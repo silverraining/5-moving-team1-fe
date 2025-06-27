@@ -33,11 +33,13 @@ export const useLoginForm = (role: Role) => {
     mutate(
       { ...data, role }, // 외부에서 받은 고정값 삽입
       {
-        onSuccess: () => {
+        onSuccess: async () => {
           openSnackbar("로그인 성공", "success", 500, "standard");
-          setFetchNotifications(true);
+          await setFetchNotifications(true);
           router.replace("/");
-          setNotifications(notificationData ?? []);
+          if (notificationData) {
+            setNotifications(notificationData ?? []);
+          }
         },
         onError: (error) => {
           openSnackbar(

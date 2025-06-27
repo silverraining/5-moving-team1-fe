@@ -50,7 +50,6 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       flexDirection="column"
       justifyContent="space-between"
       border="0.5px solid"
-      borderColor={COLORS.Line[100]}
       maxWidth={1200}
       minWidth={[400, 580, 680]}
       height="auto"
@@ -60,6 +59,10 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
       width="100%"
+      sx={(theme) => ({
+        borderColor: theme.palette.Line[100],
+        bgcolor: theme.palette.White[100],
+      })}
     >
       <Box
         display="flex"
@@ -88,12 +91,14 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       <Box
         display="flex"
         border="1px solid"
-        borderColor={COLORS.Line[100]}
-        bgcolor="#FFFFFF"
         padding={["10px", "10px", "16px 18px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
+        sx={(theme) => ({
+          bgcolor: theme.palette.White[100],
+          borderColor: theme.palette.Line[100],
+        })}
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image

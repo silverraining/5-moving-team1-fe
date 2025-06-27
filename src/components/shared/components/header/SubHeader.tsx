@@ -59,19 +59,21 @@ export const SubHeader = () => {
       alignContent={"end"}
       maxHeight={"128px"}
       minHeight={
-        isProgress && step === null
-          ? ["96px", "96px", "128px"]
-          : ["96px", "74px", "74px"]
+        isProgress ? ["96px", "96px", "128px"] : ["96px", "74px", "74px"]
       }
       width={"100%"}
-      px={["24px", "72px", "260px"]}
+      px={["24px", "72px", "72px"]}
       sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
     >
-      {tabMenuElement}
-      {isProgress && (
-        <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>{progressElement}</Box>
-      )}
-      {labelElement}
+      <Stack maxWidth={"1400px"} width={"100%"} mx={"auto"}>
+        {tabMenuElement}
+        {isProgress && (
+          <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>
+            {progressElement}
+          </Box>
+        )}
+        {labelElement}
+      </Stack>
     </Stack>
   );
 };
