@@ -217,7 +217,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
             color: theme.palette.Grayscale[500],
           })}
         >
-          {isReviewed ? data.comment : "아직 작성된 리뷰가 없습니다."}
+          {data.comment}
         </Typography>
         <Typography
           display={["flex", "flex", "none"]}
