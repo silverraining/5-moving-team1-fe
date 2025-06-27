@@ -16,11 +16,12 @@ import {
 import { EstimateOffer } from "@/src/types/estimate";
 import { Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 const Wishlist = () => {
   const { data, isLoading } = useLikeList();
   const router = useRouter();
-
+  const { t } = useTranslation();
   const transformLikeMoverToEstimateOffer = (
     item: likeMoverListResItem
   ): EstimateOffer => {
@@ -71,7 +72,7 @@ const Wishlist = () => {
   };
 
   if (!data || data.length === 0) {
-    return <EmprtyReview text="찜한 기사님이 없습니다" />;
+    return <EmprtyReview text={t("찜한 기사님이 없습니다")} />;
   }
 
   const transformedData = data

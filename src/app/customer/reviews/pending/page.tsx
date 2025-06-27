@@ -7,12 +7,13 @@ import { Stack } from "@mui/material";
 import { useState } from "react";
 import { useWriteReviewsList } from "@/src/api/review/hooks";
 import ReviewModal from "@/src/components/shared/components/modal/ReviewModal";
+import { useTranslation } from "react-i18next";
 
 const ReviewsPending = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const { data } = useWriteReviewsList(currentPage, 6);
-
+  const { t } = useTranslation();
   const handleReviewClick = () => {
     setIsOpen(true);
   };
@@ -21,7 +22,7 @@ const ReviewsPending = () => {
   };
 
   if (!data || data.reviewableOffers.length === 0)
-    return <EmprtyReview text="작성 가능한 리뷰가 없습니다" />;
+    return <EmprtyReview text={t("작성 가능한 리뷰가 없습니다")} />;
 
   return (
     <Stack pt={["16px", "24px", "24px"]} pb={5} gap={[6, 6, 5]}>
