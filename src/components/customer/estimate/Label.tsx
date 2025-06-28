@@ -2,6 +2,7 @@
 import { EstimateOfferStatus } from "@/src/types/common";
 import { Chip, useTheme, useMediaQuery } from "@mui/material";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 interface LabelProps {
   status: EstimateOfferStatus;
@@ -10,11 +11,11 @@ interface LabelProps {
 export default function Label({ status }: LabelProps) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
-
+  const { t } = useTranslation();
   const isConfirmed = status === EstimateOfferStatus.CONFIRMED;
   return (
     <Chip
-      label={"확정하지 않은 견적이에요!"}
+      label={t("확정하지 않은 견적이에요!")}
       icon={
         <Image
           src="/Images/alert/exclamation-mark.svg"

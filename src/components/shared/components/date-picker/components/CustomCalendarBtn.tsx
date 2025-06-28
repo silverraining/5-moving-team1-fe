@@ -1,6 +1,6 @@
 import { PickersActionBarProps } from "@mui/x-date-pickers/PickersActionBar";
 import { Button, useTheme, useMediaQuery } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
 interface CustomActionBarProps extends PickersActionBarProps {
   onAccept?: () => void;
   disabled?: boolean;
@@ -12,7 +12,7 @@ export const CustomActionBar = ({
 }: CustomActionBarProps) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   return (
     <Button
       variant="contained"
@@ -34,7 +34,7 @@ export const CustomActionBar = ({
         },
       })}
     >
-      선택완료
+      {t("선택완료")}
     </Button>
   );
 };

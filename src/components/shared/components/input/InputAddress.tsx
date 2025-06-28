@@ -6,7 +6,7 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
 interface EditableBoxProps {
   fromLabel: string;
   toLabel: string;
@@ -24,7 +24,7 @@ export const EditableBox = ({
 }: EditableBoxProps) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   const hasFrom = !!fromLabel;
   const hasTo = !!toLabel;
   const showConfirm = hasFrom && hasTo;
@@ -61,7 +61,7 @@ export const EditableBox = ({
             padding: 2,
           }}
         >
-          {fromLabel || "출발지 선택하기"}
+          {fromLabel || t("출발지 선택하기")}
         </Button>
         {hasFrom && (
           <Typography
@@ -75,7 +75,7 @@ export const EditableBox = ({
               textDecoration: "underline",
             }}
           >
-            수정하기
+            {t("수정하기")}
           </Typography>
         )}
       </Box>
@@ -98,7 +98,7 @@ export const EditableBox = ({
             padding: 2,
           }}
         >
-          {toLabel || "도착지 선택하기"}
+          {toLabel || t("도착지 선택하기")}
         </Button>
         {hasTo && (
           <Typography
@@ -112,7 +112,7 @@ export const EditableBox = ({
               textDecoration: "underline",
             }}
           >
-            수정하기
+            {t("수정하기")}
           </Typography>
         )}
       </Box>
@@ -130,7 +130,7 @@ export const EditableBox = ({
           }}
         >
           <Typography variant={isSmall ? "SB_16" : "SB_20"}>
-            견적 확정하기
+            {t("견적 확정하기")}
           </Typography>
         </Button>
       )}

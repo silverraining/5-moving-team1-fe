@@ -21,7 +21,7 @@ import { ServiceType } from "@/src/types/common";
 import { Outline } from "../text-field/Outline";
 import { InfoChip } from "./components/InfoChip";
 import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
-
+import { useTranslation } from "react-i18next";
 interface SendEstimateModalProps {
   open: boolean;
   onClose: () => void;
@@ -50,7 +50,7 @@ export default function SendEstimateModal({
 }: SendEstimateModalProps) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   const { register, handleSubmit, errors, isValid, reset } =
     useEstimateOfferForm();
 
@@ -97,7 +97,7 @@ export default function SendEstimateModal({
         }}
         variant={isSmall ? "B_18" : "SB_24"}
       >
-        견적 보내기
+        {t("견적 보내기")}
         <Image
           onClick={onClose}
           width={isSmall ? 24 : 36}
@@ -170,7 +170,7 @@ export default function SendEstimateModal({
                 alignItems="center"
                 gap={isSmall ? "8px" : "16px"}
               >
-                <InfoChip label="이사일" />
+                <InfoChip label={t("이사일")} />
                 <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                   {formatDateWithDay(moveDate)}
                 </Typography>
@@ -181,7 +181,7 @@ export default function SendEstimateModal({
                   alignItems="center"
                   gap={isSmall ? "8px" : "12px"}
                 >
-                  <InfoChip label="출발" />
+                  <InfoChip label={t("출발")} />
                   <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                     {fromAddress}
                   </Typography>
@@ -200,7 +200,7 @@ export default function SendEstimateModal({
                   alignItems="center"
                   gap={isSmall ? "8px" : "12px"}
                 >
-                  <InfoChip label="도착" />
+                  <InfoChip label={t("도착")} />
                   <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                     {toAddress}
                   </Typography>
@@ -217,11 +217,11 @@ export default function SendEstimateModal({
                 variant={isSmall ? "SB_16" : "SB_20"}
                 sx={{ color: theme.palette.Black[300] }}
               >
-                견적가를 입력해 주세요
+                {t("견적가를 입력해 주세요")}
               </Typography>
               <Outline
                 type="number"
-                placeholder="견적가 입력"
+                placeholder={t("견적가 입력")}
                 register={register.price}
                 errorMessage={errors.price?.message}
                 border={false}
@@ -250,10 +250,10 @@ export default function SendEstimateModal({
                 variant={isSmall ? "SB_16" : "SB_20"}
                 sx={{ color: theme.palette.Black[300] }}
               >
-                코멘트를 입력해 주세요
+                {t("코멘트를 입력해 주세요")}
               </Typography>
               <Textarea
-                placeholder="최소 10자 이상 입력해주세요"
+                placeholder={t("최소 10자 이상 입력해주세요")}
                 register={register.comment}
                 errorMessage={errors.comment?.message}
                 border={false}
@@ -282,7 +282,7 @@ export default function SendEstimateModal({
               variant={isSmall ? "SB_16" : "SB_20"}
               sx={{ color: theme.palette.White[100] }}
             >
-              견적 보내기
+              {t("견적 보내기")}
             </Typography>
             {isLoading && (
               <CircularProgress

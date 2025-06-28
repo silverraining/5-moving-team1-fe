@@ -2,7 +2,7 @@
 
 import { Box, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-
+import { useTranslation } from "react-i18next";
 interface NotificationHeaderProps {
   onClose?: () => void;
 }
@@ -10,6 +10,7 @@ interface NotificationHeaderProps {
 export default function NotificationHeader({
   onClose,
 }: NotificationHeaderProps) {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -21,7 +22,7 @@ export default function NotificationHeader({
       }}
     >
       <Typography variant="B_16" sx={{ fontWeight: "bold" }}>
-        알림
+        {t("알림")}
       </Typography>
       {/* 닫기 버튼 */}
       <IconButton

@@ -3,6 +3,7 @@ import Image from "next/image";
 import { joinAddress } from "@/src/lib/joinAddress";
 import { typeMapper } from "@/src/lib/typeMapper";
 import { EstimateOffer } from "@/src/types/estimate";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   data: EstimateOffer;
@@ -16,7 +17,7 @@ export const CardListProfile = ({
   onBasicClick,
 }: CardProps) => {
   const info = data.mover;
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -116,7 +117,7 @@ export const CardListProfile = ({
                   color: theme.palette.White[100],
                 })}
               >
-                견적 보내기
+                {t("견적 보내기")}
               </Typography>
             </Button>
             <Button
@@ -137,7 +138,7 @@ export const CardListProfile = ({
                   color: theme.palette.PrimaryBlue[300],
                 })}
               >
-                반려
+                {t("반려")}
               </Typography>
             </Button>
           </Box>
@@ -223,7 +224,7 @@ export const CardListProfile = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                경력
+                {t("경력")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -233,7 +234,7 @@ export const CardListProfile = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.experience}년
+                {info.experience} {t("년")}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -256,7 +257,7 @@ export const CardListProfile = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                확정
+                {t("확정")}
               </Typography>
             </Box>
           </Box>
@@ -283,7 +284,7 @@ export const CardListProfile = ({
                     color: theme.palette.Grayscale[400],
                   })}
                 >
-                  제공 서비스
+                  {t("제공 서비스")}
                 </Typography>
               </Box>
               <Typography
@@ -315,7 +316,7 @@ export const CardListProfile = ({
                     color: theme.palette.Grayscale[400],
                   })}
                 >
-                  지역
+                  {t("지역")}
                 </Typography>
               </Box>
               <Typography
@@ -357,7 +358,7 @@ export const CardListProfile = ({
               color: theme.palette.White[100],
             })}
           >
-            견적 보내기
+            {t("견적 보내기")}
           </Typography>
         </Button>
         <Button
@@ -378,7 +379,7 @@ export const CardListProfile = ({
               color: theme.palette.PrimaryBlue[300],
             })}
           >
-            반려
+            {t("반려")}
           </Typography>
         </Button>
       </Box>

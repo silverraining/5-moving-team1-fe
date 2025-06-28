@@ -13,6 +13,7 @@ import {
 import { MoverProfileCardData } from "@/src/api/mover/api";
 import { useRouter } from "next/navigation";
 import { PATH } from "@/src/lib/constants";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   data: MoverProfileCardData;
@@ -30,6 +31,7 @@ export default function CardListProfileWrapper({ data }: Props) {
   const router = useRouter();
   const theme = useTheme();
   const isDesktopUp = useMediaQuery(theme.breakpoints.up("desktop"));
+  const { t } = useTranslation();
   return (
     <CardListProfile
       data={data}
@@ -38,7 +40,7 @@ export default function CardListProfileWrapper({ data }: Props) {
       buttonLabels={{
         secondary: (
           <Box component="span" display="inline-flex" alignItems="center">
-            <Typography component="span">기본 정보 수정</Typography>
+            <Typography component="span">{t("기본 정보 수정")}</Typography>
             <Image
               src="/images/profile/writing_gray.svg"
               width={24}
@@ -50,7 +52,7 @@ export default function CardListProfileWrapper({ data }: Props) {
         ),
         primary: (
           <Box component="span" display="inline-flex" alignItems="center">
-            <Typography component="span">내 프로필 수정</Typography>
+            <Typography component="span">{t("내 프로필 수정")}</Typography>
             <Image
               src="/images/profile/writing.svg"
               width={24}

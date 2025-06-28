@@ -2,6 +2,7 @@
 
 import { useSearchParams } from "next/navigation";
 import PendingDetail from "./PendingDetail";
+import { useTranslation } from "react-i18next";
 
 export default function PendingDetailWrapper({
   requestId,
@@ -10,8 +11,8 @@ export default function PendingDetailWrapper({
 }) {
   const searchParams = useSearchParams();
   const moverId = searchParams.get("moverId");
-
-  if (!moverId) return <div>잘못된 접근입니다. moverId가 없습니다.</div>;
+  const { t } = useTranslation();
+  if (!moverId) return <div>{t("잘못된 접근입니다. moverId가 없습니다.")}</div>;
 
   return <PendingDetail requestId={requestId} moverId={moverId} />;
 }

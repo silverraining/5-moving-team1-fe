@@ -9,11 +9,11 @@ import {
   USER_REVIEW,
 } from "@/src/lib/headerConstants";
 import { PATH } from "@/src/lib/constants";
-
+import { useTranslation } from "react-i18next";
 export const SubHeader = () => {
   const pathname = usePathname();
   const { step } = useEstimateStore();
-
+  const { t } = useTranslation();
   const pathWithoutLocale = (() => {
     const parts = pathname.split("/");
     if (["ko", "en", "zh"].includes(parts[1])) {
@@ -23,7 +23,7 @@ export const SubHeader = () => {
   })();
   const isProgress = pathWithoutLocale === PATH.userRequest;
   const isLabel = pathWithoutLocale === PATH.userWishlist;
-  const label = isLabel ? "찜한 기사님" : "견적요청";
+  const label = isLabel ? t("찜한 기사님") : t("견적요청");
 
   const isTabmenu =
     pathWithoutLocale.startsWith("/customer/estimate") ||
@@ -34,8 +34,8 @@ export const SubHeader = () => {
   const tabMenu = pathWithoutLocale.startsWith(PATH.userReview)
     ? USER_REVIEW
     : pathWithoutLocale.startsWith("/customer/estimate")
-      ? USER_REQUEST
-      : MOVER_REQUST;
+    ? USER_REQUEST
+    : MOVER_REQUST;
 
   let tabMenuElement = null;
   let progressElement = null;

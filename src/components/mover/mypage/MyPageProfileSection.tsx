@@ -5,6 +5,7 @@ import { useTheme } from "@mui/material/styles";
 import CardListProfileWrapper from "@/src/components/mover/mypage/CardListProfileWrapper";
 
 import { MoverProfileCardData } from "@/src/api/mover/api";
+import { useTranslation } from "react-i18next";
 
 interface MyPageProfileSectionProps {
   data: MoverProfileCardData;
@@ -12,7 +13,7 @@ interface MyPageProfileSectionProps {
 
 export const MyPageProfileSection = ({ data }: MyPageProfileSectionProps) => {
   const theme = useTheme();
-
+  const { t } = useTranslation();
   return (
     <Box width="100%" display="flex" justifyContent="center" mb="32px">
       <Box
@@ -22,7 +23,7 @@ export const MyPageProfileSection = ({ data }: MyPageProfileSectionProps) => {
           mx: "auto",
         }}
       >
-        <Typography variant="SB_24">마이페이지</Typography>
+        <Typography variant="SB_24">{t("마이페이지")}</Typography>
         <Box mt="32px" mx="0">
           <CardListProfileWrapper data={data} />
         </Box>

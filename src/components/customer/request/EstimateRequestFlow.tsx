@@ -21,6 +21,7 @@ import { fetchMyActiveEstimateRequest } from "@/src/api/customer/request/api";
 import { ParsedAddress } from "@/src/utils/parseAddress";
 import { AuthStore } from "@/src/store/authStore";
 import { useSnackbarStore } from "@/src/store/snackBarStore";
+import { useTranslation } from "react-i18next";
 
 export default function EstimateRequestFlow() {
   const theme = useTheme();
@@ -28,7 +29,7 @@ export default function EstimateRequestFlow() {
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
   const [isLoading, setIsLoading] = useState(true);
-
+  const { t } = useTranslation();
   // 0. zustand 상태 가져오기
   const {
     moveType,
@@ -88,7 +89,7 @@ export default function EstimateRequestFlow() {
 
     if (hasActiveEstimateRequest) {
       openSnackbar(
-        "진행 중인 이사 견적이 있어 새 견적은 받을 수 없습니다.",
+        t("진행 중인 이사 견적이 있어 새 견적은 받을 수 없습니다."),
         "error"
       );
       router.replace("/customer/moverlist");

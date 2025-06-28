@@ -3,11 +3,12 @@
 import Image from "next/image";
 import { Stack, Typography, useTheme, useMediaQuery } from "@mui/material";
 // import { useRouter } from "next/navigation";
+import { useTranslation } from "react-i18next";
 
 export default function InProgressPage() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   // const router = useRouter();
 
   return (
@@ -32,9 +33,9 @@ export default function InProgressPage() {
           variant={isSmall ? "R_14" : "R_20"}
           color={theme.palette.Grayscale[400]}
         >
-          현재 진행 중인 이사 견적이 있어요!
+          {t("현재 진행 중인 이사 견적이 있어요!")}
           <br />
-          진행 중인 이사 완료 후 새로운 견적을 받아보세요.
+          {t("진행 중인 이사 완료 후 새로운 견적을 받아보세요.")}
         </Typography>
         {/* 버튼을 눌렀을 때 이동할 기사님에게 견적받지 않은 견적도 확인할 수 있는 페이지가 없어서 일단 없음 처리 */}
         {/* <Button

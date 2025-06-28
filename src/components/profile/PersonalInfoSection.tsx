@@ -15,6 +15,7 @@ import {
   formatPhoneNumber,
   removePhoneNumberFormat,
 } from "../../utils/formatPhonNumber";
+import { useTranslation } from "react-i18next";
 
 interface PersonalInfoSectionProps {
   register: UseFormRegister<ProfileEditFormData | GeneralEditFormData>;
@@ -40,6 +41,7 @@ export const PersonalInfoSection = ({
   errors,
   initialData,
 }: PersonalInfoSectionProps) => {
+  const { t } = useTranslation();
   return (
     <Box>
       <Stack spacing={"32px"}>
@@ -58,12 +60,12 @@ export const PersonalInfoSection = ({
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              이름
+              {t("이름")}
             </Typography>
           </Box>
           <TextField
             type="text"
-            placeholder="이름을 입력해주세요."
+            placeholder={t("이름을 입력해주세요.")}
             {...register("name")}
             error={!!errors.name}
             helperText={errors.name?.message}
@@ -87,7 +89,7 @@ export const PersonalInfoSection = ({
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              이메일
+              {t("이메일")}
             </Typography>
           </Box>
           <TextField
@@ -117,7 +119,7 @@ export const PersonalInfoSection = ({
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              전화번호
+              {t("전화번호")}
             </Typography>
           </Box>
 

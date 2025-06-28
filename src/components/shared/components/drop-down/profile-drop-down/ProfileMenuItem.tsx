@@ -1,7 +1,7 @@
 "use client";
 
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-
+import { useTranslation } from "react-i18next";
 type MenuItemType = "nickname" | "menu" | "logout";
 
 interface ProfileMenuItemProps {
@@ -23,9 +23,9 @@ export default function ProfileMenuItem({
 }: ProfileMenuItemProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
-
-  const content = nickname ? `${nickname} 고객님` : label;
-  const itemType: MenuItemType = nickname ? "nickname" : (type ?? "menu");
+  const { t } = useTranslation();
+  const content = nickname ? `${nickname} ${t("고객님")}` : label;
+  const itemType: MenuItemType = nickname ? "nickname" : type ?? "menu";
 
   const getVariant = () => {
     if (itemType === "nickname") return isTablet ? "M_16" : "M_18";
@@ -52,8 +52,8 @@ export default function ProfileMenuItem({
           ...(itemType === "logout"
             ? {}
             : label
-              ? { backgroundColor: theme.palette.PrimaryBlue[50] }
-              : undefined),
+            ? { backgroundColor: theme.palette.PrimaryBlue[50] }
+            : undefined),
         },
         overflow: "hidden",
       })}

@@ -10,7 +10,7 @@ import {
   ServiceType,
 } from "@/src/types/common";
 import { MoverProfile } from "@/src/types/auth";
-
+import { useTranslation } from "react-i18next";
 // PendingEstimate.tsx에서 쓰는 card 데이터 타입
 export interface PendingEstimateCardData {
   estimateRequestId: string;
@@ -42,8 +42,8 @@ export const CardListWait = ({
     "offerStatus" in data
       ? data.offerStatus
       : "status" in data
-        ? data.status
-        : undefined;
+      ? data.status
+      : undefined;
   // 카드 데이터
   const info = data.mover;
 
@@ -55,7 +55,7 @@ export const CardListWait = ({
       isTargeted: data.isTargeted,
     },
   ];
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -122,7 +122,7 @@ export const CardListWait = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {info.nickname} {t("기사님")}
             </Typography>
             <Box display="flex" alignItems="center">
               <Image
@@ -199,7 +199,7 @@ export const CardListWait = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                경력
+                {t("경력")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -209,7 +209,7 @@ export const CardListWait = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {info.experience}년
+                {info.experience} {t("년")}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -232,7 +232,7 @@ export const CardListWait = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                확정
+                {t("확정")}
               </Typography>
             </Box>
           </Box>
@@ -272,7 +272,7 @@ export const CardListWait = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                이사일
+                {t("이사일")}
               </Typography>
             </Box>
             <Typography
@@ -319,7 +319,7 @@ export const CardListWait = ({
                     whiteSpace: "nowrap",
                   })}
                 >
-                  출발
+                  {t("출발")}
                 </Typography>
               </Box>
               <Typography
@@ -364,7 +364,7 @@ export const CardListWait = ({
                     whiteSpace: "nowrap",
                   })}
                 >
-                  도착
+                  {t("도착")}
                 </Typography>
               </Box>
               <Typography
@@ -398,7 +398,7 @@ export const CardListWait = ({
               color: theme.palette.Black[400],
             })}
           >
-            견적 금액
+            {t("견적 금액")}
           </Typography>
           <Typography
             sx={(theme) => ({
@@ -435,7 +435,7 @@ export const CardListWait = ({
                 wordBreak: "keep-all",
               })}
             >
-              견적 확정하기
+              {t("견적 확정하기")}
             </Typography>
           </Button>
           <Button
@@ -456,7 +456,7 @@ export const CardListWait = ({
                 color: theme.palette.PrimaryBlue[300],
               })}
             >
-              상세보기
+              {t("상세보기")}
             </Typography>
           </Button>
         </Box>

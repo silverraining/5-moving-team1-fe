@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import LinearProgress from "@mui/material/LinearProgress";
 import { Typography, useMediaQuery } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
+import { useTranslation } from "react-i18next";
 interface ProgressProps {
   value: 1 | 2 | 3 | 4 | number | null;
 }
@@ -11,9 +12,12 @@ interface ProgressProps {
 export const Progress = ({ value }: ProgressProps) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+  const { t } = useTranslation();
   return (
     <Box sx={{ width: "100%" }}>
-      <Typography variant={isSmall ? "SB_18" : "SB_24"}>견적요청</Typography>
+      <Typography variant={isSmall ? "SB_18" : "SB_24"}>
+        {t("견적요청")}
+      </Typography>
       {value !== null && (
         <LinearProgress
           variant="determinate"

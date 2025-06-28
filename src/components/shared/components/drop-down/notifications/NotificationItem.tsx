@@ -2,6 +2,7 @@
 
 import { Box, Typography } from "@mui/material";
 import dayjs from "@/src/lib/dayjsConfig";
+import { useTranslation } from "react-i18next";
 /**
  * dayjs로 createdAt을 포맷팅하여 상대 시간(timeAgo)으로 변환
  * 예: "2시간 전", "3일 전", "1주일 전" 등
@@ -19,17 +20,18 @@ export default function NotificationItem({
   type,
   createdAt,
 }: NotificationItemProps) {
+  const { t } = useTranslation();
   const timeAgo = dayjs(createdAt).fromNow();
   const highlight =
     type === "ESTIMATE_CONFIRMED"
-      ? "확정"
+      ? t("확정")
       : type === "MOVE_DAY_REMINDER"
-        ? "일정"
-        : type === "NEW_ESTIMATE_REQUEST"
-          ? "견적 요청"
-          : type === "NEW_OFFER"
-            ? "이사 견적"
-            : "defualt";
+      ? t("일정")
+      : type === "NEW_ESTIMATE_REQUEST"
+      ? t("견적 요청")
+      : type === "NEW_OFFER"
+      ? t("이사 견적")
+      : t("defualt");
 
   const onHighlightClick = () => {
     console.log(targetId);

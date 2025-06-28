@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-
+import { useTranslation } from "react-i18next";
 interface RequestModalProps {
   open: boolean;
   title?: string;
@@ -20,15 +20,21 @@ interface RequestModalProps {
 
 export const RequestModal = ({
   open,
-  title = "지정 견적 요청하기",
-  description = "일반 견적 요청을 먼저 진행해 주세요.",
-  buttonText = "일반 견적 요청 하기",
+  title,
+  description,
+  buttonText,
   onClose,
   onSubmit,
 }: RequestModalProps) => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const size = isSmall ? 24 : 36;
+  const { t } = useTranslation();
+
+  const defaultTitle = t("지정 견적 요청하기");
+  const defaultDescription = t("일반 견적 요청을 먼저 진행해 주세요.");
+  const defaultButtonText = t("일반 견적 요청 하기");
+
   return (
     <Dialog
       open={open}
@@ -56,7 +62,7 @@ export const RequestModal = ({
             sx={(theme) => ({ color: theme.palette.Black[400] })}
             alignSelf="center"
           >
-            {title}
+            {title || defaultTitle}
           </Typography>
           <Image
             src={"/Images/modal/x.svg"}
@@ -67,14 +73,16 @@ export const RequestModal = ({
             style={{ cursor: "pointer" }}
           />
         </Stack>
-        <Typography alignContent="center">{description}</Typography>
+        <Typography alignContent="center">
+          {description || defaultDescription}
+        </Typography>
         <Button
           variant="contained"
           onClick={onSubmit}
           sx={{ height: ["54px", "64px", "64px"] }}
         >
           <Typography variant={isSmall ? "SB_18" : "SB_20"}>
-            {buttonText}
+            {buttonText || defaultButtonText}
           </Typography>
         </Button>
       </Stack>

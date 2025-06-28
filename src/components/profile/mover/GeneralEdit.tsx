@@ -12,6 +12,7 @@ import {
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
 import { useUpdateGeneralMoverProfile } from "../../../api/mover/hooks";
+import { useTranslation } from "react-i18next";
 
 // TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
 // interface GeneralEditProps {
@@ -26,7 +27,7 @@ export const GeneralEdit = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
   const { mutateAsync: updateProfile } = useUpdateGeneralMoverProfile();
-
+  const { t } = useTranslation();
   const {
     register,
     handleSubmit,
@@ -53,10 +54,10 @@ export const GeneralEdit = () => {
         password: data.currentPassword,
         newPassword: data.newPassword,
       });
-      openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
+      openSnackbar(t("프로필이 성공적으로 수정되었습니다."), "success");
       router.push("/"); // TODO: 수정 후 페이지 이동
     } catch (error) {
-      openSnackbar("프로필 수정 중 오류가 발생했습니다.", "error");
+      openSnackbar(t("프로필 수정 중 오류가 발생했습니다."), "error");
     }
   };
 
@@ -75,7 +76,7 @@ export const GeneralEdit = () => {
           color: (theme) => theme.palette.Black[400],
         }}
       >
-        기본정보 수정
+        {t("기본정보 수정")}
       </Typography>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -145,7 +146,7 @@ export const GeneralEdit = () => {
                 maxWidth: { md: "calc(50% - 8px)" },
               }}
             >
-              취소
+              {t("취소")}
             </Button>
             <Button
               type="submit"
@@ -169,7 +170,7 @@ export const GeneralEdit = () => {
                 maxWidth: { md: "calc(50% - 8px)" },
               }}
             >
-              수정하기
+              {t("수정하기")}
             </Button>
           </Box>
         </Box>

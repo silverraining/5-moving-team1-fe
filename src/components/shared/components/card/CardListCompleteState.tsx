@@ -9,6 +9,7 @@ import {
   ServiceType,
 } from "@/src/types/common";
 import { EstimateRequest } from "@/src/types/estimate";
+import { useTranslation } from "react-i18next";
 
 // OfferEstimate.tsx에서 쓰는 card 데이터 타입
 export interface OfferEstimateCardData {
@@ -39,7 +40,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
       isTargeted: data.isTargeted,
     },
   ];
-
+  const { t } = useTranslation();
   return (
     <Box
       position={"relative"}
@@ -89,7 +90,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
               color: theme.palette.White[100],
             })}
           >
-            이사 완료된 견적이에요
+            {t("이사 완료된 견적이에요")}
           </Typography>
           <Button
             onClick={onclickDetails}
@@ -110,7 +111,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                 color: theme.palette.PrimaryBlue[300],
               })}
             >
-              견적 상세보기
+              {t("견적 상세보기")}
             </Typography>
           </Button>
         </Box>
@@ -200,7 +201,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  이사일
+                  {t("이사일")}
                 </Typography>
               </Box>
               <Typography
@@ -246,7 +247,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  이사일
+                  {t("이사일")}
                 </Typography>
               </Box>
               <Typography
@@ -283,7 +284,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  출발
+                  {t("출발")}
                 </Typography>
               </Box>
               <Typography
@@ -316,7 +317,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  도착
+                  {t("도착")}
                 </Typography>
               </Box>
               <Typography
@@ -347,7 +348,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             color: theme.palette.Black[400],
           })}
         >
-          견적 금액
+          {t("견적 금액")}
         </Typography>
         <Typography
           sx={(theme) => ({
