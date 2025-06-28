@@ -1,6 +1,6 @@
 import React from "react";
 import { Main } from "./Main";
 
-export default function Home({ params }: { params: { lng: string } }) {
+export default function Home() {
   return <Main />;
 }
