@@ -15,7 +15,6 @@ export const LikedMoverList = ({ likedMovers }: Props) => {
   const router = useRouter();
   const { t } = useTranslation();
   const handleCardClick = (moverId?: string) => {
-    console.log("Liked mover card clicked, moverId:", moverId);
     if (moverId) {
       router.push(PATH.moverDetail(moverId));
     }
@@ -40,7 +39,14 @@ export const LikedMoverList = ({ likedMovers }: Props) => {
             onClick={() => handleCardClick(mover.id)}
             sx={{ cursor: "pointer" }}
           >
-            <CardListSave data={mover} forceMobileSize />
+            <CardListSave
+              data={mover}
+              forceMobileSize
+              fontSize={"11.5px"}
+              key={idx}
+              onClick={() => handleCardClick(mover.id)}
+              sx={{ cursor: "pointer" }}
+            />
           </Box>
         ))}
       </Box>

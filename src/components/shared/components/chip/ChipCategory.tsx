@@ -5,11 +5,13 @@ import { useTranslation } from "react-i18next";
 interface ChipCategoryProps {
   data: ChipData;
   forceMobileSize?: boolean;
+  fontSize?: string;
 }
 
 export const ChipCategory = ({
   data,
   forceMobileSize = false,
+  fontSize = "18px",
 }: ChipCategoryProps) => {
   const theme = useTheme();
   const { t } = useTranslation();
@@ -148,11 +150,10 @@ export const ChipCategory = ({
             )}
             {size !== "xs" && (
               <Typography
+                variant="SB_18"
                 sx={{
-                  fontSize: "font" in sizeStyle ? sizeStyle.font : "13px",
-                  lineHeight:
-                    "lineHeight" in sizeStyle ? sizeStyle.lineHeight : "18px",
-                  fontWeight: 600,
+                  whiteSpace: "nowrap",
+                  fontSize: fontSize,
                   color: cat.text,
                 }}
               >
