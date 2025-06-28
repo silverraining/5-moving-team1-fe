@@ -27,13 +27,13 @@ import {
   convertToServiceRegionArray,
   convertToServiceRegionObject,
 } from "../../../utils/util";
-
+import { useTranslation } from "react-i18next";
 export const ProfileEdit = () => {
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
 
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
 
   // 일반 유저 프로필 조회 hook
@@ -102,13 +102,16 @@ export const ProfileEdit = () => {
   const onSubmit = async (data: ProfileEditFormData) => {
     try {
       if (isUploading) {
-        openSnackbar("이미지 업로드가 완료될 때까지 기다려주세요.", "warning");
+        openSnackbar(
+          t("이미지 업로드가 완료될 때까지 기다려주세요."),
+          "warning"
+        );
         return;
       }
 
       // 비밀번호 변경 시 추가 검증
       if (data.newPassword && data.newPassword !== data.confirmPassword) {
-        openSnackbar("새 비밀번호가 일치하지 않습니다.", "error");
+        openSnackbar(t("새 비밀번호가 일치하지 않습니다."), "error");
         return;
       }
 
@@ -122,21 +125,21 @@ export const ProfileEdit = () => {
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
 
-      openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
+      openSnackbar(t("프로필이 성공적으로 수정되었습니다."), "success");
       router.push("/");
     } catch (error) {
-      console.error("프로필 수정 중 오류:", error);
+      console.error(t("프로필 수정 중 오류:"), error);
       openSnackbar(
         error instanceof Error
           ? error.message
-          : "프로필 수정 중 오류가 발생했습니다.",
+          : t("프로필 수정 중 오류가 발생했습니다."),
         "error"
       );
     }
   };
 
   if (isLoading) {
-    return <div>로딩 중...</div>; // 또는 적절한 로딩 컴포넌트
+    return <div>{t("로딩 중...")}</div>; // 또는 적절한 로딩 컴포넌트
   }
 
   return (
@@ -175,7 +178,7 @@ export const ProfileEdit = () => {
                 color: theme.palette.Black[400],
               })}
             >
-              프로필 수정
+              {t("프로필 수정")}
             </Typography>
           </Stack>
 
@@ -256,7 +259,7 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Black[400],
                     }}
                   >
-                    이용 서비스
+                    {t("이용 서비스")}
                   </Typography>
                   <Typography
                     variant="R_16"
@@ -264,7 +267,9 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Grayscale[400],
                     }}
                   >
-                    *이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!
+                    {t(
+                      "*이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!"
+                    )}
                   </Typography>
                 </Stack>
                 <ServiceSelector
@@ -287,7 +292,7 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Black[400],
                     }}
                   >
-                    내가 사는 지역
+                    {t("내가 사는 지역")}
                   </Typography>
                   <Typography
                     variant="R_16"
@@ -295,7 +300,7 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Grayscale[400],
                     }}
                   >
-                    *내가 사는 지역은 언제든 수정 가능해요!
+                    {t("*내가 사는 지역은 언제든 수정 가능해요!")}
                   </Typography>
                 </Stack>
                 <RegionSelector
@@ -334,7 +339,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            취소
+            {t("취소")}
           </Button>
 
           {/* 수정하기 버튼 */}
@@ -358,7 +363,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            수정하기
+            {t("수정하기")}
           </Button>
         </Box>
       </form>
