@@ -72,7 +72,7 @@ export const Main = () => {
               borderRadius: 50,
             }}
           >
-            {t("로그인")}
+            로그인
           </Button>
 
           <Button
@@ -88,7 +88,7 @@ export const Main = () => {
               bgcolor: "white",
             }}
           >
-            {t("회원가입")}
+            회원가입
           </Button>
         </Stack>
       )}
