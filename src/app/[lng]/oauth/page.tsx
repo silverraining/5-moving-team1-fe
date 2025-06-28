@@ -7,6 +7,7 @@ import { AuthStore } from "@/src/store/authStore";
 import { Box, CircularProgress, Typography } from "@mui/material";
 import { getCustomerProfile } from "@/src/api/customer/api";
 import { fetchMoverProfileCard } from "@/src/api/mover/api";
+import { useTranslation } from "react-i18next";
 
 export default function OAuthCallbackPage() {
   const router = useRouter();
@@ -18,7 +19,7 @@ export default function OAuthCallbackPage() {
     const token = searchParams.get("token");
     const refreshToken = searchParams.get("refreshToken");
     const userInfoParam = searchParams.get("userInfo");
-
+    const { t } = useTranslation("common");
     if (token && userInfoParam) {
       try {
         // 백엔드에서 전달받은 사용자 정보 파싱
@@ -57,11 +58,11 @@ export default function OAuthCallbackPage() {
         checkProfileAndRedirect();
       } catch (error) {
         console.error("OAuth 콜백 처리 중 에러:", error);
-        openSnackbar("로그인 처리 중 오류가 발생했습니다.", "error");
+        openSnackbar(t("로그인 처리 중 오류가 발생했습니다."), "error");
         router.replace("/auth/user/login");
       }
     } else {
-      openSnackbar("로그인 토큰을 받지 못했습니다.", "error");
+      openSnackbar(t("로그인 토큰을 받지 못했습니다."), "error");
       router.replace("/auth/user/login");
     }
   }, [searchParams, login, openSnackbar, router]);
