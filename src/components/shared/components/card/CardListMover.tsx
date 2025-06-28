@@ -1,8 +1,7 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Skeleton, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData, CardData } from "@/src/types/card";
 import Image from "next/image";
-import { COLORS } from "@/public/theme/colors";
 import { EstimateOffer } from "@/src/types/estimate";
 import { useTranslation } from "react-i18next";
 
@@ -241,6 +240,117 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
               >
                 {info.confirmedCount} {t("건")} <span>{t("확정")}</span>
               </Typography>
+            </Box>
+          </Box>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+export const CardListMoverSkeleton = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      border="0.5px solid"
+      maxWidth={1200}
+      minWidth={[400, 580, 680]}
+      bgcolor="#FFFFFF"
+      borderRadius="16px"
+      padding={["14px 16px", "14px 16px", "20px 24px"]}
+      boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
+      width="100%"
+      boxSizing="border-box"
+      sx={(theme) => ({
+        borderColor: theme.palette.Line[100],
+        bgcolor: theme.palette.White[100],
+      })}
+    >
+      {/* 상단: 카테고리 + 소개글 */}
+      <Box
+        display="flex"
+        flexDirection="column"
+        gap={["14px", "16px"]}
+        marginBottom="16px"
+      >
+        <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
+          <Skeleton
+            variant="rounded"
+            width={60}
+            height={28}
+            sx={{ borderRadius: "16px" }}
+          />
+        </Box>
+
+        <Skeleton variant="text" height={30} width="100%" />
+      </Box>
+
+      {/* 하단: 프로필 정보 카드 */}
+      <Box
+        display="flex"
+        border="1px solid"
+        padding={["10px", "10px", "16px 18px"]}
+        boxShadow="4px 4px 16px 0px #E9E9E91A"
+        gap={["12px", "12px", "24px"]}
+        borderRadius="6px"
+        sx={(theme) => ({
+          bgcolor: theme.palette.White[100],
+          borderColor: theme.palette.Line[100],
+        })}
+      >
+        {/* 프로필 이미지 */}
+        <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
+          <Skeleton variant="circular" width="100%" height="100%" />
+        </Box>
+
+        {/* 텍스트 박스 */}
+        <Box
+          display="flex"
+          flexDirection="column"
+          width="100%"
+          alignItems="flex-start"
+          gap={1}
+        >
+          {/* 닉네임 + 좋아요 */}
+          <Box display="flex" alignItems="center" width="100%">
+            <Skeleton variant="text" width={120} height={24} />
+            <Box display="flex" alignItems="center" ml="auto" gap={1}>
+              <Skeleton variant="circular" width={24} height={24} />
+              <Skeleton variant="text" width={20} height={24} />
+            </Box>
+          </Box>
+
+          {/* 평점 / 경력 / 확정 */}
+          <Box
+            display="flex"
+            flexDirection="row"
+            gap={"16px"}
+            alignItems="center"
+            flexWrap="wrap"
+            justifyContent={{ xs: "space-between", sm: "flex-start" }}
+          >
+            {/* 평점 */}
+            <Box display="flex" gap="4px" alignItems="center">
+              <Skeleton variant="rectangular" width={20} height={20} />
+              <Skeleton variant="text" width={30} height={20} />
+              <Skeleton variant="text" width={40} height={20} />
+            </Box>
+
+            <Box height={14} border="1px solid #E6E6E6"></Box>
+
+            {/* 경력 */}
+            <Box display="flex" gap="4px" alignItems="center">
+              <Skeleton variant="text" width={30} height={20} />
+              <Skeleton variant="text" width={40} height={20} />
+            </Box>
+
+            <Box height={14} border="1px solid #E6E6E6"></Box>
+
+            {/* 확정 */}
+            <Box display="flex" gap="4px" alignItems="center">
+              <Skeleton variant="text" width={40} height={20} />
+              <Skeleton variant="text" width={30} height={20} />
             </Box>
           </Box>
         </Box>
