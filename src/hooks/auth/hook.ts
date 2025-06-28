@@ -29,6 +29,12 @@ export const useLoginForm = (role: Role) => {
     resolver: zodResolver(loginSchema),
   });
 
+  useEffect(() => {
+    if (fetchNotifications && notificationData) {
+      setNotifications(notificationData);
+    }
+  }, [fetchNotifications, notificationData, setNotifications]);
+
   const onSubmit = (data: LoginSchemaType) => {
     mutate(
       { ...data, role }, // 외부에서 받은 고정값 삽입
@@ -37,9 +43,6 @@ export const useLoginForm = (role: Role) => {
           openSnackbar(t("로그인 성공"), "success", 500, "standard");
           await setFetchNotifications(true);
           router.replace("/");
-          if (notificationData) {
-            setNotifications(notificationData ?? []);
-          }
         },
         onError: (error) => {
           openSnackbar(
