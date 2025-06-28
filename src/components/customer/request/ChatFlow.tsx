@@ -98,7 +98,7 @@ export default function ChatHistory({
         >
           <Chat
             variant="received"
-            content={convertToLabel(moveType)}
+            content={convertToLabel(moveType, t)}
             delay={step === 2 ? 500 : 0}
           />
           <Slide
@@ -119,7 +119,7 @@ export default function ChatHistory({
                 transition: "transform 0.3s ease-out",
               }}
             >
-              수정하기
+              {t("수정하기")}
             </Typography>
           </Slide>
         </Box>

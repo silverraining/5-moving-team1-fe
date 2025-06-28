@@ -1,7 +1,3 @@
-import { useTranslation } from "react-i18next";
-
-const { t } = useTranslation();
-
 export const convertToEnum = (label: string): "SMALL" | "HOME" | "OFFICE" => {
   switch (label) {
     case "소형이사 (원룸, 투룸, 20평대 미만)":
@@ -15,7 +11,10 @@ export const convertToEnum = (label: string): "SMALL" | "HOME" | "OFFICE" => {
   }
 };
 
-export const convertToLabel = (enumValue: string): string => {
+export const convertToLabel = (
+  enumValue: string,
+  t: (key: string) => string
+): string => {
   switch (enumValue) {
     case "SMALL":
       return t("소형이사 (원룸, 투룸, 20평대 미만)");

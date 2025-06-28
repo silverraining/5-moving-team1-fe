@@ -7,25 +7,25 @@ interface RegionSelectorProps {
   selectedRegions: ServiceRegion[];
   onRegionToggle: (region: ServiceRegion) => void;
 }
-const { t } = useTranslation();
+
 export const regionLabels: Record<ServiceRegion, string> = {
-  [ServiceRegion.SEOUL]: t("서울"),
-  [ServiceRegion.GYEONGGI]: t("경기"),
-  [ServiceRegion.INCHEON]: t("인천"),
-  [ServiceRegion.GANGWON]: t("강원"),
-  [ServiceRegion.CHUNGBUK]: t("충북"),
-  [ServiceRegion.CHUNGNAM]: t("충남"),
-  [ServiceRegion.SEJONG]: t("세종"),
-  [ServiceRegion.DAEJEON]: t("대전"),
-  [ServiceRegion.JEONBUK]: t("전북"),
-  [ServiceRegion.JEONNAM]: t("전남"),
-  [ServiceRegion.GWANGJU]: t("광주"),
-  [ServiceRegion.GYEONGBUK]: t("경북"),
-  [ServiceRegion.GYEONGNAM]: t("경남"),
-  [ServiceRegion.DAEGU]: t("대구"),
-  [ServiceRegion.ULSAN]: t("울산"),
-  [ServiceRegion.BUSAN]: t("부산"),
-  [ServiceRegion.JEJU]: t("제주"),
+  [ServiceRegion.SEOUL]: "서울",
+  [ServiceRegion.GYEONGGI]: "경기",
+  [ServiceRegion.INCHEON]: "인천",
+  [ServiceRegion.GANGWON]: "강원",
+  [ServiceRegion.CHUNGBUK]: "충북",
+  [ServiceRegion.CHUNGNAM]: "충남",
+  [ServiceRegion.SEJONG]: "세종",
+  [ServiceRegion.DAEJEON]: "대전",
+  [ServiceRegion.JEONBUK]: "전북",
+  [ServiceRegion.JEONNAM]: "전남",
+  [ServiceRegion.GWANGJU]: "광주",
+  [ServiceRegion.GYEONGBUK]: "경북",
+  [ServiceRegion.GYEONGNAM]: "경남",
+  [ServiceRegion.DAEGU]: "대구",
+  [ServiceRegion.ULSAN]: "울산",
+  [ServiceRegion.BUSAN]: "부산",
+  [ServiceRegion.JEJU]: "제주",
 };
 
 const regions: ServiceRegion[][] = [
