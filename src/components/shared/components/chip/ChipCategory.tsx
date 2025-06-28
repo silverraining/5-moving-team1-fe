@@ -1,7 +1,7 @@
 import { Box, Typography, useMediaQuery, useTheme } from "@mui/material";
 import Image from "next/image";
 import { ChipData } from "@/src/types/card";
-
+import { useTranslation } from "react-i18next";
 interface ChipCategoryProps {
   data: ChipData;
   forceMobileSize?: boolean;
@@ -12,52 +12,52 @@ export const ChipCategory = ({
   forceMobileSize = false,
 }: ChipCategoryProps) => {
   const theme = useTheme();
-
+  const { t } = useTranslation();
   const categoryData = {
     SMALL: {
-      label: "소형이사",
+      label: t("소형이사"),
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
       img: "/Images/chip/box.svg",
       alt: "소형이사",
     },
     HOME: {
-      label: "가정이사",
+      label: t("가정이사"),
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
       img: "/Images/chip/home.svg",
       alt: "가정이사",
     },
     OFFICE: {
-      label: "사무실이사",
+      label: t("사무실이사"),
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
       img: "/Images/chip/company.svg",
       alt: "사무실이사",
     },
     TARGET: {
-      label: "지정 견적 요청",
+      label: t("지정 견적 요청"),
       bg: theme.palette.SecondaryRed[100],
       text: theme.palette.SecondaryRed[200],
       img: "/Images/chip/document.svg",
       alt: "지정 견적 요청",
     },
     PENDING: {
-      label: "견적 대기",
+      label: t("견적 대기"),
       bg: theme.palette.Background[100],
       text: theme.palette.PrimaryBlue[400],
       img: null,
       alt: "견적 대기",
     },
     CONFIRMED: {
-      label: "견적 확정",
+      label: t("견적 확정"),
       bg: theme.palette.Background[100],
       text: theme.palette.PrimaryBlue[400],
       img: null,
       alt: "견적 확정",
     },
     COMPLETED: {
-      label: "견적 확정",
+      label: t("견적 확정"),
       bg: theme.palette.Background[100],
       text: theme.palette.PrimaryBlue[400],
       img: null,
@@ -96,8 +96,8 @@ export const ChipCategory = ({
   const chipTypes = Array.isArray(data.chipType)
     ? data.chipType
     : data.chipType
-      ? [data.chipType]
-      : [];
+    ? [data.chipType]
+    : [];
 
   // ✅ category를 배열로 설정
   const categories: (keyof typeof categoryData)[] = [];

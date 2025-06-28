@@ -1,10 +1,11 @@
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function EmptyRequest() {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("desktop")); // 모바일+태블릿일 때 포함
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -32,7 +33,7 @@ export default function EmptyRequest() {
         variant={isSmall ? "R_14" : "R_20"}
         color={theme.palette.Grayscale[400]}
       >
-        아직 받은 요청이 없어요!
+        {t("아직 받은 요청이 없어요!")}
       </Typography>
     </Box>
   );

@@ -5,6 +5,7 @@ import { StarRating } from "./StarRating";
 import Pagination from "../../pagination/Pagination";
 import Image from "next/image";
 import { ReviewChart } from "./review-chart/ReviewChart";
+import { useTranslation } from "react-i18next";
 
 interface ReviewListProps {
   reviews: ReviewData[];
@@ -24,7 +25,7 @@ export const ReviewList = ({
   reviewStatistics,
 }: ReviewListProps) => {
   const theme = useTheme();
-
+  const { t } = useTranslation();
   if (reviews.length === 0) {
     return (
       <Box>
@@ -36,7 +37,7 @@ export const ReviewList = ({
             marginBottom: "32px",
           }}
         >
-          리뷰 ({total})
+          {t("리뷰")} ({total})
         </Typography>
         <Box
           sx={{
@@ -60,7 +61,7 @@ export const ReviewList = ({
               marginTop: "24px",
             }}
           >
-            아직 등록된 리뷰가 없어요 !
+            {t("아직 등록된 리뷰가 없어요 !")}
           </Typography>
         </Box>
       </Box>
@@ -82,7 +83,7 @@ export const ReviewList = ({
             marginBottom: "32px",
           }}
         >
-          리뷰 ({total})
+          {t("리뷰")} ({total})
         </Typography>
         {reviewStatistics && <ReviewChart data={reviewStatistics} />}
       </Box>

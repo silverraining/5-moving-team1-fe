@@ -1,5 +1,6 @@
 import { Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 interface EmprtyReviewProps {
   variation?: "complete" | "pending";
@@ -10,6 +11,7 @@ export const EmprtyReview = ({
   variation = "pending",
   text,
 }: EmprtyReviewProps) => {
+  const { t } = useTranslation();
   return (
     <Stack pt={"104px"} gap={4} alignItems={"center"}>
       <Image
@@ -26,7 +28,7 @@ export const EmprtyReview = ({
       </Typography>
       {variation === "complete" && (
         <Button variant="contained" sx={{ padding: 2 }}>
-          <Typography variant="SB_20">리뷰 작성하러 가기</Typography>
+          <Typography variant="SB_20">{t("리뷰 작성하러 가기")}</Typography>
         </Button>
       )}
     </Stack>

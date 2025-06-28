@@ -20,6 +20,7 @@ import {
   convertToServiceTypeObject,
   convertToServiceRegionObject,
 } from "../../../utils/util";
+import { useTranslation } from "react-i18next";
 
 // TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
 // interface ProfileEditProps {
@@ -44,7 +45,7 @@ export const ProfileEdit = () => {
   const [regionError, setRegionError] = useState<boolean>(false);
 
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
 
   // 기사님 프로필 수정 hook
@@ -97,13 +98,13 @@ export const ProfileEdit = () => {
     try {
       if (selectedServices.length === 0) {
         setServiceError(true);
-        openSnackbar("제공 서비스를 하나 이상 선택해주세요.", "error");
+        openSnackbar(t("제공 서비스를 하나 이상 선택해주세요."), "error");
         return;
       }
 
       if (selectedRegions.length === 0) {
         setRegionError(true);
-        openSnackbar("서비스 가능 지역을 하나 이상 선택해주세요.", "error");
+        openSnackbar(t("서비스 가능 지역을 하나 이상 선택해주세요."), "error");
         return;
       }
 
@@ -116,14 +117,14 @@ export const ProfileEdit = () => {
 
       await updateMoverProfile(profileData);
 
-      openSnackbar("기사님 프로필이 성공적으로 수정되었습니다.", "success");
+      openSnackbar(t("기사님 프로필이 성공적으로 수정되었습니다."), "success");
       router.push("/");
     } catch (error) {
-      console.error("프로필 수정 중 오류:", error);
+      console.error(t("프로필 수정 중 오류:"), error);
       openSnackbar(
         error instanceof Error
           ? error.message
-          : "프로필 수정 중 오류가 발생했습니다.",
+          : t("프로필 수정 중 오류가 발생했습니다."),
         "error"
       );
     }
@@ -165,7 +166,7 @@ export const ProfileEdit = () => {
                 color: theme.palette.Black[400],
               })}
             >
-              프로필 수정
+              {t("프로필 수정")}
             </Typography>
           </Stack>
 
@@ -202,7 +203,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    별명{" "}
+                    {t("별명")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -217,7 +218,7 @@ export const ProfileEdit = () => {
                       {...register("nickname")}
                       variant="outlined"
                       fullWidth
-                      placeholder="사이트에 노출될 이름을 입력해 주세요"
+                      placeholder={t("사이트에 노출될 이름을 입력해 주세요")}
                       error={!!errors.nickname}
                       helperText={errors.nickname?.message}
                       sx={{
@@ -263,7 +264,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    경력{" "}
+                    {t("경력")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -279,7 +280,7 @@ export const ProfileEdit = () => {
                       type="number"
                       variant="outlined"
                       fullWidth
-                      placeholder="기사님의 경력을 입력해주세요"
+                      placeholder={t("기사님의 경력을 입력해주세요")}
                       error={!!errors.experience}
                       helperText={errors.experience?.message}
                       sx={{
@@ -309,7 +310,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    한 줄 소개{" "}
+                    {t("한 줄 소개")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -324,7 +325,7 @@ export const ProfileEdit = () => {
                       {...register("intro")}
                       variant="outlined"
                       fullWidth
-                      placeholder="한 줄 소개를 입력해 주세요"
+                      placeholder={t("한 줄 소개를 입력해 주세요")}
                       error={!!errors.intro}
                       helperText={errors.intro?.message}
                       sx={{
@@ -348,7 +349,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    상세 설명
+                    {t("상세 설명")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -366,7 +367,7 @@ export const ProfileEdit = () => {
                   fullWidth
                   multiline
                   rows={4}
-                  placeholder="상세 내용을 입력해 주세요"
+                  placeholder={t("상세 내용을 입력해 주세요")}
                   error={!!errors.description}
                   helperText={errors.description?.message}
                   sx={{
@@ -404,7 +405,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.Black[400],
                       })}
                     >
-                      제공 서비스
+                      {t("제공 서비스")}
                     </Typography>
                     <Typography
                       variant="SB_20"
@@ -422,7 +423,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.SecondaryRed[200],
                       })}
                     >
-                      제공 서비스를 하나 이상 선택해주세요.
+                      {t("제공 서비스를 하나 이상 선택해주세요.")}
                     </Typography>
                   )}
                 </Stack>
@@ -442,7 +443,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.Black[400],
                       })}
                     >
-                      서비스 가능 지역
+                      {t("서비스 가능 지역")}
                     </Typography>
                     <Typography
                       variant="SB_20"
@@ -460,7 +461,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.SecondaryRed[200],
                       })}
                     >
-                      서비스 가능 지역을 하나 이상 선택해주세요.
+                      {t("서비스 가능 지역을 하나 이상 선택해주세요.")}
                     </Typography>
                   )}
                 </Stack>
@@ -500,7 +501,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            취소
+            {t("취소")}
           </Button>
 
           {/* 수정하기 버튼 */}
@@ -529,7 +530,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            수정하기
+            {t("수정하기")}
           </Button>
         </Box>
       </form>

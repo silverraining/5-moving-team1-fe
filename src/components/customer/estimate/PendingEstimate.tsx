@@ -14,6 +14,7 @@ import { PATH } from "@/src/lib/constants";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EmprtyReview } from "../../review/EmptyReview";
+import { useTranslation } from "react-i18next";
 
 // 견적서 카드 데이터에 ID 추가
 interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
@@ -24,7 +25,7 @@ interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
 export default function PendingEstimate() {
   const router = useRouter();
   const queryClient = useQueryClient();
-
+  const { t } = useTranslation();
   // ID 배열 받아오기
   const {
     data: requestIds,
@@ -45,12 +46,13 @@ export default function PendingEstimate() {
   // 해당 ID로 견적서 리스트 받아오기
   const { data, isLoading, error } = useEstimateOfferPending(requestId);
 
-  if (isLoadingIds) return <Typography>견적서 데이터 로딩중...</Typography>;
-  if (errorIds) return <Typography>견적서 데이터 에러 발생!</Typography>;
-  if (isLoading) return <Typography>견적서 데이터 로딩중...</Typography>;
-  if (error) return <Typography>견적서 데이터 에러 발생!</Typography>;
+  if (isLoadingIds)
+    return <Typography>{t("견적서 데이터 로딩중...")}</Typography>;
+  if (errorIds) return <Typography>{t("견적서 데이터 에러 발생!")}</Typography>;
+  if (isLoading) return <Typography>{t("견적서 데이터 로딩중...")}</Typography>;
+  if (error) return <Typography>{t("견적서 데이터 에러 발생!")}</Typography>;
   if (!data?.items || !Array.isArray(data?.items) || data?.items.length === 0)
-    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+    return <EmprtyReview text={t("대기중인 견적이 없습니다")} />;
 
   // 실제 데이터 렌더링
   return (
@@ -66,7 +68,9 @@ export default function PendingEstimate() {
             data={card}
             onDetailClick={() =>
               router.push(
-                `${PATH.userEstimateDetail(card.estimateRequestId)}?moverId=${card.moverId}`
+                `${PATH.userEstimateDetail(card.estimateRequestId)}?moverId=${
+                  card.moverId
+                }`
               )
             }
             onLikeClick={() => {

@@ -3,7 +3,7 @@ import { Box, Tab, Tabs, useTheme } from "@mui/material";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import React from "react";
-
+import { useTranslation } from "react-i18next";
 interface MenuTabs {
   menu: { label: string; href: string; baseUrl?: string }[];
   showIndicator?: boolean;
@@ -23,7 +23,7 @@ export const MenuTabs = ({ menu, showIndicator = true }: MenuTabs) => {
   const currentValue = validValues.includes(pathWithoutLocale)
     ? pathWithoutLocale
     : false;
-
+  const { t } = useTranslation();
   return (
     <Box>
       <Tabs
@@ -42,7 +42,7 @@ export const MenuTabs = ({ menu, showIndicator = true }: MenuTabs) => {
           if (d.baseUrl) {
             isSelect = pathWithoutLocale.startsWith(d.baseUrl);
           }
-          if (d.label === "내 견적 관리") {
+          if (d.label === t("내 견적 관리")) {
             isSelect =
               pathWithoutLocale === PATH.moverEstimateConfirm ||
               pathWithoutLocale === PATH.moverEstimateReject ||

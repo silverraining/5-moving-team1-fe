@@ -4,6 +4,7 @@ import { ChipData, CardData } from "@/src/types/card";
 import Image from "next/image";
 import { COLORS } from "@/public/theme/colors";
 import { EstimateOffer } from "@/src/types/estimate";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   data: EstimateOffer | CardData;
@@ -43,7 +44,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
       data.types.map((type) => ({
         chipType: type,
       }));
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -127,7 +128,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {info.nickname} {t("기사님")}
             </Typography>
             <Box display="flex" alignItems="center" ml="auto">
               <Image
@@ -208,7 +209,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   whiteSpace: "nowrap",
                 })}
               >
-                경력
+                {t("경력")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -219,7 +220,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   whiteSpace: "nowrap",
                 })}
               >
-                {info.experience}년
+                {info.experience} {t("년")}
               </Typography>
             </Box>
             {/* Divider */}
@@ -238,7 +239,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   },
                 })}
               >
-                {info.confirmedCount}건 <span>확정</span>
+                {info.confirmedCount} {t("건")} <span>{t("확정")}</span>
               </Typography>
             </Box>
           </Box>

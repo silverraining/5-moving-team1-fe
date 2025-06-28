@@ -5,6 +5,7 @@ import dayjs from "@/src/lib/dayjsConfig";
 import Image from "next/image";
 import { ChipData } from "@/src/types/card";
 import { EstimateRequestItem } from "@/src/api/mover/estimate/requested/api";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   data: EstimateRequestItem;
@@ -29,7 +30,7 @@ export const CardListRequest = ({
       isTargeted: data.isTargeted,
     },
   ];
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -181,7 +182,7 @@ export const CardListRequest = ({
                     color: theme.palette.Grayscale[400],
                   })}
                 >
-                  출발
+                  {t("출발")}
                 </Typography>
               </Box>
               <Typography
@@ -219,7 +220,7 @@ export const CardListRequest = ({
                     color: theme.palette.Grayscale[400],
                   })}
                 >
-                  도착
+                  {t("도착")}
                 </Typography>
               </Box>
               <Typography
@@ -268,7 +269,7 @@ export const CardListRequest = ({
                 color: theme.palette.White[100],
               })}
             >
-              견적 보내기
+              {t("견적 보내기")}
             </Typography>
           </Button>
           <Tooltip
@@ -308,7 +309,7 @@ export const CardListRequest = ({
                       : theme.palette.PrimaryBlue[300],
                   })}
                 >
-                  반려
+                  {t("반려")}
                 </Typography>
               </Button>
             </span>

@@ -10,6 +10,7 @@ import {
   ServiceType,
 } from "@/src/types/common";
 import { MoverProfile } from "@/src/types/auth";
+import { useTranslation } from "react-i18next";
 
 // HistoryEstimate.tsx에서 쓰는 card 데이터 타입
 export interface HistoryEstimateCardData {
@@ -36,8 +37,8 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
     "offerStatus" in data
       ? data.offerStatus
       : "status" in data
-        ? data.status
-        : undefined;
+      ? data.status
+      : undefined;
   // 카드 데이터
   const info = data.mover;
   // Chip 데이터
@@ -48,7 +49,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
       isTargeted: data.isTargeted,
     },
   ];
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -125,7 +126,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {info.nickname} {t("기사님")}
             </Typography>
             <Box display="flex" alignItems="center">
               <Image
@@ -202,7 +203,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                경력
+                {t("경력")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -235,7 +236,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                확정
+                {t("확정")}
               </Typography>
             </Box>
           </Box>
@@ -255,7 +256,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
             color: theme.palette.Black[400],
           })}
         >
-          견적 금액
+          {t("견적 금액")}
         </Typography>
         <Typography
           sx={(theme) => ({
