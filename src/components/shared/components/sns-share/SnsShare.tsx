@@ -22,7 +22,7 @@ export const SnsShare = ({
           await navigator.clipboard.writeText(url);
           openSnackbar(t("링크가 클립보드에 복사되었습니다."), "success");
         } catch (err) {
-          console.error(t("클립보드 복사 실패:"), err);
+          console.error("클립보드 복사 실패:", err);
         }
         break;
 
@@ -39,7 +39,7 @@ export const SnsShare = ({
         break;
 
       default:
-        console.log(`${t(platform)}으로 공유하기`);
+        console.log(`${platform}으로 공유하기`);
     }
   };
 
@@ -54,12 +54,12 @@ export const SnsShare = ({
           lineHeight: "28px",
         }}
       >
-        {title}
+        {title || t("SNS 공유")}
       </Typography>
       <Box sx={{ display: "flex", gap: "16px" }}>
-        <Clip onClick={() => handleShare(t("링크복사"))} />
-        <Kakao onClick={() => handleShare(t("카카오톡"))} />
-        <FaceBook onClick={() => handleShare(t("페이스북"))} />
+        <Clip onClick={() => handleShare("링크복사")} />
+        <Kakao onClick={() => handleShare("카카오톡")} />
+        <FaceBook onClick={() => handleShare("페이스북")} />
       </Box>
     </Box>
   );
