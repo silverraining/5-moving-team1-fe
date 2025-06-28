@@ -28,7 +28,7 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useRef } from "react";
 import { useNotificationAll } from "@/src/api/notification/hooks";
 import { useNotificationStore } from "@/src/store/notification";
-
+import { useTranslation } from "react-i18next";
 export const Header = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbar();
@@ -41,27 +41,27 @@ export const Header = () => {
   const token = Cookies.get("accessToken");
   const { refetch } = useNotificationAll(!!token);
   const { setNotifications, setMarkAsRead } = useNotificationStore();
-
+  const { t } = useTranslation();
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : GUEST_MENU;
+    ? MOVER_MENU
+    : GUEST_MENU;
 
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+    ? MOVER_MENU
+    : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
-      openSnackbar("로그아웃 되었습니다", "success", 1000, "standard");
+      openSnackbar(t("로그아웃 되었습니다"), "success", 1000, "standard");
       logout();
       router.replace(PATH.main);
     } catch (error) {
       openSnackbar(
-        error instanceof Error ? error.message : "로그아웃 실패",
+        error instanceof Error ? error.message : t("로그아웃 실패"),
         "error",
         1000,
         "standard"
@@ -208,7 +208,7 @@ export const Header = () => {
                 variant="contained"
                 sx={{ width: "116px", height: "44px" }}
               >
-                로그인
+                {t("로그인")}
               </Button>
             </Link>
           )

@@ -12,7 +12,7 @@ import {
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
-
+import { useTranslation } from "react-i18next";
 interface FilterProps {
   open: boolean;
   onClose: () => void;
@@ -88,7 +88,7 @@ const FilterModal = ({
   const handleSubmit = () => {
     onSubmit(localMoveTypeItems, localFilterItems);
   };
-
+  const { t } = useTranslation();
   return (
     <Dialog
       open={open}
@@ -137,7 +137,7 @@ const FilterModal = ({
               })}
               variant="B_18"
             >
-              이사 유형
+              {t("이사 유형")}
             </Typography>
             <Typography
               onClick={() => onTabChange("filter")}
@@ -150,7 +150,7 @@ const FilterModal = ({
               })}
               variant="SB_18"
             >
-              필터
+              {t("필터")}
             </Typography>
           </Stack>
           <Image
@@ -167,7 +167,7 @@ const FilterModal = ({
         {selectedTab === "moveType" && (
           <Stack spacing={0} flexGrow={1}>
             <CheckboxRow
-              label={`전체선택${totalMoveCount}`}
+              label={`${t("전체선택")}${totalMoveCount}`}
               checked={allMoveChecked}
               indeterminate={someMoveChecked}
               onChange={(e) => handleAllMoveTypeChange(e.target.checked)}
@@ -193,7 +193,7 @@ const FilterModal = ({
         {selectedTab === "filter" && (
           <Stack spacing={0} flexGrow={1}>
             <CheckboxRow
-              label={`전체선택 (${totalFilterCount})`}
+              label={`${t("전체선택")} (${totalFilterCount})`}
               checked={allFilterChecked}
               indeterminate={someFilterChecked}
               onChange={(e) => handleAllFilterChange(e.target.checked)}
@@ -222,7 +222,7 @@ const FilterModal = ({
           fullWidth
           onClick={handleSubmit}
         >
-          조회하기
+          {t("조회하기")}
         </Button>
       </Stack>
     </Dialog>

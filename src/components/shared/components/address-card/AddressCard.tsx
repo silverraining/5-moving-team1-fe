@@ -7,6 +7,7 @@ import {
   styled,
   useTheme,
 } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 type AddressCardProps = {
   zipCode: string;
@@ -19,7 +20,9 @@ type AddressCardProps = {
 const StyledCard = styled(Card)<{ selected: boolean }>(
   ({ selected, theme }) => ({
     borderRadius: "16px",
-    border: `1px solid ${selected ? theme.palette.PrimaryBlue[200] : theme.palette.Line[100]}`,
+    border: `1px solid ${
+      selected ? theme.palette.PrimaryBlue[200] : theme.palette.Line[100]
+    }`,
     backgroundColor: selected ? theme.palette.PrimaryBlue[50] : "white",
     boxShadow: "none",
     cursor: "pointer",
@@ -87,7 +90,7 @@ const AddressCard = ({
     setIsSelected(!isSelected);
     onClick && onClick();
   };
-
+  const { t } = useTranslation();
   return (
     <StyledCard selected={isSelected} onClick={handleClick}>
       <CardContent
@@ -110,8 +113,8 @@ const AddressCard = ({
         </Typography>
         <AddressContainer>
           <LabelContainer>
-            <StyledLabel>도로명</StyledLabel>
-            <StyledLabel>지번</StyledLabel>
+            <StyledLabel>{t("도로명")}</StyledLabel>
+            <StyledLabel>{t("지번")}</StyledLabel>
           </LabelContainer>
           <AddressTextContainer>
             <StyledValue>{roadAddress}</StyledValue>

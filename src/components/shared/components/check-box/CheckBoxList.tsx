@@ -6,7 +6,7 @@ import {
   useTheme,
 } from "@mui/material";
 import Image from "next/image";
-
+import { useTranslation } from "react-i18next";
 interface CheckBoxProps {
   selected: string;
   onChange: (value: string) => void;
@@ -18,10 +18,11 @@ export const CheckBoxList = ({
   onChange,
   onConfirm,
 }: CheckBoxProps) => {
+  const { t } = useTranslation();
   const options = [
-    "소형이사 (원룸, 투룸, 20평대 미만)",
-    "가정이사 (쓰리룸, 20평대 이상)",
-    "사무실이사 (사무실, 상업공간)",
+    t("소형이사 (원룸, 투룸, 20평대 미만)"),
+    t("가정이사 (쓰리룸, 20평대 이상)"),
+    t("사무실이사 (사무실, 상업공간)"),
   ];
 
   const theme = useTheme();
@@ -112,7 +113,7 @@ export const CheckBoxList = ({
           variant={size === "sm" ? "SB_16" : "SB_20"}
           color={theme.palette.White[100]}
         >
-          선택 완료
+          {t("선택 완료")}
         </Typography>
       </Button>
     </Box>

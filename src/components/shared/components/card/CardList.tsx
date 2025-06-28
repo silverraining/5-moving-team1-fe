@@ -3,33 +3,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Box, Stack, Typography, useTheme, useMediaQuery } from "@mui/material";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 type VariantType = "small" | "office" | "home";
 
 interface CardListProps {
   variant: VariantType;
 }
-
-const CARD_CONTENT: Record<
-  VariantType,
-  { title: string; subTitle: string; img: string }
-> = {
-  small: {
-    title: "소형이사",
-    subTitle: "원룸, 투룸, 20평대 미만",
-    img: "/Images/landing/hand.svg",
-  },
-  home: {
-    title: "가정이사",
-    subTitle: "쓰리룸, 20평대 미만",
-    img: "/Images/landing/car.svg",
-  },
-  office: {
-    title: "기업, 사무실 이사",
-    subTitle: "사무실 , 상업공간",
-    img: "/Images/landing/building.svg",
-  },
-};
 
 const IMAGE_RATIO: Record<VariantType, number> = {
   small: 284.16 / 182.4,
@@ -42,6 +22,28 @@ export const CardList = ({ variant }: CardListProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState<number>(0);
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+  const { t } = useTranslation();
+
+  const CARD_CONTENT: Record<
+    VariantType,
+    { title: string; subTitle: string; img: string }
+  > = {
+    small: {
+      title: t("소형이사"),
+      subTitle: t("원룸, 투룸, 20평대 미만"),
+      img: "/Images/landing/hand.svg",
+    },
+    home: {
+      title: t("가정이사"),
+      subTitle: t("쓰리룸, 20평대 미만"),
+      img: "/Images/landing/car.svg",
+    },
+    office: {
+      title: t("기업, 사무실 이사"),
+      subTitle: t("사무실 , 상업공간"),
+      img: "/Images/landing/building.svg",
+    },
+  };
 
   useEffect(() => {
     function updateWidth() {
@@ -64,8 +66,8 @@ export const CardList = ({ variant }: CardListProps) => {
       ? 284 // small은 고정 최소값
       : 290 // 다른 variant들은 적당히 고정값 지정 가능
     : containerWidth
-      ? containerWidth * 0.5
-      : 0;
+    ? containerWidth * 0.5
+    : 0;
 
   const imageHeight = imageWidth / IMAGE_RATIO[variant];
 

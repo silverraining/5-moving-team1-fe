@@ -14,6 +14,7 @@ import AddressCard from "./AddressCard";
 import Image from "next/image";
 import { convertSidoToEnglish } from "@/src/utils/parseAddress";
 import { ModalAddress } from "@/src/utils/parseAddress";
+import { useTranslation } from "react-i18next";
 
 interface Address {
   zipCode: string;
@@ -25,7 +26,7 @@ interface AddressModalProps {
   open: boolean;
   onClose: () => void;
   onSelect: (address: ModalAddress) => void;
-  title?: "출발지를 선택해주세요" | "도착지를 선택해주세요";
+  title?: string;
 }
 
 const StyledDialog = styled(Dialog)(({ theme }) => ({
@@ -72,7 +73,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
   const [selectedAddress, setSelectedAddress] = useState<ModalAddress | null>(
     null
   );
-
+  const { t } = useTranslation();
   /**
    * 카카오 우편번호 서비스 API 연동 방법:
    * 1. 카카오 개발자 센터에서 JavaScript 앱 키를 발급받습니다.
@@ -166,7 +167,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         <Box mb={3}>
           <SearchInput
             variation="right"
-            placeholder="도로명, 지번, 건물명으로 검색"
+            placeholder={t("도로명, 지번, 건물명으로 검색")}
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)} // ✅ 검색어 입력 가능
             onClick={openKakaoPostcode} // ✅ 검색 아이콘 클릭 시 카카오 팝업 호출
@@ -201,7 +202,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
             fontSize: ["16px", "16px", "20px"],
           })}
         >
-          선택완료
+          {t("선택완료")}
         </StyledButton>
       </StyledDialogContent>
     </StyledDialog>

@@ -20,7 +20,7 @@ import { ChipProps } from "@/src/types/card";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";
-
+import { useTranslation } from "react-i18next";
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -60,7 +60,7 @@ export default function ReviewModal({
     reset();
     onClose();
   };
-
+  const { t } = useTranslation();
   return (
     <Dialog
       open={isOpen}
@@ -94,7 +94,7 @@ export default function ReviewModal({
         }}
         variant={isSmall ? "B_18" : "SB_24"}
       >
-        리뷰 쓰기
+        {t("리뷰 쓰기")}
         <Image
           onClick={onClose}
           width={isSmall ? 24 : 36}
@@ -183,7 +183,7 @@ export default function ReviewModal({
                     gap: isSmall ? "6px" : "12px",
                   }}
                 >
-                  <InfoChip label="이사일" />{" "}
+                  <InfoChip label={t("이사일")} />{" "}
                   <Typography variant={isSmall ? "M_13" : "M_20"} noWrap>
                     {moveDate}
                   </Typography>
@@ -205,7 +205,7 @@ export default function ReviewModal({
                     gap: isSmall ? "6px" : "12px",
                   }}
                 >
-                  <InfoChip label="견적가" />{" "}
+                  <InfoChip label={t("견적가")} />{" "}
                   <Typography variant={isSmall ? "M_13" : "M_20"} noWrap>
                     {price.toLocaleString()}원
                   </Typography>
@@ -226,7 +226,7 @@ export default function ReviewModal({
             variant={isSmall ? "SB_16" : "SB_20"}
             sx={{ color: theme.palette.Black[300] }}
           >
-            평점을 선택해 주세요
+            {t("평점을 선택해 주세요")}
           </Typography>
           <Controller
             name="rating"
@@ -255,7 +255,7 @@ export default function ReviewModal({
             variant={isSmall ? "SB_16" : "SB_20"}
             sx={{ color: theme.palette.Black[300] }}
           >
-            상세 후기를 입력해 주세요
+            {t("상세 후기를 입력해 주세요")}
           </Typography>
           <Textarea
             register={register("content")}
@@ -281,8 +281,7 @@ export default function ReviewModal({
             variant={isSmall ? "SB_16" : "SB_20"}
             sx={{ color: theme.palette.White[100] }}
           >
-            {" "}
-            리뷰 등록
+            {t("리뷰 등록")}
           </Typography>
         </Button>
       </DialogActions>

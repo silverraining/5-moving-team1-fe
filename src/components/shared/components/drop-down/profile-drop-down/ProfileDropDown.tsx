@@ -6,7 +6,7 @@ import { User } from "@/src/types/auth";
 import Link from "next/link";
 import { PATH } from "@/src/lib/constants";
 import { AuthStore } from "@/src/store/authStore";
-
+import { useTranslation } from "react-i18next";
 interface ProfileDropDownProps {
   user: User | null;
   logout?: () => void;
@@ -20,7 +20,7 @@ export default function ProfileDropDown({
 }: ProfileDropDownProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   const profileEditHref =
     user?.role === "MOVER" ? PATH.moverProfileEdit : PATH.userProfileEdit;
   const profileRegisterHref =
@@ -55,7 +55,7 @@ export default function ProfileDropDown({
         onClick={close}
       >
         <ProfileMenuItem
-          label={!isProfile ? "프로필 등록" : "프로필 수정"}
+          label={!isProfile ? t("프로필 등록") : t("프로필 수정")}
           type="menu"
         />
       </Link>
@@ -65,7 +65,7 @@ export default function ProfileDropDown({
           style={{ width: "100%", textDecoration: "none" }}
           onClick={close}
         >
-          <ProfileMenuItem label="찜한 기사님" type="menu" />
+          <ProfileMenuItem label={t("찜한 기사님")} type="menu" />
         </Link>
       )}
       <Link
@@ -74,7 +74,7 @@ export default function ProfileDropDown({
         onClick={close}
       >
         <ProfileMenuItem
-          label={user?.role === "MOVER" ? "마이 페이지" : "이사 리뷰"}
+          label={user?.role === "MOVER" ? t("마이 페이지") : t("이사 리뷰")}
           type="menu"
         />
       </Link>
@@ -86,7 +86,7 @@ export default function ProfileDropDown({
         })}
       />
 
-      <ProfileMenuItem label="로그아웃" type="logout" onClick={logout} />
+      <ProfileMenuItem label={t("로그아웃")} type="logout" onClick={logout} />
     </Box>
   );
 }

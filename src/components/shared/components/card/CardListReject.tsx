@@ -10,6 +10,7 @@ import {
   ServiceType,
 } from "@/src/types/common";
 import { EstimateRequest } from "@/src/types/estimate";
+import { useTranslation } from "react-i18next";
 
 // RejectEstimate.tsx에서 쓰는 card 데이터 타입
 export interface RejectEstimateCardData {
@@ -39,6 +40,7 @@ export const CardListReject = ({ data }: CardProps) => {
       isTargeted: data.isTargeted,
     },
   ];
+  const { t } = useTranslation();
   return (
     <Box
       position={"relative"}
@@ -85,7 +87,7 @@ export const CardListReject = ({ data }: CardProps) => {
               color: theme.palette.White[100],
             })}
           >
-            반려된 요청이에요
+            {t("반려된 요청이에요")}
           </Typography>
         </Box>
       )}
@@ -142,7 +144,7 @@ export const CardListReject = ({ data }: CardProps) => {
                   color: theme.palette.Black[300],
                 })}
               >
-                {data.customerName} 고객님
+                {data.customerName} {t("고객님")}
               </Typography>
               <Typography
                 display={["inline-block", "none", "none"]}
@@ -172,7 +174,7 @@ export const CardListReject = ({ data }: CardProps) => {
                     color: theme.palette.Grayscale[300],
                   })}
                 >
-                  이사일
+                  {t("이사일")}
                 </Typography>
               </Box>
               <Typography
@@ -217,7 +219,7 @@ export const CardListReject = ({ data }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  이사일
+                  {t("이사일")}
                 </Typography>
               </Box>
               <Typography
@@ -254,7 +256,7 @@ export const CardListReject = ({ data }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  출발
+                  {t("출발")}
                 </Typography>
               </Box>
               <Typography
@@ -287,7 +289,7 @@ export const CardListReject = ({ data }: CardProps) => {
                     whiteSpace: "nowrap",
                   })}
                 >
-                  도착
+                  {t("도착")}
                 </Typography>
               </Box>
               <Typography
