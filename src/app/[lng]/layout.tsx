@@ -1,21 +1,26 @@
 import * as React from "react";
-import { Providers } from "../components/shared/providers/Providers";
-import { CustomLayout } from "../components/shared/components/CustomLayout";
+import { Providers } from "../../components/shared/providers/Providers";
+import { CustomLayout } from "../../components/shared/components/CustomLayout";
 
+export const generateStaticParams = () => {
+  return ["ko", "en", "zh"].map((lng) => ({ lng }));
+};
 export const metadata = {
   title: "Moving",
   icons: {
     icon: "/Images/favicon.svg",
   },
 };
-
-export default function RootLayout({
-  children,
-}: {
+interface Props {
+  params: Promise<{ lang: string }>;
   children: React.ReactNode;
-}) {
+}
+
+export default async function RootLayout({ params, children }: Props) {
+  const { lang } = await params;
+  console.log("Detected language:", lang);
   return (
-    <html lang="ko" suppressHydrationWarning>
+    <html lang={lang} suppressHydrationWarning>
       <head>
         <link
           rel="stylesheet"

@@ -2,6 +2,7 @@ import { useMutation, UseMutationResult } from "@tanstack/react-query";
 import { AuthStore } from "@/src/store/authStore";
 import { login, logout, signup } from "./api";
 import { Login, User, Signup } from "@/src/types/auth";
+import { useNotificationStore } from "@/src/store/notification";
 
 export const useLogin = (): UseMutationResult<
   { accessToken: string; refreshToken: string; user: User },
@@ -25,7 +26,9 @@ export const useSignup = (): UseMutationResult<User, Error, Signup> => {
 };
 
 export const useLogout = (): UseMutationResult<void, Error, void> => {
+  const { reset } = useNotificationStore.getState();
   return useMutation({
     mutationFn: () => logout(),
+    onSuccess: () => reset(),
   });
 };

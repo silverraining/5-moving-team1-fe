@@ -173,55 +173,64 @@ export const Header = () => {
 
   return (
     <Box
-      display="flex"
-      px={["24px", "72px", "260px"]}
+      px={["24px", "72px", "72px"]}
+      width={"100vw"}
       height={["54px", "54px", "88px"]}
-      alignItems="center"
-      justifyContent="space-between"
+      alignContent="center"
       bgcolor={theme.palette.White[100]}
       sx={(theme) => ({
         borderBottom: `1px solid ${theme.palette.Line[100]}`,
       })}
     >
-      <Stack direction="row" alignItems="center" spacing={2}>
-        <Link href={PATH.main} passHref>
-          <Image
-            src={"/Images/logo/logo.svg"}
-            width={88}
-            height={34}
-            alt="logo"
-          />
-        </Link>
-        {!isSmall && <MenuTabs menu={TabMenu} showIndicator={false} />}
-      </Stack>
-      {!isSmall ? (
-        isLogin ? (
-          <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
-        ) : (
-          <Link href={PATH.userLogin} passHref>
-            <Button variant="contained" sx={{ width: "116px", height: "44px" }}>
-              로그인
-            </Button>
+      <Box
+        maxWidth={"1400px"}
+        mx={"auto"}
+        display="flex"
+        justifyContent="space-between"
+      >
+        <Stack direction="row" alignItems="center" spacing={2}>
+          <Link href={PATH.main} passHref>
+            <Image
+              src={"/Images/logo/logo.svg"}
+              width={88}
+              height={34}
+              alt="logo"
+            />
           </Link>
-        )
-      ) : (
-        <Stack direction="row" alignItems="center" gap="24px">
-          {isLogin && (
-            <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
-          )}
-          <Image
-            src={"/Images/header/menu.svg"}
-            width={24}
-            height={24}
-            alt="menu"
-            onClick={toggleDrawer(true)}
-            style={{ cursor: "pointer" }}
-          />
+          {!isSmall && <MenuTabs menu={TabMenu} showIndicator={false} />}
         </Stack>
-      )}
-      <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
-        <DrawerList menu={DrawerMenu} toggleDrawer={toggleDrawer} />
-      </Drawer>
+        {!isSmall ? (
+          isLogin ? (
+            <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
+          ) : (
+            <Link href={PATH.userLogin} passHref>
+              <Button
+                variant="contained"
+                sx={{ width: "116px", height: "44px" }}
+              >
+                로그인
+              </Button>
+            </Link>
+          )
+        ) : (
+          <Stack direction="row" alignItems="center" gap="24px">
+            {isLogin && (
+              <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
+            )}
+            <Image
+              src={"/Images/header/menu.svg"}
+              width={24}
+              height={24}
+              alt="menu"
+              onClick={toggleDrawer(true)}
+              style={{ cursor: "pointer" }}
+            />
+          </Stack>
+        )}
+        <Drawer anchor="right" open={open} onClose={toggleDrawer(false)}>
+          <DrawerList menu={DrawerMenu} toggleDrawer={toggleDrawer} />
+        </Drawer>
+      </Box>
     </Box>
   );
 };

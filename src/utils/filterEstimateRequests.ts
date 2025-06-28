@@ -46,21 +46,40 @@ export const filterEstimateRequests = ({
       if (!moverProfile?.serviceRegion) {
         matchedFilters.push(false);
       } else {
-        const fromSido = convertSidoToEnglish(
-          item.fromAddressMinimal?.sido ?? ""
-        ) as ServiceRegion;
-        const toSido = convertSidoToEnglish(
-          item.toAddressMinimal?.sido ?? ""
-        ) as ServiceRegion;
+        // 받아온 데이터 그대로 사용하도록 수정
+        const fromSido = item.fromAddressMinimal?.sido ?? "";
+        const toSido = item.toAddressMinimal?.sido ?? "";
 
         const serviceRegionMap = moverProfile.serviceRegion as unknown as {
           [key: string]: boolean;
         };
 
-        const fromMatched = serviceRegionMap[fromSido] === true;
-        const toMatched = serviceRegionMap[toSido] === true;
+        const isRegionMatched = (sido: string): boolean => {
+          // 직접 매핑
+          const regionEnum = SIDO_TO_SERVICE_REGION[sido];
+          if (
+            regionEnum &&
+            serviceRegionMap[regionEnum as keyof typeof serviceRegionMap]
+          ) {
+            return true;
+          }
 
-        matchedFilters.push(fromMatched && toMatched);
+          // 별칭 매핑
+          for (const [region, aliases] of Object.entries(SIDO_ALIASES)) {
+            if (aliases.includes(sido)) {
+              return (
+                serviceRegionMap[region as keyof typeof serviceRegionMap] ===
+                true
+              );
+            }
+          }
+          return false;
+        };
+
+        const fromMatched = isRegionMatched(fromSido);
+        const toMatched = isRegionMatched(toSido);
+
+        matchedFilters.push(fromMatched || toMatched); // 출발지 OR 도착지 하나만 포함되어도 통과
       }
     }
 
@@ -138,9 +157,9 @@ export function convertCheckedToFilterItems(
 /* 한글 주소를 enum 값과 매칭하는 매핑 함수( (from또는to)AddressMinimal.sido의 값과 기사님 서비스 가능 지역(ServiceRegion)이 일치하는지 확인하기 위함)
 받아오는 값 서울, 경기 부산광역시, 대전광역시, 광주 확인 - 이외에 다르게 받아오는 데이터 있는 경우 수정 필요*/
 export const SIDO_TO_SERVICE_REGION: Record<string, ServiceRegion> = {
-  서울: ServiceRegion.SEOUL,
-  경기: ServiceRegion.GYEONGGI,
-  인천: ServiceRegion.INCHEON,
+  서울특별시: ServiceRegion.SEOUL,
+  경기도: ServiceRegion.GYEONGGI,
+  인천광역시: ServiceRegion.INCHEON,
   강원도: ServiceRegion.GANGWON,
   충청북도: ServiceRegion.CHUNGBUK,
   충청남도: ServiceRegion.CHUNGNAM,
@@ -155,5 +174,25 @@ export const SIDO_TO_SERVICE_REGION: Record<string, ServiceRegion> = {
   울산광역시: ServiceRegion.ULSAN,
   부산광역시: ServiceRegion.BUSAN,
   제주특별자치도: ServiceRegion.JEJU,
-  제주: ServiceRegion.JEJU,
+};
+
+// 동일 지역 허용: ex) "서울" = "서울특별시"
+export const SIDO_ALIASES: Record<ServiceRegion, string[]> = {
+  [ServiceRegion.SEOUL]: ["서울특별시", "서울"],
+  [ServiceRegion.GYEONGGI]: ["경기도", "경기"],
+  [ServiceRegion.INCHEON]: ["인천광역시", "인천"],
+  [ServiceRegion.GANGWON]: ["강원도"],
+  [ServiceRegion.CHUNGBUK]: ["충청북도"],
+  [ServiceRegion.CHUNGNAM]: ["충청남도"],
+  [ServiceRegion.SEJONG]: ["세종특별자치시", "세종시"],
+  [ServiceRegion.DAEJEON]: ["대전광역시", "대전"],
+  [ServiceRegion.JEONBUK]: ["전라북도"],
+  [ServiceRegion.JEONNAM]: ["전라남도"],
+  [ServiceRegion.GWANGJU]: ["광주광역시", "광주"],
+  [ServiceRegion.GYEONGBUK]: ["경상북도"],
+  [ServiceRegion.GYEONGNAM]: ["경상남도"],
+  [ServiceRegion.DAEGU]: ["대구광역시", "대구"],
+  [ServiceRegion.ULSAN]: ["울산광역시", "울산"],
+  [ServiceRegion.BUSAN]: ["부산광역시", "부산"],
+  [ServiceRegion.JEJU]: ["제주특별자치도", "제주도"],
 };

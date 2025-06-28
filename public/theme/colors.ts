@@ -61,7 +61,7 @@ export const DARK_COLORS = {
     200: "#7A7A7A",
     300: "#707070",
     400: "#505050",
-    500: "#1C1C1C",
+    500: "#ffffff",
     600: "#000",
   },
   Grayscale: {

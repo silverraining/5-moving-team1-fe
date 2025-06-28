@@ -61,7 +61,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
         backgroundColor: theme.palette.White[100],
       })}
     >
-      {data.status == "COMPLETED" && (
+      {data.isConfirmed && (
         <Box
           display={"flex"}
           alignItems={"center"}

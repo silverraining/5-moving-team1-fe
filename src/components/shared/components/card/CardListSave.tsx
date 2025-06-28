@@ -62,12 +62,12 @@ export const CardListSave = ({
       border="0.5px solid #F2F2F2"
       width={responsive([327, 600, 688])}
       height="auto"
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={responsive(["16px 14px", "16px 14px", "20px 24px"])}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
       sx={(theme) => ({
+        bgcolor: theme.palette.White[100],
         transition:
           "box-shadow 0.3s ease, border-color 0.3s ease, transform 0.3s ease",
         cursor: "pointer",
@@ -109,6 +109,7 @@ export const CardListSave = ({
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={responsive(["12px", "12px", "24px"])}
         borderRadius="6px"
+        sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
       >
         <Box
           width={responsive([46, 46, 56])}

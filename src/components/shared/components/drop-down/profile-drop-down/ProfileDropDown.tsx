@@ -28,7 +28,7 @@ export default function ProfileDropDown({
       ? PATH.moverProfileRegister
       : PATH.userProfileRegister;
   const rievewHref =
-    user?.role === "MOVER" ? PATH.moverReview : PATH.userReviewPending;
+    user?.role === "MOVER" ? PATH.moverMypage : PATH.userReviewPending;
   const isProfile = !!user?.imageUrl;
   return (
     <Box
@@ -73,7 +73,10 @@ export default function ProfileDropDown({
         style={{ width: "100%", textDecoration: "none" }}
         onClick={close}
       >
-        <ProfileMenuItem label="이사 리뷰" type="menu" />
+        <ProfileMenuItem
+          label={user?.role === "MOVER" ? "마이 페이지" : "이사 리뷰"}
+          type="menu"
+        />
       </Link>
       <Divider
         sx={(theme) => ({

@@ -14,19 +14,26 @@ export const SubHeader = () => {
   const pathname = usePathname();
   const { step } = useEstimateStore();
 
-  const isProgress = pathname === PATH.userRequest;
-  const isLabel = pathname === PATH.userWishlist;
+  const pathWithoutLocale = (() => {
+    const parts = pathname.split("/");
+    if (["ko", "en", "zh"].includes(parts[1])) {
+      return "/" + parts.slice(2).join("/");
+    }
+    return pathname; // locale 없는 경우 그대로 반환
+  })();
+  const isProgress = pathWithoutLocale === PATH.userRequest;
+  const isLabel = pathWithoutLocale === PATH.userWishlist;
   const label = isLabel ? "찜한 기사님" : "견적요청";
 
   const isTabmenu =
-    pathname.startsWith("/customer/estimate") ||
-    pathname.startsWith("/mover/estimate/confirm") ||
-    pathname.startsWith("/mover/estimate/reject") ||
-    pathname.startsWith(PATH.userReview);
+    pathWithoutLocale.startsWith("/customer/estimate") ||
+    pathWithoutLocale.startsWith("/mover/estimate/confirm") ||
+    pathWithoutLocale.startsWith("/mover/estimate/reject") ||
+    pathWithoutLocale.startsWith(PATH.userReview);
 
-  const tabMenu = pathname.startsWith(PATH.userReview)
+  const tabMenu = pathWithoutLocale.startsWith(PATH.userReview)
     ? USER_REVIEW
-    : pathname.startsWith("/customer/estimate")
+    : pathWithoutLocale.startsWith("/customer/estimate")
       ? USER_REQUEST
       : MOVER_REQUST;
 
@@ -59,19 +66,21 @@ export const SubHeader = () => {
       alignContent={"end"}
       maxHeight={"128px"}
       minHeight={
-        isProgress && step === null
-          ? ["96px", "96px", "128px"]
-          : ["96px", "74px", "74px"]
+        isProgress ? ["96px", "96px", "128px"] : ["96px", "74px", "74px"]
       }
       width={"100%"}
-      px={["24px", "72px", "260px"]}
+      px={["24px", "72px", "72px"]}
       sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
     >
-      {tabMenuElement}
-      {isProgress && (
-        <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>{progressElement}</Box>
-      )}
-      {labelElement}
+      <Stack maxWidth={"1400px"} width={"100%"} mx={"auto"}>
+        {tabMenuElement}
+        {isProgress && (
+          <Box sx={{ paddingY: ["24px", "24px", "32px"] }}>
+            {progressElement}
+          </Box>
+        )}
+        {labelElement}
+      </Stack>
     </Stack>
   );
 };

@@ -6,6 +6,7 @@ import { useEstimateOffer } from "@/src/api/mover/hooks";
 import { PATH } from "@/src/lib/constants";
 import { useRouter } from "next/navigation";
 import { OfferEstimateCardData } from "../../shared/components/card/CardListCompleteState";
+import { EmprtyReview } from "../../review/EmptyReview";
 
 export default function OfferEstimate() {
   const { data, isLoading, isError } = useEstimateOffer();
@@ -13,9 +14,8 @@ export default function OfferEstimate() {
   const router = useRouter();
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (isError || !data)
-    return <Typography>데이터를 불러오는 데 실패했습니다.</Typography>;
-  if (data.length === 0) return <Typography>보낸 견적이 없습니다.</Typography>;
+  if (isError || !data) return <EmprtyReview text="보낸 견적이 없습니다" />;
+  if (data.length === 0) return <EmprtyReview text="보낸 견적이 없습니다" />;
 
   return (
     <Grid container spacing={2} marginTop={["24px", "32px", "40px"]}>
