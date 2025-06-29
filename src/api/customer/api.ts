@@ -123,22 +123,29 @@ export type EstimateRequestHistoryItem = {
 
 /** 받았던 견적 타입 */
 export type EstimateRequestHistoryResponse = {
-  items: EstimateRequestHistoryItem;
+  items: EstimateRequestHistoryItem[];
   hasNext: boolean;
   nextCursor: string | null;
   totalCount: number;
 };
 
 /** 견적 관리 받았던 견적 api */
-export const EstimateRequestHistory =
-  async (): Promise<EstimateRequestHistoryResponse> => {
-    try {
-      const response = await apiClient.get("/estimate-request/history", {});
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+export const EstimateRequestHistory = async (
+  cursor?: string,
+  take: number = 5
+): Promise<EstimateRequestHistoryResponse> => {
+  try {
+    const response = await apiClient.get("/estimate-request/history", {
+      params: {
+        cursor,
+        take,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 /** 대기 중인 견적 Item 타입 */
 export type EstimateOfferPendingResponseItems = {
