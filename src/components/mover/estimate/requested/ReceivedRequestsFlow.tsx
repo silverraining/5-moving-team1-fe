@@ -56,15 +56,23 @@ export default function ReceivedRequestsFlow() {
   const { openSnackbar } = useSnackbarStore();
   const { t } = useTranslation();
   const [moveTypeItems, setMoveTypeItems] = useState<MoveTypeFilterItem[]>([
-    { label: t("소형이사"), count: 0, checked: false },
-    { label: t("가정이사"), count: 0, checked: false },
-    { label: t("사무실이사"), count: 0, checked: false },
+    { label: t("소형이사") as "소형이사", count: 0, checked: false },
+    { label: t("가정이사") as "가정이사", count: 0, checked: false },
+    { label: t("사무실이사") as "사무실이사", count: 0, checked: false },
   ]);
 
   const [filterItems, setFilterItems] = useState<FilterItem[]>([
     // 필터 필터링
-    { label: t("서비스 가능 지역"), count: 0, checked: false },
-    { label: t("지정 견적 요청"), count: 0, checked: false },
+    {
+      label: t("서비스 가능 지역") as "서비스 가능 지역",
+      count: 0,
+      checked: false,
+    },
+    {
+      label: t("지정 견적 요청") as "지정 견적 요청",
+      count: 0,
+      checked: false,
+    },
   ]);
   const [keyword, setKeyword] = useState(""); // 검색어
 
