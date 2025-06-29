@@ -394,12 +394,13 @@ export default function ReceivedRequestsFlow() {
                 marginBottom: ["16px", "20px", "32px"],
               }}
             >
-              <Box>
+              <Box sx={{ display: "flex", gap: "4px" }}>
                 <Typography variant={isSmall ? "M_13" : "M_16"}>
                   {t("전체")}
                 </Typography>
                 <Typography variant={isSmall ? "SB_13" : "SB_16"}>
-                  {totalCount} {t("건")}
+                  {totalCount}
+                  {t("건")}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "4px" }}>

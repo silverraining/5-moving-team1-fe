@@ -86,6 +86,7 @@ export const MoveSortDropdown = ({
             borderRadius: "8px",
             zIndex: 10,
             marginTop: "4px",
+            overflow: "hidden",
           })}
         >
           {MOVE_SORT_OPTIONS.map((option) => (
@@ -102,7 +103,6 @@ export const MoveSortDropdown = ({
                 "&:hover": {
                   backgroundColor: theme.palette.PrimaryBlue[100],
                 },
-                borderRadius: "8px",
               })}
             >
               <Typography
