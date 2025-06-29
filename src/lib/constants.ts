@@ -103,7 +103,8 @@ export const PATH = {
   userProfileEdit: "/customer/profile/edit",
 
   /** 내가 만든 견적 상세 페이지 (/customer/estimate/pending/:id) */
-  userEstimateDetail: (id: string) => `/customer/estimate/pending/${id}`,
+  userEstimateDetail: (id: string, moverId: string) =>
+    `/customer/estimate/pending/${id}?moverId=${moverId}`,
 
   /** 받았던 견적 리스트 페이지 (/customer/estimate/history) */
   userEstimateHistory: "/customer/estimate/history",

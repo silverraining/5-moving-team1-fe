@@ -2,6 +2,7 @@
 import { Grid, Typography } from "@mui/material";
 import {
   CardListWait,
+  CardListWaitSkeleton,
   PendingEstimateCardData,
 } from "@/src/components/shared/components/card/CardListWait";
 import {
@@ -46,75 +47,80 @@ export default function PendingEstimate() {
   // 해당 ID로 견적서 리스트 받아오기
   const { data, isLoading, error } = useEstimateOfferPending(requestId);
 
-  if (isLoadingIds)
-    return <Typography>{t("견적서 데이터 로딩중...")}</Typography>;
-  if (errorIds) return <Typography>{t("견적서 데이터 에러 발생!")}</Typography>;
-  if (isLoading) return <Typography>{t("견적서 데이터 로딩중...")}</Typography>;
-  if (error) return <Typography>{t("견적서 데이터 에러 발생!")}</Typography>;
-  if (!data?.items || !Array.isArray(data?.items) || data?.items.length === 0)
+  if (error || errorIds)
+    return <Typography>견적서 데이터 에러 발생!</Typography>;
+  if (!isLoading && data?.items.length === 0) {
     return <EmprtyReview text={t("대기중인 견적이 없습니다")} />;
+  }
+
+  const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
+    router.push(PATH.userEstimateDetail(card.estimateRequestId, card.moverId));
+  };
+
+  const handleLikeClick = (card: PendingEstimateCardDataWithId) => () => {
+    const moverId = card.moverId;
+    if (card.mover.isLiked) {
+      deleteLikeMutate(
+        { moverId },
+        {
+          onSuccess: () =>
+            queryClient.invalidateQueries({
+              queryKey: ["EstimateOfferPending"],
+            }),
+        }
+      );
+    } else {
+      createLikeMutate(
+        { moverId },
+        {
+          onSuccess: () =>
+            queryClient.invalidateQueries({
+              queryKey: ["EstimateOfferPending"],
+            }),
+        }
+      );
+    }
+  };
+
+  const handleConfirmClick = (card: PendingEstimateCardDataWithId) => () => {
+    EstimateOfferConfirmedMutate(
+      { offerId: card.offerId },
+      {
+        onSuccess: () =>
+          queryClient.invalidateQueries({ queryKey: ["EstimateOfferPending"] }),
+      }
+    );
+  };
 
   // 실제 데이터 렌더링
   return (
-    <Grid container spacing={2}>
-      {data.items.map((card: PendingEstimateCardDataWithId, index) => (
-        <Grid
-          key={index}
-          size={[12, 12, 6]}
-          display={"flex"}
-          sx={{ justifyContent: "center" }}
-        >
-          <CardListWait
-            data={card}
-            onDetailClick={() =>
-              router.push(
-                `${PATH.userEstimateDetail(card.estimateRequestId)}?moverId=${
-                  card.moverId
-                }`
-              )
-            }
-            onLikeClick={() => {
-              const moverId = card.moverId;
-              if (card.mover.isLiked) {
-                deleteLikeMutate(
-                  { moverId },
-                  {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries({
-                        queryKey: ["EstimateOfferPending"],
-                      });
-                    },
-                  }
-                );
-              } else {
-                createLikeMutate(
-                  { moverId },
-                  {
-                    onSuccess: () => {
-                      queryClient.invalidateQueries({
-                        queryKey: ["EstimateOfferPending"],
-                      });
-                    },
-                  }
-                );
-              }
-            }}
-            onConfirmClick={() => {
-              const offerId = card.offerId;
-              EstimateOfferConfirmedMutate(
-                { offerId },
-                {
-                  onSuccess: () => {
-                    queryClient.invalidateQueries({
-                      queryKey: ["EstimateOfferPending"],
-                    });
-                  },
-                }
-              );
-            }}
-          />
-        </Grid>
-      ))}
+    <Grid container spacing={2} py={[3, 4, 5]}>
+      {isLoading || isLoadingIds
+        ? [...Array(6)].map((_, i) => (
+            <Grid
+              key={i}
+              size={[12, 12, 6]}
+              display={"flex"}
+              sx={{ justifyContent: "center" }}
+            >
+              <CardListWaitSkeleton />
+            </Grid>
+          ))
+        : data?.items.map((card: PendingEstimateCardDataWithId, index) => (
+            <Grid
+              key={index}
+              size={[12, 12, 6]}
+              display={"flex"}
+              sx={{ justifyContent: "center" }}
+            >
+              <CardListWait
+                data={card}
+                onDetailClick={handleDetailClick(card)}
+                onLikeClick={handleLikeClick(card)}
+                onConfirmClick={handleConfirmClick(card)}
+              />
+            </Grid>
+          ))}
     </Grid>
   );
 }

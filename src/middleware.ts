@@ -59,7 +59,9 @@ export const middleware = async (request: NextRequest) => {
       ? localeFromCookie
       : DEFAULT_LOCALE;
 
-    return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
+    return NextResponse.redirect(
+      new URL(`/${locale}${pathname}${request.nextUrl.search}`, request.url)
+    );
   }
 
   // 3. locale prefix 제거한 실제 경로

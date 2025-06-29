@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Skeleton, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
@@ -459,6 +459,78 @@ export const CardListWait = ({
               {t("상세보기")}
             </Typography>
           </Button>
+        </Box>
+      </Box>
+    </Box>
+  );
+};
+
+export const CardListWaitSkeleton = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      border="0.5px solid #F2F2F2"
+      maxWidth={"688px"}
+      minWidth={"327px"}
+      width={"100%"}
+      gap={["0px", "0px", "14px"]}
+      maxHeight={"480px"}
+      minHeight={"362px"}
+      height={"100%"}
+      bgcolor="#FFFFFF"
+      borderRadius="16px"
+      padding={[
+        "20px 12px 14px 12px",
+        "22px 12px 16px 12px",
+        "28px 24px 22px 24px",
+      ]}
+      boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
+      boxSizing={"border-box"}
+    >
+      {/* Chip 영역 */}
+      <Box display="flex" gap="12px">
+        <Skeleton variant="rounded" width={80} height={28} />
+      </Box>
+
+      {/* 프로필 영역 */}
+      <Box
+        display="flex"
+        border="1px solid #F2F2F2"
+        bgcolor="#FFFFFF"
+        padding={["16px", "10px", "16px 10px"]}
+        boxShadow="4px 4px 16px 0px #E9E9E91A"
+        gap={["12px", "12px", "24px"]}
+        borderRadius={"6px"}
+      >
+        <Skeleton variant="circular" width={56} height={56} />
+        <Box flexGrow={1} display="flex" flexDirection="column" gap="8px">
+          <Skeleton variant="text" width="40%" height={24} />
+          <Box display="flex" gap="16px">
+            <Skeleton variant="text" width={80} height={20} />
+            <Skeleton variant="text" width={60} height={20} />
+            <Skeleton variant="text" width={60} height={20} />
+          </Box>
+        </Box>
+      </Box>
+
+      {/* 이사 정보 + 금액 */}
+      <Box display="flex" flexDirection="column" gap="24px">
+        <Box display="flex" flexWrap="wrap" gap="16px">
+          <Skeleton variant="text" width="30%" height={24} />
+          <Skeleton variant="text" width="30%" height={24} />
+          <Skeleton variant="text" width="30%" height={24} />
+        </Box>
+        <Box display="flex" justifyContent="flex-end" gap="16px">
+          <Skeleton variant="text" width="20%" height={28} />
+          <Skeleton variant="text" width="30%" height={28} />
+        </Box>
+
+        {/* 버튼 */}
+        <Box display="flex" gap="11px" flexDirection={["column", "row", "row"]}>
+          <Skeleton variant="rounded" width="100%" height={64} />
+          <Skeleton variant="rounded" width="100%" height={64} />
         </Box>
       </Box>
     </Box>

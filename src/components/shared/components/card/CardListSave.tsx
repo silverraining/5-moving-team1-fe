@@ -10,12 +10,14 @@ interface CardProps extends BoxProps {
   data: EstimateOffer | CardData;
   onLikeClick?: () => void;
   forceMobileSize?: boolean;
+  fontSize?: string;
 }
 
 export const CardListSave = ({
   data,
   onLikeClick,
   forceMobileSize = false,
+  fontSize = "18px",
   ...props
 }: CardProps) => {
   const responsive = useResponsiveValue(forceMobileSize);
@@ -86,7 +88,7 @@ export const CardListSave = ({
           gap={responsive(["8px", "12px", "12px"])}
         >
           {chips.map((chip, idx) => (
-            <ChipCategory key={idx} data={chip} />
+            <ChipCategory key={idx} data={chip} fontSize={fontSize} />
           ))}
         </Box>
       </Box>
