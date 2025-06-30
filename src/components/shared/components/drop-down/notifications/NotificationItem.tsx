@@ -6,7 +6,6 @@ import { useRouter } from "next/navigation";
 import { useNotificationRead } from "@/src/api/notification/hooks";
 import { AuthStore } from "@/src/store/authStore";
 import { PATH } from "@/src/lib/constants";
-import CloseIcon from "@mui/icons-material/Close";
 import { useNotificationStore } from "@/src/store/notification";
 
 /**
@@ -20,26 +19,18 @@ interface NotificationItemProps {
     targetId: string;
     type: string;
     createdAt: string;
+    isRead: boolean;
   }; // ISO 형식 예: 2025-05-22T10:30:00
 }
 
 export default function NotificationItem({ data }: NotificationItemProps) {
   const router = useRouter();
   const { user } = AuthStore();
-  const { removeNotification } = useNotificationStore();
+  const { setMarkAsRead } = useNotificationStore();
   const { mutate } = useNotificationRead();
-  const timeAgo = dayjs(data.createdAt).fromNow();
+  const timeAgo = dayjs(data.createdAt).add(9, "hour").fromNow();
+  // console.log("서버에서 내려온 createdAt:", data.createdAt);
 
-  const hendleNotificationDelete = () => {
-    mutate(
-      { id: data.id },
-      {
-        onSuccess: () => {
-          removeNotification(data.id);
-        },
-      }
-    );
-  };
   const getHighlight = () => {
     switch (data.type.trim()) {
       case "NEW_ESTIMATE_REQUEST":
@@ -61,7 +52,19 @@ export default function NotificationItem({ data }: NotificationItemProps) {
   const highlight = getHighlight();
 
   const onHighlightClick = () => {
-    hendleNotificationDelete();
+    // 읽지 않은 상태일 때만 읽음 처리
+    if (!data.isRead) {
+      mutate(
+        { id: data.id },
+        {
+          onSuccess: () => {
+            setMarkAsRead(true);
+          },
+        }
+      );
+    }
+
+    // 페이지 이동 (읽음 여부와 관계없이)
     switch (data.type.trim()) {
       case "NEW_ESTIMATE_REQUEST":
         return router.push(PATH.moverRequest);
@@ -95,13 +98,11 @@ export default function NotificationItem({ data }: NotificationItemProps) {
         width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        backgroundColor: theme.palette.White[100],
+        backgroundColor: data.isRead
+          ? theme.palette.White[100] // 읽은 상태
+          : theme.palette.PrimaryBlue[50], // 안 읽은 상태
         borderBottom: `1px solid ${theme.palette.Line[100]}`,
         boxSizing: "border-box",
-        "&:hover > .close-button": {
-          opacity: 1,
-          pointerEvents: "auto",
-        },
       })}
     >
       <Box
@@ -109,61 +110,50 @@ export default function NotificationItem({ data }: NotificationItemProps) {
           justifyContent: "center",
           padding: "14px 12px 14px 24px",
           flexDirection: "column",
+          gap: "4px",
         }}
       >
-        <Typography
-          variant="R_14"
-          sx={(theme) => ({
-            color: theme.palette.Black[300],
-            lineHeight: "20px",
-            wordBreak: "keep-all",
-            marginBottom: "4px",
-          })}
-        >
-          {parts[0]}
-          {highlight && (
-            <Box
-              component="span"
-              onClick={onHighlightClick}
-              sx={(theme) => ({
-                color: theme.palette.PrimaryBlue[300],
-                cursor: "pointer",
-                fontWeight: highlight ? "500" : "normal",
-                "&:hover": highlight
-                  ? { textDecoration: "underline" }
-                  : undefined,
-              })}
-            >
-              {highlight}
-            </Box>
-          )}
-          {parts[1]}
-        </Typography>
-        {/* createdAt을 포맷팅한 상대 시간 */}
+        <Box>
+          <Typography
+            variant="R_14"
+            sx={(theme) => ({
+              color: theme.palette.Black[300],
+              lineHeight: "20px",
+              wordBreak: "keep-all",
+            })}
+          >
+            {parts[0]}
+            {highlight && (
+              <Box
+                component="span"
+                onClick={onHighlightClick} // isRead 체크 제거하여 항상 클릭 가능
+                sx={(theme) => ({
+                  color: data.isRead
+                    ? theme.palette.Grayscale[300] // 읽은 상태: 회색
+                    : theme.palette.PrimaryBlue[300], // 안 읽은 상태: 파란색
+                  cursor: "pointer", // 항상 포인터 커서
+                  fontWeight: highlight ? "500" : "normal",
+                  "&:hover": {
+                    textDecoration: "underline", // 항상 호버 효과
+                  },
+                })}
+              >
+                {highlight}
+              </Box>
+            )}
+            {parts[1]}
+          </Typography>
+        </Box>
         <Typography
           variant="R_12"
           sx={(theme) => ({
             color: theme.palette.Grayscale[400],
+            marginTop: "4px",
           })}
         >
           {timeAgo}
         </Typography>
       </Box>
-      <IconButton
-        onClick={() => hendleNotificationDelete()}
-        className="close-button"
-        sx={{
-          opacity: 0,
-          pointerEvents: "none",
-          transition: "opacity 0.3s ease",
-          "&:hover": {
-            backgroundColor: "transparent",
-            boxShadow: "none",
-          },
-        }}
-      >
-        <CloseIcon />
-      </IconButton>
     </Stack>
   );
 }
