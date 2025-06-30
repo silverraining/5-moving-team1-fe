@@ -43,7 +43,7 @@ export const ProfileEdit = () => {
   const { openSnackbar } = useSnackbarStore();
 
   // 일반 유저 프로필 조회 hook
-  const { data: profileData, isLoading } = useGetCustomerProfile();
+  const { data: customerProfileData, isLoading } = useGetCustomerProfile();
   // 일반 유저 프로필 수정 hook
   const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
   // 이미지 업로드 hook
@@ -67,27 +67,27 @@ export const ProfileEdit = () => {
 
   // 프로필 데이터로 폼 초기화
   useEffect(() => {
-    if (profileData) {
+    if (customerProfileData) {
       const serviceTypeArray = convertToServiceTypeArray(
-        profileData.serviceType
+        customerProfileData.serviceType
       );
       const serviceRegionArray = convertToServiceRegionArray(
-        profileData.serviceRegion
+        customerProfileData.serviceRegion
       );
 
       setSelectedServices(serviceTypeArray);
       setSelectedRegions(serviceRegionArray);
 
       reset({
-        name: profileData.name,
-        email: profileData.email,
-        phone: profileData.phone,
+        name: customerProfileData.name,
+        email: customerProfileData.email,
+        phone: customerProfileData.phone,
         serviceType: serviceTypeArray,
         serviceRegion: serviceRegionArray,
-        imageUrl: profileData.imageUrl,
+        imageUrl: customerProfileData.imageUrl,
       });
     }
-  }, [profileData, reset]);
+  }, [customerProfileData, reset]);
 
   const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
@@ -126,7 +126,7 @@ export const ProfileEdit = () => {
         phone: data.phone || null,
         password: data.currentPassword,
         newPassword: data.newPassword,
-        imageUrl: s3ImageUrl || null,
+        imageUrl: s3ImageUrl || customerProfileData?.imageUrl || null,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
@@ -232,7 +232,7 @@ export const ProfileEdit = () => {
                 register={register as any}
                 control={control as any}
                 errors={errors as any}
-                initialData={profileData}
+                initialData={customerProfileData}
               />
 
               {/* 비밀번호 변경 */}
@@ -263,7 +263,7 @@ export const ProfileEdit = () => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={profileData?.imageUrl}
+                  initialImage={customerProfileData?.imageUrl}
                 />
               </Box>
 

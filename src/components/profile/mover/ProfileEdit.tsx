@@ -23,7 +23,7 @@ import {
 import { useRouter } from "next/navigation";
 import {
   useUpdateMoverProfile,
-  useMoverProfileForEdit,
+  useGetMoverProfile,
 } from "@/src/api/mover/hooks";
 import { ServiceRegion, ServiceType } from "@/src/types/common";
 import {
@@ -62,7 +62,7 @@ export const ProfileEdit = () => {
 
   // 기사님 프로필 조회 hook
   const { data: moverProfileData, isLoading: isLoadingProfile } =
-    useMoverProfileForEdit();
+    useGetMoverProfile();
 
   // 기사님 프로필 수정 hook
   const { mutateAsync: updateMoverProfile, isPending: isUpdating } =
@@ -153,7 +153,7 @@ export const ProfileEdit = () => {
         ...data,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
-        imageUrl: s3ImageUrl || null,
+        imageUrl: s3ImageUrl || moverProfileData?.imageUrl || null,
       };
 
       await updateMoverProfile(profileData);
