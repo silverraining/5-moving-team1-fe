@@ -117,7 +117,6 @@ export default function Step3_AddressSelect({
       <AddressModal
         open={openFromModal}
         onClose={() => setOpenFromModal(false)}
-        title={t("출발지를 선택해주세요")}
         onSelect={handleSelectFrom}
       />
 
@@ -125,7 +124,6 @@ export default function Step3_AddressSelect({
       <AddressModal
         open={openToModal}
         onClose={() => setOpenToModal(false)}
-        title={t("도착지를 선택해주세요")}
         onSelect={handleSelectTo}
       />
 
