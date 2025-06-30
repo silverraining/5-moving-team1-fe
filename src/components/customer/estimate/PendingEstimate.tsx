@@ -1,5 +1,5 @@
 "use client";
-import { Box, Grid, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import {
   CardListWait,
   CardListWaitSkeleton,
@@ -17,6 +17,10 @@ import { useQueryClient } from "@tanstack/react-query";
 import { EmprtyReview } from "../../review/EmptyReview";
 import { useTranslation } from "react-i18next";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
+import {
+  EstimateRequestCard,
+  EstimateRequestCardSkeleton,
+} from "./EstimateRequestCard";
 
 interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
   moverId: string;
@@ -68,7 +72,40 @@ export default function PendingEstimate() {
   // 견적 확정하기 훅
   const { mutate: EstimateOfferConfirmedMutate } = useEstimateOfferConfirmed();
 
-  // 상세/좋아요/확정 클릭 핸들러
+  // 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
+  // const requestId = requestIds?.[0]?.requestId;
+
+  // 해당 ID로 견적서 리스트 받아오기
+  if (isLoading || isLoadingIds) {
+    return (
+      <Stack display={"flex"} flexDirection={"column"} py={3}>
+        <Stack spacing={2} pb={3}>
+          <Typography variant="SB_24">견적 요청 정보</Typography>
+          <EstimateRequestCardSkeleton />
+          <Typography variant="SB_24">받은 견적</Typography>
+          <Grid container spacing={2} py={[3, 4, 5]}>
+            {[...Array(6)].map((_, i) => (
+              <Grid
+                key={i}
+                size={[12, 12, 6]}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <CardListWaitSkeleton />
+              </Grid>
+            ))}
+          </Grid>
+        </Stack>
+      </Stack>
+    );
+  }
+  if (error || errorIds)
+    return <Typography>견적서 데이터 에러 발생!</Typography>;
+  if (!requestId && !data) {
+    return <EmprtyReview text={t("요청된 견적이 없습니다.")} />;
+  }
+  if (data?.items.length === 0) {
+    return <EmprtyReview text={t("대기중인 견적이 없습니다.")} />;
+  }
   const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
     router.push(PATH.userEstimateDetail(card.estimateRequestId, card.moverId));
   };
@@ -118,30 +155,38 @@ export default function PendingEstimate() {
 
   // 실제 카드 리스트 렌더링 및 무한스크롤 ref 달기
   return (
-    <Grid container spacing={2} py={[3, 4, 5]}>
-      {items.map((card: PendingEstimateCardDataWithId, index) => (
-        <Grid
-          key={card.offerId ?? index}
-          size={[12, 12, 6]}
-          display={"flex"}
-          sx={{ justifyContent: "center" }}
-        >
-          <CardListWait
-            data={card}
-            onDetailClick={handleDetailClick(card)}
-            onLikeClick={handleLikeClick(card)}
-            onConfirmClick={handleConfirmClick(card)}
-          />
-        </Grid>
-      ))}
+    <Stack display={"flex"} flexDirection={"column"} py={3}>
+      <Stack spacing={2} pb={3}>
+        <Typography variant="SB_24">견적 요청 정보</Typography>
 
-      <Box ref={loadMoreRef} style={{ height: 1 }} />
+        <EstimateRequestCard requestData={requestIds[0]} />
+      </Stack>
+      <Typography variant="SB_24">받은 견적</Typography>
+      <Grid container spacing={2} py={[3, 4, 5]}>
+        {items.map((card: PendingEstimateCardDataWithId, index) => (
+          <Grid
+            key={card.offerId ?? index}
+            size={[12, 12, 6]}
+            display={"flex"}
+            sx={{ justifyContent: "center" }}
+          >
+            <CardListWait
+              data={card}
+              onDetailClick={handleDetailClick(card)}
+              onLikeClick={handleLikeClick(card)}
+              onConfirmClick={handleConfirmClick(card)}
+            />
+          </Grid>
+        ))}
 
-      {isFetchingNextPage && (
-        <Typography align="center" sx={{ py: 4 }}>
-          더 불러오는 중...
-        </Typography>
-      )}
-    </Grid>
+        <Box ref={loadMoreRef} style={{ height: 1 }} />
+
+        {isFetchingNextPage && (
+          <Typography align="center" sx={{ py: 4 }}>
+            더 불러오는 중...
+          </Typography>
+        )}
+      </Grid>
+    </Stack>
   );
 }
