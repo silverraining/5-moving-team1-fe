@@ -14,6 +14,7 @@ import { postEstimateRequest } from "@/src/api/customer/request/api";
 import { parseAddress, ModalAddress } from "@/src/utils/parseAddress";
 import { PATH } from "@/src/lib/constants";
 import { useTranslation } from "react-i18next";
+import { AxiosError } from "axios";
 
 type ParsedAddress = {
   sido: string; // 시도
@@ -84,7 +85,16 @@ export default function Step3_AddressSelect({
       openSnackbar(t("견적 확정 완료"), "success", 5000);
       router.replace(PATH.moverList);
     } catch (error) {
-      openSnackbar(t("견적 확정에 실패했습니다. 다시 시도해주세요."), "error");
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 404) {
+          openSnackbar(
+            t("견적 요청을 위해 먼저 프로필을 생성해주세요!"),
+            "error"
+          );
+          router.replace(PATH.userProfileRegister);
+          return;
+        }
+      }
       console.error(error);
     }
   };
