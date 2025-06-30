@@ -75,6 +75,7 @@ export default function PendingEstimate() {
   // 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
   // const requestId = requestIds?.[0]?.requestId;
 
+  console.log(data);
   // 해당 ID로 견적서 리스트 받아오기
   if (isLoading || isLoadingIds) {
     return (
@@ -98,12 +99,11 @@ export default function PendingEstimate() {
       </Stack>
     );
   }
-  if (error || errorIds)
-    return <Typography>견적서 데이터 에러 발생!</Typography>;
+  if (errorIds) return <Typography>견적서 데이터 에러 발생!</Typography>;
   if (!requestId && !data) {
     return <EmprtyReview text={t("요청된 견적이 없습니다.")} />;
   }
-  if (data?.items.length === 0) {
+  if (data?.pages.length === 0) {
     return <EmprtyReview text={t("대기중인 견적이 없습니다.")} />;
   }
   const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
