@@ -19,7 +19,7 @@ export interface HistoryEstimateCardData {
   isConfirmed: boolean;
   isTargeted: boolean;
   moveDate: Date;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   offerId: string;
   price: number;
   offerStatus: EstimateOfferStatus;
