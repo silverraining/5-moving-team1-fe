@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Stack, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -37,7 +43,7 @@ export const ProfileEdit = () => {
   const { openSnackbar } = useSnackbarStore();
 
   // 일반 유저 프로필 조회 hook
-  const { data: profileData, isLoading } = useGetCustomerProfile();
+  const { data: customerProfileData, isLoading } = useGetCustomerProfile();
   // 일반 유저 프로필 수정 hook
   const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
   // Images 업로드 hook
@@ -61,27 +67,27 @@ export const ProfileEdit = () => {
 
   // 프로필 데이터로 폼 초기화
   useEffect(() => {
-    if (profileData) {
+    if (customerProfileData) {
       const serviceTypeArray = convertToServiceTypeArray(
-        profileData.serviceType
+        customerProfileData.serviceType
       );
       const serviceRegionArray = convertToServiceRegionArray(
-        profileData.serviceRegion
+        customerProfileData.serviceRegion
       );
 
       setSelectedServices(serviceTypeArray);
       setSelectedRegions(serviceRegionArray);
 
       reset({
-        name: profileData.name,
-        email: profileData.email,
-        phone: profileData.phone,
+        name: customerProfileData.name,
+        email: customerProfileData.email,
+        phone: customerProfileData.phone,
         serviceType: serviceTypeArray,
         serviceRegion: serviceRegionArray,
-        imageUrl: profileData.imageUrl,
+        imageUrl: customerProfileData.imageUrl,
       });
     }
-  }, [profileData, reset]);
+  }, [customerProfileData, reset]);
 
   const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
@@ -117,10 +123,10 @@ export const ProfileEdit = () => {
 
       await updateCustomerProfile({
         name: data.name,
-        phone: data.phone,
+        phone: data.phone || null,
         password: data.currentPassword,
         newPassword: data.newPassword,
-        imageUrl: s3ImageUrl || null,
+        imageUrl: s3ImageUrl || customerProfileData?.imageUrl || null,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
@@ -138,8 +144,28 @@ export const ProfileEdit = () => {
     }
   };
 
+  // 로딩 중일 때
   if (isLoading) {
-    return <div>{t("로딩 중...")}</div>; // 또는 적절한 로딩 컴포넌트
+    return (
+      <Box
+        sx={{
+          maxWidth: "1400px",
+          mx: "auto",
+          p: 3,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={40} />
+        <Typography variant="body1" color="text.secondary">
+          {t("프로필 정보를 불러오는 중...")}
+        </Typography>
+      </Box>
+    );
   }
 
   return (
@@ -203,14 +229,17 @@ export const ProfileEdit = () => {
             >
               {/* 개인정보 입력 */}
               <PersonalInfoSection
-                register={register}
-                control={control}
-                errors={errors}
-                initialData={profileData}
+                register={register as any}
+                control={control as any}
+                errors={errors as any}
+                initialData={customerProfileData}
               />
 
               {/* 비밀번호 변경 */}
-              <PasswordChangeSection register={register} errors={errors} />
+              <PasswordChangeSection
+                register={register as any}
+                errors={errors as any}
+              />
             </Box>
 
             {/* 오른쪽 열: 프로필 Images, 서비스, 지역 */}
@@ -234,7 +263,7 @@ export const ProfileEdit = () => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={profileData?.imageUrl}
+                  initialImage={customerProfileData?.imageUrl}
                 />
               </Box>
 

@@ -9,17 +9,19 @@ interface ServiceSelectorProps {
   selectedServices: ServiceType[];
   onServiceToggle: (service: ServiceType) => void;
 }
-const { t } = useTranslation();
-const services: { id: ServiceType; label: string }[] = [
-  { id: "SMALL", label: t("소형이사") },
-  { id: "HOME", label: t("가정이사") },
-  { id: "OFFICE", label: t("사무실이사") },
-];
 
 export const ServiceSelector = ({
   selectedServices,
   onServiceToggle,
 }: ServiceSelectorProps) => {
+  const { t } = useTranslation();
+
+  const services: { id: ServiceType; label: string }[] = [
+    { id: "SMALL", label: t("소형이사") },
+    { id: "HOME", label: t("가정이사") },
+    { id: "OFFICE", label: t("사무실이사") },
+  ];
+
   return (
     <Box
       sx={{
