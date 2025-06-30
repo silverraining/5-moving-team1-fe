@@ -19,7 +19,7 @@ export interface PendingEstimateCardData {
   isConfirmed: boolean;
   isTargeted: boolean;
   moveDate: Date;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   price: number;
   offerStatus: EstimateOfferStatus;
   mover: MoverProfile;

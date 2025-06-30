@@ -47,7 +47,7 @@ export const ImageUpload = ({
           alignSelf: "flex-start",
         }}
       >
-        {t("프로필 Images")}
+        {t("프로필 이미지")}
       </Typography>
 
       <Box
@@ -71,14 +71,14 @@ export const ImageUpload = ({
         ) : displayImage ? (
           <Image
             src={displayImage}
-            alt="프로필 Images"
+            alt="프로필 이미지"
             fill
             style={{ objectFit: "cover" }}
           />
         ) : (
           <Image
             src="/Images/profile/binProfile.svg"
-            alt="프로필 Images"
+            alt="프로필 이미지"
             fill
             style={{ objectFit: "cover" }}
           />

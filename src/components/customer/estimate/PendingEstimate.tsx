@@ -1,5 +1,5 @@
 "use client";
-import { Button, Grid, Stack, Typography } from "@mui/material";
+import { Box, Grid, Stack, Typography } from "@mui/material";
 import {
   CardListWait,
   CardListWaitSkeleton,
@@ -16,12 +16,12 @@ import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EmprtyReview } from "../../review/EmptyReview";
 import { useTranslation } from "react-i18next";
+import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 import {
   EstimateRequestCard,
   EstimateRequestCardSkeleton,
 } from "./EstimateRequestCard";
 
-// 견적서 카드 데이터에 ID 추가
 interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
   moverId: string;
   offerId: string;
@@ -31,12 +31,39 @@ export default function PendingEstimate() {
   const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
-  // ID 배열 받아오기
+
+  // 견적서 요청 ID 리스트 가져오기
   const {
     data: requestIds,
     isLoading: isLoadingIds,
-    error: errorIds,
+    isError: errorIds,
   } = useEstimateRequestActive();
+
+  // 첫 번째 requestId만 사용 (복수라면 map/탭 등으로 UI 확장)
+  const requestId = requestIds?.[0]?.requestId ?? "";
+
+  // 무한스크롤용 훅
+  const {
+    data,
+    isLoading,
+    isError,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useEstimateOfferPending(requestId);
+
+  // 모든 pages를 펼쳐 하나의 items 배열로
+  const items =
+    data?.pages.flatMap((page) =>
+      Array.isArray(page.items) ? page.items : []
+    ) ?? [];
+
+  // Intersection Observer로 스크롤 감지
+  const { loadMoreRef } = useInfiniteScroll({
+    onLoadMore: fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  });
 
   // 좋아요 관련 훅
   const { mutate: createLikeMutate } = useCreateLike();
@@ -46,10 +73,9 @@ export default function PendingEstimate() {
   const { mutate: EstimateOfferConfirmedMutate } = useEstimateOfferConfirmed();
 
   // 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
-  const requestId = requestIds?.[0]?.requestId;
+  // const requestId = requestIds?.[0]?.requestId;
 
   // 해당 ID로 견적서 리스트 받아오기
-  const { data, isLoading, error } = useEstimateOfferPending(requestId ?? "");
   if (isLoading || isLoadingIds) {
     return (
       <Stack display={"flex"} flexDirection={"column"} py={3}>
@@ -92,7 +118,7 @@ export default function PendingEstimate() {
         {
           onSuccess: () =>
             queryClient.invalidateQueries({
-              queryKey: ["EstimateOfferPending"],
+              queryKey: ["EstimateOfferPendingInfinite"],
             }),
         }
       );
@@ -102,7 +128,7 @@ export default function PendingEstimate() {
         {
           onSuccess: () =>
             queryClient.invalidateQueries({
-              queryKey: ["EstimateOfferPending"],
+              queryKey: ["EstimateOfferPendingInfinite"],
             }),
         }
       );
@@ -114,12 +140,20 @@ export default function PendingEstimate() {
       { offerId: card.offerId },
       {
         onSuccess: () =>
-          queryClient.invalidateQueries({ queryKey: ["EstimateOfferPending"] }),
+          queryClient.invalidateQueries({
+            queryKey: ["EstimateOfferPendingInfinite"],
+          }),
       }
     );
   };
 
-  // 실제 데이터 렌더링
+  if (isLoading || isLoadingIds) return <CardListWaitSkeleton />;
+  if (isError || errorIds)
+    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+  if (!items || items.length === 0)
+    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+
+  // 실제 카드 리스트 렌더링 및 무한스크롤 ref 달기
   return (
     <Stack display={"flex"} flexDirection={"column"} py={3}>
       <Stack spacing={2} pb={3}>
@@ -129,9 +163,9 @@ export default function PendingEstimate() {
       </Stack>
       <Typography variant="SB_24">받은 견적</Typography>
       <Grid container spacing={2} py={[3, 4, 5]}>
-        {data?.items.map((card: PendingEstimateCardDataWithId, index) => (
+        {items.map((card: PendingEstimateCardDataWithId, index) => (
           <Grid
-            key={index}
+            key={card.offerId ?? index}
             size={[12, 12, 6]}
             display={"flex"}
             sx={{ justifyContent: "center" }}
@@ -144,6 +178,14 @@ export default function PendingEstimate() {
             />
           </Grid>
         ))}
+
+        <Box ref={loadMoreRef} style={{ height: 1 }} />
+
+        {isFetchingNextPage && (
+          <Typography align="center" sx={{ py: 4 }}>
+            더 불러오는 중...
+          </Typography>
+        )}
       </Grid>
     </Stack>
   );
