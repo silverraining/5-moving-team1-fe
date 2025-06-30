@@ -1,7 +1,14 @@
 "use client";
 
-import { Box, Stack, Typography, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUpload } from "../ImageUpload";
@@ -14,7 +21,10 @@ import {
   moverProfileRegisterSchema,
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
-import { useUpdateMoverProfile } from "@/src/api/mover/hooks";
+import {
+  useUpdateMoverProfile,
+  useGetMoverProfile,
+} from "@/src/api/mover/hooks";
 import { ServiceRegion, ServiceType } from "@/src/types/common";
 import {
   convertToServiceTypeObject,
@@ -22,21 +32,23 @@ import {
 } from "../../../utils/util";
 import { useTranslation } from "react-i18next";
 
-// TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
-// interface ProfileEditProps {
-//   initialData?: {
-//     name: string;
-//     email: string;
-//     phone: string;
-//     nickname: string;
-//     experience: number;
-//     intro: string;
-//     description: string;
-//     serviceType: ServiceType[];
-//     serviceRegion: ServiceRegion[];
-//     imageUrl?: string;
-//   };
-// }
+// 유틸 함수: Record<ServiceType, boolean>을 ServiceType[]로 변환
+const convertServiceTypeRecordToArray = (
+  serviceTypeRecord: Record<ServiceType, boolean>
+): ServiceType[] => {
+  return Object.entries(serviceTypeRecord)
+    .filter(([_, value]) => value)
+    .map(([key, _]) => key as ServiceType);
+};
+
+// 유틸 함수: Record<ServiceRegion, boolean>을 ServiceRegion[]로 변환
+const convertServiceRegionRecordToArray = (
+  serviceRegionRecord: Record<ServiceRegion, boolean>
+): ServiceRegion[] => {
+  return Object.entries(serviceRegionRecord)
+    .filter(([_, value]) => value)
+    .map(([key, _]) => key as ServiceRegion);
+};
 
 export const ProfileEdit = () => {
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
@@ -47,6 +59,10 @@ export const ProfileEdit = () => {
   const router = useRouter();
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
+
+  // 기사님 프로필 조회 hook
+  const { data: moverProfileData, isLoading: isLoadingProfile } =
+    useGetMoverProfile();
 
   // 기사님 프로필 수정 hook
   const { mutateAsync: updateMoverProfile, isPending: isUpdating } =
@@ -63,6 +79,7 @@ export const ProfileEdit = () => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    reset,
   } = useForm<MoverProfileRegisterFormData>({
     resolver: zodResolver(moverProfileRegisterSchema),
     defaultValues: {
@@ -75,6 +92,30 @@ export const ProfileEdit = () => {
     },
     mode: "onChange",
   });
+
+  // 초기값 설정
+  useEffect(() => {
+    if (moverProfileData) {
+      const serviceTypeArray = convertServiceTypeRecordToArray(
+        moverProfileData.serviceType
+      );
+      const serviceRegionArray = convertServiceRegionRecordToArray(
+        moverProfileData.serviceRegion
+      );
+
+      setSelectedServices(serviceTypeArray);
+      setSelectedRegions(serviceRegionArray);
+
+      reset({
+        nickname: moverProfileData.nickname,
+        experience: moverProfileData.experience,
+        intro: moverProfileData.intro,
+        description: moverProfileData.description,
+        serviceType: serviceTypeArray,
+        serviceRegion: serviceRegionArray,
+      });
+    }
+  }, [moverProfileData, reset]);
 
   const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
@@ -112,7 +153,7 @@ export const ProfileEdit = () => {
         ...data,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
-        imageUrl: s3ImageUrl || null,
+        imageUrl: s3ImageUrl || moverProfileData?.imageUrl || null,
       };
 
       await updateMoverProfile(profileData);
@@ -129,6 +170,30 @@ export const ProfileEdit = () => {
       );
     }
   };
+
+  // 로딩 중일 때
+  if (isLoadingProfile) {
+    return (
+      <Box
+        sx={{
+          maxWidth: "1400px",
+          mx: "auto",
+          p: 3,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={40} />
+        <Typography variant="body1" color="text.secondary">
+          {t("프로필 정보를 불러오는 중...")}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -245,7 +310,7 @@ export const ProfileEdit = () => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={null}
+                  initialImage={moverProfileData?.imageUrl || null}
                 />
               </Box>
 
