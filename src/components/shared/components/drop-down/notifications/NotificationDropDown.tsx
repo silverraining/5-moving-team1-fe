@@ -5,6 +5,7 @@ import NotificationItem from "./NotificationItem";
 import CustomScrollY from "@/src/lib/customScrollY";
 import { useNotificationStore } from "@/src/store/notification";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
+import { useNotificationRead } from "@/src/api/notification/hooks";
 interface NotificationDropDownProps {
   onHighlightClick?: (highlight: string) => void;
   onClose?: () => void;
@@ -13,9 +14,23 @@ interface NotificationDropDownProps {
 export default function NotificationDropDown({
   onClose,
 }: NotificationDropDownProps) {
-  const { notifications } = useNotificationStore();
+  const { notifications, reset, markAsRead } = useNotificationStore();
+  const { mutate } = useNotificationRead();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
+  const ids = notifications?.map((item) => item.id);
+
+  const allRead = () => {
+    mutate(
+      { ids: ids },
+      {
+        onSuccess: () => {
+          reset();
+          onclose;
+        },
+      }
+    );
+  };
 
   return (
     <Box
@@ -48,7 +63,11 @@ export default function NotificationDropDown({
           ...CustomScrollY,
         }}
       >
-        <NotificationHeader onClose={onClose} />
+        <NotificationHeader
+          isMany={notifications?.length !== 0}
+          allRead={allRead}
+          onClose={onClose}
+        />
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: "4px" }}>
           {notifications?.length === 0 && <EmptyNotifyCation />}

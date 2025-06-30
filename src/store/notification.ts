@@ -13,7 +13,7 @@ interface NotificationStore {
 
 const initialState = {
   notifications: [],
-  markAsRead: false,
+  markAsRead: true,
 };
 
 export const useNotificationStore = create<NotificationStore>()(
