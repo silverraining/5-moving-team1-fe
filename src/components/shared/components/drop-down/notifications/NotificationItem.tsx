@@ -40,7 +40,7 @@ export default function NotificationItem({ data }: NotificationItemProps) {
       case "MOVE_DAY_REMINDER":
         return "이사 일정";
       case "NEW_OFFER":
-        return "견적이";
+        return "견적";
       case "CREATE_REVIEW":
         return "신규 리뷰";
       case "COMPLETED_CHECK":
