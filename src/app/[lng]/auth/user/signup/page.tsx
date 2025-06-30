@@ -19,10 +19,13 @@ import {
 } from "@/src/lib/authConstants";
 import { useSignupForm } from "@/src/hooks/auth/hook";
 import { SignUpSchemaType } from "@/src/schemas/auth/signup.schema";
+import { useEffect } from "react";
+import { useSnackbar } from "@/src/hooks/snackBarHooks";
 
 const SignUp = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
+  const { openSnackbar } = useSnackbar();
 
   const {
     register,
@@ -42,6 +45,23 @@ const SignUp = () => {
   const isAllFilled = requiredFields.every(
     (field) => values[field]?.trim() !== ""
   );
+
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const errorMessage = urlParams.get("error");
+    if (errorMessage) {
+      let message = errorMessage;
+      try {
+        const parsed = JSON.parse(decodeURIComponent(errorMessage));
+        if (parsed.message) {
+          message = parsed.message;
+        }
+      } catch {
+        message = decodeURIComponent(errorMessage);
+      }
+      openSnackbar(message, "error");
+    }
+  }, [openSnackbar]);
 
   return (
     <Stack
