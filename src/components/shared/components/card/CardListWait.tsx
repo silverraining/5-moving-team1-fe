@@ -69,7 +69,6 @@ export const CardListWait = ({
       maxHeight={"480px"}
       minHeight={"362px"}
       height={"100%"}
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
         "20px 12px 14px 12px",
@@ -78,6 +77,7 @@ export const CardListWait = ({
       ]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
+      sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
     >
       <Box>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
@@ -90,11 +90,11 @@ export const CardListWait = ({
       <Box
         display="flex"
         border="1px solid #F2F2F2"
-        bgcolor="#FFFFFF"
         padding={["16px", "10px", "16px 10px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
+        sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image

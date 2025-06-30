@@ -8,6 +8,7 @@ import {
 import apiClient from "../axiosclient";
 import { EstimateOffer } from "@/src/types/estimate";
 import { MoverProfile } from "@/src/types/auth";
+import axios from "axios";
 
 export type MoverListRequest = {
   location?: ServiceRegion;
@@ -226,5 +227,23 @@ export const EstimateOfferConfirmed = async (
     return response.data;
   } catch (error) {
     throw error;
+  }
+};
+export type requestRejectReq = { requestId: string };
+
+export const requestReject = async (
+  requestId: string
+): Promise<requestRejectReq> => {
+  try {
+    const response = await apiClient.patch(
+      `estimate-request/${requestId}/cancel`,
+      {}
+    );
+    return response.data;
+  } catch (error) {
+    if (axios.isAxiosError(error) && error.response) {
+      throw new Error(error.response.data.message);
+    }
+    throw new Error("요청 실패");
   }
 };
