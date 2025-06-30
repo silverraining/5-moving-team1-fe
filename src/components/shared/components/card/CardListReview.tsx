@@ -3,13 +3,14 @@ import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { maskNickname } from "@/src/lib/maskNickname";
 import { EstimateOffer } from "@/src/types/estimate";
 import { StarRating } from "../review/StarRating";
-
+import { useTranslation } from "react-i18next";
 interface CardProps {
   data: EstimateOffer;
 }
 
 export const CardListReview = ({ data }: CardProps) => {
   const info = data.mover;
+  const { t } = useTranslation();
   return (
     <Box
       border={"1px solid"}
@@ -29,7 +30,7 @@ export const CardListReview = ({ data }: CardProps) => {
               color: theme.palette.Black[400],
             })}
           >
-            {maskNickname(info.nickname ?? "")}
+            {maskNickname(info.nickname ?? "")} {t("기사님")}
           </Typography>
         </Box>
         <Box

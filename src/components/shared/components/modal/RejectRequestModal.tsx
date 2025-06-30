@@ -20,7 +20,7 @@ import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { EstimateRequestStatus } from "@/src/types/common";
 import { formatDateWithDay } from "@/src/lib/formatKoreanDate";
-
+import { useTranslation } from "react-i18next";
 interface RejectRequestModalProps {
   open: boolean;
   onClose: () => void;
@@ -50,7 +50,7 @@ export default function RejectRequestModal({
 }: RejectRequestModalProps) {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { t } = useTranslation();
   const { register, handleSubmit, reset, errors, isValid } =
     useRejectRequestForm();
 
@@ -94,7 +94,7 @@ export default function RejectRequestModal({
         }}
         variant={isSmall ? "B_18" : "SB_24"}
       >
-        반려요청
+        {t("반려요청")}
         <Image
           onClick={onClose}
           width={isSmall ? 24 : 36}
@@ -156,7 +156,7 @@ export default function RejectRequestModal({
                   variant={isSmall ? "SB_14" : "SB_24"}
                   sx={{ whiteSpace: "nowrap" }}
                 >
-                  {customerName} 고객님
+                  {customerName} {t("고객님")}
                 </Typography>
               </Box>
               <Box
@@ -164,7 +164,7 @@ export default function RejectRequestModal({
                 alignItems="center"
                 gap={isSmall ? "8px" : "16px"}
               >
-                <InfoChip label="이사일" />
+                <InfoChip label={t("이사일")} />
                 <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                   {formatDateWithDay(moveDate)}
                 </Typography>
@@ -175,7 +175,7 @@ export default function RejectRequestModal({
                   alignItems="center"
                   gap={isSmall ? "8px" : "12px"}
                 >
-                  <InfoChip label="출발" />
+                  <InfoChip label={t("출발")} />
                   <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                     {fromAddress}
                   </Typography>
@@ -194,7 +194,7 @@ export default function RejectRequestModal({
                   alignItems="center"
                   gap={isSmall ? "8px" : "12px"}
                 >
-                  <InfoChip label="도착" />
+                  <InfoChip label={t("도착")} />
                   <Typography variant={isSmall ? "M_14" : "M_18"} noWrap>
                     {toAddress}
                   </Typography>
@@ -213,10 +213,10 @@ export default function RejectRequestModal({
                 variant={isSmall ? "SB_16" : "SB_20"}
                 sx={{ width: "100%", color: theme.palette.Black[300] }}
               >
-                반려 사유를 입력해 주세요
+                {t("반려 사유를 입력해 주세요")}
               </Typography>
               <Textarea
-                placeholder="최소 10자 이상 입력해주세요"
+                placeholder={t("최소 10자 이상 입력해주세요")}
                 register={register.reason}
                 errorMessage={errors.reason?.message}
                 sx={{
@@ -244,7 +244,7 @@ export default function RejectRequestModal({
               variant={isSmall ? "SB_16" : "SB_20"}
               sx={{ color: theme.palette.White[100] }}
             >
-              반려하기
+              {t("반려하기")}
             </Typography>
             {isLoading && (
               <CircularProgress

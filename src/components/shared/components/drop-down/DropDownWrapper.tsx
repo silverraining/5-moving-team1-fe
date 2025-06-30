@@ -3,7 +3,7 @@
 import { useState } from "react";
 import DropDownButton from "./DropDownButton";
 import DropDownList from "./DropDownList";
-import { ServiceType, RegionType } from "@/src/hooks/constants";
+import { RegionType, ServiceType } from "@/src/lib/constants";
 
 interface DropDownWrapperProps {
   type: "region" | "service";

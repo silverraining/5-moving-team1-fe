@@ -1,10 +1,14 @@
 "use client";
 
 import React from "react";
-import { Box, CircularProgress, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import Image from "next/image";
-import { CardListMover } from "@/src/components/shared/components/card/CardListMover";
+import {
+  CardListMover,
+  CardListMoverSkeleton,
+} from "@/src/components/shared/components/card/CardListMover";
 import { CardData } from "@/src/types/card";
+import { useTranslation } from "react-i18next";
 
 interface MoverListProps {
   movers: CardData[];
@@ -27,9 +31,11 @@ export const MoverList = ({
 }: MoverListProps) => {
   if (loading) {
     return (
-      <Box display="flex" justifyContent="center" py={4}>
-        <CircularProgress size={32} />
-      </Box>
+      <Stack display="flex" flexDirection={"column"} spacing={4}>
+        {[...Array(5)].map((_, i) => (
+          <CardListMoverSkeleton key={i} />
+        ))}
+      </Stack>
     );
   }
 
@@ -40,7 +46,7 @@ export const MoverList = ({
       </Box>
     );
   }
-
+  const { t } = useTranslation();
   if (movers.length === 0) {
     return (
       <Box display="flex" flexDirection="column" alignItems="center" py={4}>
@@ -52,8 +58,10 @@ export const MoverList = ({
         />
         <Typography variant="M_16" color="Grayscale.400" mt={2}>
           {searchKeywordForEmptyMessage
-            ? `"${searchKeywordForEmptyMessage}"에 대한 검색 결과가 없습니다.`
-            : "등록된 기사님이 없습니다."}
+            ? `"${searchKeywordForEmptyMessage}"${t(
+                "에 대한 검색 결과가 없습니다."
+              )}`
+            : t("등록된 기사님이 없습니다.")}
         </Typography>
       </Box>
     );
@@ -75,9 +83,11 @@ export const MoverList = ({
       {/* 무한 스크롤 트리거 */}
       <div ref={loadMoreRef} style={{ height: 1 }} />
       {isFetchingNextPage && (
-        <Box display="flex" justifyContent="center" py={2}>
-          <CircularProgress size={32} />
-        </Box>
+        <Stack display="flex" flexDirection={"column"} spacing={4} py={4}>
+          {[...Array(5)].map((_, i) => (
+            <CardListMoverSkeleton key={i} />
+          ))}
+        </Stack>
       )}
     </>
   );

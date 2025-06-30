@@ -5,6 +5,7 @@ import TextField from "@/src/components/shared/components/text-field";
 import SortDropdown from "@/src/components/shared/components/drop-down/SortDropdown";
 import DropDownWrapper from "@/src/components/shared/components/drop-down/filter-drop-down/DropDownWrapper";
 import { SORT_OPTIONS } from "@/src/lib/constants";
+import { useTranslation } from "react-i18next";
 
 interface Props {
   searchKeyword: string;
@@ -38,7 +39,7 @@ export const MoverCardList = ({
 
   const currentSortOption =
     SORT_OPTIONS.find((opt) => opt.value === selectedSort) || SORT_OPTIONS[0];
-
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -62,14 +63,14 @@ export const MoverCardList = ({
           <Box sx={{ display: "flex", gap: 1 }}>
             <DropDownWrapper
               type="region"
-              label="지역"
+              label={t("지역")}
               forceMobileSize={isTablet}
               selectedValue={selectedRegion}
               onSelect={onRegionChange}
             />
             <DropDownWrapper
               type="service"
-              label="서비스"
+              label={t("서비스")}
               forceMobileSize={isTablet}
               selectedValue={selectedServiceType}
               onSelect={onServiceTypeChange}
@@ -93,7 +94,7 @@ export const MoverCardList = ({
           value={searchKeyword}
           onChange={onSearchChange}
           onDeleteClick={onSearchClear}
-          placeholder="기사님 이름, 지역, 서비스 종류 등으로 검색"
+          placeholder={t("기사님 이름, 지역, 서비스 종류 등으로 검색")}
           sx={{ flex: 1, minWidth: { xs: "100%", md: "300px" } }}
         />
       </Box>

@@ -6,7 +6,12 @@ export const personalInfoSchema = z.object({
     .min(2, "이름은 최소 2자 이상이어야 합니다.")
     .max(20, "이름은 최대 20자까지 가능합니다."),
   email: z.string().email("유효한 이메일 주소를 입력해주세요."),
-  phone: z.string().regex(/^010\d{8}$/, "유효한 전화번호를 입력해주세요."),
+  phone: z
+    .string()
+    .nullish()
+    .refine((val) => !val || /^010\d{8}$/.test(val), {
+      message: "유효한 전화번호를 입력해주세요.",
+    }),
 });
 
 const passwordFields = {
@@ -89,7 +94,12 @@ const generalEditFields = {
     .min(2, "이름은 최소 2자 이상이어야 합니다.")
     .max(20, "이름은 최대 20자까지 가능합니다."),
   email: z.string().email("유효한 이메일 주소를 입력해주세요.").optional(),
-  phone: z.string().regex(/^010\d{8}$/, "유효한 전화번호를 입력해주세요."),
+  phone: z
+    .string()
+    .nullish()
+    .refine((val) => !val || /^010\d{8}$/.test(val), {
+      message: "유효한 전화번호를 입력해주세요.",
+    }),
   currentPassword: z.string().optional(),
   newPassword: z
     .string()

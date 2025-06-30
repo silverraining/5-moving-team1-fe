@@ -18,6 +18,7 @@ import {
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import Image from "next/image";
+import { useTranslation } from "react-i18next";
 
 export default function PendingDetail({
   requestId,
@@ -40,7 +41,7 @@ export default function PendingDetail({
   const { mutate: deleteLikeMutate } = useDeleteLike();
 
   const { mutate: EstimateOfferConfirmedMutate } = useEstimateOfferConfirmed();
-
+  const { t } = useTranslation();
   const handleLikeClick = () => {
     const moverId = data.moverId;
     if (data.mover.isLiked) {
@@ -99,7 +100,7 @@ export default function PendingDetail({
       >
         {/* 견적 상세 */}
         <Stack gap={"24px"}>
-          <EstimateSection title="견적 상세">
+          <EstimateSection title={t("견적 상세")}>
             <CardListMover
               data={{ ...data, status: data.offerStatus }}
               onLikeClick={handleLikeClick}
@@ -109,13 +110,13 @@ export default function PendingDetail({
 
           {/* 태블릿 이하 SNS */}
           <Stack display={["flex", "flex", "none"]} gap={"24px"}>
-            <SnsShare title="견적서 공유하기" />
+            <SnsShare title={t("견적서 공유하기")} />
             <Divider sx={{ borderColor: theme.palette.Line[100] }} />
           </Stack>
         </Stack>
 
         {/* 견적가 */}
-        <EstimateSection title="견적가">
+        <EstimateSection title={t("견적가")}>
           <Typography variant="B_32">
             {(data.price ?? 0).toLocaleString()}원
           </Typography>
@@ -123,7 +124,7 @@ export default function PendingDetail({
         <Divider sx={{ borderColor: theme.palette.Line[100] }} />
 
         {/* 견적 정보 */}
-        <EstimateSection title="견적 정보">
+        <EstimateSection title={t("견적 정보")}>
           <EstimateInfo info={data} />
         </EstimateSection>
       </Stack>
@@ -162,11 +163,11 @@ export default function PendingDetail({
             },
           }}
         >
-          견적 확정하기
+          {t("견적 확정하기")}
         </Button>
 
         <Divider />
-        <SnsShare title="견적서 공유하기" />
+        <SnsShare title={t("견적서 공유하기")} />
       </Stack>
       <Box
         sx={{
@@ -227,7 +228,7 @@ export default function PendingDetail({
               },
             }}
           >
-            지정 견적 요청하기
+            {t("지정 견적 요청하기")}
           </Button>
         </Box>
       </Box>

@@ -21,6 +21,7 @@ import {
   convertToServiceTypeObject,
   convertToServiceRegionObject,
 } from "../../../utils/util";
+import { useTranslation } from "react-i18next";
 
 export const ProfileRegister = () => {
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
@@ -35,12 +36,12 @@ export const ProfileRegister = () => {
   // 기사님 프로필 등록 hook
   const { mutateAsync: registerMoverProfile } = useRegisterMoverProfile();
 
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
     });
-
+  const { t } = useTranslation();
   // React Hook Form + Zod
   const {
     register,
@@ -81,12 +82,12 @@ export const ProfileRegister = () => {
   const onSubmit = async (data: MoverProfileRegisterFormData) => {
     try {
       if (selectedServices.length === 0) {
-        openSnackbar("제공 서비스를 하나 이상 선택해주세요.", "error");
+        openSnackbar(t("제공 서비스를 하나 이상 선택해주세요."), "error");
         return;
       }
 
       if (selectedRegions.length === 0) {
-        openSnackbar("서비스 가능 지역을 하나 이상 선택해주세요.", "error");
+        openSnackbar(t("서비스 가능 지역을 하나 이상 선택해주세요."), "error");
         return;
       }
 
@@ -99,14 +100,14 @@ export const ProfileRegister = () => {
 
       await registerMoverProfile(profileData);
 
-      openSnackbar("기사님 프로필이 성공적으로 등록되었습니다.", "success");
+      openSnackbar(t("기사님 프로필이 성공적으로 등록되었습니다."), "success");
       router.push("/");
     } catch (error) {
-      console.error("프로필 등록 중 오류:", error);
+      console.error(t("프로필 등록 중 오류:"), error);
       openSnackbar(
         error instanceof Error
           ? error.message
-          : "프로필 등록 중 오류가 발생했습니다.",
+          : t("프로필 등록 중 오류가 발생했습니다."),
         "error"
       );
     }
@@ -148,7 +149,7 @@ export const ProfileRegister = () => {
                 color: theme.palette.Black[400],
               })}
             >
-              기사님 프로필 등록
+              {t("기사님 프로필 등록")}
             </Typography>
             <Typography
               variant="R_20"
@@ -156,7 +157,7 @@ export const ProfileRegister = () => {
                 color: theme.palette.Grayscale[400],
               })}
             >
-              추가 정보를 입력하여 회원가입을 완료해주세요.
+              {t("추가 정보를 입력하여 회원가입을 완료해주세요.")}
             </Typography>
           </Stack>
 
@@ -170,7 +171,7 @@ export const ProfileRegister = () => {
               width: "100%",
             }}
           >
-            {/* 왼쪽 열: 프로필 이미지, 별명, 경력, 한 줄 소개 */}
+            {/* 왼쪽 열: 프로필 Images, 별명, 경력, 한 줄 소개 */}
             <Box
               sx={{
                 flex: 1,
@@ -178,7 +179,7 @@ export const ProfileRegister = () => {
                 maxWidth: ["100%", "100%", "500px"],
               }}
             >
-              {/* 프로필 이미지 */}
+              {/* 프로필 Images */}
               <Box
                 sx={{
                   mb: "32px",
@@ -210,7 +211,7 @@ export const ProfileRegister = () => {
                           color: theme.palette.Black[400],
                         })}
                       >
-                        별명{" "}
+                        {t("별명")}
                       </Typography>
                       <Typography
                         variant="SB_20"
@@ -225,7 +226,9 @@ export const ProfileRegister = () => {
                           {...register("nickname")}
                           variant="outlined"
                           fullWidth
-                          placeholder="사이트에 노출될 이름을 입력해 주세요"
+                          placeholder={t(
+                            "사이트에 노출될 이름을 입력해 주세요"
+                          )}
                           error={!!errors.nickname}
                           helperText={errors.nickname?.message}
                           sx={{
@@ -255,7 +258,7 @@ export const ProfileRegister = () => {
                           color: theme.palette.Black[400],
                         })}
                       >
-                        경력{" "}
+                        {t("경력")}
                       </Typography>
                       <Typography
                         variant="SB_20"
@@ -271,7 +274,7 @@ export const ProfileRegister = () => {
                           type="number"
                           variant="outlined"
                           fullWidth
-                          placeholder="기사님의 경력을 입력해주세요"
+                          placeholder={t("기사님의 경력을 입력해주세요")}
                           error={!!errors.experience}
                           helperText={errors.experience?.message}
                           sx={{
@@ -299,7 +302,7 @@ export const ProfileRegister = () => {
                           color: theme.palette.Black[400],
                         })}
                       >
-                        한 줄 소개{" "}
+                        {t("한 줄 소개")}
                       </Typography>
                       <Typography
                         variant="SB_20"
@@ -314,7 +317,7 @@ export const ProfileRegister = () => {
                           {...register("intro")}
                           variant="outlined"
                           fullWidth
-                          placeholder="한 줄 소개를 입력해 주세요"
+                          placeholder={t("한 줄 소개를 입력해 주세요")}
                           error={!!errors.intro}
                           helperText={errors.intro?.message}
                           sx={{
@@ -356,7 +359,7 @@ export const ProfileRegister = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    상세 설명
+                    {t("상세 설명")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -374,7 +377,7 @@ export const ProfileRegister = () => {
                   fullWidth
                   multiline
                   rows={4}
-                  placeholder="상세 내용을 입력해 주세요"
+                  placeholder={t("상세 내용을 입력해 주세요")}
                   error={!!errors.description}
                   helperText={errors.description?.message}
                   sx={{
@@ -403,7 +406,7 @@ export const ProfileRegister = () => {
                         color: theme.palette.Black[400],
                       })}
                     >
-                      제공 서비스
+                      {t("제공 서비스")}
                     </Typography>
                     <Typography
                       variant="SB_20"
@@ -421,7 +424,7 @@ export const ProfileRegister = () => {
                         color: theme.palette.SecondaryRed[200],
                       })}
                     >
-                      제공 서비스를 하나 이상 선택해주세요.
+                      {t("제공 서비스를 하나 이상 선택해주세요.")}
                     </Typography>
                   )}
                 </Stack>
@@ -450,7 +453,7 @@ export const ProfileRegister = () => {
                         color: theme.palette.Black[400],
                       })}
                     >
-                      서비스 가능 지역
+                      {t("서비스 가능 지역")}
                     </Typography>
                     <Typography
                       variant="SB_20"
@@ -468,7 +471,7 @@ export const ProfileRegister = () => {
                         color: theme.palette.SecondaryRed[200],
                       })}
                     >
-                      서비스 가능 지역을 하나 이상 선택해주세요.
+                      {t("서비스 가능 지역을 하나 이상 선택해주세요.")}
                     </Typography>
                   )}
                 </Stack>
@@ -499,7 +502,7 @@ export const ProfileRegister = () => {
                   selectedRegions.length === 0
                 }
               >
-                시작하기
+                {t("시작하기")}
               </Button>
             </Box>
           </Box>

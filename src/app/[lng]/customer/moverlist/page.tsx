@@ -15,6 +15,9 @@ import { PATH } from "@/src/lib/constants";
 import { MoverList } from "@/src/components/customer/mover-list/MoverList";
 import { useSearch } from "@/src/hooks/utill";
 import { EmprtyReview } from "@/src/components/review/EmptyReview";
+import { useLikeList } from "@/src/api/like/hooks";
+import { transformLikeMoverToEstimateOffer } from "../wishlist/page";
+import { AuthStore } from "@/src/store/authStore";
 
 /**TODO:컴포넌트 분리 , 상세페이지 라우팅시 로딩 처리*/
 
@@ -22,7 +25,6 @@ import { EmprtyReview } from "@/src/components/review/EmptyReview";
 function mapMoverDetailToCardData(item: MoverDetail): CardData {
   const serviceType = item.serviceType || {};
   const serviceRegion = item.serviceRegion || {};
-
   // 서비스 타입 칩들 먼저 생성
   const serviceTypeChips: ChipData[] = Object.entries(serviceType)
     .filter(([_, value]) => value)
@@ -65,7 +67,8 @@ export default function MoverSearchPage() {
   const [hasNext, setHasNext] = useState(false);
   const [nextCursor, setNextCursor] = useState<string | null>(null);
   const [isFetchingNextPage, setIsFetchingNextPage] = useState(false);
-
+  const { user } = AuthStore();
+  const { data: likeMovers } = useLikeList(!!user);
   const theme = useTheme();
   const router = useRouter();
   const search = useSearch();
@@ -222,7 +225,9 @@ export default function MoverSearchPage() {
     hasNextPage: hasNext,
     isFetchingNextPage,
   });
-
+  const transformedData = likeMovers
+    ? likeMovers.map((item) => transformLikeMoverToEstimateOffer(item))
+    : [];
   return (
     <Box
       sx={{
@@ -269,12 +274,7 @@ export default function MoverSearchPage() {
                   onReset={handleReset}
                 />
                 <Box sx={{ height: "46px" }} />
-
-                <LikedMoverList
-                  likedMovers={allMovers
-                    .filter((m) => m.isLiked)
-                    .map(mapMoverDetailToCardData)}
-                />
+                {!!user && <LikedMoverList likedMovers={transformedData} />}
               </Box>
             )}
 

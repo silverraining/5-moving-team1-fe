@@ -4,17 +4,20 @@ import Image from "next/image";
 import { useResponsiveValue } from "@/src/hooks/useResponsiveValue";
 import { EstimateOffer } from "@/src/types/estimate";
 import { ChipData, CardData } from "@/src/types/card";
+import { useTranslation } from "react-i18next";
 
 interface CardProps extends BoxProps {
   data: EstimateOffer | CardData;
   onLikeClick?: () => void;
   forceMobileSize?: boolean;
+  fontSize?: string;
 }
 
 export const CardListSave = ({
   data,
   onLikeClick,
   forceMobileSize = false,
+  fontSize = "18px",
   ...props
 }: CardProps) => {
   const responsive = useResponsiveValue(forceMobileSize);
@@ -53,7 +56,7 @@ export const CardListSave = ({
       data.types.map((type) => ({
         chipType: type,
       }));
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -85,7 +88,7 @@ export const CardListSave = ({
           gap={responsive(["8px", "12px", "12px"])}
         >
           {chips.map((chip, idx) => (
-            <ChipCategory key={idx} data={chip} />
+            <ChipCategory key={idx} data={chip} fontSize={fontSize} />
           ))}
         </Box>
       </Box>
@@ -118,7 +121,7 @@ export const CardListSave = ({
         >
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -221,7 +224,7 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                경력
+                {t("경력")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -232,7 +235,7 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                {info.experience}년
+                {info.experience} {t("년")}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -247,7 +250,7 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                {info.confirmedCount}건
+                {info.confirmedCount} {t("건")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -258,7 +261,7 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                확정
+                {t("확정")}
               </Typography>
             </Box>
           </Box>
@@ -305,7 +308,7 @@ export const CardListSaveSkeleton = () => {
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
       >
-        {/* 프로필 이미지 */}
+        {/* 프로필 Images */}
         <Box width={[46, 46, 56]} height={[46, 46, 56]}>
           <Skeleton variant="circular" width="100%" height="100%" />
         </Box>

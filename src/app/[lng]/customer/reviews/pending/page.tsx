@@ -45,7 +45,7 @@ const ReviewsPending = () => {
               moverName={d.mover.nickname}
               moveDate={d.moveDate}
               price={d.price}
-              moveType={[]}
+              moveType={d.moveType}
             />
           </Stack>
         ))}

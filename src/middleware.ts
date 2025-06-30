@@ -59,7 +59,9 @@ export const middleware = async (request: NextRequest) => {
       ? localeFromCookie
       : DEFAULT_LOCALE;
 
-    return NextResponse.redirect(new URL(`/${locale}${pathname}`, request.url));
+    return NextResponse.redirect(
+      new URL(`/${locale}${pathname}${request.nextUrl.search}`, request.url)
+    );
   }
 
   // 3. locale prefix 제거한 실제 경로
@@ -107,7 +109,7 @@ export const middleware = async (request: NextRequest) => {
       // public 경로는 허용
       const isPublic = rule.publicPaths.some((p) => {
         const path = typeof p === "function" ? p("") : p;
-        pathnameWithoutLocale.startsWith(path);
+        return pathnameWithoutLocale.startsWith(path);
       });
 
       if (isPublic) return NextResponse.next();

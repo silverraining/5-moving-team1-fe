@@ -28,7 +28,7 @@ import { EventSourcePolyfill } from "event-source-polyfill";
 import { useEffect, useRef } from "react";
 import { useNotificationAll } from "@/src/api/notification/hooks";
 import { useNotificationStore } from "@/src/store/notification";
-
+import { useTranslation } from "react-i18next";
 export const Header = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbar();
@@ -41,7 +41,7 @@ export const Header = () => {
   const token = Cookies.get("accessToken");
   const { refetch } = useNotificationAll(!!token);
   const { setNotifications, setMarkAsRead } = useNotificationStore();
-
+  const { t } = useTranslation();
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
@@ -52,16 +52,16 @@ export const Header = () => {
     ? CUSTOMER_MENU
     : isMover
       ? MOVER_MENU
-      : [{ label: "로그인", href: PATH.userLogin }, ...GUEST_MENU];
+      : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
-      openSnackbar("로그아웃 되었습니다", "success", 1000, "standard");
+      openSnackbar(t("로그아웃 되었습니다"), "success", 1000, "standard");
       logout();
       router.replace(PATH.main);
     } catch (error) {
       openSnackbar(
-        error instanceof Error ? error.message : "로그아웃 실패",
+        error instanceof Error ? error.message : t("로그아웃 실패"),
         "error",
         1000,
         "standard"
@@ -103,9 +103,7 @@ export const Header = () => {
         const notification = JSON.parse(event.data);
         setMarkAsRead(false);
         setNotifications(notification);
-      } catch {
-        console.log("SSE message (non-JSON):", event.data);
-      }
+      } catch {}
     };
 
     eventSource.onerror = (err) => {
@@ -122,9 +120,6 @@ export const Header = () => {
     }
 
     reconnectTimeoutRef.current = setTimeout(() => {
-      console.log(
-        `🔄 재연결 시도 (${reconnectIntervalRef.current / 1000}s 후)`
-      );
       connectSSE();
       reconnectIntervalRef.current = Math.min(
         reconnectIntervalRef.current * 2,
@@ -141,7 +136,6 @@ export const Header = () => {
     }
     if (!accessToken) {
       // 토큰 없으면 기존 연결 종료 및 타이머 정리
-      console.log("토큰 없음. SSE 연결 종료");
 
       eventSourceRef.current?.close();
       if (reconnectTimeoutRef.current) {
@@ -163,7 +157,6 @@ export const Header = () => {
 
     // 컴포넌트 언마운트 시 연결 종료 및 타이머 정리
     return () => {
-      console.log("🛑 SSE 연결 종료");
       eventSourceRef.current?.close();
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
@@ -208,7 +201,7 @@ export const Header = () => {
                 variant="contained"
                 sx={{ width: "116px", height: "44px" }}
               >
-                로그인
+                {t("로그인")}
               </Button>
             </Link>
           )

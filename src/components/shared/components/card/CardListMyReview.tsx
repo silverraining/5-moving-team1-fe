@@ -6,6 +6,7 @@ import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { COLORS } from "@/public/theme/colors";
 
 import { ServiceType } from "@/src/types/common";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   data: {
@@ -32,6 +33,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
       isTargeted: data?.isTargeted,
     },
   ];
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -69,7 +71,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
               display: ["none", "none", "block"],
             })}
           >
-            작성일 {formatKoreanDate(data.moveDate ?? "", false)}
+            {t("작성일")} {formatKoreanDate(data.moveDate ?? "", false)}
           </Typography>
         </Box>
       </Box>
@@ -89,7 +91,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
         <Box width={[46, 46, 96]} height={[46, 46, 96]} position="relative">
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -115,7 +117,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {info.nickname} {t("기사님")}
             </Typography>
             <Box display={["flex", "flex", "none"]} gap="4px">
               {Array.from({ length: data?.rating ?? 0 }).map((_, i) => (
@@ -152,7 +154,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                이사일
+                {t("이사일")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -175,7 +177,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                견적가
+                {t("견적가")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -229,7 +231,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
             color: theme.palette.Grayscale[300],
           })}
         >
-          작성일 {formatKoreanDate(data.moveDate ?? "", false)}
+          {t("작성일")} {formatKoreanDate(data.moveDate ?? "", false)}
         </Typography>
       </Box>
     </Box>

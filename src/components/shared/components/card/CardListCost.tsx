@@ -10,6 +10,7 @@ import {
   ServiceType,
 } from "@/src/types/common";
 import { MoverProfile } from "@/src/types/auth";
+import { useTranslation } from "react-i18next";
 
 // HistoryEstimate.tsx에서 쓰는 card 데이터 타입
 export interface HistoryEstimateCardData {
@@ -18,7 +19,7 @@ export interface HistoryEstimateCardData {
   isConfirmed: boolean;
   isTargeted: boolean;
   moveDate: Date;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   offerId: string;
   price: number;
   offerStatus: EstimateOfferStatus;
@@ -48,7 +49,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
       isTargeted: data.isTargeted,
     },
   ];
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -60,7 +61,6 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
       minWidth={"327px"}
       width={"100%"}
       height={[222, 222, 280]}
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
         "16px 14px 10px 14px",
@@ -69,6 +69,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
       ]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
+      sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
     >
       <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
@@ -93,16 +94,16 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
         display="flex"
         border="1px solid"
         borderColor={COLORS.Line[100]}
-        bgcolor="#FFFFFF"
         padding={["10px", "10px", "16px 18px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
+        sx={(theme) => ({ bgcolor: theme.palette.White[100] })}
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -125,7 +126,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {info.nickname} {t("기사님")}
             </Typography>
             <Box display="flex" alignItems="center">
               <Image
@@ -202,7 +203,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                경력
+                {t("경력")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -235,7 +236,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                확정
+                {t("확정")}
               </Typography>
             </Box>
           </Box>
@@ -255,7 +256,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
             color: theme.palette.Black[400],
           })}
         >
-          견적 금액
+          {t("견적 금액")}
         </Typography>
         <Typography
           sx={(theme) => ({

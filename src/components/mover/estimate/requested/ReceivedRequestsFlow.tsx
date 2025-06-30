@@ -15,7 +15,7 @@ import {
 } from "@mui/material";
 import { CheckboxList } from "../../../shared/components/filter-check-box/CheckboxList";
 import { SearchInput } from "../../../shared/components/text-field/Search";
-import MoveSortDropdown from "./MoveSortDropdown";
+import { MoveSortDropdown } from "./MoveSortDropdown";
 import { MoveSortOption } from "./MoveSortDropdown";
 import FilterModal from "../../../shared/components/modal/FilterModal";
 import EmptyRequest from "./EmptyRequest";
@@ -35,6 +35,7 @@ import { ServiceType } from "@/src/lib/constants";
 import { MoveTypeFilterItem, FilterItem } from "@/src/types/filters";
 import { useEstimateModalActions } from "@/src/hooks/useEstimateModalActions";
 import { useSnackbarStore } from "@/src/store/snackBarStore";
+import { useTranslation } from "react-i18next";
 
 type ServiceTypeLabel = (typeof ServiceType)[number];
 
@@ -53,17 +54,25 @@ export default function ReceivedRequestsFlow() {
     closeFilterModal,
   } = useModalStates();
   const { openSnackbar } = useSnackbarStore();
-
+  const { t } = useTranslation();
   const [moveTypeItems, setMoveTypeItems] = useState<MoveTypeFilterItem[]>([
-    { label: "소형이사", count: 0, checked: false },
-    { label: "가정이사", count: 0, checked: false },
-    { label: "사무실이사", count: 0, checked: false },
+    { label: t("소형이사") as "소형이사", count: 0, checked: false },
+    { label: t("가정이사") as "가정이사", count: 0, checked: false },
+    { label: t("사무실이사") as "사무실이사", count: 0, checked: false },
   ]);
 
   const [filterItems, setFilterItems] = useState<FilterItem[]>([
     // 필터 필터링
-    { label: "서비스 가능 지역", count: 0, checked: false },
-    { label: "지정 견적 요청", count: 0, checked: false },
+    {
+      label: t("서비스 가능 지역") as "서비스 가능 지역",
+      count: 0,
+      checked: false,
+    },
+    {
+      label: t("지정 견적 요청") as "지정 견적 요청",
+      count: 0,
+      checked: false,
+    },
   ]);
   const [keyword, setKeyword] = useState(""); // 검색어
 
@@ -75,7 +84,7 @@ export default function ReceivedRequestsFlow() {
     useState<EstimateRequestItem | null>(null); // 견적 보내기/반려 모달과 연결된 받은 견적 데이터
 
   const [sortOption, setSortOption] = useState<MoveSortOption>({
-    label: "이사 빠른순",
+    label: t("이사 빠른순"),
     sort: "move_date",
   }); // 정렬
 
@@ -158,11 +167,11 @@ export default function ReceivedRequestsFlow() {
     if (!estimateItems.length || !moverProfile) return;
 
     // 📎 1. 이사 유형별 카운트 계산
-    const moveTypeCounts: Record<ServiceTypeLabel, number> = {
-      소형이사: 0,
-      가정이사: 0,
-      사무실이사: 0,
-    };
+    const moveTypeCounts = {
+      [t("소형이사")]: 0,
+      [t("가정이사")]: 0,
+      [t("사무실이사")]: 0,
+    } as Record<ServiceTypeLabel, number>;
     // 📎 2. 필터별 카운트 계산
     let targetedCount = 0;
     let regionCount = 0;
@@ -174,9 +183,12 @@ export default function ReceivedRequestsFlow() {
 
     estimateItems.forEach((item) => {
       // moveType count
-      if (item.moveType === "SMALL") moveTypeCounts["소형이사"]++;
-      if (item.moveType === "HOME") moveTypeCounts["가정이사"]++;
-      if (item.moveType === "OFFICE") moveTypeCounts["사무실이사"]++;
+      if (item.moveType === "SMALL")
+        moveTypeCounts[t("소형이사") as keyof typeof moveTypeCounts]++;
+      if (item.moveType === "HOME")
+        moveTypeCounts[t("가정이사") as keyof typeof moveTypeCounts]++;
+      if (item.moveType === "OFFICE")
+        moveTypeCounts[t("사무실이사") as keyof typeof moveTypeCounts]++;
 
       // 지정 견적 요청 필터 count
       if (item.isTargeted) targetedCount++;
@@ -207,10 +219,10 @@ export default function ReceivedRequestsFlow() {
     }));
 
     const newFilterItems = filterItems.map((item) => {
-      if (item.label === "서비스 가능 지역") {
+      if (item.label === t("서비스 가능 지역")) {
         return { ...item, count: regionCount };
       }
-      if (item.label === "지정 견적 요청") {
+      if (item.label === t("지정 견적 요청")) {
         return { ...item, count: targetedCount };
       }
       return item;
@@ -269,9 +281,9 @@ export default function ReceivedRequestsFlow() {
         comment: formData.comment,
       });
 
-      openSnackbar("견적을 성공적으로 보냈습니다.", "success");
+      openSnackbar(t("견적을 성공적으로 보냈습니다."), "success");
     } catch (error) {
-      openSnackbar("견적 보내기에 실패했습니다.", "error");
+      openSnackbar(t("견적 보내기에 실패했습니다."), "error");
       console.error(error);
       throw error;
     }
@@ -287,10 +299,10 @@ export default function ReceivedRequestsFlow() {
         comment,
       });
 
-      openSnackbar("견적 요청 반려를 성공적으로 보냈습니다.", "success");
+      openSnackbar(t("견적 요청 반려를 성공적으로 보냈습니다."), "success");
       closeRejectModal();
     } catch (error) {
-      openSnackbar("견적 요청 반려 보내기에 실패했습니다.", "error");
+      openSnackbar(t("견적 요청 반려 보내기에 실패했습니다."), "error");
       console.error(error);
     }
   };
@@ -323,7 +335,7 @@ export default function ReceivedRequestsFlow() {
             }}
           >
             <CheckboxList
-              title="이사 유형"
+              title={t("이사 유형")}
               items={moveTypeItems}
               onItemChange={(index, checked) => {
                 // 개별 체크박스 선택
@@ -342,7 +354,7 @@ export default function ReceivedRequestsFlow() {
               }}
             />
             <CheckboxList
-              title="필터"
+              title={t("필터")}
               items={filterItems}
               onItemChange={(index, checked) => {
                 // 개별 체크박스 선택
@@ -375,7 +387,7 @@ export default function ReceivedRequestsFlow() {
                 value={keyword}
                 onChange={handleKeywordChange}
                 onClick={handleClear} // 검색어 삭제 버튼에 적용됨
-                placeholder="어떤 고객님을 찾고 게세요?"
+                placeholder={t("어떤 고객님을 찾고 계세요?")}
                 sx={{
                   bgcolor: theme.palette.NeutralGray[200],
                   border: "none",
@@ -390,18 +402,19 @@ export default function ReceivedRequestsFlow() {
                 marginBottom: ["16px", "20px", "32px"],
               }}
             >
-              <Box>
+              <Box sx={{ display: "flex", gap: "4px" }}>
                 <Typography variant={isSmall ? "M_13" : "M_16"}>
-                  전체{" "}
+                  {t("전체")}
                 </Typography>
                 <Typography variant={isSmall ? "SB_13" : "SB_16"}>
-                  {totalCount}건
+                  {totalCount}
+                  {t("건")}
                 </Typography>
               </Box>
               <Box sx={{ display: "flex", gap: "4px" }}>
                 <MoveSortDropdown
                   defaultOption={sortOption}
-                  onChange={(option) => setSortOption(option)}
+                  onChange={(option: MoveSortOption) => setSortOption(option)}
                 />
                 {/* 모바일 환경: 필터 아이콘만 보이기 */}
                 {isSmall && (

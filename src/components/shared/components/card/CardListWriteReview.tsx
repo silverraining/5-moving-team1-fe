@@ -4,6 +4,7 @@ import { ChipData } from "@/src/types/card";
 import Image from "next/image";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { reviewableOffers } from "@/src/api/review/api";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   data: reviewableOffers;
@@ -26,7 +27,7 @@ export const CardListWriteReview = ({
     },
   ];
   // 리뷰가 있는지 확인
-
+  const { t } = useTranslation();
   return (
     <Box
       display="flex"
@@ -66,7 +67,7 @@ export const CardListWriteReview = ({
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -90,7 +91,7 @@ export const CardListWriteReview = ({
                 color: theme.palette.Black[300],
               })}
             >
-              {info.nickname} 기사님
+              {info.nickname} {t("기사님")}
             </Typography>
           </Box>
           <Box
@@ -110,7 +111,7 @@ export const CardListWriteReview = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                이사일
+                {t("이사일")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -133,7 +134,7 @@ export const CardListWriteReview = ({
                   color: theme.palette.Grayscale[300],
                 })}
               >
-                견적가
+                {t("견적가")}
               </Typography>
               <Typography
                 sx={(theme) => ({
@@ -160,7 +161,7 @@ export const CardListWriteReview = ({
           height: [48, 48, 64],
         })}
       >
-        {!isReviewed ? "리뷰 작성하기" : "리뷰 작성 완료"}
+        {!isReviewed ? t("리뷰 작성하기") : t("리뷰 작성 완료")}
       </Button>
     </Box>
   );

@@ -3,6 +3,7 @@
 import { Box, Stack, Typography, CircularProgress } from "@mui/material";
 import Image from "next/image";
 import { useRef } from "react";
+import { useTranslation } from "react-i18next";
 
 interface ImageUploadProps {
   onFileSelect: (file: File) => void;
@@ -12,8 +13,8 @@ interface ImageUploadProps {
 }
 
 //TODO: drag & drop 업로드 기능 추가
-//TODO: 이미지 삭제 기능 추가
-//TODO: 이미지 크기 or 확장자 제한 추가
+//TODO: Images 삭제 기능 추가
+//TODO: Images 크기 or 확장자 제한 추가
 //TODO: 에러 처리
 
 export const ImageUpload = ({
@@ -36,7 +37,7 @@ export const ImageUpload = ({
     if (!file) return;
     onFileSelect(file);
   };
-
+  const { t } = useTranslation();
   return (
     <Stack spacing={"24px"} margin={"32px 0"}>
       <Typography
@@ -46,7 +47,7 @@ export const ImageUpload = ({
           alignSelf: "flex-start",
         }}
       >
-        프로필 이미지
+        {t("프로필 이미지")}
       </Typography>
 
       <Box

@@ -2,7 +2,7 @@ import { convertSidoToEnglish } from "./parseAddress";
 import { MoverProfile } from "../types/auth";
 import { EstimateRequestItem } from "@/src/api/mover/estimate/requested/api";
 import { ServiceRegion } from "../types/common";
-
+import { useTranslation } from "react-i18next";
 export const filterEstimateRequests = ({
   items,
   moveTypeItems,
@@ -16,12 +16,13 @@ export const filterEstimateRequests = ({
   moverProfile: MoverProfile | null;
   keyword?: string;
 }) => {
+  const { t } = useTranslation();
   const selectedMoveTypes = moveTypeItems
     .filter((item) => item.checked)
     .map((item) => {
-      if (item.label === "소형이사") return "SMALL";
-      if (item.label === "가정이사") return "HOME";
-      if (item.label === "사무실이사") return "OFFICE";
+      if (item.label === t("소형이사")) return "SMALL";
+      if (item.label === t("가정이사")) return "HOME";
+      if (item.label === t("사무실이사")) return "OFFICE";
       return null;
     })
     .filter(Boolean);
@@ -38,11 +39,11 @@ export const filterEstimateRequests = ({
     // ✅ 필터 조건들 OR 로 비교
     const matchedFilters: boolean[] = [];
 
-    if (selectedFilters.includes("지정 견적 요청")) {
+    if (selectedFilters.includes(t("지정 견적 요청"))) {
       matchedFilters.push(item.isTargeted === true);
     }
 
-    if (selectedFilters.includes("서비스 가능 지역")) {
+    if (selectedFilters.includes(t("서비스 가능 지역"))) {
       if (!moverProfile?.serviceRegion) {
         matchedFilters.push(false);
       } else {
@@ -88,18 +89,16 @@ export const filterEstimateRequests = ({
       selectedFilters.length === 0
         ? true
         : matchedFilters.length === 0
-          ? false
-          : matchedFilters.some(Boolean);
+        ? false
+        : matchedFilters.some(Boolean);
 
     // 검색어 필터링
     const isKeywordMatched =
       !keyword || keyword.trim() === ""
         ? true
         : item.customerName
-          ? item.customerName
-              .toLowerCase()
-              .includes(keyword.trim().toLowerCase())
-          : false;
+        ? item.customerName.toLowerCase().includes(keyword.trim().toLowerCase())
+        : false;
 
     // 최종 필터 조건 - 모두 만족해야 함
     return isMoveTypeMatched && isFilterMatched && isKeywordMatched;
@@ -108,7 +107,7 @@ export const filterEstimateRequests = ({
 
 // 두 배열이 같은지(내용이 같은지) 비교하는 함수
 export function areItemsEqual<
-  T extends { label: string | number; count: number; checked: boolean },
+  T extends { label: string | number; count: number; checked: boolean }
 >(arr1: T[], arr2: T[]) {
   if (arr1.length !== arr2.length) return false;
   return arr1.every((item, idx) => {
@@ -130,17 +129,18 @@ export function convertCheckedToFilterItems(
     office: boolean;
   },
   currentMoveTypeItems: { label: string; count: number; checked: boolean }[],
-  currentFilterItems: { label: string; count: number; checked: boolean }[]
+  currentFilterItems: { label: string; count: number; checked: boolean }[],
+  t: (key: string) => string
 ) {
   // moveTypeItems 업데이트
   const newMoveTypeItems = currentMoveTypeItems.map((item) => {
-    if (item.label === "소형이사") {
+    if (item.label === t("소형이사")) {
       return { ...item, checked: checked.all || checked.small };
     }
-    if (item.label === "가정이사") {
+    if (item.label === t("가정이사")) {
       return { ...item, checked: checked.all || checked.home };
     }
-    if (item.label === "사무실이사") {
+    if (item.label === t("사무실이사")) {
       return { ...item, checked: checked.all || checked.office };
     }
     return item;

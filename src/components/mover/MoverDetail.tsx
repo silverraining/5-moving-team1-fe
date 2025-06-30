@@ -25,6 +25,7 @@ import { useRequestTargetedEstimate } from "@/src/api/mover/hooks";
 import { NoEstimateModal } from "./NoEstimateModal";
 import { useSnackbarStore } from "@/src/store/snackBarStore";
 import { useCreateLike, useDeleteLike } from "../../api/like/hooks";
+import { useTranslation } from "react-i18next";
 
 interface MoverDetailProps {
   moverId: string;
@@ -43,7 +44,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const { openSnackbar } = useSnackbarStore();
   const createLikeMutation = useCreateLike();
   const deleteLikeMutation = useDeleteLike();
-
+  const { t } = useTranslation();
   // 찜하기 버튼 클릭 핸들러
   const handleLikeClick = async () => {
     if (!moverData) return;
@@ -89,13 +90,14 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
       {
         onSuccess: (response) => {
           openSnackbar(
-            response.message || "지정 견적 요청이 완료되었습니다.",
+            response.message || t("지정 견적 요청이 완료되었습니다."),
             "success"
           );
         },
         onError: (error: any) => {
           openSnackbar(
-            error.response?.data?.message || "지정 견적 요청에 실패했습니다.",
+            error.response?.data?.message ||
+              t("지정 견적 요청에 실패했습니다."),
             "error"
           );
           console.error("Failed to request targeted estimate:", error);
@@ -105,7 +107,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   };
 
   if (isLoading || !moverData) {
-    return <div>Loading...</div>;
+    return <div>{t("Loading...")}</div>;
   }
 
   const reviewStatistics: ReviewStatistics = {
@@ -170,7 +172,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           width={20}
           height={20}
         />
-        기사님 찜하기
+        {t("기사님 찜하기")}
       </Button>
 
       {/* 견적 요청 버튼 */}
@@ -188,7 +190,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           },
         }}
       >
-        지정 견적 요청하기
+        {t("지정 견적 요청하기")}
       </Button>
     </>
   );
@@ -238,7 +240,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
           },
         }}
       >
-        지정 견적 요청하기
+        {t("지정 견적 요청하기")}
       </Button>
     </Box>
   );
@@ -290,7 +292,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
             {/* 모바일에서 SNS 공유 섹션을 상세설명 위로 이동 */}
             {isTablet && (
               <Box sx={{ marginBottom: "80px" }}>
-                <SnsShare title="나만 알기엔 아까운 기사님인가요?" />
+                <SnsShare title={t("나만 알기엔 아까운 기사님인가요?")} />
               </Box>
             )}
 
@@ -310,7 +312,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                   marginBottom: "16px",
                 }}
               >
-                상세설명
+                {t("상세설명")}
               </Typography>
               <Typography
                 sx={{
@@ -341,7 +343,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                   marginBottom: "16px",
                 }}
               >
-                제공 서비스
+                {t("제공 서비스")}
               </Typography>
               <Box sx={{ display: "flex", gap: "12px", flexWrap: "wrap" }}>
                 {convertToServiceTypeArray(moverData.serviceType).map(
@@ -350,10 +352,10 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                       key={type}
                       label={
                         type === "SMALL"
-                          ? "소형이사"
+                          ? t("소형이사")
                           : type === "HOME"
-                            ? "가정이사"
-                            : "사무실이사"
+                            ? t("가정이사")
+                            : t("사무실이사")
                       }
                       selected={true}
                       onClick={() => {}}
@@ -379,7 +381,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                   marginBottom: "16px",
                 }}
               >
-                서비스 가능 지역
+                {t("서비스 가능 지역")}
               </Typography>
               <Box sx={{ display: "flex", gap: "8px", flexWrap: "wrap" }}>
                 {convertToServiceRegionArray(moverData.serviceRegion).map(
@@ -434,14 +436,15 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                     lineHeight: "28px",
                   }}
                 >
-                  {moverData.nickname} 기사님에게 지정 견적을 요청해보세요!
+                  {moverData.nickname}{" "}
+                  {t("기사님에게 지정 견적을 요청해보세요!")}
                 </Typography>
 
                 <DesktopActionButtons />
               </Box>
 
               {/* SNS 공유 섹션 */}
-              <SnsShare title="나만 알기엔 아까운 기사님인가요?" />
+              <SnsShare title={t("나만 알기엔 아까운 기사님인가요?")} />
             </Box>
           )}
         </Box>

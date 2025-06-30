@@ -16,11 +16,11 @@ import { Controller } from "react-hook-form";
 import Image from "next/image";
 import { ModalStar } from "./components/ModalStar";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipProps } from "@/src/types/card";
+import { ServiceType } from "@/src/types/common";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";
-
+import { useTranslation } from "react-i18next";
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
@@ -30,13 +30,13 @@ interface ReviewModalProps {
     price: number,
     rating: number,
     comment: string,
-    moveType: string[]
+    moveType: ServiceType[]
   ) => void;
   moverImage: string;
   moverName: string;
   moveDate: string;
   price: number;
-  moveType: ChipProps["type"][];
+  moveType: ServiceType | ServiceType[];
 }
 
 export default function ReviewModal({
@@ -52,14 +52,26 @@ export default function ReviewModal({
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
+  // 항상 배열로 처리하기 위해 변환
+  const moveTypeArray = Array.isArray(moveType) ? moveType : [moveType];
+
   const { control, handleSubmit, register, isValid, errors, reset } =
     useReviewForm();
 
   const onFormSubmit = (data: { rating: number; content: string }) => {
-    onSubmit(moverName, moveDate, price, data.rating, data.content, moveType);
+    onSubmit(
+      moverName,
+      moveDate,
+      price,
+      data.rating,
+      data.content,
+      moveTypeArray
+    );
     reset();
     onClose();
   };
+
+  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -94,7 +106,7 @@ export default function ReviewModal({
         }}
         variant={isSmall ? "B_18" : "SB_24"}
       >
-        리뷰 쓰기
+        {t("리뷰 쓰기")}
         <Image
           onClick={onClose}
           width={isSmall ? 24 : 36}
@@ -124,8 +136,8 @@ export default function ReviewModal({
               gap: isSmall ? "8px" : "12px",
             }}
           >
-            {moveType.map((type) => (
-              <ChipCategory key={type} type={type as ChipProps["type"]} />
+            {moveTypeArray.map((type) => (
+              <ChipCategory key={type} data={{ chipType: type }} />
             ))}
           </Box>
           {/* 기사님 정보 */}
@@ -153,10 +165,10 @@ export default function ReviewModal({
                 height={isSmall ? 46 : 96}
                 style={{
                   borderRadius: "50%",
-                  objectFit: "cover", // 이미지를 꽉 채우기 위해 추천
+                  objectFit: "cover", // Images를 꽉 채우기 위해 추천
                 }}
                 src={moverImage || "/Images/profile/binProfile.svg"}
-                alt="기사님 프로필 이미지"
+                alt="기사님 프로필 Images"
               />
             </Box>
             <Box
@@ -176,6 +188,7 @@ export default function ReviewModal({
               </Box>
               <Box display="flex">
                 <Typography
+                  component="span"
                   color="text.secondary"
                   sx={{
                     display: "flex",
@@ -183,7 +196,7 @@ export default function ReviewModal({
                     gap: isSmall ? "6px" : "12px",
                   }}
                 >
-                  <InfoChip label="이사일" />{" "}
+                  <InfoChip label={t("이사일")} />{" "}
                   <Typography variant={isSmall ? "M_13" : "M_20"} noWrap>
                     {moveDate}
                   </Typography>
@@ -205,7 +218,7 @@ export default function ReviewModal({
                     gap: isSmall ? "6px" : "12px",
                   }}
                 >
-                  <InfoChip label="견적가" />{" "}
+                  <InfoChip label={t("견적가")} />{" "}
                   <Typography variant={isSmall ? "M_13" : "M_20"} noWrap>
                     {price.toLocaleString()}원
                   </Typography>
@@ -226,7 +239,7 @@ export default function ReviewModal({
             variant={isSmall ? "SB_16" : "SB_20"}
             sx={{ color: theme.palette.Black[300] }}
           >
-            평점을 선택해 주세요
+            {t("평점을 선택해 주세요")}
           </Typography>
           <Controller
             name="rating"
@@ -255,7 +268,7 @@ export default function ReviewModal({
             variant={isSmall ? "SB_16" : "SB_20"}
             sx={{ color: theme.palette.Black[300] }}
           >
-            상세 후기를 입력해 주세요
+            {t("상세 후기를 입력해 주세요")}
           </Typography>
           <Textarea
             register={register("content")}
@@ -281,8 +294,7 @@ export default function ReviewModal({
             variant={isSmall ? "SB_16" : "SB_20"}
             sx={{ color: theme.palette.White[100] }}
           >
-            {" "}
-            리뷰 등록
+            {t("리뷰 등록")}
           </Typography>
         </Button>
       </DialogActions>

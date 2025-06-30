@@ -7,6 +7,7 @@ import {
   ProfileEditFormData,
   GeneralEditFormData,
 } from "../../schemas/profile.schema";
+import { useTranslation } from "react-i18next";
 
 interface PasswordChangeSectionProps {
   register: UseFormRegister<ProfileEditFormData | GeneralEditFormData>;
@@ -17,6 +18,7 @@ export const PasswordChangeSection = ({
   register,
   errors,
 }: PasswordChangeSectionProps) => {
+  const { t } = useTranslation();
   return (
     <Box>
       <Stack spacing={"32px"}>
@@ -35,12 +37,12 @@ export const PasswordChangeSection = ({
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              현재 비밀번호
+              {t("현재 비밀번호")}
             </Typography>
           </Box>
           <TextField.Input
             type="password"
-            placeholder="현재 비밀번호를 입력하세요"
+            placeholder={t("현재 비밀번호를 입력하세요")}
             register={register("currentPassword")}
             errorMessage={errors.currentPassword?.message}
           />
@@ -61,12 +63,12 @@ export const PasswordChangeSection = ({
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              새 비밀번호
+              {t("새 비밀번호")}
             </Typography>
           </Box>
           <TextField.Input
             type="password"
-            placeholder="새 비밀번호를 입력하세요"
+            placeholder={t("새 비밀번호를 입력하세요")}
             register={register("newPassword")}
             errorMessage={errors.newPassword?.message}
           />
@@ -87,12 +89,12 @@ export const PasswordChangeSection = ({
                 color: (theme) => theme.palette.Black[500],
               }}
             >
-              새 비밀번호 확인
+              {t("새 비밀번호 확인")}
             </Typography>
           </Box>
           <TextField.Input
             type="password"
-            placeholder="새 비밀번호를 다시 입력하세요"
+            placeholder={t("새 비밀번호를 다시 입력하세요")}
             register={register("confirmPassword")}
             errorMessage={errors.confirmPassword?.message}
           />

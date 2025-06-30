@@ -8,6 +8,7 @@ import Label from "./Label";
 import { useEstimateOfferDetail } from "@/src/api/customer/hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
+import { useTranslation } from "react-i18next";
 
 export default function HistoryDetail({
   requestId,
@@ -22,7 +23,7 @@ export default function HistoryDetail({
   );
 
   const queryClient = useQueryClient();
-
+  const { t } = useTranslation();
   const { mutate: createLikeMutate } = useCreateLike();
   const { mutate: deleteLikeMutate } = useDeleteLike();
 
@@ -43,7 +44,7 @@ export default function HistoryDetail({
       >
         {/* 견적 상세 */}
         <Stack gap={"24px"}>
-          <EstimateSection title="견적 상세">
+          <EstimateSection title={t("견적 상세")}>
             <CardListMover
               data={{ ...data, status: data.offerStatus }}
               onLikeClick={() => {
@@ -78,13 +79,13 @@ export default function HistoryDetail({
 
           {/* 태블릿 이하 SNS */}
           <Stack display={["flex", "flex", "none"]} gap={"24px"}>
-            <SnsShare title="견적서 공유하기" />
+            <SnsShare title={t("견적서 공유하기")} />
             <Divider />
           </Stack>
         </Stack>
 
         {/* 견적가 */}
-        <EstimateSection title="견적가">
+        <EstimateSection title={t("견적가")}>
           <Typography variant="B_32">
             {(data.price ?? 0).toLocaleString()}원
           </Typography>
@@ -92,7 +93,7 @@ export default function HistoryDetail({
         <Divider />
 
         {/* 견적 정보 */}
-        <EstimateSection title="견적 정보">
+        <EstimateSection title={t("견적 정보")}>
           <EstimateInfo info={data} />
         </EstimateSection>
 
@@ -104,7 +105,7 @@ export default function HistoryDetail({
         display={["none", "none", "block"]}
         marginTop={["0px", "0px", "71px"]}
       >
-        <SnsShare title="견적서 공유하기" />
+        <SnsShare title={t("견적서 공유하기")} />
       </Box>
     </Stack>
   );

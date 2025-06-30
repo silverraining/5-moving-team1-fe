@@ -2,6 +2,7 @@ import { Box, Stack, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { EstimateOffer } from "@/src/types/estimate";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import { typeMapper } from "@/src/lib/typeMapper";
+import { useTranslation } from "react-i18next";
 
 interface EstimateInfoProps {
   info: EstimateOffer;
@@ -10,7 +11,7 @@ interface EstimateInfoProps {
 export function EstimateInfo({ info }: EstimateInfoProps) {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
-
+  const { t } = useTranslation();
   return (
     <Box
       width={"100%"}
@@ -32,7 +33,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               whiteSpace: "nowrap",
             })}
           >
-            견적 요청일
+            {t("견적 요청일")}
           </Typography>
           <Typography
             variant={isDesktop ? "R_20" : "R_14"}
@@ -51,7 +52,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               whiteSpace: "nowrap",
             })}
           >
-            서비스
+            {t("서비스")}
           </Typography>
           <Typography
             variant={isDesktop ? "R_20" : "R_14"}
@@ -70,7 +71,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               whiteSpace: "nowrap",
             })}
           >
-            이용일
+            {t("이용일")}
           </Typography>
           <Typography
             variant={isDesktop ? "R_20" : "R_14"}
@@ -89,7 +90,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               whiteSpace: "nowrap",
             })}
           >
-            출발지
+            {t("출발지")}
           </Typography>
           <Typography
             variant={isDesktop ? "R_20" : "R_14"}
@@ -108,7 +109,7 @@ export function EstimateInfo({ info }: EstimateInfoProps) {
               whiteSpace: "nowrap",
             })}
           >
-            도착지
+            {t("도착지")}
           </Typography>
           <Typography
             variant={isDesktop ? "R_20" : "R_14"}

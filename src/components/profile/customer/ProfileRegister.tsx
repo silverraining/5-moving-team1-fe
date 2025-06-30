@@ -14,7 +14,7 @@ import {
   convertToServiceTypeObject,
   convertToServiceRegionObject,
 } from "../../../utils/util";
-
+import { useTranslation } from "react-i18next";
 /**
  * TODO
  * 1. 파일 크기 제한
@@ -26,16 +26,16 @@ export const ProfileRegister = () => {
   const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
 
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
 
   // 일반 유저 프로필 등록 hook
   const { mutateAsync: registerCustomerProfile } = useRegisterCustomerProfile();
 
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading, error } =
     useImageUpload({
-      showSnackbar: true, // 이미지 업로드 관련 피드백을 바로 보여줌
+      showSnackbar: true, // Images 업로드 관련 피드백을 바로 보여줌
       onUploadSuccess: (url) => {},
       onUploadError: (errorMessage) => {},
     });
@@ -58,18 +58,21 @@ export const ProfileRegister = () => {
 
   /**
    * 프로필 등록 제출 핸들러
-   * 1. 선택된 서비스, 지역, S3 이미지 URL을 포함한 프로필 데이터 생성
+   * 1. 선택된 서비스, 지역, S3 Images URL을 포함한 프로필 데이터 생성
    * 2. 백엔드 API를 통해 프로필 정보 저장
    */
   const handleSubmit = async () => {
     try {
       if (isUploading) {
-        openSnackbar("이미지 업로드가 완료될 때까지 기다려주세요.", "warning");
+        openSnackbar(
+          t("Images 업로드가 완료될 때까지 기다려주세요."),
+          "warning"
+        );
         return;
       }
 
       if (!s3ImageUrl) {
-        openSnackbar("프로필 이미지를 업로드해주세요.", "error");
+        openSnackbar(t("프로필 Images를 업로드해주세요."), "error");
         return;
       }
 
@@ -80,13 +83,13 @@ export const ProfileRegister = () => {
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
 
-      openSnackbar("프로필이 성공적으로 등록되었습니다.", "success");
+      openSnackbar(t("프로필이 성공적으로 등록되었습니다."), "success");
       router.push("/");
     } catch (error) {
       openSnackbar(
         error instanceof Error
           ? error.message
-          : "프로필 등록 중 오류가 발생했습니다.",
+          : t("프로필 등록 중 오류가 발생했습니다."),
         "error"
       );
     }
@@ -127,7 +130,7 @@ export const ProfileRegister = () => {
               color: theme.palette.Black[400],
             })}
           >
-            프로필 등록
+            {t("프로필 등록")}
           </Typography>
           <Typography
             variant="R_20"
@@ -135,11 +138,11 @@ export const ProfileRegister = () => {
               color: (theme) => theme.palette.Black[200],
             }}
           >
-            추가 정보를 입력하여 회원가입을 완료해주세요.
+            {t("추가 정보를 입력하여 회원가입을 완료해주세요.")}
           </Typography>
         </Stack>
 
-        {/* 프로필 이미지 */}
+        {/* 프로필 Images */}
         <Box
           sx={{
             margin: "32px 0",
@@ -175,7 +178,7 @@ export const ProfileRegister = () => {
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              이용 서비스
+              {t("이용 서비스")}
             </Typography>
             <Typography
               variant="R_16"
@@ -183,7 +186,7 @@ export const ProfileRegister = () => {
                 color: (theme) => theme.palette.Grayscale[400],
               }}
             >
-              *이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!
+              {t("*이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!")}
             </Typography>
           </Stack>
           <ServiceSelector
@@ -206,7 +209,7 @@ export const ProfileRegister = () => {
                 color: (theme) => theme.palette.Black[400],
               }}
             >
-              내가 사는 지역
+              {t("내가 사는 지역")}
             </Typography>
             <Typography
               variant="R_16"
@@ -214,7 +217,7 @@ export const ProfileRegister = () => {
                 color: (theme) => theme.palette.Grayscale[400],
               }}
             >
-              *내가 사는 지역은 언제든 수정 가능해요!
+              {t("*내가 사는 지역은 언제든 수정 가능해요!")}
             </Typography>
           </Stack>
           <RegionSelector
@@ -246,7 +249,7 @@ export const ProfileRegister = () => {
           },
         }}
       >
-        시작하기
+        {t("시작하기")}
       </Button>
     </Box>
   );

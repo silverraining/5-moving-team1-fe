@@ -3,6 +3,8 @@ import {
   useMutation,
   useQueryClient,
   UseMutationResult,
+  useInfiniteQuery,
+  QueryFunctionContext,
 } from "@tanstack/react-query";
 import {
   moverList,
@@ -18,6 +20,7 @@ import {
   EstimateOfferDetail,
   EstimateOfferConfirmed,
   ConfirmRes,
+  EstimateRequestHistoryResponse,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
@@ -78,21 +81,27 @@ export const useEstimateRequestActive = () => {
 };
 
 /** 견적 관리 받았던 견적 hook */
-export const useEstimateRequestHistory = () => {
-  return useQuery({
-    queryKey: ["EstimateRequestHistory"],
-    queryFn: EstimateRequestHistory,
+export const useEstimateRequestHistory = (take = 5) =>
+  useInfiniteQuery({
+    queryKey: ["EstimateRequestHistory", take],
+    queryFn: ({ pageParam }: { pageParam?: string }) =>
+      EstimateRequestHistory(pageParam, take),
+    getNextPageParam: (lastPage) =>
+      lastPage.hasNext ? lastPage.nextCursor : undefined,
+    initialPageParam: undefined,
   });
-};
 
 /** 견적 관리 대기 중인 견적 hook */
-export const useEstimateOfferPending = (requestId: string) => {
-  return useQuery({
-    queryKey: ["EstimateOfferPending", requestId],
-    queryFn: () => EstimateOfferPending(requestId),
-    enabled: !!requestId,
+export const useEstimateOfferPending = (requestId: string, take = 5) =>
+  useInfiniteQuery({
+    queryKey: ["EstimateOfferPendingInfinite", requestId, take],
+    queryFn: ({ pageParam }: { pageParam?: string }) =>
+      EstimateOfferPending(requestId, pageParam, take),
+    getNextPageParam: (lastPage) =>
+      lastPage.hasNext ? lastPage.nextCursor : undefined,
+    enabled: !!requestId, // requestId가 있을 때만 요청
+    initialPageParam: undefined,
   });
-};
 
 /** 대기 중인, 받았던 견적 상세보기 hook */
 export const useEstimateOfferDetail = (requestId: string, moverId: string) => {

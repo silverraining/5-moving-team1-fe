@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, useTheme } from "@mui/material";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import { Clip, Kakao, FaceBook } from "../icon-btn/IconBtn";
-
+import { useTranslation } from "react-i18next";
 interface SnsShareProps {
   title?: string;
   url?: string;
@@ -14,13 +14,13 @@ export const SnsShare = ({
 }: SnsShareProps) => {
   const theme = useTheme();
   const { openSnackbar } = useSnackbar();
-
+  const { t } = useTranslation();
   const handleShare = async (platform: string) => {
     switch (platform) {
       case "링크복사":
         try {
           await navigator.clipboard.writeText(url);
-          openSnackbar("링크가 클립보드에 복사되었습니다.", "success");
+          openSnackbar(t("링크가 클립보드에 복사되었습니다."), "success");
         } catch (err) {
           console.error("클립보드 복사 실패:", err);
         }
@@ -32,7 +32,9 @@ export const SnsShare = ({
         break;
 
       case "페이스북":
-        const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+        const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(
+          url
+        )}`;
         window.open(facebookShareUrl, "_blank", "width=600,height=400");
         break;
 
@@ -52,7 +54,7 @@ export const SnsShare = ({
           lineHeight: "28px",
         }}
       >
-        {title}
+        {title || t("SNS 공유")}
       </Typography>
       <Box sx={{ display: "flex", gap: "16px" }}>
         <Clip onClick={() => handleShare("링크복사")} />

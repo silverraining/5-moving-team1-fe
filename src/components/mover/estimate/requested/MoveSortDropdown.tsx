@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useTranslation } from "react-i18next";
 
 export interface MoveSortOption {
   label: string;
@@ -14,18 +15,14 @@ interface MoveSortDropdownProps {
   onChange?: (option: MoveSortOption) => void;
 }
 
-const MOVE_SORT_OPTIONS: MoveSortOption[] = [
-  { label: "이사 빠른순", sort: "move_date" },
-  { label: "요청일 빠른순", sort: "created_at" },
-];
-
-export default function MoveSortDropdown({
+export const MoveSortDropdown = ({
   defaultOption,
   onChange,
-}: MoveSortDropdownProps) {
+}: MoveSortDropdownProps) => {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<MoveSortOption>(
-    defaultOption || MOVE_SORT_OPTIONS[0]
+    defaultOption || { label: t("이사 빠른순"), sort: "move_date" }
   );
 
   const handleToggle = () => {
@@ -37,6 +34,11 @@ export default function MoveSortDropdown({
     setIsOpen(false);
     onChange?.(option);
   };
+
+  const MOVE_SORT_OPTIONS: MoveSortOption[] = [
+    { label: t("이사 빠른순"), sort: "move_date" },
+    { label: t("요청일 빠른순"), sort: "created_at" },
+  ];
 
   return (
     <Box sx={{ position: "relative", width: "fit-content" }}>
@@ -84,6 +86,7 @@ export default function MoveSortDropdown({
             borderRadius: "8px",
             zIndex: 10,
             marginTop: "4px",
+            overflow: "hidden",
           })}
         >
           {MOVE_SORT_OPTIONS.map((option) => (
@@ -100,7 +103,6 @@ export default function MoveSortDropdown({
                 "&:hover": {
                   backgroundColor: theme.palette.PrimaryBlue[100],
                 },
-                borderRadius: "8px",
               })}
             >
               <Typography
@@ -122,4 +124,4 @@ export default function MoveSortDropdown({
       )}
     </Box>
   );
-}
+};

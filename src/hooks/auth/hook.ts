@@ -16,34 +16,38 @@ import { useNotificationAll } from "@/src/api/notification/hooks";
 import { useNotificationStore } from "@/src/store/notification";
 import { useEffect, useState } from "react";
 import { formatPhoneNumber } from "@/src/utils/formatPhonNumber";
-
+import { useTranslation } from "react-i18next";
 export const useLoginForm = (role: Role) => {
   const { mutate } = useLogin();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
-  const { setNotifications } = useNotificationStore();
+  const { setNotifications, setMarkAsRead } = useNotificationStore();
   const [fetchNotifications, setFetchNotifications] = useState(false);
   const { data: notificationData } = useNotificationAll(fetchNotifications);
-
+  const { t } = useTranslation();
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
+
+  useEffect(() => {
+    if (fetchNotifications && notificationData) {
+      setNotifications(notificationData);
+      setMarkAsRead(notificationData.length !== 0);
+    }
+  }, [fetchNotifications, notificationData, setNotifications]);
 
   const onSubmit = (data: LoginSchemaType) => {
     mutate(
       { ...data, role }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: async () => {
-          openSnackbar("로그인 성공", "success", 500, "standard");
+          openSnackbar(t("로그인 성공"), "success", 500, "standard");
           await setFetchNotifications(true);
           router.replace("/");
-          if (notificationData) {
-            setNotifications(notificationData ?? []);
-          }
         },
         onError: (error) => {
           openSnackbar(
-            error instanceof Error ? error.message : "로그인 실패",
+            error instanceof Error ? error.message : t("로그인 실패"),
             "error",
             2000
           );
@@ -62,6 +66,7 @@ export const useSignupForm = (role: Role) => {
   const { mutate } = useSignup();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
+  const { t } = useTranslation();
 
   const form = useForm<SignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
@@ -90,12 +95,12 @@ export const useSignupForm = (role: Role) => {
       { ...submitData }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: () => {
-          openSnackbar("회원가입 성공", "success", 1000, "standard");
+          openSnackbar(t("회원가입 성공"), "success", 1000, "standard");
           router.push(path);
         },
         onError: (error) => {
           openSnackbar(
-            error instanceof Error ? error.message : "회원가입 실패",
+            error instanceof Error ? error.message : t("회원가입 실패"),
             "error",
             2000
           );

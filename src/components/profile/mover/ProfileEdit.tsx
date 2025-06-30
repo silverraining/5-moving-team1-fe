@@ -1,7 +1,14 @@
 "use client";
 
-import { Box, Stack, Typography, Button, TextField } from "@mui/material";
-import { useState } from "react";
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  TextField,
+  CircularProgress,
+} from "@mui/material";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ImageUpload } from "../ImageUpload";
@@ -14,28 +21,34 @@ import {
   moverProfileRegisterSchema,
 } from "../../../schemas/profile.schema";
 import { useRouter } from "next/navigation";
-import { useUpdateMoverProfile } from "@/src/api/mover/hooks";
+import {
+  useUpdateMoverProfile,
+  useGetMoverProfile,
+} from "@/src/api/mover/hooks";
 import { ServiceRegion, ServiceType } from "@/src/types/common";
 import {
   convertToServiceTypeObject,
   convertToServiceRegionObject,
 } from "../../../utils/util";
+import { useTranslation } from "react-i18next";
 
-// TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
-// interface ProfileEditProps {
-//   initialData?: {
-//     name: string;
-//     email: string;
-//     phone: string;
-//     nickname: string;
-//     experience: number;
-//     intro: string;
-//     description: string;
-//     serviceType: ServiceType[];
-//     serviceRegion: ServiceRegion[];
-//     imageUrl?: string;
-//   };
-// }
+// 유틸 함수: Record<ServiceType, boolean>을 ServiceType[]로 변환
+const convertServiceTypeRecordToArray = (
+  serviceTypeRecord: Record<ServiceType, boolean>
+): ServiceType[] => {
+  return Object.entries(serviceTypeRecord)
+    .filter(([_, value]) => value)
+    .map(([key, _]) => key as ServiceType);
+};
+
+// 유틸 함수: Record<ServiceRegion, boolean>을 ServiceRegion[]로 변환
+const convertServiceRegionRecordToArray = (
+  serviceRegionRecord: Record<ServiceRegion, boolean>
+): ServiceRegion[] => {
+  return Object.entries(serviceRegionRecord)
+    .filter(([_, value]) => value)
+    .map(([key, _]) => key as ServiceRegion);
+};
 
 export const ProfileEdit = () => {
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
@@ -44,14 +57,18 @@ export const ProfileEdit = () => {
   const [regionError, setRegionError] = useState<boolean>(false);
 
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
+
+  // 기사님 프로필 조회 hook
+  const { data: moverProfileData, isLoading: isLoadingProfile } =
+    useGetMoverProfile();
 
   // 기사님 프로필 수정 hook
   const { mutateAsync: updateMoverProfile, isPending: isUpdating } =
     useUpdateMoverProfile();
 
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -62,6 +79,7 @@ export const ProfileEdit = () => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
+    reset,
   } = useForm<MoverProfileRegisterFormData>({
     resolver: zodResolver(moverProfileRegisterSchema),
     defaultValues: {
@@ -74,6 +92,30 @@ export const ProfileEdit = () => {
     },
     mode: "onChange",
   });
+
+  // 초기값 설정
+  useEffect(() => {
+    if (moverProfileData) {
+      const serviceTypeArray = convertServiceTypeRecordToArray(
+        moverProfileData.serviceType
+      );
+      const serviceRegionArray = convertServiceRegionRecordToArray(
+        moverProfileData.serviceRegion
+      );
+
+      setSelectedServices(serviceTypeArray);
+      setSelectedRegions(serviceRegionArray);
+
+      reset({
+        nickname: moverProfileData.nickname,
+        experience: moverProfileData.experience,
+        intro: moverProfileData.intro,
+        description: moverProfileData.description,
+        serviceType: serviceTypeArray,
+        serviceRegion: serviceRegionArray,
+      });
+    }
+  }, [moverProfileData, reset]);
 
   const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
@@ -97,13 +139,13 @@ export const ProfileEdit = () => {
     try {
       if (selectedServices.length === 0) {
         setServiceError(true);
-        openSnackbar("제공 서비스를 하나 이상 선택해주세요.", "error");
+        openSnackbar(t("제공 서비스를 하나 이상 선택해주세요."), "error");
         return;
       }
 
       if (selectedRegions.length === 0) {
         setRegionError(true);
-        openSnackbar("서비스 가능 지역을 하나 이상 선택해주세요.", "error");
+        openSnackbar(t("서비스 가능 지역을 하나 이상 선택해주세요."), "error");
         return;
       }
 
@@ -111,23 +153,47 @@ export const ProfileEdit = () => {
         ...data,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
-        imageUrl: s3ImageUrl || null,
+        imageUrl: s3ImageUrl || moverProfileData?.imageUrl || null,
       };
 
       await updateMoverProfile(profileData);
 
-      openSnackbar("기사님 프로필이 성공적으로 수정되었습니다.", "success");
+      openSnackbar(t("기사님 프로필이 성공적으로 수정되었습니다."), "success");
       router.push("/");
     } catch (error) {
-      console.error("프로필 수정 중 오류:", error);
+      console.error(t("프로필 수정 중 오류:"), error);
       openSnackbar(
         error instanceof Error
           ? error.message
-          : "프로필 수정 중 오류가 발생했습니다.",
+          : t("프로필 수정 중 오류가 발생했습니다."),
         "error"
       );
     }
   };
+
+  // 로딩 중일 때
+  if (isLoadingProfile) {
+    return (
+      <Box
+        sx={{
+          maxWidth: "1400px",
+          mx: "auto",
+          p: 3,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={40} />
+        <Typography variant="body1" color="text.secondary">
+          {t("프로필 정보를 불러오는 중...")}
+        </Typography>
+      </Box>
+    );
+  }
 
   return (
     <Box
@@ -165,7 +231,7 @@ export const ProfileEdit = () => {
                 color: theme.palette.Black[400],
               })}
             >
-              프로필 수정
+              {t("프로필 수정")}
             </Typography>
           </Stack>
 
@@ -179,7 +245,7 @@ export const ProfileEdit = () => {
               width: "100%",
             }}
           >
-            {/* 왼쪽 열: 프로필 이미지, 경력, 한 줄 소개, 상세 설명 */}
+            {/* 왼쪽 열: 프로필 Images, 경력, 한 줄 소개, 상세 설명 */}
             <Box
               sx={{
                 flex: 1,
@@ -202,7 +268,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    별명{" "}
+                    {t("별명")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -217,7 +283,7 @@ export const ProfileEdit = () => {
                       {...register("nickname")}
                       variant="outlined"
                       fullWidth
-                      placeholder="사이트에 노출될 이름을 입력해 주세요"
+                      placeholder={t("사이트에 노출될 이름을 입력해 주세요")}
                       error={!!errors.nickname}
                       helperText={errors.nickname?.message}
                       sx={{
@@ -232,7 +298,7 @@ export const ProfileEdit = () => {
                 </Box>
               </Box>
 
-              {/* 프로필 이미지 */}
+              {/* 프로필 Images */}
               <Box
                 sx={{
                   mb: "32px",
@@ -244,7 +310,7 @@ export const ProfileEdit = () => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={null}
+                  initialImage={moverProfileData?.imageUrl || null}
                 />
               </Box>
 
@@ -263,7 +329,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    경력{" "}
+                    {t("경력")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -279,7 +345,7 @@ export const ProfileEdit = () => {
                       type="number"
                       variant="outlined"
                       fullWidth
-                      placeholder="기사님의 경력을 입력해주세요"
+                      placeholder={t("기사님의 경력을 입력해주세요")}
                       error={!!errors.experience}
                       helperText={errors.experience?.message}
                       sx={{
@@ -309,7 +375,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    한 줄 소개{" "}
+                    {t("한 줄 소개")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -324,7 +390,7 @@ export const ProfileEdit = () => {
                       {...register("intro")}
                       variant="outlined"
                       fullWidth
-                      placeholder="한 줄 소개를 입력해 주세요"
+                      placeholder={t("한 줄 소개를 입력해 주세요")}
                       error={!!errors.intro}
                       helperText={errors.intro?.message}
                       sx={{
@@ -348,7 +414,7 @@ export const ProfileEdit = () => {
                       color: theme.palette.Black[400],
                     })}
                   >
-                    상세 설명
+                    {t("상세 설명")}
                   </Typography>
                   <Typography
                     variant="SB_20"
@@ -366,7 +432,7 @@ export const ProfileEdit = () => {
                   fullWidth
                   multiline
                   rows={4}
-                  placeholder="상세 내용을 입력해 주세요"
+                  placeholder={t("상세 내용을 입력해 주세요")}
                   error={!!errors.description}
                   helperText={errors.description?.message}
                   sx={{
@@ -404,7 +470,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.Black[400],
                       })}
                     >
-                      제공 서비스
+                      {t("제공 서비스")}
                     </Typography>
                     <Typography
                       variant="SB_20"
@@ -422,7 +488,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.SecondaryRed[200],
                       })}
                     >
-                      제공 서비스를 하나 이상 선택해주세요.
+                      {t("제공 서비스를 하나 이상 선택해주세요.")}
                     </Typography>
                   )}
                 </Stack>
@@ -442,7 +508,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.Black[400],
                       })}
                     >
-                      서비스 가능 지역
+                      {t("서비스 가능 지역")}
                     </Typography>
                     <Typography
                       variant="SB_20"
@@ -460,7 +526,7 @@ export const ProfileEdit = () => {
                         color: theme.palette.SecondaryRed[200],
                       })}
                     >
-                      서비스 가능 지역을 하나 이상 선택해주세요.
+                      {t("서비스 가능 지역을 하나 이상 선택해주세요.")}
                     </Typography>
                   )}
                 </Stack>
@@ -500,7 +566,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            취소
+            {t("취소")}
           </Button>
 
           {/* 수정하기 버튼 */}
@@ -529,7 +595,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            수정하기
+            {t("수정하기")}
           </Button>
         </Box>
       </form>

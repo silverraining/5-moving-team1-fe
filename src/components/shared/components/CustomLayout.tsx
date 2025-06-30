@@ -65,10 +65,11 @@ export const CustomLayout = ({ children }: CustomLayoutProps) => {
   return (
     <Stack
       minHeight={"100vh"}
-      width={"100vw"}
+      width={"100%"}
       sx={(theme) => ({
         bgcolor: isColorPage ? theme.palette.NeutralGray[50] : "transparent",
         alignContent: "center",
+        overflowX: "hidden",
       })}
     >
       <Header />

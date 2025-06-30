@@ -13,6 +13,8 @@ import { convertToLabel } from "@/src/utils/convertToLabel";
 import { postEstimateRequest } from "@/src/api/customer/request/api";
 import { parseAddress, ModalAddress } from "@/src/utils/parseAddress";
 import { PATH } from "@/src/lib/constants";
+import { useTranslation } from "react-i18next";
+import { AxiosError } from "axios";
 
 type ParsedAddress = {
   sido: string; // 시도
@@ -38,7 +40,7 @@ export default function Step3_AddressSelect({
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { moveType, moveDate, toAddress, fromAddress } = useEstimateStore();
 
   const [openFromModal, setOpenFromModal] = useState(false);
@@ -51,19 +53,19 @@ export default function Step3_AddressSelect({
   // 견적입력정보 개별 유효성 검사
   const validateFields = (): boolean => {
     if (!moveType) {
-      openSnackbar("이사 종류를 선택해주세요.", "error");
+      openSnackbar(t("이사 종류를 선택해주세요."), "error");
       return false;
     }
     if (!moveDate) {
-      openSnackbar("이사 예정일을 선택해주세요.", "error");
+      openSnackbar(t("이사 예정일을 선택해주세요."), "error");
       return false;
     }
     if (!fromAddress) {
-      openSnackbar("출발지를 선택해주세요.", "error");
+      openSnackbar(t("출발지를 선택해주세요."), "error");
       return false;
     }
     if (!toAddress) {
-      openSnackbar("도착지를 선택해주세요.", "error");
+      openSnackbar(t("도착지를 선택해주세요."), "error");
       return false;
     }
     return true;
@@ -80,10 +82,23 @@ export default function Step3_AddressSelect({
         toAddress: toAddress!,
       });
 
-      openSnackbar("견적 확정 완료", "success", 5000);
+      openSnackbar(t("견적 확정 완료"), "success", 5000);
       router.replace(PATH.moverList);
     } catch (error) {
-      openSnackbar("견적 확정에 실패했습니다. 다시 시도해주세요.", "error");
+      if (error instanceof AxiosError) {
+        if (error.response?.status === 404) {
+          openSnackbar(
+            t("견적 요청을 위해 먼저 프로필을 생성해주세요!"),
+            "error"
+          );
+          router.replace(PATH.userProfileRegister);
+        } else {
+          openSnackbar(
+            t("견적 확정에 실패했습니다. 다시 시도해주세요."),
+            "error"
+          );
+        }
+      }
       console.error(error);
     }
   };
@@ -116,7 +131,6 @@ export default function Step3_AddressSelect({
       <AddressModal
         open={openFromModal}
         onClose={() => setOpenFromModal(false)}
-        title="출발지를 선택해주세요"
         onSelect={handleSelectFrom}
       />
 
@@ -124,7 +138,6 @@ export default function Step3_AddressSelect({
       <AddressModal
         open={openToModal}
         onClose={() => setOpenToModal(false)}
-        title="도착지를 선택해주세요"
         onSelect={handleSelectTo}
       />
 

@@ -5,7 +5,7 @@ import { Box, Typography, Button, Modal } from "@mui/material";
 import { useTheme } from "@mui/material";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-
+import { useTranslation } from "react-i18next";
 interface NoEstimateModalProps {
   open: boolean;
   onClose: () => void;
@@ -14,7 +14,7 @@ interface NoEstimateModalProps {
 export const NoEstimateModal = ({ open, onClose }: NoEstimateModalProps) => {
   const theme = useTheme();
   const router = useRouter();
-
+  const { t } = useTranslation();
   const handleMoveToEstimate = () => {
     router.push("/customer/request");
     onClose();
@@ -64,7 +64,7 @@ export const NoEstimateModal = ({ open, onClose }: NoEstimateModalProps) => {
             marginBottom: "8px",
           }}
         >
-          일반 견적을 먼저 요청해주세요
+          {t("일반 견적을 먼저 요청해주세요")}
         </Typography>
         <Typography
           sx={{
@@ -73,9 +73,9 @@ export const NoEstimateModal = ({ open, onClose }: NoEstimateModalProps) => {
             marginBottom: "24px",
           }}
         >
-          지정 견적을 요청하기 위해서는
+          {t("지정 견적을 요청하기 위해서는")}
           <br />
-          일반 견적을 먼저 요청해야 합니다.
+          {t("일반 견적을 먼저 요청해야 합니다.")}
         </Typography>
         <Button
           variant="contained"
@@ -91,7 +91,7 @@ export const NoEstimateModal = ({ open, onClose }: NoEstimateModalProps) => {
             },
           }}
         >
-          일반 견적 요청하기
+          {t("일반 견적 요청하기")}
         </Button>
       </Box>
     </Modal>

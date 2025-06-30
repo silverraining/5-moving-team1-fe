@@ -1,6 +1,7 @@
 import { Box, Stack } from "@mui/material";
 import { ChipArea } from "../shared/components/chip/ChipArea";
 import { ServiceRegion } from "@/src/types/common";
+import { useTranslation } from "react-i18next";
 
 interface RegionSelectorProps {
   selectedRegions: ServiceRegion[];

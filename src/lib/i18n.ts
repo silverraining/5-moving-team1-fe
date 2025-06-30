@@ -10,12 +10,17 @@ i18n
   .init({
     fallbackLng: "ko",
     supportedLngs: ["ko", "en", "zh"],
+    defaultNS: "common",
+    ns: ["common"],
     detection: {
       order: ["path", "cookie", "navigator"],
       caches: ["cookie"],
     },
     backend: {
       loadPath: "/locales/{{lng}}/{{ns}}.json",
+    },
+    react: {
+      useSuspense: true, // ✅ 이게 있어야 Suspense가 작동
     },
     interpolation: {
       escapeValue: false,

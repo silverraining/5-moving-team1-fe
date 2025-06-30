@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Stack, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,20 +33,20 @@ import {
   convertToServiceRegionArray,
   convertToServiceRegionObject,
 } from "../../../utils/util";
-
+import { useTranslation } from "react-i18next";
 export const ProfileEdit = () => {
   const [selectedServices, setSelectedServices] = useState<ServiceType[]>([]);
   const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
 
   const router = useRouter();
-
+  const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
 
   // 일반 유저 프로필 조회 hook
-  const { data: profileData, isLoading } = useGetCustomerProfile();
+  const { data: customerProfileData, isLoading } = useGetCustomerProfile();
   // 일반 유저 프로필 수정 hook
   const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -61,27 +67,27 @@ export const ProfileEdit = () => {
 
   // 프로필 데이터로 폼 초기화
   useEffect(() => {
-    if (profileData) {
+    if (customerProfileData) {
       const serviceTypeArray = convertToServiceTypeArray(
-        profileData.serviceType
+        customerProfileData.serviceType
       );
       const serviceRegionArray = convertToServiceRegionArray(
-        profileData.serviceRegion
+        customerProfileData.serviceRegion
       );
 
       setSelectedServices(serviceTypeArray);
       setSelectedRegions(serviceRegionArray);
 
       reset({
-        name: profileData.name,
-        email: profileData.email,
-        phone: profileData.phone,
+        name: customerProfileData.name,
+        email: customerProfileData.email,
+        phone: customerProfileData.phone,
         serviceType: serviceTypeArray,
         serviceRegion: serviceRegionArray,
-        imageUrl: profileData.imageUrl,
+        imageUrl: customerProfileData.imageUrl,
       });
     }
-  }, [profileData, reset]);
+  }, [customerProfileData, reset]);
 
   const handleServiceToggle = (service: ServiceType) => {
     const newServices = selectedServices.includes(service)
@@ -102,41 +108,64 @@ export const ProfileEdit = () => {
   const onSubmit = async (data: ProfileEditFormData) => {
     try {
       if (isUploading) {
-        openSnackbar("이미지 업로드가 완료될 때까지 기다려주세요.", "warning");
+        openSnackbar(
+          t("Images 업로드가 완료될 때까지 기다려주세요."),
+          "warning"
+        );
         return;
       }
 
       // 비밀번호 변경 시 추가 검증
       if (data.newPassword && data.newPassword !== data.confirmPassword) {
-        openSnackbar("새 비밀번호가 일치하지 않습니다.", "error");
+        openSnackbar(t("새 비밀번호가 일치하지 않습니다."), "error");
         return;
       }
 
       await updateCustomerProfile({
         name: data.name,
-        phone: data.phone,
+        phone: data.phone || null,
         password: data.currentPassword,
         newPassword: data.newPassword,
-        imageUrl: s3ImageUrl || null,
+        imageUrl: s3ImageUrl || customerProfileData?.imageUrl || null,
         serviceType: convertToServiceTypeObject(selectedServices),
         serviceRegion: convertToServiceRegionObject(selectedRegions),
       });
 
-      openSnackbar("프로필이 성공적으로 수정되었습니다.", "success");
+      openSnackbar(t("프로필이 성공적으로 수정되었습니다."), "success");
       router.push("/");
     } catch (error) {
-      console.error("프로필 수정 중 오류:", error);
+      console.error(t("프로필 수정 중 오류:"), error);
       openSnackbar(
         error instanceof Error
           ? error.message
-          : "프로필 수정 중 오류가 발생했습니다.",
+          : t("프로필 수정 중 오류가 발생했습니다."),
         "error"
       );
     }
   };
 
+  // 로딩 중일 때
   if (isLoading) {
-    return <div>로딩 중...</div>; // 또는 적절한 로딩 컴포넌트
+    return (
+      <Box
+        sx={{
+          maxWidth: "1400px",
+          mx: "auto",
+          p: 3,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={40} />
+        <Typography variant="body1" color="text.secondary">
+          {t("프로필 정보를 불러오는 중...")}
+        </Typography>
+      </Box>
+    );
   }
 
   return (
@@ -175,7 +204,7 @@ export const ProfileEdit = () => {
                 color: theme.palette.Black[400],
               })}
             >
-              프로필 수정
+              {t("프로필 수정")}
             </Typography>
           </Stack>
 
@@ -200,17 +229,20 @@ export const ProfileEdit = () => {
             >
               {/* 개인정보 입력 */}
               <PersonalInfoSection
-                register={register}
-                control={control}
-                errors={errors}
-                initialData={profileData}
+                register={register as any}
+                control={control as any}
+                errors={errors as any}
+                initialData={customerProfileData}
               />
 
               {/* 비밀번호 변경 */}
-              <PasswordChangeSection register={register} errors={errors} />
+              <PasswordChangeSection
+                register={register as any}
+                errors={errors as any}
+              />
             </Box>
 
-            {/* 오른쪽 열: 프로필 이미지, 서비스, 지역 */}
+            {/* 오른쪽 열: 프로필 Images, 서비스, 지역 */}
             <Box
               sx={{
                 flex: 1,
@@ -218,7 +250,7 @@ export const ProfileEdit = () => {
                 maxWidth: ["100%", "100%", "500px"],
               }}
             >
-              {/* 프로필 이미지 */}
+              {/* 프로필 Images */}
               <Box
                 sx={{
                   mb: "32px",
@@ -231,7 +263,7 @@ export const ProfileEdit = () => {
                   onFileSelect={handleFileUpload}
                   previewImage={previewImage}
                   isUploading={isUploading}
-                  initialImage={profileData?.imageUrl}
+                  initialImage={customerProfileData?.imageUrl}
                 />
               </Box>
 
@@ -256,7 +288,7 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Black[400],
                     }}
                   >
-                    이용 서비스
+                    {t("이용 서비스")}
                   </Typography>
                   <Typography
                     variant="R_16"
@@ -264,7 +296,9 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Grayscale[400],
                     }}
                   >
-                    *이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!
+                    {t(
+                      "*이용 서비스는 중복 선택 가능하며, 언제든 수정 가능해요!"
+                    )}
                   </Typography>
                 </Stack>
                 <ServiceSelector
@@ -287,7 +321,7 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Black[400],
                     }}
                   >
-                    내가 사는 지역
+                    {t("내가 사는 지역")}
                   </Typography>
                   <Typography
                     variant="R_16"
@@ -295,7 +329,7 @@ export const ProfileEdit = () => {
                       color: (theme) => theme.palette.Grayscale[400],
                     }}
                   >
-                    *내가 사는 지역은 언제든 수정 가능해요!
+                    {t("*내가 사는 지역은 언제든 수정 가능해요!")}
                   </Typography>
                 </Stack>
                 <RegionSelector
@@ -334,7 +368,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            취소
+            {t("취소")}
           </Button>
 
           {/* 수정하기 버튼 */}
@@ -358,7 +392,7 @@ export const ProfileEdit = () => {
               },
             }}
           >
-            수정하기
+            {t("수정하기")}
           </Button>
         </Box>
       </form>

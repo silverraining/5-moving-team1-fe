@@ -50,7 +50,7 @@ export const registerCustomerProfile = async (data: CustomerProfileRequest) => {
 /** 일반 유저 프로필 수정 요청 타입 */
 export interface UpdateCustomerProfileRequest {
   name: string;
-  phone: string;
+  phone: string | null;
   password?: string;
   newPassword?: string;
   imageUrl?: string | null;
@@ -114,7 +114,7 @@ export type EstimateRequestHistoryItem = {
   customerName: string;
   moveDate: string;
   createdAt: string;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   offerCount: number;
   requestStatus: EstimateOfferStatus;
   isTargeted: boolean;
@@ -123,22 +123,29 @@ export type EstimateRequestHistoryItem = {
 
 /** 받았던 견적 타입 */
 export type EstimateRequestHistoryResponse = {
-  items: EstimateRequestHistoryItem;
+  items: EstimateRequestHistoryItem[];
   hasNext: boolean;
   nextCursor: string | null;
   totalCount: number;
 };
 
 /** 견적 관리 받았던 견적 api */
-export const EstimateRequestHistory =
-  async (): Promise<EstimateRequestHistoryResponse> => {
-    try {
-      const response = await apiClient.get("/estimate-request/history", {});
-      return response.data;
-    } catch (error) {
-      throw error;
-    }
-  };
+export const EstimateRequestHistory = async (
+  cursor?: string,
+  take: number = 5
+): Promise<EstimateRequestHistoryResponse> => {
+  try {
+    const response = await apiClient.get("/estimate-request/history", {
+      params: {
+        cursor,
+        take,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
 /** 대기 중인 견적 Item 타입 */
 export type EstimateOfferPendingResponseItems = {
@@ -149,7 +156,7 @@ export type EstimateOfferPendingResponseItems = {
   isConfirmed: boolean;
   isTargeted: boolean;
   moveDate: Date;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   mover: MoverProfile;
   moverId: string;
   offerId: string;
@@ -169,12 +176,19 @@ export type EstimateOfferPendingResponse = {
 
 /** 견적 관리 대기 중인 견적 api */
 export const EstimateOfferPending = async (
-  requestId: string
+  requestId: string,
+  cursor?: string,
+  take: number = 5
 ): Promise<EstimateOfferPendingResponse> => {
   try {
     const response = await apiClient.get(
       `/estimate-offer/${requestId}/pending`,
-      {}
+      {
+        params: {
+          cursor,
+          take,
+        },
+      }
     );
     return response.data;
   } catch (error) {

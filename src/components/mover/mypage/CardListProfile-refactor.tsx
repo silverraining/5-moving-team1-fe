@@ -14,6 +14,7 @@ import {
   convertToServiceRegionArray,
   convertRegionToKoreanLabels,
 } from "@/src/utils/util";
+import { useTranslation } from "react-i18next";
 
 interface CardProps {
   data: MoverProfileCardData;
@@ -41,7 +42,7 @@ export const CardListProfile = ({
 }: CardProps) => {
   const theme = useTheme();
   const isDesktopUp = useMediaQuery(theme.breakpoints.up("desktop"));
-
+  const { t } = useTranslation();
   const buttonPrimary = (
     <Button
       key="primary"
@@ -66,7 +67,7 @@ export const CardListProfile = ({
           whiteSpace: "nowrap",
         }}
       >
-        {buttonLabels?.primary ?? "견적 보내기"}
+        {buttonLabels?.primary ?? t("견적 보내기")}
       </Typography>
     </Button>
   );
@@ -95,7 +96,7 @@ export const CardListProfile = ({
           whiteSpace: "nowrap",
         }}
       >
-        {buttonLabels?.secondary ?? "반려"}
+        {buttonLabels?.secondary ?? t("반려")}
       </Typography>
     </Button>
   );
@@ -160,7 +161,7 @@ export const CardListProfile = ({
               >
                 <Image
                   src={data.imageUrl || "/Images/profile/maleProfile.svg"}
-                  alt="프로필 이미지"
+                  alt="프로필 Images"
                   fill
                   style={{
                     objectFit: "cover",
@@ -210,7 +211,7 @@ export const CardListProfile = ({
             )}
           </Stack>
 
-          {/* 내부 박스 (이미지, 정보) */}
+          {/* 내부 박스 (Images, 정보) */}
           <Box
             display="flex"
             flexDirection="row"
@@ -225,7 +226,7 @@ export const CardListProfile = ({
               boxShadow: "4px 4px 16px 0px rgba(233, 233, 233, 0.1)",
             })}
           >
-            {/* 프로필 이미지 */}
+            {/* 프로필 Images */}
             {isDesktopUp && (
               <Box
                 width="80px"
@@ -240,7 +241,7 @@ export const CardListProfile = ({
               >
                 <Image
                   src={data.imageUrl || "/Images/profile/maleProfile.svg"}
-                  alt="프로필 이미지"
+                  alt="프로필 Images"
                   fill
                   style={{
                     objectFit: "cover",
@@ -310,7 +311,7 @@ export const CardListProfile = ({
                       whiteSpace: "nowrap",
                     })}
                   >
-                    경력
+                    {t("경력")}
                   </Typography>
                   <Typography
                     sx={(theme) => ({
@@ -321,7 +322,7 @@ export const CardListProfile = ({
                       whiteSpace: "nowrap",
                     })}
                   >
-                    {data.experience}년
+                    {data.experience} {t("년")}
                   </Typography>
                 </Box>
 
@@ -340,7 +341,8 @@ export const CardListProfile = ({
                       },
                     })}
                   >
-                    {data.confirmedEstimateCount}건 <span>확정</span>
+                    {data.confirmedEstimateCount} {t("건")}{" "}
+                    <span>{t("확정")}</span>
                   </Typography>
                 </Box>
               </Stack>
@@ -363,7 +365,7 @@ export const CardListProfile = ({
                         whiteSpace: "nowrap",
                       }}
                     >
-                      제공 서비스
+                      {t("제공 서비스")}
                     </Typography>
                   </Box>
                   <Typography sx={{ fontSize: 14 }}>
@@ -387,7 +389,7 @@ export const CardListProfile = ({
                         whiteSpace: "nowrap",
                       }}
                     >
-                      지역
+                      {t("지역")}
                     </Typography>
                   </Box>
                   <Typography

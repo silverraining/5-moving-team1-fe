@@ -96,7 +96,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
           width={size}
           height={size}
           src={
-            // user.imageUrl이 빈 문자열일 경우 기본이미지 적용하도록
+            // user.imageUrl이 빈 문자열일 경우 기본Images 적용하도록
             user && user.imageUrl && user.imageUrl.trim() !== ""
               ? user.imageUrl
               : "/Images/header/Profile.svg"
