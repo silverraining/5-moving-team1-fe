@@ -76,7 +76,7 @@ export const GeneralEdit = () => {
     try {
       await updateProfile({
         name: data.name,
-        phone: data.phone,
+        phone: data.phone || null,
         password: data.currentPassword,
         newPassword: data.newPassword,
       });

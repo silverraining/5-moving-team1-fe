@@ -50,7 +50,7 @@ export const registerCustomerProfile = async (data: CustomerProfileRequest) => {
 /** 일반 유저 프로필 수정 요청 타입 */
 export interface UpdateCustomerProfileRequest {
   name: string;
-  phone: string;
+  phone: string | null;
   password?: string;
   newPassword?: string;
   imageUrl?: string | null;

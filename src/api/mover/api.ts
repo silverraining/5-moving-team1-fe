@@ -73,7 +73,7 @@ export const getMoverProfileForEdit =
 
 interface UpdateGeneralMoverProfileRequest {
   name: string;
-  phone: string;
+  phone: string | null;
   password?: string;
   newPassword?: string;
 }

@@ -123,7 +123,7 @@ export const ProfileEdit = () => {
 
       await updateCustomerProfile({
         name: data.name,
-        phone: data.phone,
+        phone: data.phone || null,
         password: data.currentPassword,
         newPassword: data.newPassword,
         imageUrl: s3ImageUrl || null,
