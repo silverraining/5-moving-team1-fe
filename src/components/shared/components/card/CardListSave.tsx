@@ -5,6 +5,7 @@ import { useResponsiveValue } from "@/src/hooks/useResponsiveValue";
 import { EstimateOffer } from "@/src/types/estimate";
 import { ChipData, CardData } from "@/src/types/card";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@mui/material/styles";
 
 interface CardProps extends BoxProps {
   data: EstimateOffer | CardData;
@@ -21,6 +22,7 @@ export const CardListSave = ({
   ...props
 }: CardProps) => {
   const responsive = useResponsiveValue(forceMobileSize);
+  const theme = useTheme();
 
   // EstimateOffer인지 CardData인지 확인
   const isEstimateOffer = (
@@ -216,26 +218,20 @@ export const CardListSave = ({
             {/* 경력 */}
             <Box display="flex" gap="4px">
               <Typography
-                sx={(theme) => ({
+                sx={{
                   fontSize: responsive([13, 13, 16]),
                   lineHeight: responsive(["22px", "22px", "26px"]),
                   fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
                   whiteSpace: "nowrap",
-                })}
+                }}
               >
-                {t("경력")}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: responsive([13, 13, 16]),
-                  lineHeight: responsive(["22px", "22px", "26px"]),
-                  fontWeight: 500,
-                  color: theme.palette.Black[300],
-                  whiteSpace: "nowrap",
-                })}
-              >
-                {info.experience} {t("년")}
+                <span style={{ color: theme.palette.Grayscale[300] }}>
+                  {t("경력")}&nbsp;
+                </span>
+                <span style={{ color: theme.palette.Black[300] }}>
+                  {info.experience}
+                  {t("년")}
+                </span>
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -250,7 +246,8 @@ export const CardListSave = ({
                   whiteSpace: "nowrap",
                 })}
               >
-                {info.confirmedCount} {t("건")}
+                {info.confirmedCount}
+                {t("건")}
               </Typography>
               <Typography
                 sx={(theme) => ({

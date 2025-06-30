@@ -35,7 +35,7 @@ export default function NotificationHeader({
           onClick={onClose}
           size="small"
           sx={(theme) => ({
-            padding: "4px 8px",
+            padding: "4px ",
             color: theme.palette.Grayscale[50],
           })}
           aria-label="close"

@@ -4,6 +4,7 @@ import { ChipData, CardData } from "@/src/types/card";
 import Image from "next/image";
 import { EstimateOffer } from "@/src/types/estimate";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@mui/material/styles";
 
 interface CardProps {
   data: EstimateOffer | CardData;
@@ -44,6 +45,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
         chipType: type,
       }));
   const { t } = useTranslation();
+  const theme = useTheme();
   return (
     <Box
       display="flex"
@@ -200,26 +202,20 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
             {/* 경력 */}
             <Box display="flex" gap="4px">
               <Typography
-                sx={(theme) => ({
+                sx={{
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
                   whiteSpace: "nowrap",
-                })}
+                }}
               >
-                {t("경력")}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Black[300],
-                  whiteSpace: "nowrap",
-                })}
-              >
-                {info.experience} {t("년")}
+                <span style={{ color: theme.palette.Grayscale[300] }}>
+                  {t("경력")}&nbsp;
+                </span>
+                <span style={{ color: theme.palette.Black[300] }}>
+                  {info.experience}
+                  {t("년")}
+                </span>
               </Typography>
             </Box>
             {/* Divider */}
@@ -238,7 +234,8 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
                   },
                 })}
               >
-                {info.confirmedCount} {t("건")} <span>{t("확정")}</span>
+                {info.confirmedCount}
+                {t("건")} <span>{t("확정")}</span>
               </Typography>
             </Box>
           </Box>

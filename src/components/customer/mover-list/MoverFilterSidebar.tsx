@@ -45,6 +45,7 @@ export const MoverFilterSidebar = ({
           sx={(theme) => ({
             cursor: isFilterActive ? "pointer" : "default",
             textDecoration: isFilterActive ? "underline" : "none",
+            color: theme.palette.Grayscale[300],
           })}
           onClick={isFilterActive ? onReset : undefined}
         >
