@@ -15,7 +15,7 @@ type EstimateState = {
   setStep: (step: number | null) => void;
 };
 
-export const useEstimateStore = create<EstimateState>()(
+export const useEstimateStore = create<EstimateState & { reset: () => void }>()(
   persist(
     (set) => ({
       moveType: "",
@@ -28,9 +28,17 @@ export const useEstimateStore = create<EstimateState>()(
       setFromAddress: (addr) => set({ fromAddress: addr }),
       setToAddress: (addr) => set({ toAddress: addr }),
       setStep: (step) => set({ step }),
+      reset: () =>
+        set({
+          moveType: "",
+          moveDate: "",
+          fromAddress: null,
+          toAddress: null,
+          step: null,
+        }),
     }),
     {
-      name: "estimate-storage", // localStorage 키 이름
+      name: "estimate-storage",
     }
   )
 );
