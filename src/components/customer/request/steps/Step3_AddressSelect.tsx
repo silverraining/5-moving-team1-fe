@@ -92,7 +92,11 @@ export default function Step3_AddressSelect({
             "error"
           );
           router.replace(PATH.userProfileRegister);
-          return;
+        } else {
+          openSnackbar(
+            t("견적 확정에 실패했습니다. 다시 시도해주세요."),
+            "error"
+          );
         }
       }
       console.error(error);
