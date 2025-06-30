@@ -7,12 +7,13 @@ interface NotificationStore {
   markAsRead: boolean;
   setMarkAsRead: (state: boolean) => void;
   setNotifications: (newNotifications: notificationAllRes[]) => void;
-  reset: () => void; // reset 추가
+  removeNotification: (id: string) => void;
+  reset: () => void;
 }
 
 const initialState = {
   notifications: [],
-  markAsRead: true,
+  markAsRead: false,
 };
 
 export const useNotificationStore = create<NotificationStore>()(
@@ -25,6 +26,14 @@ export const useNotificationStore = create<NotificationStore>()(
           notifications: newNotifications,
           markAsRead: false,
         })),
+      removeNotification: (id) =>
+        set((state) => {
+          const updated = (state.notifications ?? []).filter(
+            (n) => n.id !== id
+          );
+          return { notifications: updated };
+        }),
+
       reset: () => set(initialState), // reset 구현
     }),
     {
