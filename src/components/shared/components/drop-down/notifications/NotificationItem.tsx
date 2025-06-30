@@ -26,7 +26,7 @@ interface NotificationItemProps {
 export default function NotificationItem({ data }: NotificationItemProps) {
   const router = useRouter();
   const { user } = AuthStore();
-  const { setMarkAsRead } = useNotificationStore();
+  const { markAsReadById } = useNotificationStore();
   const { mutate } = useNotificationRead();
   const timeAgo = dayjs(data.createdAt).add(9, "hour").fromNow();
   // console.log("서버에서 내려온 createdAt:", data.createdAt);
@@ -52,19 +52,23 @@ export default function NotificationItem({ data }: NotificationItemProps) {
   const highlight = getHighlight();
 
   const onHighlightClick = () => {
-    // 읽지 않은 상태일 때만 읽음 처리
     if (!data.isRead) {
       mutate(
         { id: data.id },
         {
           onSuccess: () => {
-            setMarkAsRead(true);
+            markAsReadById(data.id);
           },
         }
       );
     }
 
-    // 페이지 이동 (읽음 여부와 관계없이)
+    // 페이지 이동
+    navigateToPage();
+  };
+
+  // 페이지 이동 (읽음 여부와 관계없이)
+  const navigateToPage = () => {
     switch (data.type.trim()) {
       case "NEW_ESTIMATE_REQUEST":
         return router.push(PATH.moverRequest);
@@ -85,6 +89,7 @@ export default function NotificationItem({ data }: NotificationItemProps) {
         return "";
     }
   };
+
   // message에서 highlight가 존재하는지
   const parts = data.message.includes(highlight)
     ? data.message.split(highlight)

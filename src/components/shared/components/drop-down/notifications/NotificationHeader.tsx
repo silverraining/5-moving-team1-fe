@@ -3,18 +3,22 @@
 import { Box, Button, IconButton, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
+
 interface NotificationHeaderProps {
-  isMany: boolean;
-  allRead: () => void;
+  hasUnreadNotifications: boolean;
+  hasNotifications: boolean;
+  onMarkAllAsRead: () => void;
   onClose?: () => void;
 }
 
 export default function NotificationHeader({
   onClose,
-  isMany,
-  allRead,
+  hasUnreadNotifications,
+  hasNotifications,
+  onMarkAllAsRead,
 }: NotificationHeaderProps) {
   const { t } = useTranslation();
+
   return (
     <Box
       sx={{
@@ -28,14 +32,27 @@ export default function NotificationHeader({
       <Typography variant="B_16" sx={{ fontWeight: "bold" }}>
         {t("알림")}
       </Typography>
-      {/* 닫기 버튼 */}
       <Box>
-        {isMany && <Button onClick={allRead}>모두 읽기</Button>}
+        {hasNotifications && (
+          <Button
+            onClick={onMarkAllAsRead}
+            sx={(theme) => ({
+              color: theme.palette.Grayscale[300],
+              cursor: "pointer",
+              "&:hover": {
+                backgroundColor: "transparent",
+                textDecoration: "underline",
+              },
+            })}
+          >
+            {t("모두 읽음")}
+          </Button>
+        )}
         <IconButton
           onClick={onClose}
           size="small"
           sx={(theme) => ({
-            padding: "4px ",
+            padding: "4px",
             color: theme.palette.Grayscale[50],
           })}
           aria-label="close"

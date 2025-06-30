@@ -19,8 +19,5 @@ export const useNotificationRead = () => {
 
   return useMutation<void, Error, notificationReadReq>({
     mutationFn: notificationRead,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["notifications"] });
-    },
   });
 };
