@@ -14,20 +14,46 @@ import { useRouter } from "next/navigation";
 import { useUpdateGeneralMoverProfile } from "../../../api/mover/hooks";
 import { useTranslation } from "react-i18next";
 
-// TODO: 기사님 프로필 수정 페이지 초기값 설정 (localstorage vs api)
-// interface GeneralEditProps {
-//   initialData?: {
-//     name: string;
-//     email: string;
-//     phone: string;
-//   };
-// }
+// localStorage에서 사용자 정보 가져오는 함수
+const getUserDataFromLocalStorage = () => {
+  let userData = {
+    name: "",
+    email: "",
+    phone: "",
+  };
+
+  try {
+    const authStorage = localStorage.getItem("auth-storage");
+    if (authStorage) {
+      const parsedData = JSON.parse(authStorage);
+      const user = parsedData?.state?.user;
+      if (user) {
+        userData = {
+          name: user?.name || "",
+          email: user?.email || "",
+          phone: user?.phone || "",
+        };
+      }
+    }
+  } catch (error) {
+    console.error(
+      "localStorage에서 사용자 정보를 가져오는 중 오류 발생:",
+      error
+    );
+  } finally {
+    return userData;
+  }
+};
 
 export const GeneralEdit = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
   const { mutateAsync: updateProfile } = useUpdateGeneralMoverProfile();
   const { t } = useTranslation();
+
+  // localStorage에서 사용자 정보 가져오기
+  const userData = getUserDataFromLocalStorage();
+
   const {
     register,
     handleSubmit,
@@ -36,9 +62,9 @@ export const GeneralEdit = () => {
   } = useForm<GeneralEditFormData>({
     resolver: zodResolver(generalEditSchema),
     defaultValues: {
-      name: "",
-      email: "codeit@codeit.kr",
-      phone: "",
+      name: userData.name,
+      email: userData.email,
+      phone: userData.phone,
       currentPassword: undefined,
       newPassword: undefined,
       confirmPassword: undefined,

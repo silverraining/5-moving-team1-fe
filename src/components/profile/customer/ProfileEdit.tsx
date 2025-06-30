@@ -229,14 +229,17 @@ export const ProfileEdit = () => {
             >
               {/* 개인정보 입력 */}
               <PersonalInfoSection
-                register={register}
-                control={control}
-                errors={errors}
+                register={register as any}
+                control={control as any}
+                errors={errors as any}
                 initialData={profileData}
               />
 
               {/* 비밀번호 변경 */}
-              <PasswordChangeSection register={register} errors={errors} />
+              <PasswordChangeSection
+                register={register as any}
+                errors={errors as any}
+              />
             </Box>
 
             {/* 오른쪽 열: 프로필 이미지, 서비스, 지역 */}
