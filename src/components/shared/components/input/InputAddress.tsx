@@ -44,12 +44,13 @@ export const EditableBox = ({
       boxSizing={"border-box"}
     >
       {/* 출발지 */}
-      <Box
-        display={"flex"}
-        flexDirection={"column"}
-        alignItems={"flex-end"}
-        gap={"8px"}
-      >
+      <Box display={"flex"} flexDirection={"column"} gap={"8px"}>
+        <Typography
+          variant={isSmall ? "M_14" : "M_18"}
+          sx={{ color: COLORS.Black[400] }}
+        >
+          출발지
+        </Typography>
         <Button
           variant="outlined"
           onClick={onFromClick}
@@ -73,6 +74,7 @@ export const EditableBox = ({
               color: COLORS.Black[400],
               cursor: "pointer",
               textDecoration: "underline",
+              textAlign: "end",
             }}
           >
             {t("수정하기")}
@@ -81,12 +83,13 @@ export const EditableBox = ({
       </Box>
 
       {/* 도착지 */}
-      <Box
-        display={"flex"}
-        flexDirection={"column"}
-        alignItems={"flex-end"}
-        gap={"8px"}
-      >
+      <Box display={"flex"} flexDirection={"column"} gap={"8px"}>
+        <Typography
+          variant={isSmall ? "M_14" : "M_18"}
+          sx={{ color: COLORS.Black[400] }}
+        >
+          도착지
+        </Typography>
         <Button
           variant="outlined"
           onClick={onToClick}
@@ -110,6 +113,7 @@ export const EditableBox = ({
               color: COLORS.Black[400],
               cursor: "pointer",
               textDecoration: "underline",
+              textAlign: "end",
             }}
           >
             {t("수정하기")}
