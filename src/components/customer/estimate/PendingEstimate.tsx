@@ -110,12 +110,7 @@ export default function PendingEstimate() {
     );
   };
 
-  if (isLoading || isLoadingIds)
-    return (
-      <Typography>
-        <CardListWaitSkeleton />
-      </Typography>
-    );
+  if (isLoading || isLoadingIds) return <CardListWaitSkeleton />;
   if (isError || errorIds)
     return <EmprtyReview text="대기중인 견적이 없습니다" />;
   if (!items || items.length === 0)
