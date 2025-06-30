@@ -1,5 +1,5 @@
 "use client";
-import { Grid, Typography } from "@mui/material";
+import { Button, Grid, Stack, Typography } from "@mui/material";
 import {
   CardListWait,
   CardListWaitSkeleton,
@@ -16,6 +16,10 @@ import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EmprtyReview } from "../../review/EmptyReview";
 import { useTranslation } from "react-i18next";
+import {
+  EstimateRequestCard,
+  EstimateRequestCardSkeleton,
+} from "./EstimateRequestCard";
 
 // 견적서 카드 데이터에 ID 추가
 interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
@@ -48,17 +52,24 @@ export default function PendingEstimate() {
   const { data, isLoading, error } = useEstimateOfferPending(requestId ?? "");
   if (isLoading || isLoadingIds) {
     return (
-      <Grid container spacing={2} py={[3, 4, 5]}>
-        {[...Array(6)].map((_, i) => (
-          <Grid
-            key={i}
-            size={[12, 12, 6]}
-            sx={{ display: "flex", justifyContent: "center" }}
-          >
-            <CardListWaitSkeleton />
+      <Stack display={"flex"} flexDirection={"column"} py={3}>
+        <Stack spacing={2} pb={3}>
+          <Typography variant="SB_24">견적 요청 정보</Typography>
+          <EstimateRequestCardSkeleton />
+          <Typography variant="SB_24">받은 견적</Typography>
+          <Grid container spacing={2} py={[3, 4, 5]}>
+            {[...Array(6)].map((_, i) => (
+              <Grid
+                key={i}
+                size={[12, 12, 6]}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <CardListWaitSkeleton />
+              </Grid>
+            ))}
           </Grid>
-        ))}
-      </Grid>
+        </Stack>
+      </Stack>
     );
   }
   if (error || errorIds)
@@ -110,22 +121,30 @@ export default function PendingEstimate() {
 
   // 실제 데이터 렌더링
   return (
-    <Grid container spacing={2} py={[3, 4, 5]}>
-      {data?.items.map((card: PendingEstimateCardDataWithId, index) => (
-        <Grid
-          key={index}
-          size={[12, 12, 6]}
-          display={"flex"}
-          sx={{ justifyContent: "center" }}
-        >
-          <CardListWait
-            data={card}
-            onDetailClick={handleDetailClick(card)}
-            onLikeClick={handleLikeClick(card)}
-            onConfirmClick={handleConfirmClick(card)}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <Stack display={"flex"} flexDirection={"column"} py={3}>
+      <Stack spacing={2} pb={3}>
+        <Typography variant="SB_24">견적 요청 정보</Typography>
+
+        <EstimateRequestCard requestData={requestIds[0]} />
+      </Stack>
+      <Typography variant="SB_24">받은 견적</Typography>
+      <Grid container spacing={2} py={[3, 4, 5]}>
+        {data?.items.map((card: PendingEstimateCardDataWithId, index) => (
+          <Grid
+            key={index}
+            size={[12, 12, 6]}
+            display={"flex"}
+            sx={{ justifyContent: "center" }}
+          >
+            <CardListWait
+              data={card}
+              onDetailClick={handleDetailClick(card)}
+              onLikeClick={handleLikeClick(card)}
+              onConfirmClick={handleConfirmClick(card)}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </Stack>
   );
 }

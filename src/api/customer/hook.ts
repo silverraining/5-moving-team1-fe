@@ -21,6 +21,8 @@ import {
   EstimateOfferConfirmed,
   ConfirmRes,
   EstimateRequestHistoryResponse,
+  requestRejectReq,
+  requestReject,
 } from "./api";
 import { ServiceRegion } from "@/src/types/common";
 
@@ -118,5 +120,14 @@ export const useEstimateOfferConfirmed = (): UseMutationResult<
   return useMutation({
     mutationFn: ({ offerId }: { offerId: string }) =>
       EstimateOfferConfirmed(offerId),
+  });
+};
+export const useEstimateRequestCancle = (): UseMutationResult<
+  requestRejectReq,
+  Error,
+  string
+> => {
+  return useMutation<requestRejectReq, Error, string>({
+    mutationFn: (requestId: string) => requestReject(requestId),
   });
 };
