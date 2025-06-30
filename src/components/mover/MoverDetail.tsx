@@ -167,7 +167,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
         }}
       >
         <Image
-          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
+          src={isLiked ? "/이미지/like/like.svg" : "/이미지/like/unlike.svg"}
           alt="찜하기"
           width={20}
           height={20}
@@ -217,7 +217,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
         }}
       >
         <Image
-          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
+          src={isLiked ? "/이미지/like/like.svg" : "/이미지/like/unlike.svg"}
           alt="찜하기"
           width={24}
           height={24}
@@ -354,8 +354,8 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
                         type === "SMALL"
                           ? t("소형이사")
                           : type === "HOME"
-                          ? t("가정이사")
-                          : t("사무실이사")
+                            ? t("가정이사")
+                            : t("사무실이사")
                       }
                       selected={true}
                       onClick={() => {}}

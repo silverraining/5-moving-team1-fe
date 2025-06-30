@@ -45,14 +45,14 @@ export const Header = () => {
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-    ? MOVER_MENU
-    : GUEST_MENU;
+      ? MOVER_MENU
+      : GUEST_MENU;
 
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-    ? MOVER_MENU
-    : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
+      ? MOVER_MENU
+      : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
@@ -103,9 +103,7 @@ export const Header = () => {
         const notification = JSON.parse(event.data);
         setMarkAsRead(false);
         setNotifications(notification);
-      } catch {
-        console.log("SSE message (non-JSON):", event.data);
-      }
+      } catch {}
     };
 
     eventSource.onerror = (err) => {
@@ -122,9 +120,6 @@ export const Header = () => {
     }
 
     reconnectTimeoutRef.current = setTimeout(() => {
-      console.log(
-        `🔄 재연결 시도 (${reconnectIntervalRef.current / 1000}s 후)`
-      );
       connectSSE();
       reconnectIntervalRef.current = Math.min(
         reconnectIntervalRef.current * 2,
@@ -141,7 +136,6 @@ export const Header = () => {
     }
     if (!accessToken) {
       // 토큰 없으면 기존 연결 종료 및 타이머 정리
-      console.log("토큰 없음. SSE 연결 종료");
 
       eventSourceRef.current?.close();
       if (reconnectTimeoutRef.current) {
@@ -163,7 +157,6 @@ export const Header = () => {
 
     // 컴포넌트 언마운트 시 연결 종료 및 타이머 정리
     return () => {
-      console.log("🛑 SSE 연결 종료");
       eventSourceRef.current?.close();
       if (reconnectTimeoutRef.current) {
         clearTimeout(reconnectTimeoutRef.current);
@@ -191,7 +184,7 @@ export const Header = () => {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Link href={PATH.main} passHref>
             <Image
-              src={"/Images/logo/logo.svg"}
+              src={"/이미지/logo/logo.svg"}
               width={88}
               height={34}
               alt="logo"
@@ -218,7 +211,7 @@ export const Header = () => {
               <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
             )}
             <Image
-              src={"/Images/header/menu.svg"}
+              src={"/이미지/header/menu.svg"}
               width={24}
               height={24}
               alt="menu"

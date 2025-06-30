@@ -160,7 +160,7 @@ export const CardListProfile = ({
                 }}
               >
                 <Image
-                  src={data.imageUrl || "/Images/profile/maleProfile.svg"}
+                  src={data.imageUrl || "/이미지/profile/maleProfile.svg"}
                   alt="프로필 이미지"
                   fill
                   style={{
@@ -240,7 +240,7 @@ export const CardListProfile = ({
                 }}
               >
                 <Image
-                  src={data.imageUrl || "/Images/profile/maleProfile.svg"}
+                  src={data.imageUrl || "/이미지/profile/maleProfile.svg"}
                   alt="프로필 이미지"
                   fill
                   style={{
@@ -272,7 +272,7 @@ export const CardListProfile = ({
                   gap="4px"
                 >
                   <Image
-                    src="/Images/star/star_active.svg"
+                    src="/이미지/star/star_active.svg"
                     alt="별점"
                     width={20}
                     height={20}

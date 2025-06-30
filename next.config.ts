@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  images: {
+  이미지: {
     unoptimized: true,
     domains: [
       "moving-app-uploads.s3.ap-northeast-2.amazonaws.com",

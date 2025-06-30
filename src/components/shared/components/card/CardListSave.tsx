@@ -120,7 +120,7 @@ export const CardListSave = ({
           position="relative"
         >
           <Image
-            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
+            src={info.imageUrl || "/이미지/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -150,8 +150,8 @@ export const CardListSave = ({
               <Image
                 src={
                   info.isLiked
-                    ? "/Images/like/like.svg"
-                    : "/Images/like/unlike.svg"
+                    ? "/이미지/like/like.svg"
+                    : "/이미지/like/unlike.svg"
                 }
                 alt="좋아요 버튼"
                 width={24}
@@ -186,7 +186,7 @@ export const CardListSave = ({
             {/* 별점 */}
             <Box display="flex" alignItems="center" gap="4px">
               <Image
-                src="/Images/star/star_active.svg"
+                src="/이미지/star/star_active.svg"
                 alt="별점"
                 width={20}
                 height={20}

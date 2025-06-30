@@ -248,7 +248,7 @@ export const CardListRequest = ({
             variant="contained"
             endIcon={
               <Image
-                src="/Images/button/writing.svg"
+                src="/이미지/button/writing.svg"
                 alt="작성 아이콘"
                 width={24}
                 height={24}

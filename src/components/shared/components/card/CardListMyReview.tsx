@@ -90,7 +90,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
       >
         <Box width={[46, 46, 96]} height={[46, 46, 96]} position="relative">
           <Image
-            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
+            src={info.imageUrl || "/이미지/profile/maleProfile.svg"}
             alt={"프로필 이미지"}
             fill
             style={{
@@ -128,7 +128,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
                   height={[20, 20, 24]}
                 >
                   <Image
-                    src="/Images/star/star_active.svg"
+                    src="/이미지/star/star_active.svg"
                     alt="별점 사진"
                     fill
                     style={{ objectFit: "contain" }}
@@ -200,7 +200,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
                 height={[20, 20, 24]}
               >
                 <Image
-                  src="/Images/star/star_active.svg"
+                  src="/이미지/star/star_active.svg"
                   alt="별점 사진"
                   fill
                   style={{ objectFit: "contain" }}

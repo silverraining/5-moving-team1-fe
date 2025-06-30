@@ -20,7 +20,7 @@ export const Like = ({ onClick }: IconBtnProps) => {
       })}
     >
       <Image
-        src={"/Images/icon-btn/like.svg"}
+        src={"/이미지/icon-btn/like.svg"}
         alt="Like"
         width={isSmall ? 24 : 36}
         height={isSmall ? 24 : 36}
@@ -43,7 +43,7 @@ export const Clip = ({ onClick }: IconBtnProps) => {
       })}
     >
       <Image
-        src={"/Images/icon-btn/clip.svg"}
+        src={"/이미지/icon-btn/clip.svg"}
         alt="Clip"
         width={isSmall ? 24 : 36}
         height={isSmall ? 24 : 36}
@@ -66,7 +66,7 @@ export const FaceBook = ({ onClick }: IconBtnProps) => {
       onClick={onClick}
     >
       <Image
-        src={"/Images/icon-btn/facebook.svg"}
+        src={"/이미지/icon-btn/facebook.svg"}
         alt="Facebook"
         width={isSmall ? 24 : 28}
         height={isSmall ? 24 : 28}
@@ -89,7 +89,7 @@ export const Kakao = ({ onClick }: IconBtnProps) => {
       }}
     >
       <Image
-        src={"/Images/icon-btn/kakao.svg"}
+        src={"/이미지/icon-btn/kakao.svg"}
         alt="Kakao"
         width={isSmall ? 24 : 28}
         height={isSmall ? 24 : 28}

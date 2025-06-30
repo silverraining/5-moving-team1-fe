@@ -77,7 +77,7 @@ export const ImageUpload = ({
           />
         ) : (
           <Image
-            src="/Images/profile/binProfile.svg"
+            src="/이미지/profile/binProfile.svg"
             alt="프로필 이미지"
             fill
             style={{ objectFit: "cover" }}

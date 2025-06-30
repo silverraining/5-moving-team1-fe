@@ -32,7 +32,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
           <Image
             width={36}
             height={36}
-            src={"/Images/input/search.svg"}
+            src={"/이미지/input/search.svg"}
             alt="search Icon"
             style={{ marginRight: "8px" }}
           />
@@ -46,7 +46,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
                 width={36}
                 height={36}
                 onClick={props.onDeleteClick}
-                src={"/Images/input/delete.svg"}
+                src={"/이미지/input/delete.svg"}
                 alt="delete Icon"
                 style={{ cursor: "pointer" }}
               />
@@ -55,7 +55,7 @@ export const SearchInput: React.FC<SearchProps> = (props) => {
               width={36}
               height={36}
               onClick={props.onClick}
-              src={"/Images/input/search.svg"}
+              src={"/이미지/input/search.svg"}
               alt="search Icon"
               style={{ cursor: "pointer" }}
             />

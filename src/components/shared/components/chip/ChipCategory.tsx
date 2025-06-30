@@ -20,28 +20,28 @@ export const ChipCategory = ({
       label: t("소형이사"),
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
-      img: "/Images/chip/box.svg",
+      img: "/이미지/chip/box.svg",
       alt: "소형이사",
     },
     HOME: {
       label: t("가정이사"),
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
-      img: "/Images/chip/home.svg",
+      img: "/이미지/chip/home.svg",
       alt: "가정이사",
     },
     OFFICE: {
       label: t("사무실이사"),
       bg: theme.palette.PrimaryBlue[100],
       text: theme.palette.PrimaryBlue[300],
-      img: "/Images/chip/company.svg",
+      img: "/이미지/chip/company.svg",
       alt: "사무실이사",
     },
     TARGET: {
       label: t("지정 견적 요청"),
       bg: theme.palette.SecondaryRed[100],
       text: theme.palette.SecondaryRed[200],
-      img: "/Images/chip/document.svg",
+      img: "/이미지/chip/document.svg",
       alt: "지정 견적 요청",
     },
     PENDING: {
@@ -98,8 +98,8 @@ export const ChipCategory = ({
   const chipTypes = Array.isArray(data.chipType)
     ? data.chipType
     : data.chipType
-    ? [data.chipType]
-    : [];
+      ? [data.chipType]
+      : [];
 
   // ✅ category를 배열로 설정
   const categories: (keyof typeof categoryData)[] = [];

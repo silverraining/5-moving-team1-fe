@@ -31,17 +31,17 @@ export const CardList = ({ variant }: CardListProps) => {
     small: {
       title: t("소형이사"),
       subTitle: t("원룸, 투룸, 20평대 미만"),
-      img: "/Images/landing/hand.svg",
+      img: "/이미지/landing/hand.svg",
     },
     home: {
       title: t("가정이사"),
       subTitle: t("쓰리룸, 20평대 미만"),
-      img: "/Images/landing/car.svg",
+      img: "/이미지/landing/car.svg",
     },
     office: {
       title: t("기업, 사무실 이사"),
       subTitle: t("사무실 , 상업공간"),
-      img: "/Images/landing/building.svg",
+      img: "/이미지/landing/building.svg",
     },
   };
 
@@ -66,8 +66,8 @@ export const CardList = ({ variant }: CardListProps) => {
       ? 284 // small은 고정 최소값
       : 290 // 다른 variant들은 적당히 고정값 지정 가능
     : containerWidth
-    ? containerWidth * 0.5
-    : 0;
+      ? containerWidth * 0.5
+      : 0;
 
   const imageHeight = imageWidth / IMAGE_RATIO[variant];
 

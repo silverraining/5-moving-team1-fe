@@ -48,7 +48,7 @@ export const SnsLoginSection = ({ isSmall, title }: SnsLoginSectionProps) => {
       <Stack direction={"row"} spacing={[3, 3, 4]}>
         <Box sx={snsButtonStyle} onClick={handleGoogleLogin}>
           <Image
-            src={"/Images/icon-btn/google_login.svg"}
+            src={"/이미지/icon-btn/google_login.svg"}
             alt="google"
             width={size}
             height={size}
@@ -56,7 +56,7 @@ export const SnsLoginSection = ({ isSmall, title }: SnsLoginSectionProps) => {
         </Box>
         <Box sx={snsButtonStyle} onClick={handleKakaoLogin}>
           <Image
-            src={"/Images/icon-btn/kakao_login.svg"}
+            src={"/이미지/icon-btn/kakao_login.svg"}
             alt="kakao"
             width={size}
             height={size}
@@ -64,7 +64,7 @@ export const SnsLoginSection = ({ isSmall, title }: SnsLoginSectionProps) => {
         </Box>
         <Box sx={snsButtonStyle} onClick={handleNaverLogin}>
           <Image
-            src={"/Images/icon-btn/naver_login.svg"}
+            src={"/이미지/icon-btn/naver_login.svg"}
             alt="naver"
             width={size}
             height={size}
