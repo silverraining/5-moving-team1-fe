@@ -60,6 +60,17 @@ export const updateMoverProfile = async (data: MoverProfileRequest) => {
   }
 };
 
+/** 기사님 프로필 수정용 상세 조회 api */
+export const getMoverProfileForEdit =
+  async (): Promise<MoverProfileRequest> => {
+    try {
+      const response = await apiClient.get<MoverProfileRequest>("/mover/me");
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
+  };
+
 interface UpdateGeneralMoverProfileRequest {
   name: string;
   phone: string;

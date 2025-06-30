@@ -13,6 +13,7 @@ import {
   requestTargetedEstimate,
   fetchMoverProfileCard,
   fetchPaginatedMovers,
+  getMoverProfileForEdit,
 } from "./api";
 
 interface UseEstimateRequestQueryParams {
@@ -47,6 +48,14 @@ export const useRegisterMoverProfile = () => {
 export const useUpdateMoverProfile = () => {
   return useMutation({
     mutationFn: updateMoverProfile,
+  });
+};
+
+/** 기사님 프로필 수정용 상세 조회 hook */
+export const useMoverProfileForEdit = () => {
+  return useQuery({
+    queryKey: ["moverProfileForEdit"],
+    queryFn: getMoverProfileForEdit,
   });
 };
 

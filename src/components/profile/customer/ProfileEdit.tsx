@@ -1,6 +1,12 @@
 "use client";
 
-import { Box, Stack, Typography, Button } from "@mui/material";
+import {
+  Box,
+  Stack,
+  Typography,
+  Button,
+  CircularProgress,
+} from "@mui/material";
 import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -138,8 +144,28 @@ export const ProfileEdit = () => {
     }
   };
 
+  // 로딩 중일 때
   if (isLoading) {
-    return <div>{t("로딩 중...")}</div>; // 또는 적절한 로딩 컴포넌트
+    return (
+      <Box
+        sx={{
+          maxWidth: "1400px",
+          mx: "auto",
+          p: 3,
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: 2,
+        }}
+      >
+        <CircularProgress size={40} />
+        <Typography variant="body1" color="text.secondary">
+          {t("프로필 정보를 불러오는 중...")}
+        </Typography>
+      </Box>
+    );
   }
 
   return (
