@@ -59,8 +59,8 @@ export const CardListProfile = ({
             position="relative"
           >
             <Image
-              src={info.imageUrl || "/이미지/default_profile.png"}
-              alt={"프로필 이미지"}
+              src={info.imageUrl || "/Images/default_profile.png"}
+              alt={"프로필 Images"}
               fill
               style={{
                 overflow: "hidden",
@@ -165,8 +165,8 @@ export const CardListProfile = ({
             position="relative"
           >
             <Image
-              src={info.imageUrl || "/이미지/default_profile.png"}
-              alt={"프로필 이미지"}
+              src={info.imageUrl || "/Images/default_profile.png"}
+              alt={"프로필 Images"}
               fill
               style={{
                 overflow: "hidden",
@@ -188,7 +188,7 @@ export const CardListProfile = ({
               alignItems="center"
             >
               <Image
-                src="/이미지/star/star_active.svg"
+                src="/Images/star/star_active.svg"
                 alt="별점 사진"
                 width={20}
                 height={20}

@@ -120,8 +120,8 @@ export const CardListSave = ({
           position="relative"
         >
           <Image
-            src={info.imageUrl || "/이미지/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -150,8 +150,8 @@ export const CardListSave = ({
               <Image
                 src={
                   info.isLiked
-                    ? "/이미지/like/like.svg"
-                    : "/이미지/like/unlike.svg"
+                    ? "/Images/like/like.svg"
+                    : "/Images/like/unlike.svg"
                 }
                 alt="좋아요 버튼"
                 width={24}
@@ -186,7 +186,7 @@ export const CardListSave = ({
             {/* 별점 */}
             <Box display="flex" alignItems="center" gap="4px">
               <Image
-                src="/이미지/star/star_active.svg"
+                src="/Images/star/star_active.svg"
                 alt="별점"
                 width={20}
                 height={20}
@@ -308,7 +308,7 @@ export const CardListSaveSkeleton = () => {
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
       >
-        {/* 프로필 이미지 */}
+        {/* 프로필 Images */}
         <Box width={[46, 46, 56]} height={[46, 46, 56]}>
           <Skeleton variant="circular" width="100%" height="100%" />
         </Box>

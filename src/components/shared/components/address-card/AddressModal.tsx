@@ -156,7 +156,7 @@ const AddressModal: React.FC<AddressModalProps> = ({
         </Typography>
         <IconButton onClick={onClose}>
           <Image
-            src="/이미지/header/X.svg"
+            src="/Images/header/X.svg"
             alt="close"
             width={24}
             height={24}

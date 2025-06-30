@@ -102,8 +102,8 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
-            src={info.imageUrl || "/이미지/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            src={info.imageUrl || "/Images/profile/maleProfile.svg"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -132,8 +132,8 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
               <Image
                 src={
                   info.isLiked
-                    ? "/이미지/like/like.svg"
-                    : "/이미지/like/unlike.svg"
+                    ? "/Images/like/like.svg"
+                    : "/Images/like/unlike.svg"
                 }
                 alt="좋아요 버튼"
                 width={24}
@@ -167,7 +167,7 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
               alignItems="center"
             >
               <Image
-                src="/이미지/star/star_active.svg"
+                src="/Images/star/star_active.svg"
                 alt="별점 사진"
                 width={20}
                 height={20}

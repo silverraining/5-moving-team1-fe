@@ -67,8 +67,8 @@ export default function DropDownButton({
   };
 
   const iconSrc = isSelected
-    ? "/이미지/drop-down/chevron-down-blue-lg.svg"
-    : "/이미지/drop-down/chevron-down-lg.svg";
+    ? "/Images/drop-down/chevron-down-blue-lg.svg"
+    : "/Images/drop-down/chevron-down-lg.svg";
 
   return (
     <Button onClick={onClick} sx={{ ...buttonStyle, ...sx }}>

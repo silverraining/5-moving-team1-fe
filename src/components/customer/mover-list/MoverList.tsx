@@ -51,7 +51,7 @@ export const MoverList = ({
     return (
       <Box display="flex" flexDirection="column" alignItems="center" py={4}>
         <Image
-          src="/이미지/empty/no_data.svg"
+          src="/Images/empty/no_data.svg"
           alt="검색 결과 없음"
           width={120}
           height={120}

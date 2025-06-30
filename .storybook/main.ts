@@ -19,7 +19,7 @@ const config: StorybookConfig = {
   },
   staticDirs:
     // Next.js의 public 폴더를 Storybook dev 서버에서 접근 가능하도록 설정
-    // → /이미지/ 같은 경로를 정상적으로 로딩할 수 있게 해줌
+    // → /Images/ 같은 경로를 정상적으로 로딩할 수 있게 해줌
     ["../public"],
   webpackFinal: async (config) => {
     if (config.resolve) {

@@ -44,7 +44,7 @@ function mapMoverDetailToCardData(item: MoverDetail): CardData {
       .filter(([_, value]) => value)
       .map(([key]) => key as ServiceType),
     message: item.intro || "",
-    imgSrc: item.imageUrl || "/이미지/profile/maleProfile.svg",
+    imgSrc: item.imageUrl || "/Images/profile/maleProfile.svg",
     name: item.nickname || "",
     isLiked: item.isLiked || false,
     like: item.likeCount || 0,

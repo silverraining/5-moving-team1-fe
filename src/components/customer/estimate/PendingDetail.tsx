@@ -203,8 +203,8 @@ export default function PendingDetail({
             <Image
               src={
                 data.mover.isLiked
-                  ? "/이미지/like/like.svg"
-                  : "/이미지/like/unlike.svg"
+                  ? "/Images/like/like.svg"
+                  : "/Images/like/unlike.svg"
               }
               alt="찜하기"
               width={24}

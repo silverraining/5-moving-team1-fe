@@ -42,7 +42,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
         ref={alram.anchorRef}
         width={size}
         height={size}
-        src={"/이미지/header/alram.svg"}
+        src={"/Images/header/alram.svg"}
         alt="alram"
         style={{ position: "relative", cursor: "pointer" }}
         onClick={alramOpen}
@@ -96,10 +96,10 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
           width={size}
           height={size}
           src={
-            // user.imageUrl이 빈 문자열일 경우 기본이미지 적용하도록
+            // user.imageUrl이 빈 문자열일 경우 기본Images 적용하도록
             user && user.imageUrl && user.imageUrl.trim() !== ""
               ? user.imageUrl
-              : "/이미지/header/Profile.svg"
+              : "/Images/header/Profile.svg"
           }
           alt="profile"
           style={{ cursor: "pointer", borderRadius: "50%" }}

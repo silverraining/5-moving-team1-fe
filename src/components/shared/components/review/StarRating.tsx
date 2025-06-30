@@ -14,7 +14,7 @@ export const StarRating = ({ rating, size = 16, gap = 4 }: StarRatingProps) => {
       {Array.from({ length: rating }, (_, index) => (
         <Image
           key={index}
-          src="/이미지/star/star_active.svg"
+          src="/Images/star/star_active.svg"
           alt="별점"
           width={size}
           height={size}

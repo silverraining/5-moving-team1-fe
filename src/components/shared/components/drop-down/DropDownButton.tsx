@@ -50,8 +50,8 @@ export default function DropDownButton({
         };
 
   const iconSrc = isSelected
-    ? "/이미지/drop-down/chevron-down.svg"
-    : "/이미지/drop-down/chevron-down2.svg";
+    ? "/Images/drop-down/chevron-down.svg"
+    : "/Images/drop-down/chevron-down2.svg";
 
   return (
     <Button

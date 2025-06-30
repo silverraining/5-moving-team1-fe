@@ -160,8 +160,8 @@ export const CardListProfile = ({
                 }}
               >
                 <Image
-                  src={data.imageUrl || "/이미지/profile/maleProfile.svg"}
-                  alt="프로필 이미지"
+                  src={data.imageUrl || "/Images/profile/maleProfile.svg"}
+                  alt="프로필 Images"
                   fill
                   style={{
                     objectFit: "cover",
@@ -211,7 +211,7 @@ export const CardListProfile = ({
             )}
           </Stack>
 
-          {/* 내부 박스 (이미지, 정보) */}
+          {/* 내부 박스 (Images, 정보) */}
           <Box
             display="flex"
             flexDirection="row"
@@ -226,7 +226,7 @@ export const CardListProfile = ({
               boxShadow: "4px 4px 16px 0px rgba(233, 233, 233, 0.1)",
             })}
           >
-            {/* 프로필 이미지 */}
+            {/* 프로필 Images */}
             {isDesktopUp && (
               <Box
                 width="80px"
@@ -240,8 +240,8 @@ export const CardListProfile = ({
                 }}
               >
                 <Image
-                  src={data.imageUrl || "/이미지/profile/maleProfile.svg"}
-                  alt="프로필 이미지"
+                  src={data.imageUrl || "/Images/profile/maleProfile.svg"}
+                  alt="프로필 Images"
                   fill
                   style={{
                     objectFit: "cover",
@@ -272,7 +272,7 @@ export const CardListProfile = ({
                   gap="4px"
                 >
                   <Image
-                    src="/이미지/star/star_active.svg"
+                    src="/Images/star/star_active.svg"
                     alt="별점"
                     width={20}
                     height={20}

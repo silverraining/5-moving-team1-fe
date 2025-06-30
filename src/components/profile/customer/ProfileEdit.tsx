@@ -40,7 +40,7 @@ export const ProfileEdit = () => {
   const { data: profileData, isLoading } = useGetCustomerProfile();
   // 일반 유저 프로필 수정 hook
   const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -103,7 +103,7 @@ export const ProfileEdit = () => {
     try {
       if (isUploading) {
         openSnackbar(
-          t("이미지 업로드가 완료될 때까지 기다려주세요."),
+          t("Images 업로드가 완료될 때까지 기다려주세요."),
           "warning"
         );
         return;
@@ -213,7 +213,7 @@ export const ProfileEdit = () => {
               <PasswordChangeSection register={register} errors={errors} />
             </Box>
 
-            {/* 오른쪽 열: 프로필 이미지, 서비스, 지역 */}
+            {/* 오른쪽 열: 프로필 Images, 서비스, 지역 */}
             <Box
               sx={{
                 flex: 1,
@@ -221,7 +221,7 @@ export const ProfileEdit = () => {
                 maxWidth: ["100%", "100%", "500px"],
               }}
             >
-              {/* 프로필 이미지 */}
+              {/* 프로필 Images */}
               <Box
                 sx={{
                   mb: "32px",

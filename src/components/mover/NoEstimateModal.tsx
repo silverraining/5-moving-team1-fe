@@ -50,7 +50,7 @@ export const NoEstimateModal = ({ open, onClose }: NoEstimateModalProps) => {
           }}
         >
           <Image
-            src="/이미지/header/X.svg"
+            src="/Images/header/X.svg"
             alt="close"
             width={24}
             height={24}

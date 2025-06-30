@@ -428,7 +428,7 @@ export default function ReceivedRequestsFlow() {
                       }}
                     >
                       <Image
-                        src="/이미지/icon-btn/sort_button.svg"
+                        src="/Images/icon-btn/sort_button.svg"
                         width={32}
                         height={32}
                         alt="필터"

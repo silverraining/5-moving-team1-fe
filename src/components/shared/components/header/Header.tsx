@@ -184,7 +184,7 @@ export const Header = () => {
         <Stack direction="row" alignItems="center" spacing={2}>
           <Link href={PATH.main} passHref>
             <Image
-              src={"/이미지/logo/logo.svg"}
+              src={"/Images/logo/logo.svg"}
               width={88}
               height={34}
               alt="logo"
@@ -211,7 +211,7 @@ export const Header = () => {
               <UserTabs isSmall={isSmall} user={user} logout={hendleLogout} />
             )}
             <Image
-              src={"/이미지/header/menu.svg"}
+              src={"/Images/header/menu.svg"}
               width={24}
               height={24}
               alt="menu"

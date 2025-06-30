@@ -25,7 +25,7 @@ export interface UseImageUploadReturn {
 }
 
 /**
- * 이미지 업로드 훅
+ * Images 업로드 훅
  * @param options - 업로드 성공/실패 시 콜백 함수들과 스낵바 표시
  */
 export const useImageUpload = (
@@ -42,8 +42,8 @@ export const useImageUpload = (
 
   /**
    * 파일 업로드 처리 함수
-   * 1. 미리보기용 base64 이미지 생성
-   * 2. S3에 이미지 업로드
+   * 1. 미리보기용 base64 Images 생성
+   * 2. S3에 Images 업로드
    * 3. 성공/실패에 따른 상태 업데이트 및 콜백 실행
    */
   const handleFileUpload = useCallback(
@@ -52,24 +52,24 @@ export const useImageUpload = (
         setIsUploading(true);
         setError(null);
 
-        // 1. 미리보기용 base64 이미지 생성
+        // 1. 미리보기용 base64 Images 생성
         const base64Image = await fileToBase64(file);
         setPreviewImage(base64Image);
 
-        // 2. S3에 이미지 업로드
+        // 2. S3에 Images 업로드
         const s3Url = await uploadImageToS3(file);
         setS3ImageUrl(s3Url);
 
         // 3. 성공 처리
         if (showSnackbar) {
-          openSnackbar("이미지가 성공적으로 업로드되었습니다.", "success");
+          openSnackbar("Images가 성공적으로 업로드되었습니다.", "success");
         }
         onUploadSuccess?.(s3Url);
       } catch (err) {
         const errorMessage =
           err instanceof Error
             ? err.message
-            : "이미지 업로드 중 오류가 발생했습니다.";
+            : "Images 업로드 중 오류가 발생했습니다.";
 
         setError(errorMessage);
         setPreviewImage(null);

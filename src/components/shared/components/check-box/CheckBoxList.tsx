@@ -76,8 +76,8 @@ export const CheckBoxList = ({
             <Image
               src={
                 isSelected
-                  ? "/이미지/check-box/onclick.svg"
-                  : "/이미지/check-box/click.svg"
+                  ? "/Images/check-box/onclick.svg"
+                  : "/Images/check-box/click.svg"
               }
               alt="선택 상태"
               width={size === "sm" ? 24 : 36}

@@ -24,7 +24,7 @@ export default function InProgressPage() {
         }}
       >
         <Image
-          src={"/이미지/in-progress/inProgressCar.svg"}
+          src={"/Images/in-progress/inProgressCar.svg"}
           alt="견적 진행 중"
           width={isSmall ? 228 : 378}
           height={isSmall ? 96 : 140}

@@ -24,7 +24,7 @@ export const DrawerList = ({ toggleDrawer, menu }: DrawerListProps) => {
             <Image
               width={24}
               height={24}
-              src={"/이미지/header/X.svg"}
+              src={"/Images/header/X.svg"}
               alt="close"
             />
           </Button>

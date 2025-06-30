@@ -7,7 +7,7 @@ const mockInitialData = {
   phone: "01012345678",
   serviceType: ["small"],
   serviceRegion: ["서울"],
-  imageUrl: "/이미지/profile/binProfile.svg",
+  imageUrl: "/Images/profile/binProfile.svg",
 };
 
 export default function ProfileEditPage() {

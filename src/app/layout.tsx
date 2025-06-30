@@ -8,7 +8,7 @@ export const generateStaticParams = () => {
 export const metadata = {
   title: "Moving",
   icons: {
-    icon: "/이미지/favicon.svg",
+    icon: "/Images/favicon.svg",
   },
 };
 interface Props {

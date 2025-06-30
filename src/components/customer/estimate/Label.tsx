@@ -18,7 +18,7 @@ export default function Label({ status }: LabelProps) {
       label={t("확정하지 않은 견적이에요!")}
       icon={
         <Image
-          src="/이미지/alert/exclamation-mark.svg"
+          src="/Images/alert/exclamation-mark.svg"
           alt="아이콘"
           width={isDesktop ? 24 : 16}
           height={isDesktop ? 24 : 16}

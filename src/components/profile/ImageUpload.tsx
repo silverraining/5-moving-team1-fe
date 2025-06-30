@@ -13,8 +13,8 @@ interface ImageUploadProps {
 }
 
 //TODO: drag & drop 업로드 기능 추가
-//TODO: 이미지 삭제 기능 추가
-//TODO: 이미지 크기 or 확장자 제한 추가
+//TODO: Images 삭제 기능 추가
+//TODO: Images 크기 or 확장자 제한 추가
 //TODO: 에러 처리
 
 export const ImageUpload = ({
@@ -47,7 +47,7 @@ export const ImageUpload = ({
           alignSelf: "flex-start",
         }}
       >
-        {t("프로필 이미지")}
+        {t("프로필 Images")}
       </Typography>
 
       <Box
@@ -71,14 +71,14 @@ export const ImageUpload = ({
         ) : displayImage ? (
           <Image
             src={displayImage}
-            alt="프로필 이미지"
+            alt="프로필 Images"
             fill
             style={{ objectFit: "cover" }}
           />
         ) : (
           <Image
-            src="/이미지/profile/binProfile.svg"
-            alt="프로필 이미지"
+            src="/Images/profile/binProfile.svg"
+            alt="프로필 Images"
             fill
             style={{ objectFit: "cover" }}
           />

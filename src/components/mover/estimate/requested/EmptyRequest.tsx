@@ -23,7 +23,7 @@ export default function EmptyRequest() {
         }}
       >
         <Image
-          src="/이미지/empty/no_data.svg"
+          src="/Images/empty/no_data.svg"
           alt="데이터 없음"
           fill
           className="mb-6"

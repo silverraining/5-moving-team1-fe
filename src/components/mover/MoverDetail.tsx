@@ -167,7 +167,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
         }}
       >
         <Image
-          src={isLiked ? "/이미지/like/like.svg" : "/이미지/like/unlike.svg"}
+          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
           alt="찜하기"
           width={20}
           height={20}
@@ -217,7 +217,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
         }}
       >
         <Image
-          src={isLiked ? "/이미지/like/like.svg" : "/이미지/like/unlike.svg"}
+          src={isLiked ? "/Images/like/like.svg" : "/Images/like/unlike.svg"}
           alt="찜하기"
           width={24}
           height={24}

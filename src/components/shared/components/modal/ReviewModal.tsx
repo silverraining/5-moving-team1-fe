@@ -99,7 +99,7 @@ export default function ReviewModal({
           onClick={onClose}
           width={isSmall ? 24 : 36}
           height={isSmall ? 24 : 36}
-          src={"/이미지/header/X.svg"}
+          src={"/Images/header/X.svg"}
           alt="close"
           style={{ cursor: "pointer" }}
         />
@@ -153,10 +153,10 @@ export default function ReviewModal({
                 height={isSmall ? 46 : 96}
                 style={{
                   borderRadius: "50%",
-                  objectFit: "cover", // 이미지를 꽉 채우기 위해 추천
+                  objectFit: "cover", // Images를 꽉 채우기 위해 추천
                 }}
-                src={moverImage || "/이미지/profile/binProfile.svg"}
-                alt="기사님 프로필 이미지"
+                src={moverImage || "/Images/profile/binProfile.svg"}
+                alt="기사님 프로필 Images"
               />
             </Box>
             <Box

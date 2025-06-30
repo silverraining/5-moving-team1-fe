@@ -20,7 +20,7 @@ export function useSnackbar(): UseSnackbarReturn {
   const infoStyles = {
     bg: theme.palette.PrimaryBlue[100],
     text: theme.palette.PrimaryBlue[300],
-    icon: "/이미지/info.svg",
+    icon: "/Images/info.svg",
   };
   const {
     open,
