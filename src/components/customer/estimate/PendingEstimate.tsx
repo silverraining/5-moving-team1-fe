@@ -49,7 +49,12 @@ export default function PendingEstimate() {
 
   if (error || errorIds)
     return <Typography>견적서 데이터 에러 발생!</Typography>;
-  if (!isLoading && data?.items.length === 0) {
+
+  if (isLoading) {
+    return <EmprtyReview text={t("로딩 중 입니다")} />;
+  }
+
+  if (!data || data.items.length === 0) {
     return <EmprtyReview text={t("대기중인 견적이 없습니다")} />;
   }
 
