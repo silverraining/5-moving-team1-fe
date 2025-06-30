@@ -24,9 +24,9 @@ interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
 }
 
 export default function PendingEstimate() {
+  const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
   // ID 배열 받아오기
   const {
     data: requestIds,
@@ -45,14 +45,16 @@ export default function PendingEstimate() {
   const requestId = requestIds?.[0]?.estimateRequestId;
 
   // 해당 ID로 견적서 리스트 받아오기
-  const { data, isLoading, error } = useEstimateOfferPending(requestId);
+  const { data, isLoading, error } = useEstimateOfferPending(requestId ?? "");
 
   if (error || errorIds)
     return <Typography>견적서 데이터 에러 발생!</Typography>;
-  if (!isLoading && data?.items.length === 0) {
-    return <EmprtyReview text={t("대기중인 견적이 없습니다")} />;
+  if (requestId) {
+    return <EmprtyReview text={t("요청된 견적이 없습니다.")} />;
   }
-
+  if (data?.items.length === 0) {
+    return <EmprtyReview text={t("대기중인 견적이 없습니다.")} />;
+  }
   const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
     router.push(PATH.userEstimateDetail(card.estimateRequestId, card.moverId));
   };

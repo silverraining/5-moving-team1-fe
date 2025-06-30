@@ -42,8 +42,8 @@ export const CardListWait = ({
     "offerStatus" in data
       ? data.offerStatus
       : "status" in data
-      ? data.status
-      : undefined;
+        ? data.status
+        : undefined;
   // 카드 데이터
   const info = data.mover;
 
@@ -471,7 +471,6 @@ export const CardListWaitSkeleton = () => {
       display="flex"
       flexDirection="column"
       justifyContent="space-between"
-      border="0.5px solid #F2F2F2"
       maxWidth={"688px"}
       minWidth={"327px"}
       width={"100%"}
@@ -479,30 +478,43 @@ export const CardListWaitSkeleton = () => {
       maxHeight={"480px"}
       minHeight={"362px"}
       height={"100%"}
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
         "20px 12px 14px 12px",
         "22px 12px 16px 12px",
         "28px 24px 22px 24px",
       ]}
-      boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
-      boxSizing={"border-box"}
+      boxSizing="border-box"
+      sx={(theme) => ({
+        bgcolor: theme.palette.background.paper,
+        border: `1px solid ${theme.palette.divider}`,
+        boxShadow: theme.shadows[1],
+      })}
     >
       {/* Chip 영역 */}
       <Box display="flex" gap="12px">
-        <Skeleton variant="rounded" width={80} height={28} />
+        <Skeleton
+          variant="rounded"
+          width={80}
+          height={28}
+          sx={(theme) => ({
+            bgcolor: theme.palette.action.hover,
+            borderRadius: "8px",
+          })}
+        />
       </Box>
 
       {/* 프로필 영역 */}
       <Box
         display="flex"
-        border="1px solid #F2F2F2"
-        bgcolor="#FFFFFF"
         padding={["16px", "10px", "16px 10px"]}
-        boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
+        sx={(theme) => ({
+          bgcolor: theme.palette.background.paper,
+          border: `1px solid ${theme.palette.divider}`,
+          boxShadow: theme.shadows[1],
+        })}
       >
         <Skeleton variant="circular" width={56} height={56} />
         <Box flexGrow={1} display="flex" flexDirection="column" gap="8px">
@@ -529,8 +541,24 @@ export const CardListWaitSkeleton = () => {
 
         {/* 버튼 */}
         <Box display="flex" gap="11px" flexDirection={["column", "row", "row"]}>
-          <Skeleton variant="rounded" width="100%" height={64} />
-          <Skeleton variant="rounded" width="100%" height={64} />
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height={64}
+            sx={(theme) => ({
+              bgcolor: theme.palette.action.hover,
+              borderRadius: "16px",
+            })}
+          />
+          <Skeleton
+            variant="rounded"
+            width="100%"
+            height={64}
+            sx={(theme) => ({
+              bgcolor: theme.palette.action.hover,
+              borderRadius: "16px",
+            })}
+          />
         </Box>
       </Box>
     </Box>

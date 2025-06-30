@@ -256,7 +256,6 @@ export const CardListMoverSkeleton = () => {
       border="0.5px solid"
       maxWidth={1200}
       minWidth={[400, 580, 680]}
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={["14px 16px", "14px 16px", "20px 24px"]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"

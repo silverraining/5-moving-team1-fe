@@ -17,66 +17,69 @@ import { EstimateOffer } from "@/src/types/estimate";
 import { Stack } from "@mui/material";
 import { useRouter } from "next/navigation";
 
+export const transformLikeMoverToEstimateOffer = (
+  item: likeMoverListResItem
+): EstimateOffer => {
+  const activeServiceTypes = Object.entries(item.serviceType)
+    .filter(([_, value]) => value)
+    .map(([key]) => key as ServiceType);
+
+  return {
+    estimateRequestId: "",
+    moverId: item.id,
+    price: 0,
+    comment: "",
+    status: EstimateOfferStatus.PENDING,
+    requestStatus: EstimateRequestStatus.PENDING,
+    confirmedCount: item.confirmedEstimateCount,
+    isTargeted: false,
+    isConfirmed: false,
+    confirmedAt: undefined,
+    completedAt: undefined,
+    createdAt: new Date(),
+    moveDate: new Date(),
+    updatedAt: new Date(),
+    moveType: activeServiceTypes,
+    estimateReques: undefined,
+    mover: {
+      id: item.id,
+      nickname: item.nickname,
+      imageUrl: item.imageUrl,
+      experience: item.experience,
+      serviceType: activeServiceTypes,
+      reviewCount: item.reviewCount,
+      averageRating: 0,
+      likeCount: item.likeCount,
+      userId: "",
+      intro: "",
+      rating: item.averageRating ?? 0,
+      description: "",
+      serviceRegion: [],
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      confirmedCount: item.confirmedEstimateCount,
+      isLiked: true,
+    },
+    review: undefined as any,
+    fromAddress: undefined as any,
+    toAddress: undefined as any,
+    fromAddressMinimal: undefined as any,
+    toAddressMinimal: undefined as any,
+  };
+};
+
 const Wishlist = () => {
   const { data, isLoading } = useLikeList();
   const router = useRouter();
 
-  const transformLikeMoverToEstimateOffer = (
-    item: likeMoverListResItem
-  ): EstimateOffer => {
-    return {
-      estimateRequestId: "",
-      moverId: item.id,
-      price: 0,
-      comment: "",
-      status: EstimateOfferStatus.PENDING,
-      requestStatus: EstimateRequestStatus.PENDING,
-      confirmedCount: item.confirmedEstimateCount,
-      isTargeted: false,
-      isConfirmed: false,
-      confirmedAt: undefined,
-      completedAt: undefined,
-      createdAt: new Date(),
-      moveDate: new Date(),
-      updatedAt: new Date(),
-      moveType: "HOME",
-      estimateRequest: undefined as any,
-      mover: {
-        id: item.id,
-        nickname: item.nickname,
-        imageUrl: item.imageUrl,
-        experience: item.experience,
-        serviceType: Object.keys(item.serviceType).filter(
-          (key) => item.serviceType[key as keyof typeof item.serviceType]
-        ) as ServiceType[],
-        reviewCount: item.reviewCount,
-        averageRating: 0,
-        likeCount: item.likeCount,
-        userId: "",
-        intro: "",
-        rating: item.averageRating | 0,
-        description: "",
-        serviceRegion: [],
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        confirmedCount: 0,
-        isLiked: true,
-      },
-      review: undefined as any,
-      fromAddress: undefined as any,
-      toAddress: undefined as any,
-      fromAddressMinimal: undefined as any,
-      toAddressMinimal: undefined as any,
-    };
-  };
-
-  if (!data || data.length === 0) {
+  if (!isLoading && (!data || data.length === 0)) {
     return <EmprtyReview text="찜한 기사님이 없습니다" />;
   }
 
   const transformedData = data
     ? data.map((item) => transformLikeMoverToEstimateOffer(item))
     : [];
+  console.log(data, transformedData);
   return (
     <Stack
       direction="row"

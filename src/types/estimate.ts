@@ -22,8 +22,8 @@ export type EstimateOffer = {
   createdAt: Date;
   moveDate: Date;
   updatedAt: Date;
-  moveType: ServiceType;
-  estimateRequest: EstimateRequest;
+  moveType: ServiceType[];
+  estimateReques?: EstimateRequest;
   mover: MoverProfile;
   review: Review;
   toAddress: Address;
