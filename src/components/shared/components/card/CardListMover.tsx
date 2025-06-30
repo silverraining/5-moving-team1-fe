@@ -103,7 +103,7 @@ export const CardListMover = ({ data, onLikeClick }: CardProps) => {
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -256,7 +256,6 @@ export const CardListMoverSkeleton = () => {
       border="0.5px solid"
       maxWidth={1200}
       minWidth={[400, 580, 680]}
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={["14px 16px", "14px 16px", "20px 24px"]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
@@ -299,7 +298,7 @@ export const CardListMoverSkeleton = () => {
           borderColor: theme.palette.Line[100],
         })}
       >
-        {/* 프로필 이미지 */}
+        {/* 프로필 Images */}
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Skeleton variant="circular" width="100%" height="100%" />
         </Box>

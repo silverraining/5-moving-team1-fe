@@ -109,7 +109,7 @@ export const middleware = async (request: NextRequest) => {
       // public 경로는 허용
       const isPublic = rule.publicPaths.some((p) => {
         const path = typeof p === "function" ? p("") : p;
-        pathnameWithoutLocale.startsWith(path);
+        return pathnameWithoutLocale.startsWith(path);
       });
 
       if (isPublic) return NextResponse.next();

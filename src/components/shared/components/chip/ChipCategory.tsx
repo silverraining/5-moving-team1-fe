@@ -98,8 +98,8 @@ export const ChipCategory = ({
   const chipTypes = Array.isArray(data.chipType)
     ? data.chipType
     : data.chipType
-    ? [data.chipType]
-    : [];
+      ? [data.chipType]
+      : [];
 
   // ✅ category를 배열로 설정
   const categories: (keyof typeof categoryData)[] = [];

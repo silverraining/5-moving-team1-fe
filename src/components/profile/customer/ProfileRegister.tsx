@@ -32,10 +32,10 @@ export const ProfileRegister = () => {
   // 일반 유저 프로필 등록 hook
   const { mutateAsync: registerCustomerProfile } = useRegisterCustomerProfile();
 
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading, error } =
     useImageUpload({
-      showSnackbar: true, // 이미지 업로드 관련 피드백을 바로 보여줌
+      showSnackbar: true, // Images 업로드 관련 피드백을 바로 보여줌
       onUploadSuccess: (url) => {},
       onUploadError: (errorMessage) => {},
     });
@@ -58,21 +58,21 @@ export const ProfileRegister = () => {
 
   /**
    * 프로필 등록 제출 핸들러
-   * 1. 선택된 서비스, 지역, S3 이미지 URL을 포함한 프로필 데이터 생성
+   * 1. 선택된 서비스, 지역, S3 Images URL을 포함한 프로필 데이터 생성
    * 2. 백엔드 API를 통해 프로필 정보 저장
    */
   const handleSubmit = async () => {
     try {
       if (isUploading) {
         openSnackbar(
-          t("이미지 업로드가 완료될 때까지 기다려주세요."),
+          t("Images 업로드가 완료될 때까지 기다려주세요."),
           "warning"
         );
         return;
       }
 
       if (!s3ImageUrl) {
-        openSnackbar(t("프로필 이미지를 업로드해주세요."), "error");
+        openSnackbar(t("프로필 Images를 업로드해주세요."), "error");
         return;
       }
 
@@ -142,7 +142,7 @@ export const ProfileRegister = () => {
           </Typography>
         </Stack>
 
-        {/* 프로필 이미지 */}
+        {/* 프로필 Images */}
         <Box
           sx={{
             margin: "32px 0",

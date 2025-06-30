@@ -17,7 +17,7 @@ export const EmprtyReview = ({
       <Image
         width={184}
         height={136}
-        src={"/images/empty.svg"}
+        src={"/Images/empty.svg"}
         alt="emptyImg"
       />
       <Typography

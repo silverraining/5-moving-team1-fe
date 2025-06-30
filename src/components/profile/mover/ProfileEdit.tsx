@@ -52,7 +52,7 @@ export const ProfileEdit = () => {
   const { mutateAsync: updateMoverProfile, isPending: isUpdating } =
     useUpdateMoverProfile();
 
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -180,7 +180,7 @@ export const ProfileEdit = () => {
               width: "100%",
             }}
           >
-            {/* 왼쪽 열: 프로필 이미지, 경력, 한 줄 소개, 상세 설명 */}
+            {/* 왼쪽 열: 프로필 Images, 경력, 한 줄 소개, 상세 설명 */}
             <Box
               sx={{
                 flex: 1,
@@ -233,7 +233,7 @@ export const ProfileEdit = () => {
                 </Box>
               </Box>
 
-              {/* 프로필 이미지 */}
+              {/* 프로필 Images */}
               <Box
                 sx={{
                   mb: "32px",
