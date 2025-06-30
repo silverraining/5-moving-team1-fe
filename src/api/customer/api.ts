@@ -114,7 +114,7 @@ export type EstimateRequestHistoryItem = {
   customerName: string;
   moveDate: string;
   createdAt: string;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   offerCount: number;
   requestStatus: EstimateOfferStatus;
   isTargeted: boolean;
@@ -156,7 +156,7 @@ export type EstimateOfferPendingResponseItems = {
   isConfirmed: boolean;
   isTargeted: boolean;
   moveDate: Date;
-  moveType: ServiceType;
+  moveType: ServiceType[];
   mover: MoverProfile;
   moverId: string;
   offerId: string;
@@ -176,12 +176,19 @@ export type EstimateOfferPendingResponse = {
 
 /** 견적 관리 대기 중인 견적 api */
 export const EstimateOfferPending = async (
-  requestId: string
+  requestId: string,
+  cursor?: string,
+  take: number = 5
 ): Promise<EstimateOfferPendingResponse> => {
   try {
     const response = await apiClient.get(
       `/estimate-offer/${requestId}/pending`,
-      {}
+      {
+        params: {
+          cursor,
+          take,
+        },
+      }
     );
     return response.data;
   } catch (error) {
