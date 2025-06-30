@@ -1,5 +1,7 @@
+import { PATH } from "@/src/lib/constants";
 import { Button, Stack, Typography } from "@mui/material";
 import Image from "next/image";
+import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
 interface EmprtyReviewProps {
@@ -27,9 +29,11 @@ export const EmprtyReview = ({
         {text}
       </Typography>
       {variation === "complete" && (
-        <Button variant="contained" sx={{ padding: 2 }}>
-          <Typography variant="SB_20">{t("리뷰 작성하러 가기")}</Typography>
-        </Button>
+        <Link href={PATH.userReviewPending}>
+          <Button variant="contained" sx={{ padding: 2 }}>
+            <Typography variant="SB_20">{t("리뷰 작성하러 가기")}</Typography>
+          </Button>
+        </Link>
       )}
     </Stack>
   );
