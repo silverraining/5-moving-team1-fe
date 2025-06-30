@@ -16,7 +16,7 @@ import { Controller } from "react-hook-form";
 import Image from "next/image";
 import { ModalStar } from "./components/ModalStar";
 import { ChipCategory } from "../chip/ChipCategory";
-import { ChipProps } from "@/src/types/card";
+import { ServiceType } from "@/src/types/common";
 import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";
@@ -30,13 +30,13 @@ interface ReviewModalProps {
     price: number,
     rating: number,
     comment: string,
-    moveType: string[]
+    moveType: ServiceType[]
   ) => void;
   moverImage: string;
   moverName: string;
   moveDate: string;
   price: number;
-  moveType: ChipProps["type"][];
+  moveType: ServiceType | ServiceType[];
 }
 
 export default function ReviewModal({
@@ -52,15 +52,27 @@ export default function ReviewModal({
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
 
+  // 항상 배열로 처리하기 위해 변환
+  const moveTypeArray = Array.isArray(moveType) ? moveType : [moveType];
+
   const { control, handleSubmit, register, isValid, errors, reset } =
     useReviewForm();
 
   const onFormSubmit = (data: { rating: number; content: string }) => {
-    onSubmit(moverName, moveDate, price, data.rating, data.content, moveType);
+    onSubmit(
+      moverName,
+      moveDate,
+      price,
+      data.rating,
+      data.content,
+      moveTypeArray
+    );
     reset();
     onClose();
   };
+
   const { t } = useTranslation();
+
   return (
     <Dialog
       open={isOpen}
@@ -124,8 +136,8 @@ export default function ReviewModal({
               gap: isSmall ? "8px" : "12px",
             }}
           >
-            {moveType.map((type) => (
-              <ChipCategory key={type} type={type as ChipProps["type"]} />
+            {moveTypeArray.map((type) => (
+              <ChipCategory key={type} data={{ chipType: type }} />
             ))}
           </Box>
           {/* 기사님 정보 */}
@@ -176,6 +188,7 @@ export default function ReviewModal({
               </Box>
               <Box display="flex">
                 <Typography
+                  component="span"
                   color="text.secondary"
                   sx={{
                     display: "flex",
