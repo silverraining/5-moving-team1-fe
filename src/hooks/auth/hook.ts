@@ -21,7 +21,7 @@ export const useLoginForm = (role: Role) => {
   const { mutate } = useLogin();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
-  const { setNotifications } = useNotificationStore();
+  const { setNotifications, setMarkAsRead } = useNotificationStore();
   const [fetchNotifications, setFetchNotifications] = useState(false);
   const { data: notificationData } = useNotificationAll(fetchNotifications);
   const { t } = useTranslation();
@@ -32,6 +32,7 @@ export const useLoginForm = (role: Role) => {
   useEffect(() => {
     if (fetchNotifications && notificationData) {
       setNotifications(notificationData);
+      setMarkAsRead(notificationData.length !== 0);
     }
   }, [fetchNotifications, notificationData, setNotifications]);
 
