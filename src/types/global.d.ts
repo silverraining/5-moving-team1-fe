@@ -1,19 +1,24 @@
-interface DaumPostcodeData {
-  zonecode: string;
-  roadAddress: string;
-  jibunAddress: string;
-}
+export {};
 
-interface DaumPostcodeOptions {
-  oncomplete: (data: DaumPostcodeData) => void;
-}
+declare global {
+  interface DaumPostcodeData {
+    zonecode: string;
+    roadAddress: string;
+    jibunAddress: string;
+  }
 
-interface DaumPostcode {
-  open(): void;
-}
+  interface DaumPostcodeOptions {
+    oncomplete: (data: DaumPostcodeData) => void;
+    onclose?: () => void;
+  }
 
-interface Window {
-  daum: {
-    Postcode: new (options: DaumPostcodeOptions) => DaumPostcode;
-  };
+  interface DaumPostcode {
+    open(): void;
+  }
+
+  interface Window {
+    daum: {
+      Postcode: new (options: DaumPostcodeOptions) => DaumPostcode;
+    };
+  }
 }
