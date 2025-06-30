@@ -59,7 +59,7 @@ export const uploadImageToS3 = async (file: File): Promise<string> => {
     throw new Error(
       error instanceof Error
         ? error.message
-        : "이미지 업로드 중 오류가 발생했습니다."
+        : "Images 업로드 중 오류가 발생했습니다."
     );
   }
 };

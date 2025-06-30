@@ -60,14 +60,14 @@ export const CardList = ({ variant }: CardListProps) => {
 
   const { title, subTitle, img } = CARD_CONTENT[variant];
 
-  // isSmall일 때 무조건 최소 이미지 사이즈 지정, 아닐 때는 containerWidth 기준
+  // isSmall일 때 무조건 최소 Images 사이즈 지정, 아닐 때는 containerWidth 기준
   const imageWidth = isSmall
     ? variant === "small"
       ? 284 // small은 고정 최소값
       : 290 // 다른 variant들은 적당히 고정값 지정 가능
     : containerWidth
-    ? containerWidth * 0.5
-    : 0;
+      ? containerWidth * 0.5
+      : 0;
 
   const imageHeight = imageWidth / IMAGE_RATIO[variant];
 

@@ -5,9 +5,10 @@ import { CardData } from "@/src/types/card";
 import { useRouter } from "next/navigation";
 import { PATH } from "@/src/lib/constants";
 import { useTranslation } from "react-i18next";
+import { EstimateOffer } from "@/src/types/estimate";
 
 interface Props {
-  likedMovers: CardData[];
+  likedMovers: EstimateOffer[];
 }
 //  찜한 기사님UI
 
@@ -36,7 +37,7 @@ export const LikedMoverList = ({ likedMovers }: Props) => {
         {likedMovers.map((mover, idx) => (
           <Box
             key={idx}
-            onClick={() => handleCardClick(mover.id)}
+            onClick={() => handleCardClick(mover.moverId)}
             sx={{ cursor: "pointer" }}
           >
             <CardListSave
@@ -44,8 +45,6 @@ export const LikedMoverList = ({ likedMovers }: Props) => {
               forceMobileSize
               fontSize={"11.5px"}
               key={idx}
-              onClick={() => handleCardClick(mover.id)}
-              sx={{ cursor: "pointer" }}
             />
           </Box>
         ))}

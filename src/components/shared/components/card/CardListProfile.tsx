@@ -60,7 +60,7 @@ export const CardListProfile = ({
           >
             <Image
               src={info.imageUrl || "/Images/default_profile.png"}
-              alt={"프로필 이미지"}
+              alt={"프로필 Images"}
               fill
               style={{
                 overflow: "hidden",
@@ -166,7 +166,7 @@ export const CardListProfile = ({
           >
             <Image
               src={info.imageUrl || "/Images/default_profile.png"}
-              alt={"프로필 이미지"}
+              alt={"프로필 Images"}
               fill
               style={{
                 overflow: "hidden",

@@ -121,7 +121,7 @@ export const CardListSave = ({
         >
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",
@@ -308,7 +308,7 @@ export const CardListSaveSkeleton = () => {
         gap={["12px", "12px", "24px"]}
         borderRadius={"6px"}
       >
-        {/* 프로필 이미지 */}
+        {/* 프로필 Images */}
         <Box width={[46, 46, 56]} height={[46, 46, 56]}>
           <Skeleton variant="circular" width="100%" height="100%" />
         </Box>

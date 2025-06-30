@@ -42,7 +42,7 @@ export default function CardListProfileWrapper({ data }: Props) {
           <Box component="span" display="inline-flex" alignItems="center">
             <Typography component="span">{t("기본 정보 수정")}</Typography>
             <Image
-              src="/images/profile/writing_gray.svg"
+              src="/Images/profile/writing_gray.svg"
               width={24}
               height={24}
               alt="수정 아이콘"
@@ -54,7 +54,7 @@ export default function CardListProfileWrapper({ data }: Props) {
           <Box component="span" display="inline-flex" alignItems="center">
             <Typography component="span">{t("내 프로필 수정")}</Typography>
             <Image
-              src="/images/profile/writing.svg"
+              src="/Images/profile/writing.svg"
               width={24}
               height={24}
               alt="수정 아이콘"

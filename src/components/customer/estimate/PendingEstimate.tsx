@@ -24,9 +24,9 @@ interface PendingEstimateCardDataWithId extends PendingEstimateCardData {
 }
 
 export default function PendingEstimate() {
+  const { t } = useTranslation();
   const router = useRouter();
   const queryClient = useQueryClient();
-  const { t } = useTranslation();
   // ID 배열 받아오기
   const {
     data: requestIds,
@@ -42,22 +42,33 @@ export default function PendingEstimate() {
   const { mutate: EstimateOfferConfirmedMutate } = useEstimateOfferConfirmed();
 
   // 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
-  const requestId = requestIds?.[0]?.estimateRequestId;
+  const requestId = requestIds?.[0]?.requestId;
 
   // 해당 ID로 견적서 리스트 받아오기
-  const { data, isLoading, error } = useEstimateOfferPending(requestId);
-
+  const { data, isLoading, error } = useEstimateOfferPending(requestId ?? "");
+  if (isLoading || isLoadingIds) {
+    return (
+      <Grid container spacing={2} py={[3, 4, 5]}>
+        {[...Array(6)].map((_, i) => (
+          <Grid
+            key={i}
+            size={[12, 12, 6]}
+            sx={{ display: "flex", justifyContent: "center" }}
+          >
+            <CardListWaitSkeleton />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
   if (error || errorIds)
     return <Typography>견적서 데이터 에러 발생!</Typography>;
-
-  if (isLoading) {
-    return <EmprtyReview text={t("로딩 중 입니다")} />;
+  if (!requestId && !data) {
+    return <EmprtyReview text={t("요청된 견적이 없습니다.")} />;
   }
-
-  if (!data || data.items.length === 0) {
-    return <EmprtyReview text={t("대기중인 견적이 없습니다")} />;
+  if (data?.items.length === 0) {
+    return <EmprtyReview text={t("대기중인 견적이 없습니다.")} />;
   }
-
   const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
     router.push(PATH.userEstimateDetail(card.estimateRequestId, card.moverId));
   };
@@ -100,32 +111,21 @@ export default function PendingEstimate() {
   // 실제 데이터 렌더링
   return (
     <Grid container spacing={2} py={[3, 4, 5]}>
-      {isLoading || isLoadingIds
-        ? [...Array(6)].map((_, i) => (
-            <Grid
-              key={i}
-              size={[12, 12, 6]}
-              display={"flex"}
-              sx={{ justifyContent: "center" }}
-            >
-              <CardListWaitSkeleton />
-            </Grid>
-          ))
-        : data?.items.map((card: PendingEstimateCardDataWithId, index) => (
-            <Grid
-              key={index}
-              size={[12, 12, 6]}
-              display={"flex"}
-              sx={{ justifyContent: "center" }}
-            >
-              <CardListWait
-                data={card}
-                onDetailClick={handleDetailClick(card)}
-                onLikeClick={handleLikeClick(card)}
-                onConfirmClick={handleConfirmClick(card)}
-              />
-            </Grid>
-          ))}
+      {data?.items.map((card: PendingEstimateCardDataWithId, index) => (
+        <Grid
+          key={index}
+          size={[12, 12, 6]}
+          display={"flex"}
+          sx={{ justifyContent: "center" }}
+        >
+          <CardListWait
+            data={card}
+            onDetailClick={handleDetailClick(card)}
+            onLikeClick={handleLikeClick(card)}
+            onConfirmClick={handleConfirmClick(card)}
+          />
+        </Grid>
+      ))}
     </Grid>
   );
 }

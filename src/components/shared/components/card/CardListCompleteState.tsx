@@ -77,7 +77,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
           gap={"16px"}
           sx={(theme) => ({
             background: "rgba(4, 4, 4, 0.64)",
-            zIndex: 10,
+            zIndex: 0,
             borderRadius: "16px",
             borderColor: theme.palette.Line[100],
           })}

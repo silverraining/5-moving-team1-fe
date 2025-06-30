@@ -17,6 +17,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { EstimateRequestHistoryItem } from "@/src/api/customer/api";
 import { EmprtyReview } from "../../review/EmptyReview";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
+import { useTranslation } from "react-i18next";
 
 interface HistoryEstimateCardDataWithId extends HistoryEstimateCardData {
   moverId: string;
@@ -28,7 +29,7 @@ export default function HistoryEstimate() {
   const queryClient = useQueryClient();
   const { mutate: createLikeMutate } = useCreateLike();
   const { mutate: deleteLikeMutate } = useDeleteLike();
-
+  const { t } = useTranslation();
   // 무한스크롤 Query 사용
   const {
     data,
@@ -84,7 +85,6 @@ export default function HistoryEstimate() {
     <Stack
       padding={["0px 0px", "0px 72px", "0px 260px"]}
       sx={(theme) => ({
-        backgroundColor: theme.palette.Background[100],
         borderColor: theme.palette.Line[100],
       })}
     >
@@ -114,11 +114,11 @@ export default function HistoryEstimate() {
                 borderColor: theme.palette.Line[100],
               })}
             >
-              <EstimateSection title="견적 정보">
+              <EstimateSection title={t("견적 정보")}>
                 <EstimateInfo info={info.estimateOffers[0]} />
               </EstimateSection>
 
-              <EstimateSection title="견적서 목록">
+              <EstimateSection title={t("견적서 목록")}>
                 <Dropdown
                   options={sortOptions}
                   onChange={(option) =>
@@ -199,7 +199,7 @@ export default function HistoryEstimate() {
                       paddingTop: "16px",
                     })}
                   >
-                    해당 조건의 견적서가 없습니다.
+                    {t("해당 조건의 견적서가 없습니다.")}
                   </Typography>
                 )}
               </EstimateSection>

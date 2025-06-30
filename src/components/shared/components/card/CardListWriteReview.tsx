@@ -67,7 +67,7 @@ export const CardListWriteReview = ({
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
             src={info.imageUrl || "/Images/profile/maleProfile.svg"}
-            alt={"프로필 이미지"}
+            alt={"프로필 Images"}
             fill
             style={{
               overflow: "hidden",

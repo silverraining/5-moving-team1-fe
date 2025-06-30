@@ -36,7 +36,7 @@ export const ProfileRegister = () => {
   // 기사님 프로필 등록 hook
   const { mutateAsync: registerMoverProfile } = useRegisterMoverProfile();
 
-  // 이미지 업로드 hook
+  // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
       showSnackbar: false,
@@ -171,7 +171,7 @@ export const ProfileRegister = () => {
               width: "100%",
             }}
           >
-            {/* 왼쪽 열: 프로필 이미지, 별명, 경력, 한 줄 소개 */}
+            {/* 왼쪽 열: 프로필 Images, 별명, 경력, 한 줄 소개 */}
             <Box
               sx={{
                 flex: 1,
@@ -179,7 +179,7 @@ export const ProfileRegister = () => {
                 maxWidth: ["100%", "100%", "500px"],
               }}
             >
-              {/* 프로필 이미지 */}
+              {/* 프로필 Images */}
               <Box
                 sx={{
                   mb: "32px",
