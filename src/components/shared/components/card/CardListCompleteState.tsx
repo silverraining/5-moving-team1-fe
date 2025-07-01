@@ -1,4 +1,11 @@
-import { Box, Button, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Skeleton,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData } from "@/src/types/card";
 import dayjs from "@/src/lib/dayjsConfig";
@@ -184,7 +191,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
                 {dayjs(data.createdAt).fromNow()}
               </Typography>
             </Box>
-            <Box display={["flex", "none", "none"]}>
+            <Box display={["flex", "none", "none"]} gap={1}>
               <Box
                 borderRadius="4px"
                 padding={["2px 6px", "2px 6px", "4px 6px"]}
@@ -228,7 +235,7 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
             gap={"9.5px"}
             alignItems="center"
             flexGrow={1}
-            justifyContent={["space-between", "flex-start"]}
+            justifyContent={"flex-start"}
           >
             <Box display={["none", "flex"]} alignItems="center" gap={"12px"}>
               <Box
@@ -364,3 +371,123 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
     </Box>
   );
 };
+
+export const CardListCompleteStateSkeleton = () => (
+  <Stack
+    direction="column"
+    border={"0.5px solid black"}
+    padding={["22px 12px 16px 12px"]}
+    boxShadow={"2px 2px 10px 0px #DCDCDC24,-2px -2px 10px 0px #DCDCDC24"}
+    borderRadius={"16px"}
+    maxWidth={"688px"}
+    width={"100%"}
+    minWidth={"327px"}
+    justifyContent={"space-between"}
+    height={["233px", "184px", "228px"]}
+    boxSizing={"border-box"}
+    sx={(theme) => ({
+      borderColor: theme.palette.Line[100],
+    })}
+  >
+    {/* 칩 + 만든 시간 */}
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <Stack direction={"row"} spacing={1}>
+        <Skeleton variant="rounded" width={106} height={34} />
+        <Skeleton variant="rounded" width={106} height={34} />
+      </Stack>
+      <Stack display={["none", "flex", "flex"]}>
+        <Skeleton variant="text" width={50} height={34} />
+      </Stack>
+    </Stack>
+
+    {/* 고객 이름 + 시간 */}
+    <Stack direction="column" sx={{ alignItems: "flex-start" }}>
+      {/* 고객 이름 */}
+      <Stack display={["none", "flex", "flex"]}>
+        <Skeleton variant="text" width={80} height={32} />
+      </Stack>
+
+      {/* 모바일 고객 이름 */}
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        display={["flex", "none", "none"]}
+      >
+        <Skeleton variant="text" width={90} height={32} />
+        <Skeleton variant="text" width={50} height={34} />
+      </Stack>
+
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        display={["flex", "none", "none"]}
+      >
+        <Skeleton variant="text" width={50} height={34} />
+        <Skeleton variant="text" width={100} height={34} />
+      </Stack>
+    </Stack>
+
+    <Divider
+      sx={(theme) => ({
+        borderColor: theme.palette.Line[200],
+      })}
+    ></Divider>
+
+    {/* 이사일 + 출발 + 도착 */}
+    <Stack
+      direction="row"
+      justifyContent={"flex-start"}
+      alignItems="center"
+      spacing={1}
+      display={["none", "flex", "flex"]}
+    >
+      <Skeleton variant="text" width={40} height={34} />
+      <Skeleton variant="text" width={110} height={34} />
+      <Skeleton variant="text" width={40} height={34} />
+      <Skeleton variant="text" width={110} height={34} />
+      <Skeleton variant="text" width={40} height={34} />
+      <Skeleton variant="text" width={110} height={34} />
+    </Stack>
+
+    {/* 이사일 + 출발 + 도착 (모바일) */}
+    <Stack
+      direction="row"
+      justifyContent={"flex-start"}
+      spacing={1}
+      alignItems="center"
+      display={["flex", "none", "none"]}
+    >
+      <Skeleton variant="text" width={34} height={34} />
+      <Skeleton variant="text" width={70} height={34} />
+      <Divider
+        orientation="vertical"
+        sx={(theme) => ({
+          borderColor: theme.palette.Line[200],
+          height: 14,
+        })}
+      ></Divider>
+      <Skeleton variant="text" width={34} height={34} />
+      <Skeleton variant="text" width={70} height={34} />
+    </Stack>
+
+    {/* 견적 금액 */}
+    <Stack direction={"row"} justifyContent={"flex-end"} spacing={1}>
+      <Skeleton
+        variant="text"
+        width={60}
+        sx={{
+          height: [48, 48, 64],
+        }}
+      />
+      <Skeleton
+        variant="text"
+        width={100}
+        sx={{
+          height: [48, 48, 64],
+        }}
+      />
+    </Stack>
+  </Stack>
+);
