@@ -14,7 +14,7 @@ import { useRouter } from "next/navigation";
 import { PATH } from "@/src/lib/constants";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
-import { EmprtyReview } from "../../review/EmptyReview";
+import { EmptyReview } from "../../review/EmptyReview";
 import { useTranslation } from "react-i18next";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 import {
@@ -101,10 +101,10 @@ export default function PendingEstimate() {
   }
   if (errorIds) return <Typography>견적서 데이터 에러 발생!</Typography>;
   if (!requestId && !data) {
-    return <EmprtyReview text={t("요청된 견적이 없습니다.")} />;
+    return <EmptyReview text={t("요청된 견적이 없습니다.")} />;
   }
   if (data?.pages.length === 0) {
-    return <EmprtyReview text={t("대기중인 견적이 없습니다.")} />;
+    return <EmptyReview text={t("대기중인 견적이 없습니다.")} />;
   }
   const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
     router.push(PATH.userEstimateDetail(card.estimateRequestId, card.moverId));
@@ -149,9 +149,9 @@ export default function PendingEstimate() {
 
   if (isLoading || isLoadingIds) return <CardListWaitSkeleton />;
   if (isError || errorIds)
-    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+    return <EmptyReview text="대기중인 견적이 없습니다" />;
   if (!items || items.length === 0)
-    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+    return <EmptyReview text="대기중인 견적이 없습니다" />;
 
   // 실제 카드 리스트 렌더링 및 무한스크롤 ref 달기
   return (

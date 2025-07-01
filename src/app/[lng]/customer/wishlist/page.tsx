@@ -1,7 +1,7 @@
 "use client";
 
 import { useLikeList } from "@/src/api/like/hooks";
-import { EmprtyReview } from "@/src/components/review/EmptyReview";
+import { EmptyReview } from "@/src/components/review/EmptyReview";
 import {
   CardListSave,
   CardListSaveSkeleton,
@@ -73,7 +73,7 @@ const Wishlist = () => {
   const router = useRouter();
 
   if (!isLoading && (!data || data.length === 0)) {
-    return <EmprtyReview text="찜한 기사님이 없습니다" />;
+    return <EmptyReview text="찜한 기사님이 없습니다" />;
   }
 
   const transformedData = data

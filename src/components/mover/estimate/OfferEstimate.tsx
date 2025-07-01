@@ -6,7 +6,7 @@ import { useEstimateOffer } from "@/src/api/mover/hooks";
 import { PATH } from "@/src/lib/constants";
 import { useRouter } from "next/navigation";
 import { OfferEstimateCardData } from "../../shared/components/card/CardListCompleteState";
-import { EmprtyReview } from "../../review/EmptyReview";
+import { EmptyReview } from "../../review/EmptyReview";
 import { useTranslation } from "react-i18next";
 
 export default function OfferEstimate() {
@@ -15,10 +15,9 @@ export default function OfferEstimate() {
   const router = useRouter();
   const { t } = useTranslation();
   if (isLoading) return <Typography>{t("로딩 중...")}</Typography>;
-  if (isError || !data)
-    return <EmprtyReview text={t("보낸 견적이 없습니다")} />;
+  if (isError || !data) return <EmptyReview text={t("보낸 견적이 없습니다")} />;
   if (data.length === 0)
-    return <EmprtyReview text={t("보낸 견적이 없습니다")} />;
+    return <EmptyReview text={t("보낸 견적이 없습니다")} />;
 
   return (
     <Grid container spacing={2} marginTop={["24px", "32px", "40px"]}>
