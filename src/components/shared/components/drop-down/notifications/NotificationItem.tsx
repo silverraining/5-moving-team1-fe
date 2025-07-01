@@ -90,14 +90,15 @@ export default function NotificationItem({ data }: NotificationItemProps) {
     if (isConfirmed) {
       completeRequest(data.targetId, {
         onSuccess: (response) => {
-          // 백엔드에서 받은 성공 메시지 표시
           openSnackbar(
             `${response.message} 🎉 저희 서비스를 이용해주셔서 감사합니다.`,
             "success",
             4000
           );
-          // 리뷰 작성 페이지로 이동
-          router.push(PATH.userReviewPending);
+          // 스낵바 표시 후 새로고침
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
         },
         onError: (error) => {
           console.error("이사 완료 처리 실패:", error);
@@ -145,9 +146,7 @@ export default function NotificationItem({ data }: NotificationItemProps) {
         width: "100%",
         display: "flex",
         justifyContent: "space-between",
-        backgroundColor: data.isRead
-          ? theme.palette.White[100] // 읽은 상태
-          : theme.palette.PrimaryBlue[50], // 안 읽은 상태
+        backgroundColor: theme.palette.White[100],
         borderBottom: `1px solid ${theme.palette.Line[100]}`,
         boxSizing: "border-box",
       })}
