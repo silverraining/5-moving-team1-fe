@@ -102,3 +102,19 @@ export const fetchMyActiveEstimateRequest = async (): Promise<
     throw error;
   }
 };
+
+/**
+ * 3. 이사 완료 처리
+ */
+export const completeEstimateRequest = async (
+  requestId: string
+): Promise<{ message: string }> => {
+  try {
+    const response = await apiClient.patch(
+      `/estimate-request/${requestId}/complete`
+    );
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

@@ -29,16 +29,22 @@ import { useEffect, useRef } from "react";
 import { useNotificationAll } from "@/src/api/notification/hooks";
 import { useNotificationStore } from "@/src/store/notification";
 import { useTranslation } from "react-i18next";
+import { useGetCustomerProfile } from "@/src/api/customer/hook";
+import { useGetMoverProfile } from "@/src/api/mover/hooks";
 export const Header = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbar();
   const { open, toggleDrawer } = useDrawer();
-  const { user, isLogin, logout } = AuthStore();
+  const { user, isLogin, logout, setProfile } = AuthStore();
   const isCustomer = user?.role === "CUSTOMER";
   const isMover = user?.role === "MOVER";
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const token = Cookies.get("accessToken");
+
+  const { data: customerProfile } = useGetCustomerProfile(isCustomer);
+  const { data: moverProfile } = useGetMoverProfile(isMover);
+
   const { data: notifications, refetch } = useNotificationAll(!!token);
   const {
     notifications: localNotifications,
@@ -50,14 +56,14 @@ export const Header = () => {
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-    ? MOVER_MENU
-    : GUEST_MENU;
+      ? MOVER_MENU
+      : GUEST_MENU;
 
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-    ? MOVER_MENU
-    : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
+      ? MOVER_MENU
+      : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
@@ -180,6 +186,11 @@ export const Header = () => {
       setNotifications(notifications);
     }
   }, [notifications, setNotifications]);
+
+  useEffect(() => {
+    if (!!customerProfile) return setProfile(customerProfile);
+    if (!!moverProfile) return setProfile(moverProfile);
+  }, [customerProfile, moverProfile]);
 
   return (
     <Box

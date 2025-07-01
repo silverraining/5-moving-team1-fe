@@ -4,7 +4,10 @@ import { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import Image from "next/image";
 import SendEstimateModal from "../../../shared/components/modal/SendEstimateModal";
 import RejectRequestModal from "../../../shared/components/modal/RejectRequestModal";
-import { CardListRequest } from "../../../shared/components/card/CardListRequest";
+import {
+  CardListRequest,
+  CardListRequestSkeleton,
+} from "../../../shared/components/card/CardListRequest";
 import {
   Box,
   Typography,
@@ -460,7 +463,7 @@ export default function ReceivedRequestsFlow() {
               }}
             >
               {isLoading ? (
-                <CircularProgress />
+                <CardListRequestSkeleton />
               ) : filteredItems.length === 0 ? (
                 <EmptyRequest />
               ) : (

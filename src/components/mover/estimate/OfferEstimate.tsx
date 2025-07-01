@@ -1,7 +1,10 @@
 "use client";
 
-import { Grid, Typography } from "@mui/material";
-import { CardListCompleteState } from "../../shared/components/card/CardListCompleteState";
+import { Grid } from "@mui/material";
+import {
+  CardListCompleteState,
+  CardListCompleteStateSkeleton,
+} from "../../shared/components/card/CardListCompleteState";
 import { useEstimateOffer } from "@/src/api/mover/hooks";
 import { PATH } from "@/src/lib/constants";
 import { useRouter } from "next/navigation";
@@ -14,8 +17,26 @@ export default function OfferEstimate() {
 
   const router = useRouter();
   const { t } = useTranslation();
-  if (isLoading) return <Typography>{t("로딩 중...")}</Typography>;
+
+  if (isLoading) {
+    return (
+      <Grid container spacing={2} marginTop={["24px", "32px", "40px"]}>
+        {[1, 2, 3, 4, 5].map((_, idx) => (
+          <Grid
+            key={idx}
+            size={[12, 12, 6]}
+            display={"flex"}
+            sx={{ justifyContent: "center" }}
+          >
+            <CardListCompleteStateSkeleton />
+          </Grid>
+        ))}
+      </Grid>
+    );
+  }
+
   if (isError || !data) return <EmptyReview text={t("보낸 견적이 없습니다")} />;
+
   if (data.length === 0)
     return <EmptyReview text={t("보낸 견적이 없습니다")} />;
 
