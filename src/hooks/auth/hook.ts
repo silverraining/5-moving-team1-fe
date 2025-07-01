@@ -18,13 +18,13 @@ import { useEffect, useState } from "react";
 import { formatPhoneNumber } from "@/src/utils/formatPhonNumber";
 import { useTranslation } from "react-i18next";
 export const useLoginForm = (role: Role) => {
-  const { mutate } = useLogin();
+  const { t } = useTranslation();
+  const { mutate, isPending } = useLogin();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
   const { setNotifications, setMarkAsRead } = useNotificationStore();
   const [fetchNotifications, setFetchNotifications] = useState(false);
   const { data: notificationData } = useNotificationAll(fetchNotifications);
-  const { t } = useTranslation();
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -58,12 +58,13 @@ export const useLoginForm = (role: Role) => {
 
   return {
     ...form,
+    isPending,
     onSubmit,
   };
 };
 
 export const useSignupForm = (role: Role) => {
-  const { mutate } = useSignup();
+  const { mutate, isPending } = useSignup();
   const { openSnackbar } = useSnackbar();
   const router = useRouter();
   const { t } = useTranslation();
@@ -111,6 +112,7 @@ export const useSignupForm = (role: Role) => {
 
   return {
     ...form,
+    isPending,
     onSubmit,
   };
 };
