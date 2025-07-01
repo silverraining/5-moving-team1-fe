@@ -1,10 +1,11 @@
 "use client";
 
-import { Typography, Stack, Box } from "@mui/material";
+import { Typography, Stack, Box, Button, Grid } from "@mui/material";
 import { EstimateInfo } from "./EstimateInfo";
 import {
   HistoryEstimateCardData,
   CardListCost,
+  CardListCostSkeleton,
 } from "../../shared/components/card/CardListCost";
 import Dropdown, { SortOption } from "./Dropdown";
 import { useState } from "react";
@@ -18,6 +19,7 @@ import { EstimateRequestHistoryItem } from "@/src/api/customer/api";
 import { EmprtyReview } from "../../review/EmptyReview";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 import { useTranslation } from "react-i18next";
+import { EstimateHistoryCardSkeleton } from "./EstimateHistoryCard";
 
 interface HistoryEstimateCardDataWithId extends HistoryEstimateCardData {
   moverId: string;
@@ -69,17 +71,32 @@ export default function HistoryEstimate() {
     }));
   };
 
-  if (isLoading) return <Typography>로딩 중...</Typography>;
+  if (isLoading) {
+    return (
+      <Stack display={"flex"} flexDirection={"column"} py={3}>
+        <Stack spacing={2} pb={3}>
+          <Typography variant="SB_24">견적 요청 정보</Typography>
+          <EstimateHistoryCardSkeleton />
+          <Typography variant="SB_24">받은 견적</Typography>
+          <Grid container spacing={2} py={[3, 4, 5]}>
+            {[...Array(6)].map((_, i) => (
+              <Grid
+                key={i}
+                size={[12, 12, 6]}
+                sx={{ display: "flex", justifyContent: "center" }}
+              >
+                <CardListCostSkeleton />
+              </Grid>
+            ))}
+          </Grid>
+        </Stack>
+      </Stack>
+    );
+  }
+
   if (isError) return <EmprtyReview text="대기중인 견적이 없습니다" />;
   if (!items || items.length === 0)
     return <EmprtyReview text="대기중인 견적이 없습니다" />;
-
-  console.log(
-    "hasNextPage",
-    hasNextPage,
-    "isFetchingNextPage",
-    isFetchingNextPage
-  );
 
   return (
     <Stack
