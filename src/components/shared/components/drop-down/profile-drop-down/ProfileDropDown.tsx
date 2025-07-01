@@ -2,13 +2,13 @@
 
 import { Box, Divider, useMediaQuery, useTheme } from "@mui/material";
 import ProfileMenuItem from "./ProfileMenuItem";
-import { User } from "@/src/types/auth";
 import Link from "next/link";
 import { PATH } from "@/src/lib/constants";
-import { AuthStore } from "@/src/store/authStore";
 import { useTranslation } from "react-i18next";
+import { UnifiedProfile } from "../../header/UserTabs";
+
 interface ProfileDropDownProps {
-  user: User | null;
+  user: UnifiedProfile | null;
   logout?: () => void;
   close?: () => void;
 }
@@ -20,6 +20,7 @@ export default function ProfileDropDown({
 }: ProfileDropDownProps) {
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
+
   const { t } = useTranslation();
   const profileEditHref =
     user?.role === "MOVER" ? PATH.moverProfileEdit : PATH.userProfileEdit;

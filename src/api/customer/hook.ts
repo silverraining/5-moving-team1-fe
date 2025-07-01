@@ -4,7 +4,6 @@ import {
   useQueryClient,
   UseMutationResult,
   useInfiniteQuery,
-  QueryFunctionContext,
 } from "@tanstack/react-query";
 import {
   moverList,
@@ -20,10 +19,10 @@ import {
   EstimateOfferDetail,
   EstimateOfferConfirmed,
   ConfirmRes,
-  EstimateRequestHistoryResponse,
   requestRejectReq,
   requestReject,
 } from "./api";
+import { completeEstimateRequest } from "./request/api";
 import { ServiceRegion } from "@/src/types/common";
 
 // 고객 프로필 관련 쿼리 키
@@ -132,5 +131,23 @@ export const useEstimateRequestCancle = (): UseMutationResult<
 > => {
   return useMutation<requestRejectReq, Error, string>({
     mutationFn: (requestId: string) => requestReject(requestId),
+  });
+};
+
+/** 이사 완료 처리 hook */
+export const useCompleteEstimateRequest = (): UseMutationResult<
+  { message: string },
+  Error,
+  string
+> => {
+  const queryClient = useQueryClient();
+
+  return useMutation<{ message: string }, Error, string>({
+    mutationFn: (requestId: string) => completeEstimateRequest(requestId),
+    onSuccess: () => {
+      // 성공 시 관련 쿼리 무효화 새로고침
+      queryClient.invalidateQueries({ queryKey: ["EstimateRequestActive"] });
+      queryClient.invalidateQueries({ queryKey: ["EstimateRequestHistory"] });
+    },
   });
 };

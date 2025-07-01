@@ -52,10 +52,11 @@ export const useUpdateMoverProfile = () => {
 };
 
 /** 기사님 프로필 조회 hook */
-export const useGetMoverProfile = () => {
+export const useGetMoverProfile = (enabled = true) => {
   return useQuery({
     queryKey: ["moverProfile"],
     queryFn: getMoverProfile,
+    enabled,
   });
 };
 
