@@ -3,8 +3,8 @@ import { persist } from "zustand/middleware";
 import { ParsedAddress } from "../utils/parseAddress";
 
 type EstimateState = {
-  moveType: string;
-  moveDate: string;
+  moveType: string | null;
+  moveDate: string | null;
   fromAddress: ParsedAddress | null;
   toAddress: ParsedAddress | null;
   step: number | null; // 견적요청 Progress 게이지 바를 header로 사용하기 위해 추가
@@ -18,8 +18,8 @@ type EstimateState = {
 export const useEstimateStore = create<EstimateState & { reset: () => void }>()(
   persist(
     (set) => ({
-      moveType: "",
-      moveDate: "",
+      moveType: null,
+      moveDate: null,
       fromAddress: null,
       toAddress: null,
       step: null,
@@ -30,8 +30,8 @@ export const useEstimateStore = create<EstimateState & { reset: () => void }>()(
       setStep: (step) => set({ step }),
       reset: () =>
         set({
-          moveType: "",
-          moveDate: "",
+          moveType: null,
+          moveDate: null,
           fromAddress: null,
           toAddress: null,
           step: null,
