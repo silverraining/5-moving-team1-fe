@@ -19,12 +19,13 @@ import { formatPhoneNumber } from "@/src/utils/formatPhonNumber";
 import { useTranslation } from "react-i18next";
 export const useLoginForm = (role: Role) => {
   const { t } = useTranslation();
+  const router = useRouter();
   const { mutate, isPending } = useLogin();
   const { openSnackbar } = useSnackbar();
-  const router = useRouter();
   const { setNotifications, setMarkAsRead } = useNotificationStore();
   const [fetchNotifications, setFetchNotifications] = useState(false);
   const { data: notificationData } = useNotificationAll(fetchNotifications);
+  const [isNavigating, setIsNavigating] = useState(false);
   const form = useForm<LoginSchemaType>({
     resolver: zodResolver(loginSchema),
   });
@@ -38,18 +39,19 @@ export const useLoginForm = (role: Role) => {
 
   const onSubmit = (data: LoginSchemaType) => {
     mutate(
-      { ...data, role }, // 외부에서 받은 고정값 삽입
+      { ...data, role }, // 외부에서 받은 고정값삽입
       {
-        onSuccess: async () => {
+        onSuccess: () => {
           openSnackbar(t("로그인 성공"), "success", 500, "standard");
-          await setFetchNotifications(true);
+          setFetchNotifications(true);
+          setIsNavigating(true);
           router.replace("/");
         },
         onError: (error) => {
           openSnackbar(
             error instanceof Error ? error.message : t("로그인 실패"),
             "error",
-            2000
+            500
           );
         },
       }
@@ -58,16 +60,18 @@ export const useLoginForm = (role: Role) => {
 
   return {
     ...form,
+    isNavigating,
     isPending,
     onSubmit,
   };
 };
 
 export const useSignupForm = (role: Role) => {
+  const { t } = useTranslation();
+  const router = useRouter();
   const { mutate, isPending } = useSignup();
   const { openSnackbar } = useSnackbar();
-  const router = useRouter();
-  const { t } = useTranslation();
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const form = useForm<SignUpSchemaType>({
     resolver: zodResolver(signUpSchema),
@@ -96,14 +100,15 @@ export const useSignupForm = (role: Role) => {
       { ...submitData }, // 외부에서 받은 고정값 삽입
       {
         onSuccess: () => {
-          openSnackbar(t("회원가입 성공"), "success", 1000, "standard");
+          openSnackbar(t("회원가입 성공"), "success", 500, "standard");
+          setIsNavigating(true);
           router.push(path);
         },
         onError: (error) => {
           openSnackbar(
             error instanceof Error ? error.message : t("회원가입 실패"),
             "error",
-            2000
+            500
           );
         },
       }
@@ -112,6 +117,7 @@ export const useSignupForm = (role: Role) => {
 
   return {
     ...form,
+    isNavigating,
     isPending,
     onSubmit,
   };

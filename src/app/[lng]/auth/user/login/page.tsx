@@ -29,6 +29,7 @@ const Login = () => {
     handleSubmit,
     onSubmit,
     watch,
+    isNavigating,
     isPending,
     formState: { errors },
   } = useLoginForm("CUSTOMER");
@@ -79,7 +80,7 @@ const Login = () => {
         <FormSection register={register} errors={errors} fields={LOGIN_FIELD} />
         <Button
           fullWidth
-          loading={isPending}
+          loading={isPending || isNavigating}
           loadingPosition="start"
           variant="contained"
           disabled={!isAllFilled ? !isAllFilled : false}

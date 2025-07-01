@@ -32,6 +32,7 @@ const SignUp = () => {
     handleSubmit,
     watch,
     isPending,
+    isNavigating,
     formState: { errors },
   } = useSignupForm("MOVER");
   const requiredFields: (keyof SignUpSchemaType)[] = [
@@ -89,7 +90,7 @@ const SignUp = () => {
         />
         <Button
           fullWidth
-          loading={isPending}
+          loading={isPending || isNavigating}
           loadingPosition="start"
           variant="contained"
           disabled={!isAllFilled ? !isAllFilled : false}

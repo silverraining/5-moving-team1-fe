@@ -32,6 +32,8 @@ const SignUp = () => {
     onSubmit,
     handleSubmit,
     watch,
+    isPending,
+    isNavigating,
     formState: { errors },
   } = useSignupForm("CUSTOMER");
   const requiredFields: (keyof SignUpSchemaType)[] = [
@@ -90,6 +92,8 @@ const SignUp = () => {
         <Button
           fullWidth
           variant="contained"
+          loading={isPending || isNavigating}
+          loadingPosition="start"
           disabled={!isAllFilled ? !isAllFilled : false}
           sx={{
             maxHeight: "64px",
