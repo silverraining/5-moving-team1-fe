@@ -39,20 +39,25 @@ export const Header = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const token = Cookies.get("accessToken");
-  const { refetch } = useNotificationAll(!!token);
-  const { setNotifications, setMarkAsRead } = useNotificationStore();
+  const { data: notifications, refetch } = useNotificationAll(!!token);
+  const {
+    notifications: localNotifications,
+    setNotifications,
+    setMarkAsRead,
+    addNotification,
+  } = useNotificationStore();
   const { t } = useTranslation();
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : GUEST_MENU;
+    ? MOVER_MENU
+    : GUEST_MENU;
 
   const DrawerMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
-      ? MOVER_MENU
-      : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
+    ? MOVER_MENU
+    : [{ label: t("로그인"), href: PATH.userLogin }, ...GUEST_MENU];
 
   const hendleLogout = () => {
     try {
@@ -96,14 +101,20 @@ export const Header = () => {
     };
 
     eventSource.onmessage = (event) => {
-      if (event.data === "dummy") {
-        return;
-      }
       try {
+        // dummy같은 유효하지 않은 메시지 무시
+        if (event.data === "dummy" || !event.data || event.data.trim() === "") {
+          console.log("SSE: 무시된 메시지", event.data);
+          return;
+        }
+
         const notification = JSON.parse(event.data);
         setMarkAsRead(false);
-        setNotifications(notification);
-      } catch {}
+        addNotification(notification);
+      } catch (error) {
+        console.warn("SSE 메시지 파싱 에러:", event.data, error);
+        // JSON 파싱 실패시 무시하고 계속 진행
+      }
     };
 
     eventSource.onerror = (err) => {
@@ -163,6 +174,12 @@ export const Header = () => {
       }
     };
   }, [accessToken, isLogin]);
+
+  useEffect(() => {
+    if (notifications) {
+      setNotifications(notifications);
+    }
+  }, [notifications, setNotifications]);
 
   return (
     <Box

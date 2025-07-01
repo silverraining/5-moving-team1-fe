@@ -49,7 +49,7 @@ export default function SortDropdown({
       >
         <Typography
           sx={(theme) => ({
-            fontWeight: 500,
+            fontWeight: 600,
             fontSize: ["12px", "14px"],
             color: theme.palette.Black[300],
           })}
