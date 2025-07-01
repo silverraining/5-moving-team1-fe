@@ -7,6 +7,7 @@ import { EstimateOffer } from "@/src/types/estimate";
 import { Button, Skeleton, Stack, Typography } from "@mui/material";
 import dayjs from "dayjs";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 interface EstimateRequestCardProps {
   requestData: {
@@ -29,11 +30,13 @@ export const EstimateRequestCard = ({
 }: EstimateRequestCardProps) => {
   const { openSnackbar } = useSnackbar();
   const { mutate, isPending } = useEstimateRequestCancle();
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const hendleClickCancle = () => {
     mutate(requestData.requestId, {
       onSuccess: () => {
         openSnackbar("견적 요청이 성공적으로 취소되었습니다.", "success", 1000);
+        setIsNavigating(true);
         router.push(PATH.userRequest);
       },
       onError: (error) => {
@@ -73,7 +76,8 @@ export const EstimateRequestCard = ({
         />
       </Stack>
       <Button
-        disabled={isPending}
+        loading={isPending || isNavigating}
+        loadingPosition="start"
         onClick={hendleClickCancle}
         variant="contained"
         sx={(theme) => ({

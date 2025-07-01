@@ -28,6 +28,8 @@ export default function EstimateRequestFlow() {
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
+  const reset = useEstimateStore((state) => state.reset);
+
   const [isLoading, setIsLoading] = useState(true);
   const { t } = useTranslation();
   // 0. zustand 상태 가져오기
@@ -52,19 +54,19 @@ export default function EstimateRequestFlow() {
   useEffect(() => {
     if (!userIdOrToken) return;
 
-    // 2. 새 유저 로그인 시 기존 localStorage 초기화
+    // 2. 새 유저 로그인 시 zustand 메모리 상태 초기화
     const prevUser = localStorage.getItem("prevUserId");
     if (prevUser !== userIdOrToken && userIdOrToken) {
       localStorage.setItem("prevUserId", userIdOrToken);
       useEstimateStore.persist.clearStorage();
-      useEstimateStore.setState({
-        moveType: "",
-        moveDate: "",
-        fromAddress: null,
-        toAddress: null,
-        step: null,
-      });
+      reset();
     }
+
+    // 수동으로 저장한 localStorage 항목도 제거
+    localStorage.removeItem("moveType");
+    localStorage.removeItem("moveDate");
+    localStorage.removeItem("fromAddress");
+    localStorage.removeItem("toAddress");
   }, [userIdOrToken]);
 
   const isReady = typeof window !== "undefined" && isLogin;

@@ -55,7 +55,7 @@ export const ProfileEdit = () => {
   const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
   const [serviceError, setServiceError] = useState<boolean>(false);
   const [regionError, setRegionError] = useState<boolean>(false);
-
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
   const { t } = useTranslation();
   const { openSnackbar } = useSnackbarStore();
@@ -159,6 +159,7 @@ export const ProfileEdit = () => {
       await updateMoverProfile(profileData);
 
       openSnackbar(t("기사님 프로필이 성공적으로 수정되었습니다."), "success");
+      setIsNavigating(true);
       router.push("/");
     } catch (error) {
       console.error(t("프로필 수정 중 오류:"), error);
@@ -573,6 +574,8 @@ export const ProfileEdit = () => {
           <Button
             type="submit"
             variant="contained"
+            loading={isUpdating || isNavigating}
+            loadingPosition="start"
             fullWidth
             disabled={
               !isValid ||

@@ -3,38 +3,53 @@ import { createJSONStorage, persist } from "zustand/middleware";
 import { notificationAllRes } from "../api/notification/api";
 
 interface NotificationStore {
-  notifications: notificationAllRes[] | undefined;
+  notifications: notificationAllRes[];
   markAsRead: boolean;
   setMarkAsRead: (state: boolean) => void;
   setNotifications: (newNotifications: notificationAllRes[]) => void;
-  removeNotification: (id: string) => void;
+  addNotification: (notification: notificationAllRes) => void;
+  markAsReadById: (id: string) => void;
   reset: () => void;
 }
 
 const initialState = {
-  notifications: [],
+  notifications: [] as notificationAllRes[],
   markAsRead: true,
 };
 
 export const useNotificationStore = create<NotificationStore>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       ...initialState,
       setMarkAsRead: (state) => set({ markAsRead: state }),
-      setNotifications: (newNotifications) =>
-        set(() => ({
-          notifications: newNotifications,
-          markAsRead: false,
-        })),
-      removeNotification: (id) =>
-        set((state) => {
-          const updated = (state.notifications ?? []).filter(
-            (n) => n.id !== id
-          );
-          return { notifications: updated };
-        }),
+      setNotifications: (newNotifications) => {
+        console.log("setNotifications 호출됨, 데이터:", newNotifications);
+        if (!newNotifications) return;
 
-      reset: () => set(initialState), // reset 구현
+        set({
+          notifications: Array.isArray(newNotifications)
+            ? newNotifications
+            : [newNotifications],
+          markAsRead: false,
+        });
+
+        console.log("상태 업데이트 후:", get().notifications);
+      },
+      addNotification: (notification) => {
+        const currentNotifications = get().notifications;
+        set({
+          notifications: [notification, ...currentNotifications],
+          markAsRead: false,
+        });
+      },
+      markAsReadById: (id: string) => {
+        set((state) => ({
+          notifications: state.notifications.map((n) =>
+            n.id === id ? { ...n, isRead: true } : n
+          ),
+        }));
+      },
+      reset: () => set(initialState),
     }),
     {
       name: "notification-store-session",

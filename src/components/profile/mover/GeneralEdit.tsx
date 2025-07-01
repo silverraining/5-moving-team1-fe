@@ -13,6 +13,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useUpdateGeneralMoverProfile } from "../../../api/mover/hooks";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 // localStorage에서 사용자 정보 가져오는 함수
 const getUserDataFromLocalStorage = () => {
@@ -48,9 +49,10 @@ const getUserDataFromLocalStorage = () => {
 export const GeneralEdit = () => {
   const router = useRouter();
   const { openSnackbar } = useSnackbarStore();
-  const { mutateAsync: updateProfile } = useUpdateGeneralMoverProfile();
+  const { mutateAsync: updateProfile, isPending } =
+    useUpdateGeneralMoverProfile();
   const { t } = useTranslation();
-
+  const [isNavigating, setIsNavigating] = useState(false);
   // localStorage에서 사용자 정보 가져오기
   const userData = getUserDataFromLocalStorage();
 
@@ -81,6 +83,7 @@ export const GeneralEdit = () => {
         newPassword: data.newPassword,
       });
       openSnackbar(t("프로필이 성공적으로 수정되었습니다."), "success");
+      setIsNavigating(true);
       router.push("/"); // TODO: 수정 후 페이지 이동
     } catch (error) {
       openSnackbar(t("프로필 수정 중 오류가 발생했습니다."), "error");
@@ -177,6 +180,8 @@ export const GeneralEdit = () => {
             <Button
               type="submit"
               variant="contained"
+              loading={isPending || isNavigating}
+              loadingPosition="start"
               fullWidth
               disabled={!isValid}
               sx={{

@@ -7,8 +7,8 @@ export const formatKoreanDate = (
   const date = dayjs(input);
 
   return includeWeekday
-    ? date.format(`YYYY.MM.DD(dd)`)
-    : date.format(`YYYY.MM.DD`);
+    ? date.format(`YYYY. MM. DD(dd)`)
+    : date.format(`YYYY. MM. DD`);
 };
 
 export const formatDateWithDay = (isoString: string) => {

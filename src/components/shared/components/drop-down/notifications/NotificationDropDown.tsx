@@ -14,7 +14,7 @@ interface NotificationDropDownProps {
 export default function NotificationDropDown({
   onClose,
 }: NotificationDropDownProps) {
-  const { notifications, reset, markAsRead } = useNotificationStore();
+  const { notifications, markAsReadById } = useNotificationStore();
   const { mutate } = useNotificationRead();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
@@ -25,8 +25,12 @@ export default function NotificationDropDown({
       { ids: ids },
       {
         onSuccess: () => {
-          reset();
-          onclose;
+          // 각 알림을 개별적으로 읽음 처리
+          notifications?.forEach((notification) => {
+            if (!notification.isRead) {
+              markAsReadById(notification.id);
+            }
+          });
         },
       }
     );
@@ -64,8 +68,9 @@ export default function NotificationDropDown({
         }}
       >
         <NotificationHeader
-          isMany={notifications?.length !== 0}
-          allRead={allRead}
+          hasUnreadNotifications={notifications?.some((n) => !n.isRead)}
+          hasNotifications={!!notifications && notifications.length > 0}
+          onMarkAllAsRead={allRead}
           onClose={onClose}
         />
 

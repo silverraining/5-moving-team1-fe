@@ -11,6 +11,7 @@ import {
 } from "@/src/types/common";
 import { MoverProfile } from "@/src/types/auth";
 import { useTranslation } from "react-i18next";
+import { useTheme } from "@mui/material/styles";
 // PendingEstimate.tsx에서 쓰는 card 데이터 타입
 export interface PendingEstimateCardData {
   estimateRequestId: string;
@@ -42,8 +43,8 @@ export const CardListWait = ({
     "offerStatus" in data
       ? data.offerStatus
       : "status" in data
-        ? data.status
-        : undefined;
+      ? data.status
+      : undefined;
   // 카드 데이터
   const info = data.mover;
 
@@ -167,6 +168,7 @@ export const CardListWait = ({
                 alt="별점 사진"
                 width={20}
                 height={20}
+                style={{ marginRight: "4px" }}
               />
               <Typography
                 sx={(theme) => ({
@@ -176,17 +178,10 @@ export const CardListWait = ({
                   color: theme.palette.Black[300],
                 })}
               >
-                {Number(info.rating).toFixed(1)}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
-              >
-                ({info.reviewCount})
+                {Number(info.rating).toFixed(1)}{" "}
+                <span style={{ color: useTheme().palette.Grayscale[300] }}>
+                  ({info.reviewCount})
+                </span>
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -196,20 +191,20 @@ export const CardListWait = ({
                   fontSize: [13, 13, 16],
                   lineHeight: ["22px", "22px", "26px"],
                   fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
                 })}
               >
-                {t("경력")}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Black[300],
-                })}
-              >
-                {info.experience} {t("년")}
+                {((theme) => (
+                  <>
+                    <span style={{ color: theme.palette.Grayscale[300] }}>
+                      {t("경력")}
+                    </span>
+                    <span style={{ color: theme.palette.Black[300] }}>
+                      {" "}
+                      {info.experience}
+                      {t("년")}
+                    </span>
+                  </>
+                ))(useTheme())}
               </Typography>
             </Box>
             <Box height={14} border={"1px solid #E6E6E6"}></Box>
@@ -223,16 +218,12 @@ export const CardListWait = ({
                 })}
               >
                 {info.confirmedCount}
-              </Typography>
-              <Typography
-                sx={(theme) => ({
-                  fontSize: [13, 13, 16],
-                  lineHeight: ["22px", "22px", "26px"],
-                  fontWeight: 500,
-                  color: theme.palette.Grayscale[300],
-                })}
-              >
-                {t("확정")}
+                <span style={{ color: useTheme().palette.Black[300] }}>
+                  {t("건")}
+                </span>{" "}
+                <span style={{ color: useTheme().palette.Grayscale[300] }}>
+                  {t("확정")}
+                </span>
               </Typography>
             </Box>
           </Box>
@@ -282,6 +273,7 @@ export const CardListWait = ({
                 fontWeight: 500,
                 color: theme.palette.Black[300],
                 wordBreak: "break-all",
+                whiteSpace: "nowrap",
               })}
             >
               {formatKoreanDate(data.moveDate ?? "")}

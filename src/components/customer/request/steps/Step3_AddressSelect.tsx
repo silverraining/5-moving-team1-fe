@@ -42,6 +42,7 @@ export default function Step3_AddressSelect({
   const router = useRouter();
   const { t } = useTranslation();
   const { moveType, moveDate, toAddress, fromAddress } = useEstimateStore();
+  const reset = useEstimateStore((state) => state.reset);
 
   const [openFromModal, setOpenFromModal] = useState(false);
   const [openToModal, setOpenToModal] = useState(false);
@@ -81,6 +82,16 @@ export default function Step3_AddressSelect({
         fromAddress: fromAddress!,
         toAddress: toAddress!,
       });
+
+      // 견적 확정 성공 후 로컬스토리지 초기화
+      localStorage.removeItem("estimate-storage");
+      localStorage.removeItem("fromAddress");
+      localStorage.removeItem("toAddress");
+      localStorage.removeItem("moveDate");
+      localStorage.removeItem("moveType");
+
+      // zustand 상태 초기화
+      reset();
 
       openSnackbar(t("견적 확정 완료"), "success", 5000);
       router.replace(PATH.moverList);

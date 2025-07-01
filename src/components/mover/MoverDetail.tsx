@@ -26,6 +26,7 @@ import { NoEstimateModal } from "./NoEstimateModal";
 import { useSnackbarStore } from "@/src/store/snackBarStore";
 import { useCreateLike, useDeleteLike } from "../../api/like/hooks";
 import { useTranslation } from "react-i18next";
+import { AuthStore } from "@/src/store/authStore";
 
 interface MoverDetailProps {
   moverId: string;
@@ -44,11 +45,12 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const { openSnackbar } = useSnackbarStore();
   const createLikeMutation = useCreateLike();
   const deleteLikeMutation = useDeleteLike();
+  const { user } = AuthStore();
   const { t } = useTranslation();
   // 찜하기 버튼 클릭 핸들러
   const handleLikeClick = async () => {
+    if (!!user) return;
     if (!moverData) return;
-
     try {
       if (isLiked) {
         await deleteLikeMutation.mutate({ moverId: moverData.id });
@@ -148,6 +150,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
     <>
       {/* 찜하기 버튼 */}
       <Button
+        disabled={createLikeMutation.isPending || deleteLikeMutation.isPending}
         variant="outlined"
         fullWidth
         onClick={handleLikeClick}
@@ -200,6 +203,7 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
     <Box sx={{ display: "flex", gap: "12px", alignItems: "center" }}>
       {/* 찜하기 버튼 - 하트만 */}
       <Button
+        disabled={createLikeMutation.isPending || deleteLikeMutation.isPending}
         variant="outlined"
         onClick={handleLikeClick}
         sx={{
@@ -228,6 +232,8 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
       <Button
         variant="contained"
         onClick={handleEstimateRequest}
+        loading={requestTargetedEstimate.isPending}
+        loadingPosition="start"
         sx={{
           flex: 1,
           height: "56px",
