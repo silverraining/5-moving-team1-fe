@@ -378,7 +378,7 @@ export default function ReceivedRequestsFlow() {
             sx={{
               display: "flex",
               flexDirection: "column",
-              minWidth: ["375px", "601px", "955px"],
+              minWidth: ["375px", "601px", "750px"],
             }}
           >
             <Box sx={{ marginBottom: isSmall ? "12px" : "24px" }}>
@@ -456,6 +456,7 @@ export default function ReceivedRequestsFlow() {
                 display: isLoading ? "flex" : "block",
                 justifyContent: isLoading ? "center" : undefined,
                 alignItems: isLoading ? "center" : undefined,
+                overflow: "hidden",
               }}
             >
               {isLoading ? (
