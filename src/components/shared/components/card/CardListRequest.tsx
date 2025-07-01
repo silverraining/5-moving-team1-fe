@@ -1,4 +1,12 @@
-import { Box, Button, Divider, Typography, Tooltip } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Typography,
+  Tooltip,
+  Stack,
+  Skeleton,
+} from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { formatKoreanDate } from "@/src/lib/formatKoreanDate";
 import dayjs from "@/src/lib/dayjsConfig";
@@ -60,7 +68,7 @@ export const CardListRequest = ({
           ))}
         </Box>
         <Typography
-          display={["none", "inline-block"]}
+          display={["inline-block"]}
           sx={(theme) => ({
             fontSize: [12, 12, 14],
             lineHeight: ["18px", "18px", "24px"],
@@ -93,17 +101,6 @@ export const CardListRequest = ({
               })}
             >
               {info.customerName} 고객님
-            </Typography>
-            <Typography
-              display={["inline-block", "none"]}
-              sx={(theme) => ({
-                fontSize: [12, 12, 14],
-                lineHeight: ["18px", "18px", "24px"],
-                fontWeight: 400,
-                color: theme.palette.Grayscale[500],
-              })}
-            >
-              {dayjs(info.createdAt).fromNow()}
             </Typography>
           </Box>
         </Box>
@@ -319,3 +316,99 @@ export const CardListRequest = ({
     </Box>
   );
 };
+
+export const CardListRequestSkeleton = () => (
+  <Stack
+    direction="column"
+    border={"0.5px solid black"}
+    padding={["22px 12px 16px 12px"]}
+    boxShadow={"2px 2px 10px 0px #DCDCDC24,-2px -2px 10px 0px #DCDCDC24"}
+    borderRadius={"16px"}
+    width={["375px", "601px", "750px"]}
+    justifyContent={"space-between"}
+    height={["316px", "228px", "296px"]}
+    boxSizing={"border-box"}
+    sx={(theme) => ({
+      borderColor: theme.palette.Line[100],
+    })}
+  >
+    {/* 칩 + 만든 시간 */}
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <Skeleton variant="rounded" width={106} height={34} />
+      <Skeleton variant="text" width={54} height={24} />
+    </Stack>
+
+    {/* 고객 이름 */}
+    <Stack direction="column" sx={{ alignItems: "flex-start" }}>
+      <Skeleton variant="text" width={182} height={32} />
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        display={["flex", "none", "none"]}
+      >
+        <Skeleton variant="text" width={59} height={34} />
+        <Skeleton variant="text" width={130} height={34} />
+      </Stack>
+    </Stack>
+
+    <Divider
+      sx={(theme) => ({
+        borderColor: theme.palette.Line[200],
+      })}
+    ></Divider>
+
+    {/* 이사일 + 출발 + 도착 */}
+    <Stack
+      direction="row"
+      justifyContent={"flex-start"}
+      alignItems="center"
+      spacing={2}
+      display={["none", "flex", "flex"]}
+    >
+      <Skeleton variant="text" width={59} height={34} />
+      <Skeleton variant="text" width={130} height={34} />
+      <Skeleton variant="text" width={59} height={34} />
+      <Skeleton variant="text" width={140} height={34} />
+      <Skeleton variant="text" width={59} height={34} />
+      <Skeleton variant="text" width={140} height={34} />
+    </Stack>
+
+    {/* 이사일 + 출발 + 도착 (모바일) */}
+    <Stack
+      direction="row"
+      justifyContent={"flex-start"}
+      spacing={2}
+      alignItems="center"
+      display={["flex", "none", "none"]}
+    >
+      <Skeleton variant="text" width={59} height={34} />
+      <Skeleton variant="text" width={140} height={34} />
+      <Skeleton variant="text" width={59} height={34} />
+      <Skeleton variant="text" width={140} height={34} />
+    </Stack>
+
+    {/* 버튼 */}
+    <Stack
+      direction={["column", "row", "row"]}
+      justifyContent={"flex-start"}
+      spacing={2}
+      gap={1}
+    >
+      <Skeleton
+        variant="rounded"
+        width={340}
+        sx={{
+          height: [48, 48, 64],
+        }}
+      />
+      <Skeleton
+        variant="rounded"
+        width={340}
+        sx={{
+          height: [48, 48, 64],
+        }}
+      />
+    </Stack>
+  </Stack>
+);
