@@ -1,6 +1,6 @@
 "use client";
 
-import { Box, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Stack, Typography } from "@mui/material";
 import dayjs from "@/src/lib/dayjsConfig";
 import { useRouter } from "next/navigation";
 import { useNotificationRead } from "@/src/api/notification/hooks";
@@ -8,10 +8,6 @@ import { AuthStore } from "@/src/store/authStore";
 import { PATH } from "@/src/lib/constants";
 import { useNotificationStore } from "@/src/store/notification";
 
-/**
- * dayjs로 createdAt을 포맷팅하여 상대 시간(timeAgo)으로 변환
- * 예: "2시간 전", "3일 전", "1주일 전" 등
- */
 interface NotificationItemProps {
   data: {
     id: string;
@@ -28,8 +24,8 @@ export default function NotificationItem({ data }: NotificationItemProps) {
   const { user } = AuthStore();
   const { markAsReadById } = useNotificationStore();
   const { mutate } = useNotificationRead();
-  const timeAgo = dayjs(data.createdAt).add(9, "hour").fromNow();
-  // console.log("서버에서 내려온 createdAt:", data.createdAt);
+
+  const timeAgo = dayjs(data.createdAt).fromNow();
 
   const getHighlight = () => {
     switch (data.type.trim()) {
