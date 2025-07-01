@@ -4,7 +4,6 @@ import {
   useQueryClient,
   UseMutationResult,
   useInfiniteQuery,
-  QueryFunctionContext,
 } from "@tanstack/react-query";
 import {
   moverList,
@@ -20,7 +19,6 @@ import {
   EstimateOfferDetail,
   EstimateOfferConfirmed,
   ConfirmRes,
-  EstimateRequestHistoryResponse,
   requestRejectReq,
   requestReject,
 } from "./api";

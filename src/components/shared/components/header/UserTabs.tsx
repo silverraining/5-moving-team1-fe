@@ -11,7 +11,23 @@ import NotificationDropDown from "../drop-down/notifications/NotificationDropDow
 import ProfileDropDown from "../drop-down/profile-drop-down/ProfileDropDown";
 import { useDropdown } from "@/src/hooks/utill";
 import { useNotificationStore } from "@/src/store/notification";
+import { AuthStore } from "@/src/store/authStore";
+import { CustomerProfileResponse } from "@/src/api/customer/api";
+import { MoverProfileRequest } from "@/src/api/mover/api";
+import { ServiceRegion, ServiceType } from "@/src/types/common";
 
+export interface UnifiedProfile {
+  name: string;
+  imageUrl: string | null;
+  serviceType: Record<ServiceType, boolean>;
+  serviceRegion: Record<ServiceRegion, boolean>;
+  intro?: string;
+  description?: string;
+  experience?: number;
+  email?: string;
+  phone?: string;
+  role: "CUSTOMER" | "MOVER";
+}
 interface UserTab {
   user?: User | null;
   isSmall: boolean;
@@ -19,10 +35,45 @@ interface UserTab {
 }
 
 export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
+  const { profile: userProfile } = AuthStore();
   const size = isSmall ? 24 : 36;
   const alram = useDropdown();
   const profile = useDropdown();
   const { notifications, markAsRead, setMarkAsRead } = useNotificationStore();
+
+  const toUnifiedProfile = (
+    data: CustomerProfileResponse | MoverProfileRequest | null | undefined,
+    role?: "CUSTOMER" | "MOVER"
+  ): UnifiedProfile | null => {
+    if (!data) return null;
+
+    if (role === "CUSTOMER") {
+      const customer = data as CustomerProfileResponse;
+      return {
+        role: "CUSTOMER",
+        name: customer.name,
+        imageUrl: customer.imageUrl ?? null,
+        serviceType: customer.serviceType,
+        serviceRegion: customer.serviceRegion,
+        email: customer.email,
+        phone: customer.phone,
+      };
+    } else {
+      const mover = data as MoverProfileRequest;
+      return {
+        role: "MOVER",
+        name: mover.nickname,
+        imageUrl: mover.imageUrl ?? null,
+        serviceType: mover.serviceType,
+        serviceRegion: mover.serviceRegion,
+        intro: mover.intro,
+        description: mover.description,
+        experience: mover.experience,
+      };
+    }
+  };
+
+  const unifiedProfile = toUnifiedProfile(userProfile, user?.role);
 
   const alramOpen = () => {
     alram.toggle();
@@ -97,8 +148,10 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
           height={size}
           src={
             // user.imageUrl이 빈 문자열일 경우 기본Images 적용하도록
-            user && user.imageUrl && user.imageUrl.trim() !== ""
-              ? user.imageUrl
+            userProfile &&
+            userProfile.imageUrl &&
+            userProfile.imageUrl.trim() !== ""
+              ? userProfile.imageUrl
               : "/Images/header/Profile.svg"
           }
           alt="profile"
@@ -127,7 +180,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
           <ClickAwayListener onClickAway={profile.close}>
             <div>
               <ProfileDropDown
-                user={user || null}
+                user={unifiedProfile || null}
                 logout={logout}
                 close={profile.close}
               />
@@ -142,7 +195,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
               alignContent: "center",
             })}
           >
-            {user?.name}
+            {unifiedProfile?.name}
           </Typography>
         )}
       </Stack>
