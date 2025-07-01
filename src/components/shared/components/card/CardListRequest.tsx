@@ -330,6 +330,7 @@ export const CardListRequestSkeleton = () => (
     boxSizing={"border-box"}
     sx={(theme) => ({
       borderColor: theme.palette.Line[100],
+      backgroundColor: theme.palette.background.paper,
     })}
   >
     {/* 칩 + 만든 시간 */}
