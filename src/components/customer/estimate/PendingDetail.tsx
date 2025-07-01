@@ -37,10 +37,13 @@ export default function PendingDetail({
 
   const queryClient = useQueryClient();
 
-  const { mutate: createLikeMutate } = useCreateLike();
-  const { mutate: deleteLikeMutate } = useDeleteLike();
+  const { mutate: createLikeMutate, isPending: createLikePending } =
+    useCreateLike();
+  const { mutate: deleteLikeMutate, isPending: deleteLikePending } =
+    useDeleteLike();
 
-  const { mutate: EstimateOfferConfirmedMutate } = useEstimateOfferConfirmed();
+  const { mutate: EstimateOfferConfirmedMutate, isPending } =
+    useEstimateOfferConfirmed();
   const { t } = useTranslation();
   const handleLikeClick = () => {
     const moverId = data.moverId;
@@ -187,6 +190,7 @@ export default function PendingDetail({
           <Button
             variant="outlined"
             onClick={handleLikeClick}
+            disabled={createLikePending || deleteLikePending}
             sx={{
               width: "54px",
               height: "54px",
@@ -216,6 +220,8 @@ export default function PendingDetail({
           <Button
             variant="contained"
             onClick={handleEstimateConfirm}
+            loading={isPending}
+            loadingPosition="start"
             sx={{
               flex: 1,
               height: "56px",

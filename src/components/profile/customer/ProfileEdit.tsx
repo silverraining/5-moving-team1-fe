@@ -45,7 +45,8 @@ export const ProfileEdit = () => {
   // 일반 유저 프로필 조회 hook
   const { data: customerProfileData, isLoading } = useGetCustomerProfile();
   // 일반 유저 프로필 수정 hook
-  const { mutateAsync: updateCustomerProfile } = useUpdateCustomerProfile();
+  const { mutateAsync: updateCustomerProfile, isPending } =
+    useUpdateCustomerProfile();
   // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
     useImageUpload({
@@ -376,6 +377,8 @@ export const ProfileEdit = () => {
             type="submit"
             variant="contained"
             fullWidth
+            loading={isPending}
+            loadingPosition="start"
             disabled={!isValid}
             sx={{
               height: "56px",

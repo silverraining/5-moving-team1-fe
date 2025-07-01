@@ -28,13 +28,14 @@ export const ProfileRegister = () => {
   const [selectedRegions, setSelectedRegions] = useState<ServiceRegion[]>([]);
   const [serviceError, setServiceError] = useState<boolean>(false);
   const [regionError, setRegionError] = useState<boolean>(false);
-
+  const [isNavigating, setIsNavigating] = useState(false);
   const router = useRouter();
 
   const { openSnackbar } = useSnackbarStore();
 
   // 기사님 프로필 등록 hook
-  const { mutateAsync: registerMoverProfile } = useRegisterMoverProfile();
+  const { mutateAsync: registerMoverProfile, isPending } =
+    useRegisterMoverProfile();
 
   // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading } =
@@ -99,8 +100,8 @@ export const ProfileRegister = () => {
       };
 
       await registerMoverProfile(profileData);
-
       openSnackbar(t("기사님 프로필이 성공적으로 등록되었습니다."), "success");
+      setIsNavigating(true);
       router.push("/");
     } catch (error) {
       console.error(t("프로필 등록 중 오류:"), error);
@@ -485,6 +486,8 @@ export const ProfileRegister = () => {
               <Button
                 variant="contained"
                 type="submit"
+                loading={isPending || isNavigating}
+                loadingPosition="start"
                 fullWidth
                 sx={{
                   height: "56px",

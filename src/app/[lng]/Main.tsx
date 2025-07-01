@@ -11,6 +11,7 @@ import { CardList } from "../../components/shared/components/card/CardList";
 import { PATH } from "../../lib/constants";
 import { AuthStore } from "../../store/authStore";
 import { useTranslation } from "react-i18next";
+import { useState } from "react";
 
 export const Main = () => {
   const theme = useTheme();
@@ -18,12 +19,21 @@ export const Main = () => {
   const { isLogin } = AuthStore();
   const { t } = useTranslation("common");
 
+  const [isNavigating, setIsNavigating] = useState(false);
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (isNavigating) {
+      e.preventDefault(); // 중복 클릭 방지
+      return;
+    }
+    setIsNavigating(true);
+  };
   return (
     <Stack
       width={"100%"}
       alignItems={"center"}
       justifyItems={"center"}
-      pt={10}
+      py={10}
       gap={6}
     >
       <Stack alignItems={"center"}>
@@ -65,6 +75,8 @@ export const Main = () => {
             href={PATH.userLogin}
             fullWidth
             variant="contained"
+            disabled={isNavigating}
+            onClick={handleClick}
             sx={{
               maxWidth: "340px",
               minWidth: "327px",
@@ -80,6 +92,8 @@ export const Main = () => {
             href={PATH.userSignup}
             fullWidth
             variant="outlined"
+            disabled={isNavigating}
+            onClick={handleClick}
             sx={{
               maxWidth: "340px",
               minWidth: "327px",

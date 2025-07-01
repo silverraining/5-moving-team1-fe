@@ -4,8 +4,6 @@ import { LogoSection } from "@/src/components/auth/LogoSection";
 import { TextLink } from "@/src/components/auth/TextLink";
 import {
   Button,
-  Checkbox,
-  FormControlLabel,
   Stack,
   Typography,
   useMediaQuery,
@@ -33,6 +31,8 @@ const SignUp = () => {
     onSubmit,
     handleSubmit,
     watch,
+    isPending,
+    isNavigating,
     formState: { errors },
   } = useSignupForm("MOVER");
   const requiredFields: (keyof SignUpSchemaType)[] = [
@@ -90,8 +90,10 @@ const SignUp = () => {
         />
         <Button
           fullWidth
+          loading={isPending || isNavigating}
+          loadingPosition="start"
           variant="contained"
-          disabled={isAllFilled ? !isAllFilled : false}
+          disabled={!isAllFilled ? !isAllFilled : false}
           sx={{
             maxHeight: "64px",
             minHeight: "54px",
