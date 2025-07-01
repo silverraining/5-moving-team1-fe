@@ -32,6 +32,7 @@ interface CardProps {
 }
 
 export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
+  const { t } = useTranslation();
   // chip 데이터
   const chips: ChipData[] = [
     {
@@ -40,7 +41,6 @@ export const CardListCompleteState = ({ data, onclickDetails }: CardProps) => {
       isTargeted: data.isTargeted,
     },
   ];
-  const { t } = useTranslation();
   return (
     <Box
       position={"relative"}

@@ -30,7 +30,8 @@ export const ProfileRegister = () => {
   const { openSnackbar } = useSnackbarStore();
 
   // 일반 유저 프로필 등록 hook
-  const { mutateAsync: registerCustomerProfile } = useRegisterCustomerProfile();
+  const { mutateAsync: registerCustomerProfile, isPending } =
+    useRegisterCustomerProfile();
 
   // Images 업로드 hook
   const { s3ImageUrl, handleFileUpload, previewImage, isUploading, error } =
@@ -230,6 +231,8 @@ export const ProfileRegister = () => {
       {/* 시작하기 버튼 */}
       <Button
         variant="contained"
+        loading={isPending}
+        loadingPosition="start"
         fullWidth
         onClick={() => {
           handleSubmit();
