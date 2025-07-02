@@ -21,57 +21,65 @@ import { InfoChip } from "./components/InfoChip";
 import { Textarea } from "../text-field/Textarea";
 import { useReviewForm } from "@/src/hooks/utill";
 import { useTranslation } from "react-i18next";
+import { useCreateReview } from "@/src/api/review/hooks";
+import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import { QueryObserverResult, RefetchOptions } from "@tanstack/react-query";
+import { getWriteReviewListRes } from "@/src/api/review/api";
 interface ReviewModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSubmit: (
-    moverName: string,
-    moveDate: string,
-    price: number,
-    rating: number,
-    comment: string,
-    moveType: ServiceType[]
-  ) => void;
+  dataRefetch: (
+    options?: RefetchOptions
+  ) => Promise<QueryObserverResult<getWriteReviewListRes, Error>>;
   moverImage: string;
   moverName: string;
   moveDate: string;
   price: number;
   moveType: ServiceType | ServiceType[];
+  offerId: string;
 }
 
 export default function ReviewModal({
   isOpen,
   onClose,
-  onSubmit,
+  dataRefetch,
   moverImage,
   moverName,
   moveDate,
   price,
   moveType,
+  offerId,
 }: ReviewModalProps) {
   const theme = useTheme();
+  const { t } = useTranslation();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
-
+  const { mutate, isPending } = useCreateReview();
   // 항상 배열로 처리하기 위해 변환
   const moveTypeArray = Array.isArray(moveType) ? moveType : [moveType];
-
+  const { openSnackbar } = useSnackbar();
   const { control, handleSubmit, register, isValid, errors, reset } =
     useReviewForm();
 
   const onFormSubmit = (data: { rating: number; content: string }) => {
-    onSubmit(
-      moverName,
-      moveDate,
-      price,
-      data.rating,
-      data.content,
-      moveTypeArray
+    mutate(
+      {
+        completedOfferId: offerId,
+        rating: data.rating,
+        comment: data.content,
+      },
+      {
+        onSuccess: () => {
+          openSnackbar("리뷰 등록 성공", "success", 500);
+          dataRefetch();
+          reset();
+          onClose();
+        },
+        onError: (err) => {
+          openSnackbar("리뷰 등록 실패", "error", 1000);
+        },
+      }
     );
-    reset();
-    onClose();
   };
-
-  const { t } = useTranslation();
 
   return (
     <Dialog
@@ -281,6 +289,8 @@ export default function ReviewModal({
 
       <DialogActions sx={{ p: 0 }}>
         <Button
+          loading={isPending}
+          loadingPosition="start"
           onClick={handleSubmit(onFormSubmit)}
           disabled={!isValid}
           variant="contained"

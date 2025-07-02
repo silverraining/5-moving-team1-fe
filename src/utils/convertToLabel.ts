@@ -1,4 +1,6 @@
-export const convertToEnum = (label: string): "SMALL" | "HOME" | "OFFICE" => {
+export const convertToEnum = (
+  label: string | null
+): "SMALL" | "HOME" | "OFFICE" => {
   switch (label) {
     case "소형이사 (원룸, 투룸, 20평대 미만)":
       return "SMALL";
@@ -12,16 +14,16 @@ export const convertToEnum = (label: string): "SMALL" | "HOME" | "OFFICE" => {
 };
 
 export const convertToLabel = (
-  enumValue: string,
+  enumValue: string | null,
   t: (key: string) => string
 ): string => {
   switch (enumValue) {
     case "SMALL":
-      return t("소형이사 (원룸, 투룸, 20평대 미만)");
+      return "소형이사 (원룸, 투룸, 20평대 미만)";
     case "HOME":
-      return t("가정이사 (쓰리룸, 20평대 이상)");
+      return "가정이사 (쓰리룸, 20평대 이상)";
     case "OFFICE":
-      return t("사무실이사 (사무실, 상업공간)");
+      return "사무실이사 (사무실, 상업공간)";
     default:
       return "";
   }

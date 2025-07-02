@@ -79,7 +79,7 @@ const Wishlist = () => {
   const transformedData = data
     ? data.map((item) => transformLikeMoverToEstimateOffer(item))
     : [];
-  console.log(data, transformedData);
+
   return (
     <Stack
       direction="row"

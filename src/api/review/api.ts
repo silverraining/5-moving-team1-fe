@@ -37,6 +37,7 @@ export type reviewableOffers = {
   moveDate: string;
   price: number;
   isTargeted: boolean;
+  reviewableOfferId: string;
   mover: {
     nickname: string;
     imageUrl: string;
@@ -95,4 +96,15 @@ export const getCompletedReviews = async (
     }
   );
   return response.data;
+};
+
+export const createReview = async (
+  completedOfferId: string,
+  rating: number,
+  comment: string
+): Promise<void> => {
+  const response = await apiClient.post(`/review/${completedOfferId}`, {
+    rating: rating,
+    comment: comment,
+  });
 };
