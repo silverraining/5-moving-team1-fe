@@ -6,6 +6,7 @@ import Pagination from "../../pagination/Pagination";
 import Image from "next/image";
 import { ReviewChart } from "./review-chart/ReviewChart";
 import { useTranslation } from "react-i18next";
+import { maskNickname } from "@/src/lib/maskNickname";
 
 interface ReviewListProps {
   reviews: ReviewData[];
@@ -104,7 +105,7 @@ export const ReviewList = ({
                 color: theme.palette.Black[300],
               }}
             >
-              {review.author}
+              {maskNickname(review.author)}
             </Typography>
             <Typography
               sx={{
