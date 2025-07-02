@@ -12,10 +12,9 @@
 
 ## 링크
 
-- 배포 URL : https://5-moving.vercel.app/
-- Figma : https://www.figma.com/design/W7nLdXDag1Fz6eoeKShOmx/1%ED%8C%80_%EB%AC%B4%EB%B9%99?node-id=0-1&t=NKsVd93eAVd1K7Or-1
-- Storybook :
-- 팀 협업 문서 : https://positive-kingfisher-003.notion.site/1-_-1f0d9fa672ba8055b067ec2833354efd?source=copy_link
+- [무빙 서비스 바로가기](https://5-moving.vercel.app/)
+- [Figma 디자인](https://www.figma.com/design/W7nLdXDag1Fz6eoeKShOmx/1%ED%8C%80_%EB%AC%B4%EB%B9%99?node-id=0-1&t=NKsVd93eAVd1K7Or-1)
+- [팀 노션 문서](https://positive-kingfisher-003.notion.site/1-_-1f0d9fa672ba8055b067ec2833354efd?source=copy_link)
 
 ## 기술 스택
 
@@ -150,11 +149,12 @@ src/
 
 - 모바일 우선 반응형 디자인
 - Material-UI 기반 일관된 디자인 시스템
-- 다크모드 지원 (선택사항)
 - 접근성 고려된 UI/UX
 
 ### 부가 기능
 
+- 다국어 기능 지원
+- 다크 모드 지원
 - 다음 주소 API 연동
 - 이미지 최적화 및 압축
 - 무한 스크롤 구현
