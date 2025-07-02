@@ -1,6 +1,9 @@
 "use client";
 
-import { CardListWriteReview } from "@/src/components/shared/components/card/CardListWriteReview";
+import {
+  CardListWriteReview,
+  CardListWriteReviewSkeleton,
+} from "@/src/components/shared/components/card/CardListWriteReview";
 import Pagination from "@/src/components/shared/pagination/Pagination";
 import { EmptyReview } from "@/src/components/review/EmptyReview";
 import { Stack } from "@mui/material";
@@ -11,8 +14,7 @@ import ReviewModal from "@/src/components/shared/components/modal/ReviewModal";
 const ReviewsPending = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [currentPage, setCurrentPage] = useState<number>(1);
-  const { data } = useWriteReviewsList(currentPage, 6);
-
+  const { data, refetch, isLoading } = useWriteReviewsList(currentPage, 6);
   const handleReviewClick = () => {
     setIsOpen(true);
   };
@@ -20,7 +22,7 @@ const ReviewsPending = () => {
     setIsOpen(false);
   };
 
-  if (!data || data.reviewableOffers.length === 0)
+  if (!isLoading && (!data || data.reviewableOffers.length === 0))
     return <EmptyReview text="작성 가능한 리뷰가 없습니다" />;
 
   return (
@@ -34,18 +36,22 @@ const ReviewsPending = () => {
         }}
         justifyContent="center"
       >
+        {isLoading &&
+          [...Array(6)].map((_, i) => <CardListWriteReviewSkeleton key={i} />)}
+
         {data?.reviewableOffers.map((d, idx: number) => (
           <Stack key={idx}>
             <CardListWriteReview data={d} onReviewClick={handleReviewClick} />
             <ReviewModal
               isOpen={isOpen}
               onClose={handleClose}
-              onSubmit={() => {}}
               moverImage={d.mover.imageUrl}
               moverName={d.mover.nickname}
               moveDate={d.moveDate}
               price={d.price}
               moveType={d.moveType}
+              offerId={d.reviewableOfferId}
+              dataRefetch={refetch}
             />
           </Stack>
         ))}

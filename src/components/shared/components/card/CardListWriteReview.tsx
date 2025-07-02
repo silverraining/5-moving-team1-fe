@@ -1,4 +1,4 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Skeleton, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData } from "@/src/types/card";
 import Image from "next/image";
@@ -36,7 +36,6 @@ export const CardListWriteReview = ({
       border="0.5px solid #F2F2F2"
       width={[327, 600, 688]}
       height={[208, 208, 346]}
-      bgcolor="#FFFFFF"
       borderRadius="16px"
       padding={[
         "16px 14px 10px 14px",
@@ -45,6 +44,7 @@ export const CardListWriteReview = ({
       ]}
       boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
       boxSizing={"border-box"}
+      sx={(theme) => ({ bgColor: theme.palette.White[100] })}
     >
       <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
         <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
@@ -58,11 +58,11 @@ export const CardListWriteReview = ({
       <Box
         display="flex"
         border={["0px", "0px", "1px solid #F2F2F2"]}
-        bgcolor="#FFFFFF"
         padding={["10px", "10px", "16px 18px"]}
         boxShadow="4px 4px 16px 0px #E9E9E91A"
         gap={["12px", "12px", "24px"]}
         borderRadius={"1px"}
+        sx={(theme) => ({ bgColor: theme.palette.White[100] })}
       >
         <Box width={[46, 46, 56]} height={[46, 46, 56]} position="relative">
           <Image
@@ -163,6 +163,69 @@ export const CardListWriteReview = ({
       >
         {!isReviewed ? t("리뷰 작성하기") : t("리뷰 작성 완료")}
       </Button>
+    </Box>
+  );
+};
+export const CardListWriteReviewSkeleton = () => {
+  return (
+    <Box
+      display="flex"
+      flexDirection="column"
+      justifyContent="space-between"
+      border="0.5px solid #F2F2F2"
+      width={[327, 600, 688]}
+      height={[208, 208, 346]}
+      borderRadius="16px"
+      padding={[
+        "16px 14px 10px 14px",
+        "16px 14px 10px 14px",
+        "20px 24px 14px 24px",
+      ]}
+      boxShadow="2px 2px 10px 0px #DCDCDC24, -2px -2px 10px 0px #DCDCDC24"
+      boxSizing={"border-box"}
+      sx={(theme) => ({ bgColor: theme.palette.White[100] })}
+    >
+      {/* Top Chip Skeletons */}
+      <Box display="flex" flexDirection="column" gap={["14px", "16px"]}>
+        <Box display="flex" flexDirection="row" gap={["8px", "12px"]}>
+          <Skeleton variant="rounded" width={60} height={28} />
+          <Skeleton variant="rounded" width={60} height={28} />
+        </Box>
+      </Box>
+
+      {/* Profile Section */}
+      <Box
+        display="flex"
+        padding={["10px", "10px", "16px 18px"]}
+        gap={["12px", "12px", "24px"]}
+        borderRadius={"1px"}
+        border={["0px", "0px", "1px solid #F2F2F2"]}
+        boxShadow="4px 4px 16px 0px #E9E9E91A"
+        sx={(theme) => ({ bgColor: theme.palette.White[100] })}
+      >
+        {/* Profile Image */}
+        <Box width={[46, 46, 56]} height={[46, 46, 56]}>
+          <Skeleton variant="circular" width="100%" height="100%" />
+        </Box>
+
+        {/* Profile Texts */}
+        <Box display="flex" flexDirection="column" flexGrow={1} gap={1}>
+          <Skeleton variant="text" width="40%" height={24} />
+          <Box display="flex" gap="12px" flexWrap="wrap">
+            {[...Array(4)].map((_, i) => (
+              <Skeleton
+                key={i}
+                variant="text"
+                width={i % 2 === 0 ? 60 : 80}
+                height={20}
+              />
+            ))}
+          </Box>
+        </Box>
+      </Box>
+
+      {/* Button */}
+      <Skeleton variant="rounded" width="100%" height={64} />
     </Box>
   );
 };

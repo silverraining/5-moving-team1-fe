@@ -13,7 +13,6 @@ interface CalendarProps {
 export const Calendar = ({ onChange, value, onAccept }: CalendarProps) => {
   const handleAccept = () => {
     onAccept?.(value);
-    console.log("확인 클릭, 현재 선택값:", value);
   };
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));

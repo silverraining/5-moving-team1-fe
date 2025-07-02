@@ -16,8 +16,8 @@ import { useTranslation } from "react-i18next";
 
 interface ChatHistoryProps {
   step: number;
-  moveType?: string;
-  moveDate?: string;
+  moveType?: string | null;
+  moveDate?: string | null;
   onBackStep1?: () => void;
   onBackStep2?: () => void;
 }
@@ -98,7 +98,7 @@ export default function ChatHistory({
         >
           <Chat
             variant="received"
-            content={convertToLabel(moveType, t)}
+            content={convertToLabel(moveType)}
             delay={step === 2 ? 500 : 0}
           />
           <Slide
