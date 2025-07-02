@@ -113,7 +113,7 @@ export default function HistoryEstimate() {
     );
   }
 
-  if (isError) return <EmprtyReview text="대기중인 견적이 없습니다" />;
+  if (isError) return <EmptyReview text="대기중인 견적이 없습니다" />;
 
   if (!items || items.length === 0)
     return <EmptyReview text="대기중인 견적이 없습니다" />;

@@ -251,7 +251,7 @@ export default function MoverSearchPage() {
       >
         <Box>
           <Box mb={6}>
-            <Typography variant="SB_24">기사님 찾기</Typography>
+            <Typography variant="SB_24">{t("기사님 찾기")}</Typography>
           </Box>
 
           <Box

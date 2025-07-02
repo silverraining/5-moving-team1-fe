@@ -47,9 +47,10 @@ export const MoverDetail = ({ moverId }: MoverDetailProps) => {
   const deleteLikeMutation = useDeleteLike();
   const { user } = AuthStore();
   const { t } = useTranslation();
+
   // 찜하기 버튼 클릭 핸들러
   const handleLikeClick = async () => {
-    if (!!user) return;
+    if (!user) return openSnackbar("로그인이 필요합니다.", "error", 500);
     if (!moverData) return;
     try {
       if (isLiked) {

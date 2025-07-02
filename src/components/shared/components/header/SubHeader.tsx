@@ -3,17 +3,32 @@ import { MenuTabs } from "./MenuTabs";
 import { Progress } from "../progress/progress";
 import { usePathname } from "next/navigation";
 import { useEstimateStore } from "@/src/store/requestStore";
-import {
-  MOVER_REQUST,
-  USER_REQUEST,
-  USER_REVIEW,
-} from "@/src/lib/headerConstants";
+import { TabType } from "@/src/lib/headerConstants";
 import { PATH } from "@/src/lib/constants";
 import { useTranslation } from "react-i18next";
 export const SubHeader = () => {
   const pathname = usePathname();
   const { step } = useEstimateStore();
   const { t } = useTranslation();
+
+  const USER_REQUEST: TabType = [
+    {
+      label: t("대기중인 견적"),
+      href: PATH.userEstimate,
+    },
+    { label: t("받았던 견적"), href: PATH.userEstimateHistory },
+  ];
+
+  const USER_REVIEW: TabType = [
+    { label: t("작성 가능한 리뷰"), href: PATH.userReviewPending },
+    { label: t("내가 작성한 리뷰"), href: PATH.userReviewCompleted },
+  ];
+
+  const MOVER_REQUST: TabType = [
+    { label: t("보낸 견적 조회"), href: PATH.moverEstimateConfirm },
+    { label: t("반려 요청"), href: PATH.moverEstimateReject },
+  ];
+
   const pathWithoutLocale = (() => {
     const parts = pathname.split("/");
     if (["ko", "en", "zh"].includes(parts[1])) {
@@ -21,6 +36,7 @@ export const SubHeader = () => {
     }
     return pathname; // locale 없는 경우 그대로 반환
   })();
+
   const isProgress = pathWithoutLocale === PATH.userRequest;
   const isLabel = pathWithoutLocale === PATH.userWishlist;
   const label = isLabel ? t("찜한 기사님") : t("견적요청");
@@ -34,8 +50,8 @@ export const SubHeader = () => {
   const tabMenu = pathWithoutLocale.startsWith(PATH.userReview)
     ? USER_REVIEW
     : pathWithoutLocale.startsWith("/customer/estimate")
-    ? USER_REQUEST
-    : MOVER_REQUST;
+      ? USER_REQUEST
+      : MOVER_REQUST;
 
   let tabMenuElement = null;
   let progressElement = null;

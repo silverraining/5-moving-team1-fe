@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Box, Typography } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import { useTranslation } from "react-i18next";
 
 export interface SortOption {
   label: string;
@@ -20,6 +21,7 @@ export default function SortDropdown({
   defaultOption,
   onChange,
 }: SortDropdownProps) {
+  const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<SortOption>(
     defaultOption || options[0]
@@ -54,7 +56,7 @@ export default function SortDropdown({
             color: theme.palette.Black[300],
           })}
         >
-          {selectedOption.label}
+          {t(selectedOption.label)}
         </Typography>
         <KeyboardArrowDownIcon
           sx={(theme) => ({
@@ -112,7 +114,7 @@ export default function SortDropdown({
                   whiteSpace: "nowrap",
                 })}
               >
-                {option.label}
+                {t(option.label)}
               </Typography>
             </Box>
           ))}

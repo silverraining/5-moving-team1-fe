@@ -2,6 +2,7 @@
 import { useEstimateRequestCancle } from "@/src/api/customer/hook";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
 import { PATH } from "@/src/lib/constants";
+import { typeMapper } from "@/src/lib/typeMapper";
 import { Address } from "@/src/types/common";
 import { EstimateOffer } from "@/src/types/estimate";
 import { Button, Skeleton, Stack, Typography } from "@mui/material";
@@ -61,7 +62,10 @@ export const EstimateRequestCard = ({
           title={"견적 요청일"}
           description={dayjs(requestData.createdAt).format("YYYY.MM.DD")}
         />
-        <TextSection title={"서비스"} description={requestData.moveType} />
+        <TextSection
+          title={"서비스"}
+          description={typeMapper([requestData.moveType]).join("")}
+        />
         <TextSection
           title={"이용일"}
           description={dayjs(requestData.moveDate).format("YYYY.MM.DD")}

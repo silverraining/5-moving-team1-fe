@@ -147,22 +147,17 @@ export default function PendingEstimate() {
   };
 
   if (isLoading || isLoadingIds) return <CardListWaitSkeleton />;
-  if (isError || errorIds)
-    return 
-  if (!items || items.length === 0)
-    return <EmptyReview text="대기중인 견적이 없습니다" />;
 
   // 실제 카드 리스트 렌더링 및 무한스크롤 ref 달기
   return (
     <Stack display={"flex"} flexDirection={"column"} py={3}>
       <Stack spacing={2} pb={3}>
         <Typography variant="SB_24">{t("견적 요청 정보")}</Typography>
-
         <EstimateRequestCard requestData={requestIds[0]} />
       </Stack>
       <Typography variant="SB_24">{t("받은 견적")}</Typography>
       {items.length === 0 && (
-        <EmprtyReview text={t("대기중인 견적이 없습니다.")} />
+        <EmptyReview text={t("대기중인 견적이 없습니다.")} />
       )}
       <Grid container spacing={2} py={[3, 4, 5]}>
         {items.map((card: PendingEstimateCardDataWithId, index) => (
