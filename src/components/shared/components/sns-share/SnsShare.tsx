@@ -100,7 +100,6 @@ export const SnsShare = ({
         break;
 
       default:
-        console.log(`${platform}으로 공유하기`);
     }
   };
 

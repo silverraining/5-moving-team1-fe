@@ -134,7 +134,6 @@ export const Header = () => {
       try {
         // dummy같은 유효하지 않은 메시지 무시
         if (event.data === "dummy" || !event.data || event.data.trim() === "") {
-          console.log("SSE: 무시된 메시지", event.data);
           return;
         }
 

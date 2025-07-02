@@ -8,7 +8,7 @@ import {
 import Image from "next/image";
 import { useTranslation } from "react-i18next";
 interface CheckBoxProps {
-  selected: string;
+  selected: string | null;
   onChange: (value: string) => void;
   onConfirm?: () => void;
 }
@@ -20,9 +20,9 @@ export const CheckBoxList = ({
 }: CheckBoxProps) => {
   const { t } = useTranslation();
   const options = [
-    t("소형이사 (원룸, 투룸, 20평대 미만)"),
-    t("가정이사 (쓰리룸, 20평대 이상)"),
-    t("사무실이사 (사무실, 상업공간)"),
+    { label: t("소형이사 (원룸, 투룸, 20평대 미만)"), value: "SMALL" },
+    { label: t("가정이사 (쓰리룸, 20평대 이상)"), value: "HOME" },
+    { label: t("사무실이사 (사무실, 상업공간)"), value: "OFFICE" },
   ];
 
   const theme = useTheme();
@@ -31,7 +31,6 @@ export const CheckBoxList = ({
   const size = isMobile ? "sm" : isDesktop ? "xl" : "md";
 
   const isDisabled = !selected;
-
   return (
     <Box
       sx={{
@@ -46,11 +45,11 @@ export const CheckBoxList = ({
       }}
     >
       {options.map((option) => {
-        const isSelected = selected === option;
+        const isSelected = selected === option.value;
         return (
           <Button
-            key={option}
-            onClick={() => onChange(option)}
+            key={option.value}
+            onClick={() => onChange(option.value)}
             sx={(theme) => ({
               display: "flex",
               alignItems: "center",
@@ -87,7 +86,7 @@ export const CheckBoxList = ({
               variant={size === "sm" ? "SB_14" : "SB_18"}
               color="text.Primary"
             >
-              {option}
+              {option.label}
             </Typography>
           </Button>
         );

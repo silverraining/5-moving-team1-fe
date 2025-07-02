@@ -23,7 +23,6 @@ export const useNotificationStore = create<NotificationStore>()(
       ...initialState,
       setMarkAsRead: (state) => set({ markAsRead: state }),
       setNotifications: (newNotifications) => {
-        console.log("setNotifications 호출됨, 데이터:", newNotifications);
         if (!newNotifications) return;
 
         set({
@@ -32,8 +31,6 @@ export const useNotificationStore = create<NotificationStore>()(
             : [newNotifications],
           markAsRead: false,
         });
-
-        console.log("상태 업데이트 후:", get().notifications);
       },
       addNotification: (notification) => {
         const currentNotifications = get().notifications;

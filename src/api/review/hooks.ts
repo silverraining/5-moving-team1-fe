@@ -1,5 +1,6 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import {
+  createReview,
   getCompletedReviews,
   getMoverReviews,
   getWriteReviewList,
@@ -28,5 +29,19 @@ export const useCompletedReviews = (page: number, take: number) => {
   return useQuery({
     queryKey: ["completedReviews", page, take],
     queryFn: () => getCompletedReviews(page, take),
+  });
+};
+
+export const useCreateReview = () => {
+  return useMutation({
+    mutationFn: ({
+      completedOfferId,
+      rating,
+      comment,
+    }: {
+      completedOfferId: string;
+      rating: number;
+      comment: string;
+    }) => createReview(completedOfferId, rating, comment),
   });
 };
