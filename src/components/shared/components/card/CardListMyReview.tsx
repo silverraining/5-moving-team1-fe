@@ -7,7 +7,6 @@ import { COLORS } from "@/public/theme/colors";
 
 import { ServiceType } from "@/src/types/common";
 import { useTranslation } from "react-i18next";
-import { maskNickname } from "@/src/lib/maskNickname";
 
 interface CardProps {
   data: {
@@ -118,7 +117,7 @@ export const CardListMyReview = ({ data, isReviewed }: CardProps) => {
                 color: theme.palette.Black[300],
               })}
             >
-              {maskNickname(info.nickname)} {t("기사님")}
+              {info.nickname} {t("기사님")}
             </Typography>
             <Box display={["flex", "flex", "none"]} gap="4px">
               {Array.from({ length: data?.rating ?? 0 }).map((_, i) => (
