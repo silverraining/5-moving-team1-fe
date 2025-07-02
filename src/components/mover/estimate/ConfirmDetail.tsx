@@ -5,7 +5,7 @@ import { EstimateSection } from "../../customer/estimate/EstimateSection";
 import { SnsShare } from "../../shared/components/sns-share/SnsShare";
 import { EstimateInfo } from "../../customer/estimate/EstimateInfo";
 import { useEstimateOfferId } from "@/src/api/mover/hooks";
-import { EmprtyReview } from "../../review/EmptyReview";
+import { EmptyReview } from "../../review/EmptyReview";
 import { useTranslation } from "react-i18next";
 
 export default function ConfirmDetail({ offerId }: { offerId: string }) {
@@ -13,7 +13,7 @@ export default function ConfirmDetail({ offerId }: { offerId: string }) {
   const { t } = useTranslation();
   if (isLoading) return <Typography>로딩 중입니다...</Typography>;
   if (isError || !data || data.length === 0)
-    return <EmprtyReview text={t("확정 견적 상세 데이터가 없습니다")} />;
+    return <EmptyReview text={t("확정 견적 상세 데이터가 없습니다")} />;
 
   return (
     <Stack
