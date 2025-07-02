@@ -1,7 +1,7 @@
 "use client";
 
 import Pagination from "@/src/components/shared/pagination/Pagination";
-import { EmprtyReview } from "@/src/components/review/EmptyReview";
+import { EmptyReview } from "@/src/components/review/EmptyReview";
 import { Stack } from "@mui/material";
 import { useState } from "react";
 import { CardListMyReview } from "@/src/components/shared/components/card/CardListMyReview";
@@ -14,7 +14,7 @@ const ReviewsCompleted = () => {
 
   if (!data || data?.reviews.length === 0) {
     return (
-      <EmprtyReview text="아직 등록된 리뷰가 없어요!" variation="complete" />
+      <EmptyReview text="아직 등록된 리뷰가 없어요!" variation="complete" />
     );
   }
 

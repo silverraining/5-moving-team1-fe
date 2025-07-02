@@ -17,11 +17,7 @@ import { AuthStore } from "@/src/store/authStore";
 import { API_BASE_URL, PATH } from "@/src/lib/constants";
 import { useRouter } from "next/navigation";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
-import {
-  CUSTOMER_MENU,
-  GUEST_MENU,
-  MOVER_MENU,
-} from "@/src/lib/headerConstants";
+import { TabType } from "@/src/lib/headerConstants";
 import Link from "next/link";
 import Cookies from "js-cookie";
 import { EventSourcePolyfill } from "event-source-polyfill";
@@ -41,10 +37,8 @@ export const Header = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const token = Cookies.get("accessToken");
-
   const { data: customerProfile } = useGetCustomerProfile(isCustomer);
   const { data: moverProfile } = useGetMoverProfile(isMover);
-
   const { data: notifications, refetch } = useNotificationAll(!!token);
   const {
     notifications: localNotifications,
@@ -53,6 +47,36 @@ export const Header = () => {
     addNotification,
   } = useNotificationStore();
   const { t } = useTranslation();
+  const CUSTOMER_MENU: TabType = [
+    {
+      label: t("견적 요청"),
+      href: PATH.userRequest,
+      baseUrl: "/customer/request",
+    },
+    {
+      label: t("기사님 찾기"),
+      href: PATH.moverList,
+      baseUrl: "/customer/moverlist",
+    },
+    {
+      label: t("내 견적 관리"),
+      href: PATH.userEstimate,
+      baseUrl: "/customer/estimate",
+    },
+  ];
+
+  const MOVER_MENU: TabType = [
+    { label: t("받은 요청"), href: PATH.moverRequest },
+    {
+      label: t("내 견적 관리"),
+      href: PATH.moverEstimateConfirm,
+    },
+  ];
+
+  const GUEST_MENU: TabType = [
+    { label: t("기사님 찾기"), href: PATH.moverList },
+  ];
+
   const TabMenu = isCustomer
     ? CUSTOMER_MENU
     : isMover
@@ -67,14 +91,14 @@ export const Header = () => {
 
   const hendleLogout = () => {
     try {
-      openSnackbar(t("로그아웃 되었습니다"), "success", 1000, "standard");
+      openSnackbar(t("로그아웃 되었습니다"), "success", 500, "standard");
       logout();
       router.replace(PATH.main);
     } catch (error) {
       openSnackbar(
         error instanceof Error ? error.message : t("로그아웃 실패"),
         "error",
-        1000,
+        500,
         "standard"
       );
     }

@@ -12,21 +12,66 @@ import {
 
 import { SnsLoginSection } from "@/src/components/auth/SnsLoginSection";
 import { FormSection } from "@/src/components/auth/FromSection";
-import {
-  SIGNUP_FIELD,
-  USER_INFO,
-  USER_LOGIN_LINK,
-} from "@/src/lib/authConstants";
+
 import { useSignupForm } from "@/src/hooks/auth/hook";
 import { SignUpSchemaType } from "@/src/schemas/auth/signup.schema";
 import { useEffect } from "react";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import { useTranslation } from "react-i18next";
+import { PATH } from "@/src/lib/constants";
 
 const SignUp = () => {
   const theme = useTheme();
   const isSmall = useMediaQuery(theme.breakpoints.down("tablet"));
   const { openSnackbar } = useSnackbar();
+  const { t } = useTranslation();
+  const USER_INFO = {
+    description: t("기사님이신가요?"),
+    link: {
+      content: t("기사님 전용 페이지"),
+      href: PATH.moverLogin,
+    },
+  };
 
+  const USER_LOGIN_LINK = {
+    description: t("이미 무빙 회원이신가요?"),
+    link: {
+      content: t("로그인"),
+      href: PATH.userLogin,
+    },
+  };
+  const SIGNUP_FIELD = [
+    {
+      name: "name",
+      label: t("이름"),
+      type: "text",
+      placeholder: t("성함을 입력해 주세요"),
+    },
+    {
+      name: "email",
+      label: t("이메일"),
+      type: "email",
+      placeholder: t("이메일을 입력해주세요"),
+    },
+    {
+      name: "phone",
+      label: t("전화번호"),
+      type: "tel",
+      placeholder: t("숫자만 입력해 주세요"),
+    },
+    {
+      name: "password",
+      label: t("비밀번호"),
+      type: "password",
+      placeholder: t("비밀번호를 입력해 주세요"),
+    },
+    {
+      name: "passwordConfirm",
+      label: t("비밀번호 확인"),
+      type: "password",
+      placeholder: t("비밀번호를 다시 한번 입력해 주세요"),
+    },
+  ] as const;
   const {
     register,
     onSubmit,
@@ -104,7 +149,7 @@ const SignUp = () => {
           type="submit"
         >
           <Typography variant={isSmall ? "SB_16" : "SB_20"}>
-            시작하기
+            {t("시작하기")}
           </Typography>
         </Button>
         <TextLink
@@ -112,7 +157,7 @@ const SignUp = () => {
           link={USER_LOGIN_LINK.link}
         />
       </form>
-      <SnsLoginSection title="SNS 간편 로그인" isSmall={isSmall} />
+      <SnsLoginSection title={t("SNS 간편 로그인")} isSmall={isSmall} />
     </Stack>
   );
 };

@@ -1,5 +1,6 @@
 "use client";
 import React, { useState, useEffect, useCallback } from "react";
+import { AxiosError } from "axios";
 import { Box, Typography } from "@mui/material";
 import { CardData, ChipData } from "@/src/types/card";
 import { MoverFilterSidebar } from "@/src/components/customer/mover-list/MoverFilterSidebar";
@@ -14,12 +15,12 @@ import { useRouter } from "next/navigation";
 import { PATH } from "@/src/lib/constants";
 import { MoverList } from "@/src/components/customer/mover-list/MoverList";
 import { useSearch } from "@/src/hooks/utill";
-import { EmprtyReview } from "@/src/components/review/EmptyReview";
+import { EmptyReview } from "@/src/components/review/EmptyReview";
 import { useLikeList } from "@/src/api/like/hooks";
 import { transformLikeMoverToEstimateOffer } from "../wishlist/page";
 import { AuthStore } from "@/src/store/authStore";
-
-/**TODO:컴포넌트 분리 , 상세페이지 라우팅시 로딩 처리*/
+import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import { useTranslation } from "react-i18next";
 
 // MoverDetail을 CardData 타입으로 변환하는 함수
 function mapMoverDetailToCardData(item: MoverDetail): CardData {
@@ -72,7 +73,8 @@ export default function MoverSearchPage() {
   const theme = useTheme();
   const router = useRouter();
   const search = useSearch();
-
+  const { openSnackbar } = useSnackbar();
+  const { t } = useTranslation();
   const isDesktop = useMediaQuery(theme.breakpoints.up("desktop"));
 
   // 필터 훅 사용
@@ -126,12 +128,7 @@ export default function MoverSearchPage() {
     const filtered = filterMoversBySearch(search.debouncedValue, allMovers);
     setMovers(filtered);
     setFilterSearchKeyword(search.debouncedValue);
-  }, [
-    search.debouncedValue,
-    allMovers,
-    filterMoversBySearch,
-    setFilterSearchKeyword,
-  ]);
+  }, [search.debouncedValue]);
 
   // 초기화
   const handleReset = useCallback(() => {
@@ -164,8 +161,15 @@ export default function MoverSearchPage() {
       setHasNext(data.hasNext);
       setNextCursor(data.nextCursor || null);
     } catch (err) {
+      const error = err as AxiosError<{ message?: string }>;
+
       console.error("API 에러:", err);
-      <EmprtyReview text="프로필을 등록해주세요." />;
+      <EmptyReview text="프로필을 등록해주세요." />;
+
+      // ✅ 404 에러 메시지 스낵바로 띄우기
+      if (error.response?.status === 404) {
+        openSnackbar(t("프로필 등록 후 이용 가능한 페이지입니다."), "error");
+      }
     } finally {
       setLoading(false);
     }
@@ -233,9 +237,6 @@ export default function MoverSearchPage() {
       sx={{
         width: "100%",
         minHeight: "100vh",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "flex-start",
       }}
     >
       <Box
@@ -250,7 +251,7 @@ export default function MoverSearchPage() {
       >
         <Box>
           <Box mb={6}>
-            <Typography variant="SB_24">기사님 찾기</Typography>
+            <Typography variant="SB_24">{t("기사님 찾기")}</Typography>
           </Box>
 
           <Box

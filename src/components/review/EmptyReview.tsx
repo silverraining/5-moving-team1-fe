@@ -4,18 +4,24 @@ import Image from "next/image";
 import Link from "next/link";
 import { useTranslation } from "react-i18next";
 
-interface EmprtyReviewProps {
+interface EmptyReviewProps {
   variation?: "complete" | "pending";
   text: string;
 }
 
-export const EmprtyReview = ({
+export const EmptyReview = ({
   variation = "pending",
   text,
-}: EmprtyReviewProps) => {
+}: EmptyReviewProps) => {
   const { t } = useTranslation();
   return (
-    <Stack pt={"104px"} gap={4} alignItems={"center"}>
+    <Stack
+      gap={4}
+      alignItems={"center"}
+      justifyContent="center" // 수직 중앙 정렬
+      minHeight="60vh" // 화면의 60% 높이 확보
+      textAlign="center"
+    >
       <Image
         width={184}
         height={136}
