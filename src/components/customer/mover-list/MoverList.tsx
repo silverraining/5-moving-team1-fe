@@ -49,7 +49,14 @@ export const MoverList = ({
   const { t } = useTranslation();
   if (movers.length === 0) {
     return (
-      <Box display="flex" flexDirection="column" alignItems="center" py={4}>
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        py={4}
+        justifyContent="center"
+        minHeight="60vh"
+      >
         <Image
           src="/Images/empty/no_data.svg"
           alt="검색 결과 없음"

@@ -189,5 +189,6 @@
   "로그인 성공": "Login successful",
   "로그인 실패": "Login failed",
   "회원가입 성공": "Signup successful",
-  "회원가입 실패": "Signup failed"
+  "회원가입 실패": "Signup failed",
+  "프로필 등록 후 이용 가능한 페이지입니다.": "This page will be available after you complete your profile registration."
 }

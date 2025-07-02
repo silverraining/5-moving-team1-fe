@@ -15,7 +15,7 @@ import { PATH } from "@/src/lib/constants";
 import { useCreateLike, useDeleteLike } from "@/src/api/like/hooks";
 import { useQueryClient } from "@tanstack/react-query";
 import { EstimateRequestHistoryItem } from "@/src/api/customer/api";
-import { EmprtyReview } from "../../review/EmptyReview";
+import { EmptyReview } from "../../review/EmptyReview";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 import { useTranslation } from "react-i18next";
 
@@ -70,9 +70,9 @@ export default function HistoryEstimate() {
   };
 
   if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (isError) return <EmprtyReview text="대기중인 견적이 없습니다" />;
+  if (isError) return <EmptyReview text="대기중인 견적이 없습니다" />;
   if (!items || items.length === 0)
-    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+    return <EmptyReview text="대기중인 견적이 없습니다" />;
 
   console.log(
     "hasNextPage",
