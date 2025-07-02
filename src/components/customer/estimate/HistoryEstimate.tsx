@@ -1,10 +1,11 @@
 "use client";
 
-import { Typography, Stack, Box } from "@mui/material";
+import { Typography, Stack, Box, Button, Grid } from "@mui/material";
 import { EstimateInfo } from "./EstimateInfo";
 import {
   HistoryEstimateCardData,
   CardListCost,
+  CardListCostSkeleton,
 } from "../../shared/components/card/CardListCost";
 import Dropdown, { SortOption } from "./Dropdown";
 import { useState } from "react";
@@ -18,6 +19,7 @@ import { EstimateRequestHistoryItem } from "@/src/api/customer/api";
 import { EmptyReview } from "../../review/EmptyReview";
 import { useInfiniteScroll } from "@/src/hooks/useInfiniteScroll";
 import { useTranslation } from "react-i18next";
+import { EstimateHistoryCardSkeleton } from "./EstimateHistoryCard";
 
 interface HistoryEstimateCardDataWithId extends HistoryEstimateCardData {
   moverId: string;
@@ -69,17 +71,52 @@ export default function HistoryEstimate() {
     }));
   };
 
-  if (isLoading) return <Typography>로딩 중...</Typography>;
-  if (isError) return <EmptyReview text="대기중인 견적이 없습니다" />;
+  if (isLoading) {
+    return (
+      <Stack
+        alignItems="center"
+        padding={["0px 0px", "0px 72px", "0px 260px"]}
+        marginTop={["0px", "32px", "64px"]}
+      >
+        <Stack
+          padding={["48px 40px"]}
+          margin={"0px 0px 32px 0px"}
+          borderRadius={["0px", "24px", "48px"]}
+          border={"0.5px solid"}
+          gap={"48px"}
+          sx={(theme) => ({
+            backgroundColor: theme.palette.White[100],
+            borderColor: theme.palette.Line[100],
+          })}
+        >
+          <Stack spacing={2}>
+            <EstimateSection title={t("견적 정보")}>
+              <EstimateHistoryCardSkeleton />
+            </EstimateSection>
+            <EstimateSection title={t("견적서 목록")}>
+              <Dropdown options={sortOptions} />
+              <Grid container spacing={2} py={[3, 4, 5]}>
+                {[...Array(6)].map((_, i) => (
+                  <Grid
+                    key={i}
+                    size={[12, 12, 12]}
+                    sx={{ display: "flex", justifyContent: "center" }}
+                  >
+                    <CardListCostSkeleton />
+                  </Grid>
+                ))}
+              </Grid>
+            </EstimateSection>
+          </Stack>
+        </Stack>
+      </Stack>
+    );
+  }
+
+  if (isError) return <EmprtyReview text="대기중인 견적이 없습니다" />;
+
   if (!items || items.length === 0)
     return <EmptyReview text="대기중인 견적이 없습니다" />;
-
-  console.log(
-    "hasNextPage",
-    hasNextPage,
-    "isFetchingNextPage",
-    isFetchingNextPage
-  );
 
   return (
     <Stack

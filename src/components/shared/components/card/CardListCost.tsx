@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Skeleton, Stack, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { EstimateOffer } from "@/src/types/estimate";
 import Image from "next/image";
@@ -272,3 +272,84 @@ export const CardListCost = ({ data, onLikeClick }: CardProps) => {
     </Box>
   );
 };
+
+export const CardListCostSkeleton = () => (
+  <Stack
+    direction="column"
+    border={"0.5px solid black"}
+    padding={["22px 12px 16px 12px"]}
+    boxShadow={"2px 2px 10px 0px #DCDCDC24,-2px -2px 10px 0px #DCDCDC24"}
+    borderRadius={"16px"}
+    maxWidth={"1320px"}
+    minWidth={"327px"}
+    width={"100%"}
+    height={[222, 222, 280]}
+    justifyContent={"space-between"}
+    boxSizing={"border-box"}
+    sx={(theme) => ({
+      borderColor: theme.palette.Line[100],
+      backgroundColor: theme.palette.background.paper,
+    })}
+  >
+    {/* 칩 + 만든 시간 */}
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <Stack direction={"row"} spacing={1}>
+        <Skeleton variant="rounded" width={100} height={26} />
+        <Skeleton variant="rounded" width={100} height={26} />
+      </Stack>
+    </Stack>
+
+    {/* 한줄 소개 */}
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <Skeleton variant="text" width={146} height={34} />
+    </Stack>
+
+    {/* 고객 정보*/}
+    <Stack
+      direction="row"
+      sx={{ alignItems: "flex-start" }}
+      border={"1px solid #F2F2F2"}
+      padding={1}
+      borderRadius={6}
+      spacing={1}
+    >
+      {/* 프로필 이미지 */}
+      <Stack>
+        <Skeleton variant="circular" width={70} height={70} />
+      </Stack>
+
+      {/* 고객 이름 */}
+      <Stack direction={"column"} flex={1}>
+        <Stack direction={"row"} justifyContent="space-between" spacing={1}>
+          <Skeleton variant="text" width={80} height={32} />
+          <Skeleton variant="text" width={80} height={32} />
+        </Stack>
+        <Stack direction={"row"} spacing={1}>
+          <Skeleton variant="text" width={80} height={32} />
+          <Divider></Divider>
+          <Skeleton variant="text" width={80} height={32} />
+          <Divider></Divider>
+          <Skeleton variant="text" width={80} height={32} />
+        </Stack>
+      </Stack>
+    </Stack>
+
+    {/* 견적 금액 */}
+    <Stack direction={"row"} justifyContent={"flex-end"} spacing={1}>
+      <Skeleton
+        variant="text"
+        width={60}
+        sx={{
+          height: [48, 48, 64],
+        }}
+      />
+      <Skeleton
+        variant="text"
+        width={100}
+        sx={{
+          height: [48, 48, 64],
+        }}
+      />
+    </Stack>
+  </Stack>
+);

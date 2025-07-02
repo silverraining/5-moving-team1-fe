@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Divider, Skeleton, Stack, Typography } from "@mui/material";
 import { ChipCategory } from "../chip/ChipCategory";
 import { ChipData } from "@/src/types/card";
 import dayjs from "@/src/lib/dayjsConfig";
@@ -310,3 +310,127 @@ export const CardListReject = ({ data }: CardProps) => {
     </Box>
   );
 };
+
+export const CardListRejectSkeleton = () => (
+  <Stack
+    direction="column"
+    border={"0.5px solid black"}
+    padding={"22px"}
+    boxShadow={"2px 2px 10px 0px #DCDCDC24,-2px -2px 10px 0px #DCDCDC24"}
+    borderRadius={"16px"}
+    position={"relative"}
+    maxWidth={"688px"}
+    width={"100%"}
+    minWidth={"327px"}
+    justifyContent={"space-between"}
+    height={["192px", "164px", "216px"]}
+    boxSizing={"border-box"}
+    sx={(theme) => ({
+      borderColor: theme.palette.Line[100],
+      backgroundColor: theme.palette.background.paper,
+    })}
+  >
+    <Box
+      display={"flex"}
+      alignItems={"center"}
+      justifyContent={"center"}
+      position={"absolute"}
+      border="1px solid"
+      top={0}
+      right={0}
+      width={"100%"}
+      height={"100%"}
+      flexDirection={"column"}
+      gap={"16px"}
+      sx={(theme) => ({
+        background: "rgba(4, 4, 4, 0.64)",
+        zIndex: 0,
+        borderRadius: "16px",
+        borderColor: theme.palette.Line[100],
+      })}
+    ></Box>
+
+    {/* 칩 + 만든 시간 */}
+    <Stack direction="row" spacing={2} justifyContent="space-between">
+      <Stack direction={"row"} spacing={1}>
+        <Skeleton variant="rounded" width={106} height={34} />
+        <Skeleton variant="rounded" width={106} height={34} />
+      </Stack>
+      <Stack display={["none", "flex", "flex"]}>
+        <Skeleton variant="text" width={50} height={34} />
+      </Stack>
+    </Stack>
+
+    {/* 고객 이름 + 시간 */}
+    <Stack direction="column" sx={{ alignItems: "flex-start" }}>
+      {/* 고객 이름 */}
+      <Stack display={["none", "flex", "flex"]}>
+        <Skeleton variant="text" width={80} height={32} />
+      </Stack>
+
+      {/* 모바일 고객 이름 */}
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        display={["flex", "none", "none"]}
+      >
+        <Skeleton variant="text" width={90} height={32} />
+        <Skeleton variant="text" width={50} height={34} />
+      </Stack>
+
+      <Stack
+        direction="row"
+        spacing={2}
+        alignItems="center"
+        display={["flex", "none", "none"]}
+      >
+        <Skeleton variant="text" width={50} height={34} />
+        <Skeleton variant="text" width={100} height={34} />
+      </Stack>
+    </Stack>
+
+    <Divider
+      sx={(theme) => ({
+        borderColor: theme.palette.Line[200],
+      })}
+    ></Divider>
+
+    {/* 이사일 + 출발 + 도착 */}
+    <Stack
+      direction="row"
+      justifyContent={"flex-start"}
+      alignItems="center"
+      spacing={1}
+      display={["none", "flex", "flex"]}
+    >
+      <Skeleton variant="text" width={40} height={34} />
+      <Skeleton variant="text" width={110} height={34} />
+      <Skeleton variant="text" width={40} height={34} />
+      <Skeleton variant="text" width={110} height={34} />
+      <Skeleton variant="text" width={40} height={34} />
+      <Skeleton variant="text" width={110} height={34} />
+    </Stack>
+
+    {/* 이사일 + 출발 + 도착 (모바일) */}
+    <Stack
+      direction="row"
+      justifyContent={"flex-start"}
+      spacing={1}
+      alignItems="center"
+      display={["flex", "none", "none"]}
+    >
+      <Skeleton variant="text" width={34} height={34} />
+      <Skeleton variant="text" width={70} height={34} />
+      <Divider
+        orientation="vertical"
+        sx={(theme) => ({
+          borderColor: theme.palette.Line[200],
+          height: 14,
+        })}
+      ></Divider>
+      <Skeleton variant="text" width={34} height={34} />
+      <Skeleton variant="text" width={70} height={34} />
+    </Stack>
+  </Stack>
+);
