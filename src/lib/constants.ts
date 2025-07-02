@@ -25,10 +25,13 @@ export type Region = (typeof RegionType)[number];
 
 // 정렬 옵션 매핑 (백엔드의 OrderString 형태로)
 export const SORT_OPTIONS = [
-  { value: "review_count DESC", label: "리뷰 많은순" },
-  { value: "average_rating DESC", label: "평점 높은순" },
-  { value: "experience DESC", label: "경력 높은순" },
-  { value: "confirmed_estimate_count DESC", label: "확정 많은순" },
+  { value: "review_count DESC", label: "sort.review_count" },
+  { value: "average_rating DESC", label: "sort.average_rating" },
+  { value: "experience DESC", label: "sort.experience" },
+  {
+    value: "confirmed_estimate_count DESC",
+    label: "sort.confirmed_estimate_count",
+  },
 ] as const;
 
 // 서비스 타입 매핑 (프론트엔드 -> 백엔드)
