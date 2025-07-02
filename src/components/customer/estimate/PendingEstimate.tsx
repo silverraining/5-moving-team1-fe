@@ -75,15 +75,14 @@ export default function PendingEstimate() {
   // 첫 번째 ID만 사용(여러 개라면 map 돌려도 됨)
   // const requestId = requestIds?.[0]?.requestId;
 
-  console.log(data);
   // 해당 ID로 견적서 리스트 받아오기
   if (isLoading || isLoadingIds) {
     return (
       <Stack display={"flex"} flexDirection={"column"} py={3}>
         <Stack spacing={2} pb={3}>
-          <Typography variant="SB_24">견적 요청 정보</Typography>
+          <Typography variant="SB_24">{t("견적 요청 정보")}</Typography>
           <EstimateRequestCardSkeleton />
-          <Typography variant="SB_24">받은 견적</Typography>
+          <Typography variant="SB_24">{t("받은 견적")}</Typography>
           <Grid container spacing={2} py={[3, 4, 5]}>
             {[...Array(6)].map((_, i) => (
               <Grid
@@ -104,7 +103,7 @@ export default function PendingEstimate() {
     return <EmprtyReview text={t("요청된 견적이 없습니다.")} />;
   }
   if (data?.pages.length === 0) {
-    return <EmprtyReview text={t("대기중인 견적이 없습니다.")} />;
+    return;
   }
   const handleDetailClick = (card: PendingEstimateCardDataWithId) => () => {
     router.push(PATH.userEstimateDetail(card.estimateRequestId, card.moverId));
@@ -149,19 +148,20 @@ export default function PendingEstimate() {
 
   if (isLoading || isLoadingIds) return <CardListWaitSkeleton />;
   if (isError || errorIds)
-    return <EmprtyReview text="대기중인 견적이 없습니다" />;
-  if (!items || items.length === 0)
-    return <EmprtyReview text="대기중인 견적이 없습니다" />;
+    return <EmprtyReview text={t("대기중인 견적이 없습니다")} />;
 
   // 실제 카드 리스트 렌더링 및 무한스크롤 ref 달기
   return (
     <Stack display={"flex"} flexDirection={"column"} py={3}>
       <Stack spacing={2} pb={3}>
-        <Typography variant="SB_24">견적 요청 정보</Typography>
+        <Typography variant="SB_24">{t("견적 요청 정보")}</Typography>
 
         <EstimateRequestCard requestData={requestIds[0]} />
       </Stack>
-      <Typography variant="SB_24">받은 견적</Typography>
+      <Typography variant="SB_24">{t("받은 견적")}</Typography>
+      {items.length === 0 && (
+        <EmprtyReview text={t("대기중인 견적이 없습니다.")} />
+      )}
       <Grid container spacing={2} py={[3, 4, 5]}>
         {items.map((card: PendingEstimateCardDataWithId, index) => (
           <Grid

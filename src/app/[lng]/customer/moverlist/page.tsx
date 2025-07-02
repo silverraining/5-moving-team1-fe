@@ -19,8 +19,6 @@ import { useLikeList } from "@/src/api/like/hooks";
 import { transformLikeMoverToEstimateOffer } from "../wishlist/page";
 import { AuthStore } from "@/src/store/authStore";
 
-/**TODO:컴포넌트 분리 , 상세페이지 라우팅시 로딩 처리*/
-
 // MoverDetail을 CardData 타입으로 변환하는 함수
 function mapMoverDetailToCardData(item: MoverDetail): CardData {
   const serviceType = item.serviceType || {};
@@ -126,12 +124,7 @@ export default function MoverSearchPage() {
     const filtered = filterMoversBySearch(search.debouncedValue, allMovers);
     setMovers(filtered);
     setFilterSearchKeyword(search.debouncedValue);
-  }, [
-    search.debouncedValue,
-    allMovers,
-    filterMoversBySearch,
-    setFilterSearchKeyword,
-  ]);
+  }, [search.debouncedValue]);
 
   // 초기화
   const handleReset = useCallback(() => {
