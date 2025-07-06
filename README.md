@@ -16,26 +16,46 @@
 - [Figma 디자인](https://www.figma.com/design/W7nLdXDag1Fz6eoeKShOmx/1%ED%8C%80_%EB%AC%B4%EB%B9%99?node-id=0-1&t=NKsVd93eAVd1K7Or-1)
 - [팀 노션 문서](https://positive-kingfisher-003.notion.site/1-_-1f0d9fa672ba8055b067ec2833354efd?source=copy_link)
 
-## 기술 스택
+## 🛠 기술 스택 (Tech Stack)
 
-- **Framework**: Next.js 15.3.2
-- **Language**: TypeScript
-- **State Management**: Zustand
-- **Data Fetching**: TanStack React Query
-- **UI Library**: Material-UI (MUI)
-- **Form Management**: React Hook Form + Zod
-- **Styling**: Emotion
-- **Package Manager**: Yarn
-- **Testing**: Jest (설정)
-- **Deployment**: Vercel
+![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Zustand](https://img.shields.io/badge/Zustand-000000?style=flat-square&logo=Zustand&logoColor=white)
+![React Query](https://img.shields.io/badge/TanStack_React_Query-FF4154?style=flat-square&logo=react-query&logoColor=white)
+![MUI](https://img.shields.io/badge/MUI-007FFF?style=flat-square&logo=mui&logoColor=white)
+![React Hook Form](https://img.shields.io/badge/React_Hook_Form-EC5990?style=flat-square&logo=reacthookform&logoColor=white)
+![Zod](https://img.shields.io/badge/Zod-3c9d9b?style=flat-square&logoColor=white)
+![Emotion](https://img.shields.io/badge/Emotion-C76494?style=flat-square&logo=emotion&logoColor=white)
+![Yarn](https://img.shields.io/badge/Yarn-2C8EBB?style=flat-square&logo=yarn&logoColor=white)
+![Jest](https://img.shields.io/badge/Jest-C21325?style=flat-square&logo=jest&logoColor=white)
+![Vercel](https://img.shields.io/badge/Vercel-000000?style=flat-square&logo=vercel&logoColor=white)
 
-## 개발 도구
+## ⚙️ 개발 도구 (Development Tools)
 
-### Code Quality
+![ESLint](https://img.shields.io/badge/ESLint-4B32C3?style=flat-square&logo=eslint&logoColor=white)
+![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+![Storybook](https://img.shields.io/badge/Storybook-FF4785?style=flat-square&logo=storybook&logoColor=white)
 
-- **ESLint**: 코드 품질 관리
-- **TypeScript**: 타입 안정성
-- **Storybook**: 컴포넌트 개발 및 문서화
+## 📦 전체 기술 개요 (Full Stack Overview)
+
+- **프레임워크 (Framework):** Next.js  
+- **언어 (Language):** TypeScript  
+- **상태 관리 (State Management):** Zustand  
+- **데이터 패칭 (Data Fetching):** TanStack React Query  
+- **UI 라이브러리 (UI Library):** MUI (Material UI)  
+- **폼 관리 (Form Management):** React Hook Form + Zod  
+- **스타일링 (Styling):** Emotion  
+- **패키지 매니저 (Package Manager):** Yarn  
+- **테스트 (Testing):** Jest  
+- **배포 (Deployment):** Vercel  
+
+## 🧰 개발 도구 (Development Tools)
+
+- **ESLint:** 코드 품질 관리 (Code Quality Enforcement)  
+- **Storybook:** UI 컴포넌트 개발 및 문서화  
+- **TypeScript:** 타입 안정성 확보 (Static Typing for Safety)  
+
+---
 
 ## 프로젝트 구조
 
@@ -110,10 +130,20 @@ src/
 - 찜한 기사목록 페이지
 - SSE API 자동연결 및 해제 설정
 - 헤더 및 전역에서 사용하는 Navigation tap 구현
+- i18next 다국어 번역 기능
 
 ### 윤민호
 
 ### 최은비
+
+**기사님 찾기(기사님 목록 조회)/ 기사님 마이페이지 담당**
+
+- 공통 컴포넌트 작업
+- 기사님 마이페이지 
+- 기사님 찾기 페이지
+- 소셜 로그인 구현
+- i18next 다국어 번역 기능
+- Sentry 설정
 
 ### 박세정
 
