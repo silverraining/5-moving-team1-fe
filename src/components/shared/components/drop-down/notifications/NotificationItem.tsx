@@ -9,6 +9,36 @@ import { AuthStore } from "@/src/store/authStore";
 import { PATH } from "@/src/lib/constants";
 import { useNotificationStore } from "@/src/store/notification";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
+import { SIDO_ALIASES } from "@/src/utils/filterEstimateRequests";
+
+// 시/도 축약형 매핑 상수
+const sidoShortMap: Record<string, string> = {
+  서울특별시: "서울",
+  부산광역시: "부산",
+  대구광역시: "대구",
+  인천광역시: "인천",
+  광주광역시: "광주",
+  대전광역시: "대전",
+  울산광역시: "울산",
+  세종특별자치시: "세종",
+  경기도: "경기",
+  강원도: "강원",
+  충청북도: "충북",
+  충청남도: "충남",
+  전라북도: "전북",
+  전라남도: "전남",
+  경상북도: "경북",
+  경상남도: "경남",
+  제주특별자치도: "제주",
+  제주도: "제주",
+  제주: "제주",
+};
+function trimSigungu(sigungu: string): string {
+  return sigungu
+    .replace(/(시|군|구)$/g, "")
+    .replace(/ /g, "")
+    .replace(/(시|군|구)/g, "");
+}
 
 interface NotificationItemProps {
   data: {
@@ -32,7 +62,8 @@ export default function NotificationItem({ data }: NotificationItemProps) {
   const timeAgo = dayjs(data.createdAt).fromNow();
 
   const getHighlight = () => {
-    switch (data.type.trim()) {
+    const type = data.type?.trim?.() || "";
+    switch (type) {
       case "NEW_ESTIMATE_REQUEST":
         return "견적 요청";
       case "ESTIMATE_CONFIRMED":
@@ -138,6 +169,83 @@ export default function NotificationItem({ data }: NotificationItemProps) {
     ? data.message.split(highlight)
     : [data.message, ""];
 
+  // MOVE_DAY_REMINDER 타입일 때는 정규식으로 하이라이트 추출 및 커스텀 렌더링
+  if (data.type?.trim?.() === "MOVE_DAY_REMINDER") {
+    const highlightMatch = data.message.match(
+      /^내일은 ([^()]+)\(([^()]+)\) -> ([^()]+)\(([^()]+)\) 이사 예정일이에요\.$/
+    );
+    let trimmedHighlight = highlightMatch
+      ? `${
+          sidoShortMap[highlightMatch[1].trim()] || highlightMatch[1].trim()
+        }(${trimSigungu(highlightMatch[2].trim())}) -> ${
+          sidoShortMap[highlightMatch[3].trim()] || highlightMatch[3].trim()
+        }(${trimSigungu(highlightMatch[4].trim())}) 이사 예정일`
+      : data.message;
+    return (
+      <Stack
+        display={"flex"}
+        flexDirection={"row"}
+        sx={(theme) => ({
+          width: "100%",
+          display: "flex",
+          justifyContent: "space-between",
+          backgroundColor: theme.palette.White[100],
+          borderBottom: `1px solid ${theme.palette.Line[100]}`,
+          boxSizing: "border-box",
+        })}
+      >
+        <Box
+          sx={{
+            justifyContent: "center",
+            padding: "14px 12px 14px 24px",
+            flexDirection: "column",
+            gap: "4px",
+          }}
+        >
+          <Box>
+            <Typography
+              variant="R_14"
+              sx={(theme) => ({
+                color: theme.palette.Black[300],
+                lineHeight: "20px",
+                wordBreak: "keep-all",
+              })}
+            >
+              {highlightMatch ? (
+                <>
+                  내일은{" "}
+                  <Box
+                    component="span"
+                    sx={(theme) => ({
+                      color: data.isRead
+                        ? theme.palette.Grayscale[300]
+                        : theme.palette.PrimaryBlue[300],
+                      fontWeight: "500",
+                    })}
+                  >
+                    {trimmedHighlight}
+                  </Box>
+                  이에요.
+                </>
+              ) : (
+                data.message
+              )}
+            </Typography>
+          </Box>
+          <Typography
+            variant="R_12"
+            sx={(theme) => ({
+              color: theme.palette.Grayscale[400],
+              marginTop: "4px",
+            })}
+          >
+            {timeAgo}
+          </Typography>
+        </Box>
+      </Stack>
+    );
+  }
+
   return (
     <Stack
       display={"flex"}
@@ -175,13 +283,13 @@ export default function NotificationItem({ data }: NotificationItemProps) {
                 onClick={isPending ? undefined : onHighlightClick} // 로딩 중 클릭 비활성화
                 sx={(theme) => ({
                   color: data.isRead
-                    ? theme.palette.Grayscale[300] // 읽은 상태: 회색
-                    : theme.palette.PrimaryBlue[300], // 안 읽은 상태: 파란색
-                  cursor: isPending ? "not-allowed" : "pointer", // 로딩 중 커서 변경
+                    ? theme.palette.Grayscale[300]
+                    : theme.palette.PrimaryBlue[300],
+                  cursor: isPending ? "not-allowed" : "pointer",
                   fontWeight: highlight ? "500" : "normal",
-                  opacity: isPending ? 0.6 : 1, // 로딩 중일 때 투명도 적용
+                  opacity: isPending ? 0.6 : 1,
                   "&:hover": {
-                    textDecoration: isPending ? "none" : "underline", // 로딩 중 호버 효과 제거
+                    textDecoration: isPending ? "none" : "underline",
                   },
                 })}
               >
