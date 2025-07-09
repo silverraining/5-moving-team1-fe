@@ -9,7 +9,7 @@ import { AuthStore } from "@/src/store/authStore";
 import { PATH } from "@/src/lib/constants";
 import { useNotificationStore } from "@/src/store/notification";
 import { useSnackbar } from "@/src/hooks/snackBarHooks";
-import { SIDO_ALIASES } from "@/src/utils/filterEstimateRequests";
+import { useQueryClient } from "@tanstack/react-query";
 
 // 시/도 축약형 매핑 상수
 const sidoShortMap: Record<string, string> = {
@@ -56,6 +56,8 @@ export default function NotificationItem({ data }: NotificationItemProps) {
   const { user } = AuthStore();
   const { markAsReadById } = useNotificationStore();
   const { mutate } = useNotificationRead();
+  const queryClient = useQueryClient();
+
   const { mutate: completeRequest, isPending } = useCompleteEstimateRequest();
   const { openSnackbar } = useSnackbar();
 
@@ -216,10 +218,12 @@ export default function NotificationItem({ data }: NotificationItemProps) {
                   내일은{" "}
                   <Box
                     component="span"
+                    onClick={isPending ? undefined : onHighlightClick} // 로딩 중 클릭 비활성화
                     sx={(theme) => ({
                       color: data.isRead
                         ? theme.palette.Grayscale[300]
                         : theme.palette.PrimaryBlue[300],
+                      cursor: isPending ? "not-allowed" : "pointer",
                       fontWeight: "500",
                     })}
                   >
