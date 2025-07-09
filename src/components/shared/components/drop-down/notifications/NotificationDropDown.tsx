@@ -6,6 +6,7 @@ import CustomScrollY from "@/src/lib/customScrollY";
 import { useNotificationStore } from "@/src/store/notification";
 import NotificationsOffIcon from "@mui/icons-material/NotificationsOff";
 import { useNotificationRead } from "@/src/api/notification/hooks";
+import { useQueryClient } from "@tanstack/react-query";
 interface NotificationDropDownProps {
   onHighlightClick?: (highlight: string) => void;
   onClose?: () => void;
@@ -16,6 +17,7 @@ export default function NotificationDropDown({
 }: NotificationDropDownProps) {
   const { notifications, markAsReadById } = useNotificationStore();
   const { mutate } = useNotificationRead();
+  const queryClient = useQueryClient();
   const theme = useTheme();
   const isTablet = useMediaQuery(theme.breakpoints.down("tablet"));
   const ids = notifications?.map((item) => item.id);
@@ -31,6 +33,8 @@ export default function NotificationDropDown({
               markAsReadById(notification.id);
             }
           });
+          // 알림 목록 강제 refetch
+          queryClient.invalidateQueries({ queryKey: ["notifications"] });
         },
       }
     );
@@ -68,7 +72,6 @@ export default function NotificationDropDown({
         }}
       >
         <NotificationHeader
-          hasUnreadNotifications={notifications?.some((n) => !n.isRead)}
           hasNotifications={!!notifications && notifications.length > 0}
           onMarkAllAsRead={allRead}
           onClose={onClose}

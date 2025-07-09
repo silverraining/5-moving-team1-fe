@@ -5,7 +5,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useTranslation } from "react-i18next";
 
 interface NotificationHeaderProps {
-  hasUnreadNotifications: boolean;
   hasNotifications: boolean;
   onMarkAllAsRead: () => void;
   onClose?: () => void;
@@ -13,9 +12,8 @@ interface NotificationHeaderProps {
 
 export default function NotificationHeader({
   onClose,
-  hasUnreadNotifications,
-  hasNotifications,
   onMarkAllAsRead,
+  hasNotifications,
 }: NotificationHeaderProps) {
   const { t } = useTranslation();
 

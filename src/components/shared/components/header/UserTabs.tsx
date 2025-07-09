@@ -82,6 +82,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
       return;
     }
   };
+  const unreadCount = notifications?.filter((n) => !n.isRead).length ?? 0;
   return (
     <Stack
       position="relative"
@@ -98,7 +99,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
         style={{ position: "relative", cursor: "pointer" }}
         onClick={alramOpen}
       />
-      {!markAsRead && (
+      {!markAsRead && unreadCount > 0 && (
         <Box
           bgcolor={"red"}
           borderRadius={"50%"}
@@ -113,7 +114,7 @@ export const UserTabs = ({ user, isSmall, logout }: UserTab) => {
           textAlign={"center"}
           fontWeight={700}
         >
-          {notifications?.length}
+          {unreadCount}
         </Box>
       )}
       <Popper
