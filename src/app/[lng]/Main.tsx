@@ -37,7 +37,17 @@ export const Main = () => {
       gap={6}
     >
       <Stack alignItems={"center"}>
-        <Typography variant="B_36">
+        <Typography
+          variant={isSmall ? "B_20" : "B_36"}
+          sx={{
+            fontSize: {
+              xs: "1.5rem", // 모바일
+              sm: "2rem", // 태블릿
+              md: "2.25rem", // 데스크탑
+            },
+            textAlign: "center",
+          }}
+        >
           {t("원하는 이사 서비스를 요청하고")}
         </Typography>
         <Typography variant="B_36">{t("견적을 받아보세요")} </Typography>
